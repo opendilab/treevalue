@@ -1,0 +1,116 @@
+name: Code Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  unittest:
+    name: Code test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        python-version:
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 20
+      - name: Set up system dependences on linux
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tree cloc wget curl make
+          sudo apt-get install -y libxml2-dev libxslt-dev python-dev  # need by pypy3
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade flake8 setuptools wheel twine
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+      - name: Test the basic environment
+        run: |
+          python -V
+          pip --version
+          pip list
+          tree .
+          cloc treevalue
+          cloc test
+      - name: Run unittest
+        env:
+          WORKERS: '4'
+          CI: 'true'
+        run: |
+          make unittest
+      - name: Upload coverage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ format('{0}-{1}', matrix.os, matrix.python-version) }}
+          COVERALLS_PARALLEL: true
+        run: |
+          pip3 install --upgrade 'coveralls<3'
+          coveralls
+
+  coveralls:
+    name: Finish coveralls
+    needs:
+      - unittest
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+      - name: Finished
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip3 install --upgrade 'coveralls<3'
+          coveralls --finish
+
+  test_publish:
+    name: Publish to test pypi
+    needs:
+      - unittest
+    runs-on: ${{ matrix.os }}
+    if: ${{ github.repository == 'HansBug/treevalue' }}
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        python-version:
+          - '3.8'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 20
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up python dependences
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade flake8 setuptools wheel twine
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-test.txt ]; then pip install -r requirements-test.txt; fi
+          pip install --upgrade build
+      - name: Build packages
+        run: |
+          python -m build --sdist --wheel --outdir dist/
+      - name: Publish distribution 📦 to Test PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          skip_existing: true
+          password: ${{ secrets.TEST_PYPI_PASSWORD }}
+          repository_url: https://test.pypi.org/legacy/
