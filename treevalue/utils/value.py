@@ -1,7 +1,7 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
 
-class _ValueProxy(metaclass=ABCMeta):
+class _ValueProxy:
     def __init__(self, value=None):
         self._value = value
 
