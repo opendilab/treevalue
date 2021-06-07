@@ -17,6 +17,12 @@ class _ValueProxy(metaclass=ABCMeta):
     def _set_value(self, new_value):
         raise NotImplementedError
 
+    def __repr__(self):
+        return '<{cls} value: {value}>'.format(
+            cls=self.__class__.__name__,
+            value=repr(self._value),
+        )
+
 
 class StaticValueProxy(_ValueProxy):
     def _set_value(self, new_value):
