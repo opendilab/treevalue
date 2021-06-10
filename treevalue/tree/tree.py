@@ -15,6 +15,7 @@ _PRESERVED_ATTRS = {
 }
 
 
+# noinspection PyMethodMayBeStatic
 class TreeMeta(type):
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
@@ -89,7 +90,9 @@ class TreeValue(metaclass=TreeMeta):
         return _value
 
     def __set_attr(self, key, value):
-        self._dict[self.__class__.check_key(key)] = self.__unpack_value(value)
+        _type, _value = self.__unpack_value(value)
+        _value = self.__class__.check_value(_value)
+        self._dict[self.__class__.check_key(key)] = (_type, _value)
 
     def __del_attr(self, key):
         del self._dict[self.__class__.check_key(key)]
