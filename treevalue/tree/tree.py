@@ -15,11 +15,28 @@ _PRESERVED_ATTRS = {
 }
 
 
+class MethodsProxy:
+    def __init__(self, add_method, get_method, del_method, has_method):
+        self.__add_method = add_method
+        self.__get_method = get_method
+        self.__del_method = del_method
+        self.__has_method = has_method
+
+    def __setattr__(self, key, value):
+        return self.__add_method(key, value)
+
+    def __delattr__(self, item):
+        return self.__del_method(item)
+
+    def __contains__(self, item):
+        return self.__has_method(item)
+
+
 # noinspection PyMethodMayBeStatic
 class TreeMeta(type):
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
-        cls.__registered__ = {}
+        cls.__methods = {}
         cls.__default_output_class__ = cls
 
     def check_key(cls, key):
@@ -28,12 +45,29 @@ class TreeMeta(type):
     def check_value(cls, value):
         return value
 
-    def register(cls, name, method):
-        cls.__registered__[name] = method
+    @property
+    def methods(cls) -> MethodsProxy:
+        return MethodsProxy(
+            add_method=cls.__add_method,
+            get_method=cls.__get_method,
+            del_method=cls.__del_method,
+            has_method=cls.__has_method,
+        )
 
-    def unregister(cls, name):
-        del cls.__registered__[name]
+    def __add_method(cls, name, method):
+        cls.__methods[name] = method
 
+    def __get_method(cls, name):
+        return cls.__methods[name]
+
+    def __del_method(cls, name):
+        del cls.__methods[name]
+
+    def __has_method(cls, name):
+        return name in cls.__methods.keys()
+
+class StaticTreeMeta(TreeMeta):
+    pass
 
 class TreeValue(metaclass=TreeMeta):
     def __init__(self, data):
@@ -68,8 +102,8 @@ class TreeValue(metaclass=TreeMeta):
             return super().__getattribute__(item)
         elif self.__class__.check_key(item) in self._dict.keys():
             return self.__get_attr(item)
-        elif item in self.__registered__.keys():
-            return self.__get_func_tree(self.__registered__[item])
+        elif item in self.__methods.keys():
+            return self.__get_func_tree(self.__methods[item])
         else:
             return self.__get_property(item)
 
