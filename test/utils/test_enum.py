@@ -102,7 +102,7 @@ class TestUtilsEnum:
             Enum1.loads(None)
 
     def test_int_enum_extend_str(self):
-        @int_enum_loads(name_preprocess=lambda x: x.upper())
+        @int_enum_loads(name_preprocess=lambda x: x.lower())
         class Enum1(IntEnum):
             A = 1
             B = 2

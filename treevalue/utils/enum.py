@@ -39,11 +39,11 @@ def int_enum_loads(enable_int: bool = True, value_preprocess: Optional[Callable[
 
         @lru_cache()
         def _int_value_to_item():
-            return {value.value: value for key, value in _dict_item().items()}
+            return {value.value: value for _, value in _dict_item().items()}
 
         @lru_cache()
         def _str_name_to_item():
-            return {key: value for key, value in _dict_item().items()}
+            return {name_preprocess(key): value for key, value in _dict_item().items()}
 
         def loads(cls, data) -> Optional[enum_class]:
             if isinstance(data, enum_class):
