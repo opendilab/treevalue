@@ -1,19 +1,11 @@
-from enum import unique, IntEnum
 from functools import wraps
 
-from ..utils import int_enum_loads
+from .modes import TreeCalcMode
 
 
-@int_enum_loads(name_preprocess=lambda x: x.upper())
-@unique
-class TreeCalcMode(IntEnum):
-    STRICT = 1
-    LEFT = 2
-    INNER = 3
-    OUTER = 4
+def treeilize(mode, allow_missing: bool = False, missing_default=None, allow_inherit: bool = False):
+    mode = TreeCalcMode.loads(mode)
 
-
-def treeilize():
     def _decorator(func):
         @wraps(func)
         def _new_func(*args, **kwargs):

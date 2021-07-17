@@ -66,8 +66,10 @@ class TreeMeta(type):
     def __has_method(cls, name):
         return name in cls.__methods.keys()
 
+
 class StaticTreeMeta(TreeMeta):
     pass
+
 
 class TreeValue(metaclass=TreeMeta):
     def __init__(self, data):
