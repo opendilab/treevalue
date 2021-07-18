@@ -1,4 +1,5 @@
 import os
+import re
 from codecs import open
 from distutils.core import setup
 
@@ -11,18 +12,25 @@ meta = {}
 with open(os.path.join(here, _package_name, 'config', 'meta.py'), 'r', 'utf-8') as f:
     exec(f.read(), meta)
 
-with open('requirements.txt', 'r', 'utf-8') as f:
-    _lines = f.readlines()
-    requirements = [line.strip() for line in _lines if line.strip()]
 
-with open('requirements-test.txt', 'r', 'utf-8') as f:
-    _lines = f.readlines()
-    requirements_dev = [line.strip() for line in _lines if line.strip()]
+def _load_req(file: str):
+    with open(file, 'r', 'utf-8') as f:
+        return [line.strip() for line in f.readlines() if line.strip()]
+
+
+requirements = _load_req('requirements.txt')
+
+_REQ_PATTERN = re.compile('^requirements-([a-zA-Z0-9_]+)\\.txt$')
+group_requirements = {
+    item.group(1): _load_req(item.group(0))
+    for item in [_REQ_PATTERN.fullmatch(reqpath) for reqpath in os.listdir()] if item
+}
 
 with open('README.md', 'r', 'utf-8') as f:
     readme = f.read()
 
 setup(
+    # information
     name=meta['__TITLE__'],
     version=meta['__VERSION__'],
     packages=find_packages(
@@ -32,9 +40,15 @@ setup(
     long_description_content_type='text/markdown',
     author=meta['__AUTHOR__'],
     author_email=meta['__AUTHOR_EMAIL__'],
+    license='Apache License, Version 2.0',
+    keywords='Tree-structured Value Management',
+    url='https://github.com/HansBug/treevalue',
+
+    # environment
     python_requires=">=3.6",
     install_requires=requirements,
-    tests_require=requirements_dev,
+    tests_require=group_requirements['test'],
+    extras_require=group_requirements,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
