@@ -45,7 +45,7 @@ def int_enum_loads(enable_int: bool = True, value_preprocess: Optional[Callable[
         def _str_name_to_item():
             return {name_preprocess(key): value for key, value in _dict_item().items()}
 
-        def loads(cls, data) -> Optional[enum_class]:
+        def _load_func(data) -> Optional[enum_class]:
             if isinstance(data, enum_class):
                 return data
             elif enable_int and isinstance(data, int):
@@ -55,7 +55,10 @@ def int_enum_loads(enable_int: bool = True, value_preprocess: Optional[Callable[
             else:
                 return (external_process or _get_default_external_preprocess(enum_class))(data)
 
-        setattr(enum_class, 'loads', classmethod(loads))
+        def loads(cls, data) -> Optional[enum_class]:
+            return _load_func(data)
+
+        enum_class.loads = classmethod(loads)
         return enum_class
 
     return _decorator
