@@ -1,5 +1,6 @@
-from typing import Dict, Any, Union
+from typing import Dict, Any, Union, List
 
+from .base import BaseTree
 from ...utils import init_magic
 
 
@@ -20,7 +21,7 @@ def _to_tree_decorator(init_func):
 
 
 @init_magic(_to_tree_decorator)
-class Tree:
+class Tree(BaseTree):
     def __init__(self, mapping: Union[Dict[str, Union['Tree', Any]], 'Tree']):
         self.__dict = mapping
 
@@ -41,20 +42,12 @@ class Tree:
         self.__check_key_exist(key)
         del self.__dict[key]
 
-    def to_json(self):
-        return {
-            key: value.to_json() if isinstance(value, Tree) else value
-            for key, value in self.__dict.items()
-        }
+    def view(self, path: List[str]):
+        from .view import TreeView
+        return TreeView(self, path)
 
     def clone(self):
         return self.__class__(self)
-
-    def __repr__(self):
-        return '<{cls} keys: {keys}>'.format(
-            cls=self.__class__.__name__,
-            keys=repr(sorted(self.__dict.keys()))
-        )
 
     def items(self):
         return self.__dict.items()
@@ -64,17 +57,3 @@ class Tree:
 
     def values(self):
         return self.__dict.values()
-
-    def __len__(self):
-        return len(self.__dict)
-
-    def __hash__(self):
-        return hash(((key, value) for key, value in sorted(self.__dict.items())))
-
-    def __eq__(self, other):
-        if other is self:
-            return True
-        elif isinstance(other, Tree):
-            return self.__dict == other.__dict
-        else:
-            return False
