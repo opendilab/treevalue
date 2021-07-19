@@ -1,1 +1,2 @@
-from .test_tree import TestTreeCommon
+from .test_tree import TestTreeCommonTree
+from .test_view import TestTreeCommonView

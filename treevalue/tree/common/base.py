@@ -29,12 +29,6 @@ class BaseTree(metaclass=ABCMeta):
     def clone(self):
         raise NotImplementedError  # pragma: no cover
 
-    def __repr__(self):
-        return '<{cls} keys: {keys}>'.format(
-            cls=self.__class__.__name__,
-            keys=repr(sorted(self.keys()))
-        )
-
     @abstractmethod
     def items(self):
         raise NotImplementedError  # pragma: no cover
@@ -60,3 +54,9 @@ class BaseTree(metaclass=ABCMeta):
             return self.to_json() == other.to_json()
         else:
             return False
+
+    def __repr__(self):
+        return '<{cls} keys: {keys}>'.format(
+            cls=self.__class__.__name__,
+            keys=repr(sorted(self.keys()))
+        )

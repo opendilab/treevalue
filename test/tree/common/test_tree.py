@@ -4,7 +4,7 @@ from treevalue.tree.common import Tree
 
 
 @pytest.mark.unittest
-class TestTreeCommon:
+class TestTreeCommonTree:
     def test_tree_init_and_eq(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         assert t == Tree({'x': {'c': 2, 'b': 1}, 'a': 1})

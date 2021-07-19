@@ -9,12 +9,16 @@ class TreeView(BaseTree):
         self.__tree = tree
         self.__path = [str(segment) for segment in path]
 
-    def __get_actual_tree(self) -> Tree:
+    def __get_actual_tree(self) -> BaseTree:
         _tree = self.__tree
         for _segment in self.__path:
             _tree = _tree[_segment]
 
-        return _tree
+        if not isinstance(_tree, BaseTree):
+            raise TypeError(
+                'Viewed target is not a tree but {target} found.'.format(target=repr(type(_tree.__class__))))
+        else:
+            return _tree
 
     def __getitem__(self, key):
         return self.__get_actual_tree().__getitem__(key)
@@ -29,13 +33,13 @@ class TreeView(BaseTree):
         return TreeView(self.__tree, self.__path + [str(segment) for segment in path])
 
     def clone(self):
-        self.__get_actual_tree().clone()
+        return self.__get_actual_tree().clone()
 
     def items(self):
-        self.__get_actual_tree().items()
+        return self.__get_actual_tree().items()
 
     def keys(self):
-        self.__get_actual_tree().keys()
+        return self.__get_actual_tree().keys()
 
     def values(self):
-        self.__get_actual_tree().values()
+        return self.__get_actual_tree().values()
