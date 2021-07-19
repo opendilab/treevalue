@@ -20,7 +20,7 @@ def _init_decorate(init_func):
             _new_init_func(_get_data_property(data))
         elif isinstance(data, dict):
             _new_init_func(Tree(data))
-        elif isinstance(data, Tree):
+        elif isinstance(data, BaseTree):
             init_func(data)
         else:
             raise TypeError(
@@ -36,14 +36,16 @@ class TreeValue:
 
     def __getattr__(self, key):
         if key in _PRESERVED_PROPERTIES:
-            return object.__getattribute__(key)
+            return object.__getattribute__(self, key)
         else:
-            return _get_data_property(self).__getitem__(key)
+            return TreeValue(_get_data_property(self).__getitem__(key))
 
     def __setattr__(self, key, value):
         if key in _PRESERVED_PROPERTIES:
             object.__setattr__(self, key, value)
         else:
+            if isinstance(value, TreeValue):
+                value = _get_data_property(value)
             return _get_data_property(self).__setattr__(key, value)
 
     def __delattr__(self, key):
