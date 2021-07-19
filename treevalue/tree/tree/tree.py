@@ -48,6 +48,6 @@ class TreeValue:
 
     def __delattr__(self, key):
         if key in _PRESERVED_PROPERTIES:
-            object.__delattr__(self, key)
+            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(key)))
         else:
             return _get_data_property(self).__delattr__(key)
