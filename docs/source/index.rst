@@ -1,7 +1,7 @@
 .. treevalue documentation master file, created by
-   sphinx-quickstart on Sun Jul 18 21:54:24 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+sphinx-quickstart on Sun Jul 18 21:54:24 2021.
+You can adapt this file completely to your liking, but it should at least
+contain the root `toctree` directive.
 
 Welcome to treevalue's documentation!
 =====================================

@@ -15,7 +15,7 @@ class _ValueProxy:
 
     @abstractmethod
     def _set_value(self, new_value):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def __repr__(self):
         return '<{cls} value: {value}>'.format(

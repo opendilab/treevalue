@@ -4,7 +4,7 @@ from treevalue.utils import init_magic
 
 
 @pytest.mark.unittest
-class TestUtilsInit:
+class TestUtilsClazz:
     def test_init_magic(self):
         def func_dc(func):
             def _new_func(x):
