@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Dict, Any, Union, List
 
 from .base import BaseTree
@@ -5,6 +6,7 @@ from ...utils import init_magic
 
 
 def _to_tree_decorator(init_func):
+    @wraps(init_func)
     def _new_init_func(data):
         if isinstance(data, Tree):
             _new_init_func(data.to_json())
