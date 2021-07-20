@@ -5,4 +5,7 @@
 [![Code Test](https://github.com/HansBug/treevalue/workflows/Code%20Test/badge.svg)](https://github.com/HansBug/treevalue/actions?query=workflow%3A%22Code+Test%22)
 [![Coverage Status](https://coveralls.io/repos/github/HansBug/treevalue/badge.svg?branch=main)](https://coveralls.io/github/HansBug/treevalue?branch=main)
 
+![Loc](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/loc.json)
+![Comments](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/comments.json)
+
 Tree-nested data structure
