@@ -39,15 +39,12 @@ class TreeValue:
         setattr(self, _DATA_PROPERTY, data)
 
     def __getattr__(self, key):
-        if key in _PRESERVED_PROPERTIES:
-            return object.__getattribute__(self, key)
+        _tree = get_data_property(self)
+        if key in _tree.keys():
+            value = get_data_property(self).__getitem__(key)
+            return self.__class__(value) if isinstance(value, BaseTree) else value
         else:
-            _tree = get_data_property(self)
-            if key in _tree.keys():
-                value = get_data_property(self).__getitem__(key)
-                return self.__class__(value) if isinstance(value, BaseTree) else value
-            else:
-                return self._attr_extern(key)
+            return self._attr_extern(key)
 
     def __setattr__(self, key, value):
         if key in _PRESERVED_PROPERTIES:
