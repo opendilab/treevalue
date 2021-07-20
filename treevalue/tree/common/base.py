@@ -49,7 +49,7 @@ class BaseTree(metaclass=ABCMeta):
         return len(self.keys())
 
     def __hash__(self):
-        return hash(((key, value) for key, value in sorted(self.items())))
+        return hash(tuple([(key, value) for key, value in sorted(self.items())]))
 
     def __eq__(self, other):
         if other is self:

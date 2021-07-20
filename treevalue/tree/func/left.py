@@ -10,6 +10,3 @@ class _LeftProcessor(_BaseProcessor):
 
         _, first_keyset = key_entries[0]
         return first_keyset
-
-    def check_arguments(self, mode, allow_inherit, allow_missing, missing_value, missing_func):
-        pass

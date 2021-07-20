@@ -45,7 +45,7 @@ class TreeValue:
             _tree = get_data_property(self)
             if key in _tree.keys():
                 value = get_data_property(self).__getitem__(key)
-                return TreeValue(value) if isinstance(value, BaseTree) else value
+                return self.__class__(value) if isinstance(value, BaseTree) else value
             else:
                 self._attr_extern(key)
 

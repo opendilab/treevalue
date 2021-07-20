@@ -17,6 +17,12 @@ class _BaseProcessor(metaclass=SingletonMeta):
     def get_key_set(self, *args, **kwargs):
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
-    def check_arguments(self, mode, allow_inherit, allow_missing, missing_value, missing_func):
-        raise NotImplementedError  # pragma: no cover
+    def check_arguments(self, mode, return_type, allow_inherit, allow_missing, missing_value, missing_func):
+        if return_type is not None:
+            if not isinstance(return_type, type):
+                raise TypeError("Return type should be a type or none, but {type} found.".format(
+                    type=repr(type(return_type).__name__)))
+            elif not issubclass(return_type, TreeValue):
+                raise TypeError("Tree value should be subclass of TreeValue, but {type} found.".format(
+                    type=repr(return_type.__name__)
+                ))
