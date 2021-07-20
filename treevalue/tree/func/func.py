@@ -1,10 +1,10 @@
 from enum import IntEnum
 from functools import wraps
 
-from .inner import get_key_set as get_inner_key_set
-from .left import get_key_set as get_left_key_set
-from .outer import get_key_set as get_outer_key_set
-from .strict import get_key_set as get_strict_key_set
+from .inner import _InnerProcessor
+from .left import _LeftProcessor
+from .outer import _OuterProcessor
+from .strict import _StrictProcessor
 from ..tree.tree import TreeValue
 from ...utils import int_enum_loads
 
@@ -17,11 +17,11 @@ class TreeMode(IntEnum):
     OUTER = 4
 
 
-_KEY_ITERATORS = {
-    TreeMode.STRICT: get_strict_key_set,
-    TreeMode.LEFT: get_left_key_set,
-    TreeMode.INNER: get_inner_key_set,
-    TreeMode.OUTER: get_outer_key_set,
+_MODE_PROCESSORS = {
+    TreeMode.STRICT: _StrictProcessor(),
+    TreeMode.LEFT: _LeftProcessor(),
+    TreeMode.INNER: _InnerProcessor(),
+    TreeMode.OUTER: _OuterProcessor(),
 }
 
 
@@ -37,6 +37,7 @@ def func_treelize(mode='strict', allow_inherit: bool = False,
                   allow_missing: bool = False, missing_value=None, missing_func=None):
     mode = TreeMode.loads(mode)
     missing_func = missing_func or (lambda: missing_value)
+    _MODE_PROCESSORS[mode].check_arguments(mode, allow_inherit, allow_missing, missing_value, missing_func)
 
     def _value_wrap(item, index):
         if isinstance(item, TreeValue):
@@ -72,7 +73,7 @@ def func_treelize(mode='strict', allow_inherit: bool = False,
                 key: _new_func(
                     *(item(key) for item in pargs),
                     **{key_: value(key) for key_, value in pkwargs.items()}
-                ) for key in sorted(_KEY_ITERATORS[mode](*args, **kwargs))
+                ) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
             })
 
         return _new_func

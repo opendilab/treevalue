@@ -1,7 +1,11 @@
 from functools import reduce
 
-from .base import get_key_entries
+from .base import _BaseProcessor
 
 
-def get_key_set(*args, **kwargs):
-    return reduce(lambda x, y: x | y, [set(keyset) for index, keyset in get_key_entries(*args, **kwargs)])
+class _OuterProcessor(_BaseProcessor):
+    def get_key_set(self, *args, **kwargs):
+        return reduce(lambda x, y: x | y, [set(keyset) for index, keyset in self._get_key_entries(*args, **kwargs)])
+
+    def check_arguments(self, mode, allow_inherit, allow_missing, missing_value, missing_func):
+        pass
