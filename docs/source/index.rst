@@ -1,20 +1,21 @@
-.. treevalue documentation master file, created by
-sphinx-quickstart on Sun Jul 18 21:54:24 2021.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive.
-
-Welcome to treevalue's documentation!
+Welcome to TreeValue's Documentation
 =====================================
 
+Overview
+-------------
+
+`TreeValue` is a generalized tree-based data structure.
+
+Main Features
+---------------
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: User Guide
 
 
+.. toctree::
+    :maxdepth: 2
+    :caption: Developer Guide
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    api_doc/index
