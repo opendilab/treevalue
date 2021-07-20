@@ -42,8 +42,12 @@ class TreeValue:
         if key in _PRESERVED_PROPERTIES:
             return object.__getattribute__(self, key)
         else:
-            value = get_data_property(self).__getitem__(key)
-            return TreeValue(value) if isinstance(value, BaseTree) else value
+            _tree = get_data_property(self)
+            if key in _tree.keys():
+                value = get_data_property(self).__getitem__(key)
+                return TreeValue(value) if isinstance(value, BaseTree) else value
+            else:
+                self._attr_extern(key)
 
     def __setattr__(self, key, value):
         if key in _PRESERVED_PROPERTIES:
@@ -63,11 +67,12 @@ class TreeValue:
         return item in get_data_property(self).keys()
 
     def __repr__(self):
-        return "<{cls} keys: {keys}>".format(
+        _tree = get_data_property(self)
+        return "<{cls} {id} keys: {keys}>".format(
             cls=self.__class__.__name__,
-            keys=repr(sorted(get_data_property(self).keys()))
+            id=hex(id(_tree.actual())),
+            keys=repr(sorted(_tree.keys()))
         )
 
-
-def treevalue_dump(tv: TreeValue):
-    return get_data_property(tv).to_json()
+    def _attr_extern(self, key):
+        raise KeyError("Attribute {key} not found.".format(key=repr(key)))

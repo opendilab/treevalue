@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from treevalue.tree.common import Tree
@@ -50,9 +52,9 @@ class TestTreeCommonTree:
         t1 = Tree(t)
         t1['x'] = {'b1': 1, 'b2': 2, 'b4': 5, 't': {'v': 33}}
         del t1['x']['b2']
-        assert repr(t) == "<Tree keys: ['a', 'x']>"
-        assert repr(t1) == "<Tree keys: ['a', 'x']>"
-        assert repr(t1['x']) == "<Tree keys: ['b1', 'b4', 't']>"
+        assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['a', 'x']>", repr(t))
+        assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['a', 'x']>", repr(t1))
+        assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['b1', 'b4', 't']>", repr(t1['x']))
 
         assert len(t) == 2
         assert len(t1) == 2

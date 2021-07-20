@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from treevalue.tree.common import Tree
@@ -32,8 +34,8 @@ class TestTreeCommonView:
         assert tv3 == Tree({'b': 235, 'f': {'t': 2, 'p': 3}})
         assert t == Tree({'a': 1, 'x': {'b': 235, 'd': 345, 'f': {'t': 2, 'p': 3}}})
 
-        assert repr(tv1) == "<TreeView keys: ['b', 'd', 'f']>"
-        assert repr(tv3) == "<Tree keys: ['b', 'f']>"
+        assert re.fullmatch(r"<TreeView 0x[0-9a-f]+ keys: \['b', 'd', 'f']>", repr(tv1))
+        assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['b', 'f']>", repr(tv3))
 
         t['x'] = {'a': 1, 'b': 2, 'c': 3, 'd': {'t': 'p', 'q': -1}}
         assert tv1 == Tree({'a': 1, 'b': 2, 'c': 3, 'd': {'t': 'p', 'q': -1}})

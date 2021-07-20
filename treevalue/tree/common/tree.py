@@ -59,3 +59,6 @@ class Tree(BaseTree):
 
     def values(self):
         return self.__dict.values()
+
+    def actual(self):
+        return self

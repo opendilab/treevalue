@@ -41,6 +41,10 @@ class BaseTree(metaclass=ABCMeta):
     def values(self):
         raise NotImplementedError  # pragma: no cover
 
+    @abstractmethod
+    def actual(self):
+        raise NotImplementedError  # pragma: no cover
+
     def __len__(self):
         return len(self.keys())
 
@@ -56,7 +60,8 @@ class BaseTree(metaclass=ABCMeta):
             return False
 
     def __repr__(self):
-        return '<{cls} keys: {keys}>'.format(
+        return '<{cls} {id} keys: {keys}>'.format(
             cls=self.__class__.__name__,
+            id=hex(id(self.actual())),
             keys=repr(sorted(self.keys()))
         )

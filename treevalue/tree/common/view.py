@@ -43,3 +43,6 @@ class TreeView(BaseTree):
 
     def values(self):
         return self.__get_actual_tree().values()
+
+    def actual(self):
+        return self.__get_actual_tree().actual()
