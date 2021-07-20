@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from treevalue.tree import general_tree_value, func_treelize
@@ -63,6 +64,57 @@ class TestTreeGeneralGeneral:
         t1 = TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         t2 = TreeNumber({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
         assert (2 * t1 * t2) == TreeNumber({'a': 22, 'b': 88, 'x': {'c': 198, 'd': 40}})
+
+    def test_numeric_matmul(self):
+        t1 = TreeNumber({
+            'a': np.array([[1, 2], [3, 4]]),
+            'b': np.array([[2, 3], [4, 5]]),
+            'x': {
+                'c': np.array([[3, 4], [5, 6]]),
+                'd': np.array([[4, 5], [6, 7]]),
+            }
+        })
+        t2 = TreeNumber({
+            'a': np.array([[4, 5], [6, 7]]),
+            'b': np.array([[3, 4], [5, 6]]),
+            'x': {
+                'c': np.array([[2, 3], [4, 5]]),
+                'd': np.array([[1, 2], [3, 4]]),
+            }
+        })
+
+        assert func_treelize(inherit=True, return_type=TreeNumber)(np.array_equal)((t1 @ t2), TreeNumber({
+            'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
+            'b': np.array([[2, 3], [4, 5]]) @ np.array([[3, 4], [5, 6]]),
+            'x': {
+                'c': np.array([[3, 4], [5, 6]]) @ np.array([[2, 3], [4, 5]]),
+                'd': np.array([[4, 5], [6, 7]]) @ np.array([[1, 2], [3, 4]]),
+            }
+        })) == TreeNumber({
+            'a': True,
+            'b': True,
+            'x': {
+                'c': True,
+                'd': True,
+            }
+        })
+        assert func_treelize(inherit=True, return_type=TreeNumber)(np.array_equal)(
+            (t2.__rmatmul__(np.array([[1, 2], [3, 4]]))), TreeNumber({
+                'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
+                'b': np.array([[1, 2], [3, 4]]) @ np.array([[3, 4], [5, 6]]),
+                'x': {
+                    'c': np.array([[1, 2], [3, 4]]) @ np.array([[2, 3], [4, 5]]),
+                    'd': np.array([[1, 2], [3, 4]]) @ np.array([[1, 2], [3, 4]]),
+                }
+            })
+        ) == TreeNumber({
+            'a': True,
+            'b': True,
+            'x': {
+                'c': True,
+                'd': True,
+            }
+        })
 
     def test_numeric_floordiv(self):
         t1 = TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})

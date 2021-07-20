@@ -26,6 +26,7 @@ class TestTreeCommonTree:
         t1 = Tree({'a': 1, 'x': {'b': 1, 'c': None}})
         assert t != t1
         assert hash(t) != hash(t1)
+        assert t1 != Tree({'a': 1, 'x': {'b': 1, 'f': None}})
 
         h = {t: 1, t1: 2}
         assert h[t] == 1

@@ -55,7 +55,13 @@ class BaseTree(metaclass=ABCMeta):
         if other is self:
             return True
         elif isinstance(other, BaseTree):
-            return self.json() == other.json()
+            if set(self.keys()) == set(other.keys()):
+                for key in self.keys():
+                    if self[key] != other[key]:
+                        return False
+                return True
+            else:
+                return False
         else:
             return False
 
