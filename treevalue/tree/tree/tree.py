@@ -55,13 +55,13 @@ class TreeValue:
         else:
             if isinstance(value, TreeValue):
                 value = get_data_property(value)
-            return get_data_property(self).__setattr__(key, value)
+            return get_data_property(self).__setitem__(key, value)
 
     def __delattr__(self, key):
         if key in _PRESERVED_PROPERTIES:
             raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(key)))
         else:
-            return get_data_property(self).__delattr__(key)
+            return get_data_property(self).__delitem__(key)
 
     def __contains__(self, item):
         return item in get_data_property(self).keys()
@@ -73,6 +73,17 @@ class TreeValue:
             id=hex(id(_tree.actual())),
             keys=repr(sorted(_tree.keys()))
         )
+
+    def __hash__(self):
+        return hash(get_data_property(self))
+
+    def __eq__(self, other):
+        if self is other:
+            return True
+        elif type(other) == self.__class__:
+            return get_data_property(self) == get_data_property(other)
+        else:
+            return False
 
     def _attr_extern(self, key):
         raise KeyError("Attribute {key} not found.".format(key=repr(key)))
