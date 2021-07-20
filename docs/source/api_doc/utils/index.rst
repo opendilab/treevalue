@@ -7,3 +7,4 @@ treevalue.utils
     enum
     final
     func
+    singleton
