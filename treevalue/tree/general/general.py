@@ -30,7 +30,6 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
         return _config
 
     def _decorate(func):
-        print(func.__name__)
         return method_treelize(**_decorator_config(func.__name__))(func)
 
     class _GeneralTreeValue(TreeValue):
