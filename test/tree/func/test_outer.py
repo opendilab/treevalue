@@ -7,7 +7,7 @@ from treevalue.tree import func_treelize, TreeValue
 @pytest.mark.unittest
 class TestTreeFuncOuter:
     def test_outer_inherit(self):
-        @func_treelize('outer', allow_missing=True, missing_value=0)
+        @func_treelize('outer', missing=lambda: 0)
         def ssum(*args):
             return sum(args)
 

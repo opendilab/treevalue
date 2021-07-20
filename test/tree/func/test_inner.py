@@ -25,7 +25,7 @@ class TestTreeFuncInner:
         assert ssum(t3, t1, t2) == TreeValue({'a': 23, 'b': 46, 'x': {'c': 69, 'd': 92}})
 
     def test_inner_inherit(self):
-        @func_treelize('inner', allow_inherit=True)
+        @func_treelize('inner', inherit=True)
         def ssum(*args):
             return sum(args)
 

@@ -7,7 +7,7 @@ from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..tree.tree import TreeValue
-from ...utils import int_enum_loads
+from ...utils import int_enum_loads, SingletonMeta
 
 
 @int_enum_loads(name_preprocess=str.upper)
@@ -37,13 +37,24 @@ def _any_getattr(value):
 _ClassType = TypeVar("_ClassType", bound=TreeValue)
 
 
+class _MissingNotAllow(metaclass=SingletonMeta):
+    pass
+
+
+MISSING_NOT_ALLOW = _MissingNotAllow()
+
+
 def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeValue,
-                  allow_inherit: bool = False, allow_missing: bool = False,
-                  missing_value=None, missing_func=None):
+                  inherit: bool = False, missing=MISSING_NOT_ALLOW):
     mode = TreeMode.loads(mode)
-    missing_func = missing_func or (lambda: missing_value)
-    _MODE_PROCESSORS[mode].check_arguments(mode, return_type, allow_inherit,
-                                           allow_missing, missing_value, missing_func)
+    if missing is MISSING_NOT_ALLOW:
+        allow_missing = False
+        missing_func = None
+    else:
+        allow_missing = True
+        missing_func = missing if hasattr(missing, '__call__') else (lambda: missing)
+
+    _MODE_PROCESSORS[mode].check_arguments(mode, return_type, inherit, allow_missing, missing_func)
 
     def _value_wrap(item, index):
         if isinstance(item, TreeValue):
@@ -58,7 +69,7 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
                     ))
 
             return _get_from_key
-        elif allow_inherit:
+        elif inherit:
             return _any_getattr(item).__getattr__
         else:
             raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(

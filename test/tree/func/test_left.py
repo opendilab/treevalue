@@ -24,7 +24,7 @@ class TestTreeFuncLeft:
             _ = ssum(t3, t1, t2)
 
     def test_left_missing(self):
-        @func_treelize('left', allow_missing=True, missing_value=0)
+        @func_treelize('left', missing=0)
         def ssum(*args):
             return sum(args)
 
@@ -36,7 +36,7 @@ class TestTreeFuncLeft:
         assert ssum(t3, t1, t2) == TreeValue({'a': 23, 'b': 46, 'c': 33, 'x': {'c': 69, 'd': 92, 'e': 550}})
 
     def test_left_inherit(self):
-        @func_treelize('left', allow_missing=True, missing_value=0, allow_inherit=True)
+        @func_treelize('left', missing=0, inherit=True)
         def ssum(*args):
             return sum(args)
 

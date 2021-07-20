@@ -24,7 +24,7 @@ class TestTreeFuncStrict:
             _ = ssum(t1, 1)
 
     def test_strict_inherit(self):
-        @func_treelize(allow_inherit=True)
+        @func_treelize(inherit=True)
         def ssum(*args):
             return sum(args)
 
@@ -41,7 +41,7 @@ class TestTreeFuncStrict:
             return sum(args)
 
         with pytest.warns(RuntimeWarning):
-            ssum = func_treelize(allow_missing=True, missing_value=0)(ssum)
+            ssum = func_treelize(missing=0)(ssum)
 
         t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 44}})
