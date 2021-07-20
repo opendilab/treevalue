@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import TreeMode, func_treelize, TreeValue
+from treevalue.tree import TreeMode, func_treelize, TreeValue, method_treelize, classmethod_treelize
 
 
 # noinspection DuplicatedCode
@@ -61,3 +61,70 @@ class TestTreeFuncFunc:
             @func_treelize(return_type=233)
             def ssum(*args):
                 return sum(args)
+
+    def test_method_treelize(self):
+        class TreeNumber(TreeValue):
+            @method_treelize(inherit=True)
+            def _attr_extern(self, key):
+                return getattr(self, key)
+                # print(key)
+                # TreeValue._attr_extern(self, key)
+
+            @method_treelize('outer', inherit=True, missing=0)
+            def __add__(self, other):
+                return self + other
+
+            @method_treelize('outer', inherit=True, missing=0)
+            def __radd__(self, other):
+                return other + self
+
+            @method_treelize('outer', inherit=True, missing=0)
+            def __sub__(self, other):
+                return self - other
+
+            @method_treelize('outer', inherit=True, missing=0)
+            def __rsub__(self, other):
+                return other - self
+
+            @method_treelize()
+            def __pos__(self):
+                return +self
+
+            @method_treelize()
+            def __neg__(self):
+                return -self
+
+            @method_treelize(inherit=True)
+            def __call__(self, *args, **kwargs):
+                return self(*args, **kwargs)
+
+        t1 = TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        t2 = TreeNumber({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
+        assert (t1 + t2 + 1) == TreeNumber({'a': 13, 'b': 25, 'x': {'c': 37, 'd': 10}})
+        assert (t1 - t2) == TreeNumber({'a': -10, 'b': -20, 'x': {'c': -30, 'd': -1}})
+        assert (1 - t2) == TreeNumber({'a': -10, 'b': -21, 'x': {'c': -32, 'd': -4}})
+
+        class P:
+            def __init__(self, value):
+                self.__value = value
+
+            @property
+            def value(self):
+                return self.__value
+
+            def vv(self):
+                return self.__value + 1
+
+        ttt = TreeNumber({"a": P(1), "b": P(2), "x": {"c": P(3), "d": P(4)}})
+        assert ttt.value == TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        assert ttt.vv() == TreeNumber({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+
+    def test_classmethod_treelize(self):
+        class TestUtils:
+            @classmethod
+            @classmethod_treelize('outer', inherit=True, missing=0, return_type=TreeValue)
+            def add(cls, a, b):
+                return cls, a + b
+
+        assert TestUtils.add(1, 2) == (TestUtils, 3)
+        assert TestUtils.add(TreeValue({'a': 1, 'b': 2}), 2) == TreeValue({'a': (TestUtils, 3), 'b': (TestUtils, 4)})

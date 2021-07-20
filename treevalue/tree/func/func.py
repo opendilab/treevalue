@@ -7,7 +7,7 @@ from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..tree.tree import TreeValue
-from ...utils import int_enum_loads, SingletonMeta
+from ...utils import int_enum_loads, SingletonMark
 
 
 @int_enum_loads(name_preprocess=str.upper)
@@ -35,13 +35,7 @@ def _any_getattr(value):
 
 
 _ClassType = TypeVar("_ClassType", bound=TreeValue)
-
-
-class _MissingNotAllow(metaclass=SingletonMeta):
-    pass
-
-
-MISSING_NOT_ALLOW = _MissingNotAllow()
+MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
 def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeValue,
@@ -97,3 +91,32 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
         return _new_func
 
     return _decorator
+
+
+AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
+
+
+def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
+                    inherit: bool = False, missing=MISSING_NOT_ALLOW):
+    def _decorate(method):
+        @wraps(method)
+        def _new_method(self, *args, **kwargs):
+            rt = self.__class__ if return_type is AUTO_DETECT_RETURN_TYPE else return_type
+            return func_treelize(mode, rt, inherit, missing)(method)(self, *args, **kwargs)
+
+        return _new_method
+
+    return _decorate
+
+
+def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
+                         inherit: bool = False, missing=MISSING_NOT_ALLOW):
+    def _decorate(method):
+        @wraps(method)
+        def _new_method(cls, *args, **kwargs):
+            rt = cls if return_type is AUTO_DETECT_RETURN_TYPE else return_type
+            return func_treelize(mode, rt, inherit, missing)(method)(cls, *args, **kwargs)
+
+        return _new_method
+
+    return _decorate

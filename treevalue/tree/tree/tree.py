@@ -47,7 +47,7 @@ class TreeValue:
                 value = get_data_property(self).__getitem__(key)
                 return self.__class__(value) if isinstance(value, BaseTree) else value
             else:
-                self._attr_extern(key)
+                return self._attr_extern(key)
 
     def __setattr__(self, key, value):
         if key in _PRESERVED_PROPERTIES:
