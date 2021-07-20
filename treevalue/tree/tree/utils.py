@@ -6,7 +6,7 @@ _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
 
 def jsonify(tree: _TreeValue):
-    return get_data_property(tree).to_json()
+    return get_data_property(tree).json()
 
 
 def view(tree: _TreeValue, path: List[str]) -> _TreeValue:
@@ -14,4 +14,4 @@ def view(tree: _TreeValue, path: List[str]) -> _TreeValue:
 
 
 def clone(tree: _TreeValue) -> _TreeValue:
-    return tree.__class__(get_data_property(tree).to_json())
+    return tree.__class__(get_data_property(tree).json())

@@ -15,9 +15,9 @@ class BaseTree(metaclass=ABCMeta):
     def __delitem__(self, key):
         raise NotImplementedError  # pragma: no cover
 
-    def to_json(self):
+    def json(self):
         return {
-            key: value.to_json() if isinstance(value, BaseTree) else value
+            key: value.json() if isinstance(value, BaseTree) else value
             for key, value in self.items()
         }
 
@@ -55,7 +55,7 @@ class BaseTree(metaclass=ABCMeta):
         if other is self:
             return True
         elif isinstance(other, BaseTree):
-            return self.to_json() == other.to_json()
+            return self.json() == other.json()
         else:
             return False
 

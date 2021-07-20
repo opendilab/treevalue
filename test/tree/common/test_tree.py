@@ -32,7 +32,7 @@ class TestTreeCommonTree:
         assert h[t.clone()] == 1
         assert h[Tree(t)] == 1
         assert h[t1] == 2
-        assert h[Tree(t1.to_json())] == 2
+        assert h[Tree(t1.json())] == 2
 
     def test_tree_items(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})

@@ -9,7 +9,7 @@ def _to_tree_decorator(init_func):
     @wraps(init_func)
     def _new_init_func(data):
         if isinstance(data, Tree):
-            _new_init_func(data.to_json())
+            _new_init_func(data.json())
         elif isinstance(data, dict):
             init_func({
                 str(key): Tree(value) if isinstance(value, dict) else value

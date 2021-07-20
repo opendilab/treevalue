@@ -15,7 +15,7 @@ class TestTreeCommonView:
 
         with pytest.raises(TypeError):
             tv2 = t.view(['a'])
-            tv2.to_json()
+            tv2.json()
 
         t['x']['b'] = 234
         assert tv1 == Tree({'b': 234, 'c': 'sdklfgjl', 'f': {'t': 2, 'p': 3}})
