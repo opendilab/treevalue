@@ -18,15 +18,14 @@ BASE_CONFIG = dict(inherit=True)
 
 def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                        methods: Optional[Mapping[str, Optional[Mapping[str, Any]]]] = None):
-    if base is None:
-        base = BASE_CONFIG
     base = base or {}
     methods = methods or {}
 
     @lru_cache()
     def _decorator_config(name):
-        _config = base.copy()
-        _config.update(methods.get(name, {}))
+        _config = BASE_CONFIG.copy()
+        _config.update(base)
+        _config.update(methods.get(name, None) or {})
         return _config
 
     def _decorate(func):
