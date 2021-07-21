@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial, wraps
 from typing import TypeVar, Type
 
 _ClassType = TypeVar('_ClassType')
@@ -68,6 +68,7 @@ def init_magic(init_decorator):
     def _decorator(clazz: Type[_ClassType]) -> Type[_ClassType]:
         @class_wraps(clazz)
         class _NewClass(clazz):
+            @wraps(clazz.__init__)
             def __init__(self, *args, **kwargs):
                 init_decorator(partial(clazz.__init__, self))(*args, **kwargs)
 

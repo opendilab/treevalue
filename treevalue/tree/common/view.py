@@ -5,7 +5,26 @@ from .tree import Tree
 
 
 class TreeView(BaseTree):
+    """
+    Overview:
+        Tree view data model, based on `BaseTree`.
+    """
+
     def __init__(self, tree: Tree, path: List[str]):
+        """
+        Overview:
+            Constructor of `TreeValue`.
+
+        Arguments:
+            - tree (:obj:`Tree`): Based tree.
+            - path (:obj:`List[str]`): Viewing path.
+
+        Example:
+            >>> t = Tree({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> tv = t.view(["x"])                # tv should be equal to Tree({'c': 3, 'd': 4})
+            >>> t['x'] = Tree({'c': 5, 'd': 6})
+            >>> tv                                # tv should be equal to Tree({'c': 5, 'd': 6})
+        """
         self.__tree = tree
         self.__path = [str(segment) for segment in path]
 

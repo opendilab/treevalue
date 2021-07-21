@@ -8,7 +8,7 @@ from ...utils import init_magic
 def _to_tree_decorator(init_func):
     @wraps(init_func)
     def _new_init_func(data):
-        if isinstance(data, Tree):
+        if isinstance(data, BaseTree):
             _new_init_func(data.json())
         elif isinstance(data, dict):
             init_func({
@@ -24,8 +24,27 @@ def _to_tree_decorator(init_func):
 
 @init_magic(_to_tree_decorator)
 class Tree(BaseTree):
-    def __init__(self, mapping: Union[Dict[str, Union['Tree', Any]], 'Tree']):
-        self.__dict = mapping
+    """
+    Overview:
+        Tree node data model, based on `BaseTree`.
+    """
+
+    def __init__(self, data: Union[Dict[str, Union['Tree', Any]], 'Tree']):
+        """
+        Overview:
+            Constructor of `Tree`, can be `dict`, `Tree`, `TreeView`.
+            When dict passed in, a new tree structure will be created once.
+            When `Tree` or `TreeView` passed in, a fully copy will be constructed in this object.
+
+        Arguments:
+            - data (:obj:`Union[Dict[str, Union['Tree', Any]], 'Tree']`): Any data can be parsed into `Tree`.
+
+        Example:
+            >>> t = Tree({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})  # t is a new tree structure
+            >>> t2 = Tree(t)                                       # t2 is a full copy of t1
+            >>> t3 = Tree({'a': t, 'b': t2})                       # t3 is a tree with subtree of t and t2 (not copy)
+        """
+        self.__dict = data
 
     def __check_key_exist(self, key):
         if key not in self.__dict.keys():
