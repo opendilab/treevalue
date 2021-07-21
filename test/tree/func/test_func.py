@@ -67,8 +67,6 @@ class TestTreeFuncFunc:
             @method_treelize(inherit=True)
             def _attr_extern(self, key):
                 return getattr(self, key)
-                # print(key)
-                # TreeValue._attr_extern(self, key)
 
             @method_treelize('outer', inherit=True, missing=0)
             def __add__(self, other):
@@ -126,5 +124,12 @@ class TestTreeFuncFunc:
             def add(cls, a, b):
                 return cls, a + b
 
+            @classmethod
+            @classmethod_treelize(return_type=TreeValue)
+            def add2(cls, a, b):
+                return cls, a + b
+
         assert TestUtils.add(1, 2) == (TestUtils, 3)
         assert TestUtils.add(TreeValue({'a': 1, 'b': 2}), 2) == TreeValue({'a': (TestUtils, 3), 'b': (TestUtils, 4)})
+        assert TestUtils.add2(TreeValue({'a': 1, 'b': 2}), TreeValue({'a': 12, 'b': 22})) == TreeValue(
+            {'a': (TestUtils, 13), 'b': (TestUtils, 24)})

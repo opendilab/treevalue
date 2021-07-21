@@ -65,6 +65,17 @@ class TestTreeTreeTree:
         assert re.fullmatch(r"<TreeValue 0x[0-9a-f]+ keys: \['a', 'b', 'c']>", repr(tv1))
         assert re.fullmatch(r"<TreeValue 0x[0-9a-f]+ keys: \['x', 'y']>", repr(tv1.c))
 
+    def test_tree_value_iter(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        assert dict(tv1) == {
+            'a': 1,
+            'b': 2,
+            'c': TreeValue({'x': 2, 'y': 3})
+        }
+        assert dict(tv1.c) == {
+            'x': 2, 'y': 3
+        }
+
     def test_tee_value_hash_equal(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         assert tv1 == tv1

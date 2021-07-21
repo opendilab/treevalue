@@ -125,6 +125,16 @@ def int_enum_loads(enable_int: bool = True, value_preprocess: Optional[Callable[
                 return (external_process or _get_default_external_preprocess(enum_class))(data)
 
         def loads(cls, data) -> Optional[enum_class]:
+            """
+            Overview:
+                Load enum data from raw data.
+
+            Arguments:
+                - data (:obj:`Any`): Data which going to be parsed.
+
+            Returns:
+                - enum_data (:obj:): Parsed enum data
+            """
             return _load_func(data)
 
         enum_class.loads = classmethod(loads)

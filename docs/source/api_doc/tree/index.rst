@@ -5,3 +5,5 @@ treevalue.tree
     :maxdepth: 3
 
     common/index
+    tree/index
+    func

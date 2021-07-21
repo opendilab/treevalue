@@ -38,11 +38,15 @@ class TreeValue:
     def __init__(self, data: Union[BaseTree, 'TreeValue', dict]):
         setattr(self, _DATA_PROPERTY, data)
 
+    @classmethod
+    def __raw_value_to_value(cls, value):
+        return cls(value) if isinstance(value, BaseTree) else value
+
     def __getattr__(self, key):
         _tree = get_data_property(self)
         if key in _tree.keys():
             value = get_data_property(self).__getitem__(key)
-            return self.__class__(value) if isinstance(value, BaseTree) else value
+            return self.__raw_value_to_value(value)
         else:
             return self._attr_extern(key)
 
@@ -62,6 +66,10 @@ class TreeValue:
 
     def __contains__(self, item):
         return item in get_data_property(self).keys()
+
+    def __iter__(self):
+        for key, value in get_data_property(self).items():
+            yield key, self.__raw_value_to_value(value)
 
     def __repr__(self):
         _tree = get_data_property(self)
