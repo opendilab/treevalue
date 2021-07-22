@@ -1,8 +1,8 @@
 from functools import lru_cache
-from typing import List, Mapping, Optional, Any
+from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping
 
 
 @lru_cache()
@@ -31,6 +31,8 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
     def _decorate(func):
         return method_treelize(**_decorator_config(func.__name__))(func)
 
+    _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
+
     class _GeneralTreeValue(TreeValue):
         @method_treelize(inherit=True)
         def _attr_extern(self, key):
@@ -44,6 +46,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
         def clone(self):
             return clone(self)
+
+        def type(self, clazz: Type[_TreeValue]) -> _TreeValue:
+            return typetrans(self, clazz)
+
+        def map(self, mapper):
+            return mapping(self, mapper)
 
         @_decorate
         def __add__(self, other):

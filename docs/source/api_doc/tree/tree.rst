@@ -25,3 +25,15 @@ clone
 
 .. autofunction:: treevalue.tree.tree.utils.clone
 
+
+typetrans
+~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.typetrans
+
+
+mapping
+~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.mapping
+

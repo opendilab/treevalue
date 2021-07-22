@@ -32,7 +32,7 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
         def __repr__(self):
             return "<{cls} value: {value}>".format(cls=type(self).__name__, value=repr(self.__value))
 
-    # noinspection DuplicatedCode
+    # noinspection DuplicatedCode,PyMethodMayBeStatic
     @pytest.mark.unittest
     class _TestClass:
         def test_basic_methods(self):
@@ -217,5 +217,14 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
             assert t2.add(10) == tree_number_class({'a': 11, 'b': 12, 'x': {'c': 13, 'd': 14}})
             assert t2.add(x=10) == tree_number_class({'a': 11, 'b': 12, 'x': {'c': 13, 'd': 14}})
             assert t2.add(t1) == tree_number_class({'a': 2, 'b': 4, 'x': {'c': 6, 'd': 8}})
+
+        def test_map(self):
+            t1 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            assert t1.map(lambda x: x + 2) == tree_number_class({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
+
+        def test_type(self):
+            t1 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            assert t1.type(TreeValue) == TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            assert t1.type(TreeValue) != tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
 
     return _TestClass
