@@ -1,4 +1,4 @@
-from typing import TypeVar, List, Type
+from typing import TypeVar, List, Type, Tuple, Union, Any
 
 from .tree import TreeValue, get_data_property
 
@@ -100,3 +100,64 @@ def mapping(tree: _TreeValue, func) -> _TreeValue:
     """
     from ..func import func_treelize
     return func_treelize(return_type=tree.__class__)(func)(tree)
+
+
+def _filter_by_masked_tree(masked_tree: _TreeValue, remove_empty: bool) -> _TreeValue:
+    def _recursion(t: Union[_TreeValue, Any]) -> Tuple[bool, _TreeValue]:
+        if isinstance(t, masked_tree.__class__):
+            dict_result = {key: _recursion(value) for key, value in t}
+            dict_result = {key: value for key, (flag, value) in dict_result.items() if flag}
+            result = masked_tree.__class__(dict_result)
+
+            return not not result if remove_empty else True, result
+        else:
+            return t
+
+    _, _result = _recursion(masked_tree)
+    return _result
+
+
+def mask(tree: _TreeValue, mask_: Union[TreeValue, bool], remove_empty: bool = True) -> _TreeValue:
+    """
+    Overview:
+        Filter the element in the tree with a mask
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - mask_ (:obj:`TreeValue`): Tree value mask object
+        - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
+
+    Returns:
+        - tree (:obj:`_TreeValue`): Filtered tree value object.
+
+    Example:
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': False}))                    # TreeValue({'a': 1})
+        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}}))  # TreeValue({'a': 1, 'x': {'c': 3}})
+    """
+    from ..func import func_treelize
+    raw_result = func_treelize(inherit=True, return_type=tree.__class__)(
+        lambda t, f: (not not f, t))(tree, mask_)
+    return _filter_by_masked_tree(raw_result, remove_empty)
+
+
+def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
+    """
+    Overview:
+        Filter the element in the tree with a predict function.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
+
+    Returns:
+        - tree (:obj:`_TreeValue`): Filtered tree value object.
+
+    Example:
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> filter_(t, lambda x: x < 3)         # TreeValue({'a': 1, 'b': 2})
+        >>> filter_(t, lambda x: x < 3, False)  # TreeValue({'a': 1, 'b': 2, 'x': {}})
+        >>> filter_(t, lambda x: x % 2 == 1)    # TreeValue({'a': 1, 'x': {'c': 3}})
+    """
+    raw_result = mapping(tree, lambda x: (not not func(x), x))
+    return _filter_by_masked_tree(raw_result, remove_empty)

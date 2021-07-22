@@ -227,4 +227,22 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
             assert t1.type(TreeValue) == TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             assert t1.type(TreeValue) != tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
 
+        def test_filter(self):
+            t1 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            assert t1.filter(lambda x: x % 2 == 1) == tree_number_class({'a': 1, 'x': {'c': 3}})
+            assert t1.filter(lambda x: x < 3) == tree_number_class({'a': 1, 'b': 2, })
+            assert t1.filter(lambda x: x < 3, False) == tree_number_class({'a': 1, 'b': 2, 'x': {}})
+
+        def test_mask(self):
+            t1 = tree_number_class({'a': 13, 'b': 27, 'x': {'c': 39, 'd': 45}})
+            t2 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            t3 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 7, 'd': 4}})
+
+            mask1 = t2.map(lambda x: (lambda v: v % x == 0))(t1)
+            assert t1.mask(mask1) == tree_number_class({'a': 13, 'x': {'c': 39}})
+
+            mask2 = t3.map(lambda x: (lambda v: v % x == 0))(t1)
+            assert t1.mask(mask2) == tree_number_class({'a': 13})
+            assert t1.mask(mask2, False) == tree_number_class({'a': 13, 'x': {}})
+
     return _TestClass

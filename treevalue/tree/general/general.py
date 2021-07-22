@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_
 
 
 @lru_cache()
@@ -52,6 +52,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
         def map(self, mapper):
             return mapping(self, mapper)
+
+        def mask(self, mask_: TreeValue, remove_empty: bool = True):
+            return mask(self, mask_, remove_empty)
+
+        def filter(self, func, remove_empty: bool = True):
+            return filter_(self, func, remove_empty)
 
         @_decorate
         def __add__(self, other):

@@ -37,3 +37,15 @@ mapping
 
 .. autofunction:: treevalue.tree.tree.utils.mapping
 
+
+mask
+~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.mask
+
+
+filter\_
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.filter_
+
