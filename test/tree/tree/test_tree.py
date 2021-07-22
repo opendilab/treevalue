@@ -76,6 +76,24 @@ class TestTreeTreeTree:
             'x': 2, 'y': 3
         }
 
+    def test_tree_value_len(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        tv2 = TreeValue({'a': 1, 'b': 2, 'c': {}, 'd': 4})
+
+        assert len(tv1) == 3
+        assert len(tv1.c) == 2
+        assert len(tv2) == 4
+        assert len(tv2.c) == 0
+
+    def test_tree_value_bool(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        tv2 = TreeValue({'a': 1, 'b': 2, 'c': {}, 'd': 4})
+
+        assert tv1
+        assert tv1.c
+        assert tv2
+        assert not tv2.c
+
     def test_tee_value_hash_equal(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         assert tv1 == tv1

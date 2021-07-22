@@ -63,6 +63,9 @@ class TestTreeCommonTree:
         assert len(t) == 2
         assert len(t1) == 2
         assert len(t1['x']) == 3
+        assert t
+        assert t1
+        assert not Tree({})
 
     def test_tree_iters(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})

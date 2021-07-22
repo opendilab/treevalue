@@ -4,6 +4,7 @@ treevalue.tree
 .. toctree::
     :maxdepth: 3
 
-    common/index
-    tree/index
+    common
+    tree
     func
+    general

@@ -71,6 +71,12 @@ class TreeValue:
         for key, value in get_data_property(self).items():
             yield key, self.__raw_value_to_value(value)
 
+    def __len__(self):
+        return len(get_data_property(self))
+
+    def __bool__(self):
+        return not not get_data_property(self)
+
     def __repr__(self):
         _tree = get_data_property(self)
         return "<{cls} {id} keys: {keys}>".format(

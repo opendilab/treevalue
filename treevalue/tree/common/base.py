@@ -210,6 +210,9 @@ class BaseTree(metaclass=ABCMeta):
     def __len__(self):
         return len(self.keys())
 
+    def __bool__(self):
+        return len(self.keys()) > 0
+
     def __hash__(self):
         return hash(tuple([(key, value) for key, value in sorted(self.items())]))
 
