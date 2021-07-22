@@ -1,6 +1,7 @@
 from typing import TypeVar, List, Type, Tuple, Union, Any
 
 from .tree import TreeValue, get_data_property
+from ..common import BaseTree
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -82,6 +83,16 @@ def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
     return return_type(get_data_property(tree))
 
 
+def _build_path_tree(tree: _TreeValue) -> _TreeValue:
+    def _recursion(path, t: _TreeValue):
+        if isinstance(t, tree.__class__):
+            return tree.__class__({key: _recursion(path + [key], value) for key, value in t})
+        else:
+            return path
+
+    return _recursion([], tree)
+
+
 def mapping(tree: _TreeValue, func) -> _TreeValue:
     """
     Overview:
@@ -98,8 +109,11 @@ def mapping(tree: _TreeValue, func) -> _TreeValue:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> mapping(t, lambda x: x + 2)  # TreeValue({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
     """
+
     from ..func import func_treelize
-    return func_treelize(return_type=tree.__class__)(func)(tree)
+
+    path_tree = func_treelize(return_type=tree.__class__)(lambda v, p: (p, v))(tree, _build_path_tree(tree))
+    return func_treelize(return_type=tree.__class__)(lambda t: func(t[1]))(path_tree)
 
 
 def _filter_by_masked_tree(masked_tree: _TreeValue, remove_empty: bool) -> _TreeValue:
@@ -161,3 +175,17 @@ def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
     """
     raw_result = mapping(tree, lambda x: (not not func(x), x))
     return _filter_by_masked_tree(raw_result, remove_empty)
+
+
+def shrink(tree: _TreeValue, treefunc):
+    def _recursion(t: _TreeValue):
+        if isinstance(t, tree.__class__):
+            _result = treefunc(**{key: _recursion(value) for key, value in t})
+            if isinstance(_result, (dict, TreeValue, BaseTree)):
+                return tree.__class__(_result)
+            else:
+                return _result
+        else:
+            return t
+
+    return _recursion(tree)
