@@ -1,7 +1,7 @@
 from typing import TypeVar, List, Type, Tuple, Union, Any
 
 from .tree import TreeValue, get_data_property
-from ..common import BaseTree
+from ...utils import dynamic_call
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -88,7 +88,7 @@ def _build_path_tree(tree: _TreeValue) -> _TreeValue:
         if isinstance(t, tree.__class__):
             return tree.__class__({key: _recursion(path + [key], value) for key, value in t})
         else:
-            return path
+            return tuple(path)
 
     return _recursion([], tree)
 
@@ -111,9 +111,8 @@ def mapping(tree: _TreeValue, func) -> _TreeValue:
     """
 
     from ..func import func_treelize
-
-    path_tree = func_treelize(return_type=tree.__class__)(lambda v, p: (p, v))(tree, _build_path_tree(tree))
-    return func_treelize(return_type=tree.__class__)(lambda t: func(t[1]))(path_tree)
+    return func_treelize(return_type=tree.__class__)(lambda args: dynamic_call(func)(*args))(
+        union(tree, _build_path_tree(tree)))
 
 
 def _filter_by_masked_tree(masked_tree: _TreeValue, remove_empty: bool) -> _TreeValue:
@@ -149,10 +148,7 @@ def mask(tree: _TreeValue, mask_: Union[TreeValue, bool], remove_empty: bool = T
         >>> mask(t, TreeValue({'a': True, 'b': False, 'x': False}))                    # TreeValue({'a': 1})
         >>> mask(t, TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}}))  # TreeValue({'a': 1, 'x': {'c': 3}})
     """
-    from ..func import func_treelize
-    raw_result = func_treelize(inherit=True, return_type=tree.__class__)(
-        lambda t, f: (not not f, t))(tree, mask_)
-    return _filter_by_masked_tree(raw_result, remove_empty)
+    return _filter_by_masked_tree(union(mask_, tree, return_type=tree.__class__), remove_empty)
 
 
 def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
@@ -162,6 +158,7 @@ def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
+        - func (:obj:): Function for filtering
         - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
 
     Returns:
@@ -173,15 +170,61 @@ def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
         >>> filter_(t, lambda x: x < 3, False)  # TreeValue({'a': 1, 'b': 2, 'x': {}})
         >>> filter_(t, lambda x: x % 2 == 1)    # TreeValue({'a': 1, 'x': {'c': 3}})
     """
-    raw_result = mapping(tree, lambda x: (not not func(x), x))
-    return _filter_by_masked_tree(raw_result, remove_empty)
+    return mask(tree, mapping(tree, func), remove_empty)
 
 
-def shrink(tree: _TreeValue, treefunc):
+def union(*trees: TreeValue, return_type=None, inherit=True, **kwargs):
+    """
+    Overview:
+        Union tree values together.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
+            means raise `KeyError` when missing detected.
+
+    Returns:
+        - result (:obj:`TreeValue`): Unionised tree value.
+
+    Example:
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> tx = mapping(t, lambda v: v % 2 == 1)
+        >>> union(t, tx)  # TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
+    """
+    if return_type is None:
+        return_type = trees[0].__class__ if trees else TreeValue
+
+    from ..func import func_treelize
+    return func_treelize(inherit=inherit, return_type=return_type, **kwargs)(lambda *args: tuple(args))(*trees)
+
+
+def shrink(tree: _TreeValue, func):
+    """
+    Overview
+        Shrink the tree to value.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - func (:obj:): Function for shrinking
+
+    Returns:
+        - result (:obj:): Shrunk result
+
+    Examples:
+        >>> from functools import reduce
+        >>>
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> shrink(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
+        >>> shrink(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
+    """
+
     def _recursion(t: _TreeValue):
         if isinstance(t, tree.__class__):
-            _result = treefunc(**{key: _recursion(value) for key, value in t})
-            if isinstance(_result, (dict, TreeValue, BaseTree)):
+            _result = func(**{key: _recursion(value) for key, value in t})
+            if isinstance(_result, TreeValue):
                 return tree.__class__(_result)
             else:
                 return _result

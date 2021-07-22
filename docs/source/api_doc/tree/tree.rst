@@ -49,3 +49,15 @@ filter\_
 
 .. autofunction:: treevalue.tree.tree.utils.filter_
 
+
+union
+~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.union
+
+
+shrink
+~~~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.shrink
+
