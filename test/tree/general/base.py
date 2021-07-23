@@ -1,9 +1,11 @@
+from functools import reduce
+from operator import __mul__
 from typing import Type
 
 import numpy as np
 import pytest
 
-from treevalue.tree import func_treelize, TreeValue
+from treevalue.tree import func_treelize, TreeValue, raw
 
 
 def get_tree_test(tree_number_class: Type[TreeValue]):
@@ -244,5 +246,57 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
             mask2 = t3.map(lambda x: (lambda v: v % x == 0))(t1)
             assert t1.mask(mask2) == tree_number_class({'a': 13})
             assert t1.mask(mask2, False) == tree_number_class({'a': 13, 'x': {}})
+
+        def test_shrink(self):
+            t1 = tree_number_class({'a': 13, 'b': 27, 'x': {'c': 39, 'd': 45}})
+            t2 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+
+            assert t1.shrink(lambda **kwargs: sum(kwargs.values())) == 124
+            assert t2.shrink(lambda **kwargs: reduce(__mul__, kwargs.values())) == 24
+
+        def test_union(self):
+            t1 = tree_number_class({'a': 13, 'b': 27, 'x': {'c': 39, 'd': 45}})
+            t2 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            t3 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 7, 'd': 4}})
+
+            assert tree_number_class.union(t1, t2, t3) == tree_number_class({
+                'a': (13, 1, 1),
+                'b': (27, 2, 2),
+                'x': {
+                    'c': (39, 3, 7),
+                    'd': (45, 4, 4),
+                }
+            })
+
+            assert tree_number_class.union(t1, t2, t3, return_type=TreeValue) == TreeValue({
+                'a': (13, 1, 1),
+                'b': (27, 2, 2),
+                'x': {
+                    'c': (39, 3, 7),
+                    'd': (45, 4, 4),
+                }
+            })
+
+        def test_subside(self):
+            data = {
+                'a': TreeValue({'a': 1, 'b': 2}),
+                'x': {
+                    'c': TreeValue({'a': 3, 'b': 4}),
+                    'd': [
+                        TreeValue({'a': 5, 'b': 6}),
+                        TreeValue({'a': 7, 'b': 8}),
+                    ]
+                },
+                'k': '233'
+            }
+
+            assert tree_number_class.subside(data) == tree_number_class({
+                'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+                'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+            })
+            assert tree_number_class.subside(data, return_type=TreeValue) == TreeValue({
+                'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+                'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+            })
 
     return _TestClass
