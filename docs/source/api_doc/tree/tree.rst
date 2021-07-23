@@ -56,6 +56,12 @@ union
 .. autofunction:: treevalue.tree.tree.utils.union
 
 
+subside
+~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.subside
+
+
 shrink
 ~~~~~~~~~~~~~~~~
 
