@@ -2,9 +2,10 @@ import re
 
 import pytest
 
-from treevalue.tree.common import Tree
+from treevalue.tree.common import Tree, raw
 
 
+# noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeCommonTree:
     def test_tree_init_and_eq(self):
@@ -82,3 +83,30 @@ class TestTreeCommonTree:
 
         assert {key: value for key, value in t.items()} == \
                {'a': 1, 'x': Tree({'b': 1, 'c': 2})}
+
+    def test_raw(self):
+        t = Tree({
+            'a': raw({'a': 1, 'b': 2}),
+            'b': raw({'a': 3, 'b': 4}),
+            'x': {
+                'c': raw({'a': 5, 'b': 6}),
+                'd': raw({'a': 7, 'b': 8}),
+            }
+        })
+
+        assert t['a'] == {'a': 1, 'b': 2}
+        assert t['b'] == {'a': 3, 'b': 4}
+        assert t['x']['c'] == {'a': 5, 'b': 6}
+        assert t['x']['d'] == {'a': 7, 'b': 8}
+
+        t1 = t.clone()
+        assert t1['a'] == {'a': 1, 'b': 2}
+        assert t1['b'] == {'a': 3, 'b': 4}
+        assert t1['x']['c'] == {'a': 5, 'b': 6}
+        assert t1['x']['d'] == {'a': 7, 'b': 8}
+
+        t['a'] = raw({'a': 9, 'b': 10})
+        assert t['a'] == {'a': 9, 'b': 10}
+        assert t['b'] == {'a': 3, 'b': 4}
+        assert t['x']['c'] == {'a': 5, 'b': 6}
+        assert t['x']['d'] == {'a': 7, 'b': 8}

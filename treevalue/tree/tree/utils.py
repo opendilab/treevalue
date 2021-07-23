@@ -56,7 +56,7 @@ def clone(tree: _TreeValue) -> _TreeValue:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
-    return tree.__class__(get_data_property(tree).json())
+    return tree.__class__(get_data_property(tree).clone())
 
 
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
@@ -225,7 +225,7 @@ def shrink(tree: _TreeValue, func):
         if isinstance(t, tree.__class__):
             _result = func(**{key: _recursion(value) for key, value in t})
             if isinstance(_result, TreeValue):
-                return tree.__class__(_result)
+                return typetrans(_result, tree.__class__)
             else:
                 return _result
         else:
