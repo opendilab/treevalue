@@ -14,10 +14,14 @@ class _RawWrapped:
         return self.__value
 
 
+_RAW_NEEDED_TYPES = (dict,)
+
+
 def raw(value) -> _RawWrapped:
     """
     Overview:
         Wrap raw value to init tree or set item, can be used for dict.
+        Can only performs when value is a dict object, otherwise just return the original value.
 
     Arguments:
         - value (:obj:): Original value.
@@ -45,7 +49,17 @@ def raw(value) -> _RawWrapped:
         >>> t['a'] = {'a': 9, 'b': 10}
         >>> t['a']  # should be a Tree object when raw not used
     """
-    return _RawWrapped(value) if not isinstance(value, _RawWrapped) else value
+    if not isinstance(value, _RawWrapped) and isinstance(value, _RAW_NEEDED_TYPES):
+        return _RawWrapped(value)
+    else:
+        return value
+
+
+def _unraw(value):
+    if isinstance(value, _RawWrapped):
+        return value.value
+    else:
+        return value
 
 
 def _to_tree_decorator(init_func):
@@ -55,8 +69,7 @@ def _to_tree_decorator(init_func):
             _new_init_func(_tree_dump(data))
         elif isinstance(data, dict):
             init_func({
-                str(key): Tree(value) if isinstance(value, dict) else (
-                    value.value if isinstance(value, _RawWrapped) else value)
+                str(key): Tree(value) if isinstance(value, dict) else _unraw(value)
                 for key, value in data.items()
             })
         else:
@@ -111,9 +124,7 @@ class Tree(BaseTree):
     def __setitem__(self, key, value):
         if isinstance(value, dict):
             value = Tree(value)
-        elif isinstance(value, _RawWrapped):
-            value = value.value
-        self.__dict[key] = value
+        self.__dict[key] = _unraw(value)
 
     def __delitem__(self, key):
         self.__check_key_exist(key)

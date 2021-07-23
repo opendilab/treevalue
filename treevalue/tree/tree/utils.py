@@ -1,4 +1,4 @@
-from typing import TypeVar, List, Type, Tuple, Union, Any
+from typing import TypeVar, List, Type, Tuple, Union, Any, Optional
 
 from .tree import TreeValue, get_data_property
 from ...utils import dynamic_call
@@ -199,6 +199,21 @@ def union(*trees: TreeValue, return_type=None, inherit=True, **kwargs):
 
     from ..func import func_treelize
     return func_treelize(inherit=inherit, return_type=return_type, **kwargs)(lambda *args: tuple(args))(*trees)
+
+
+def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
+            return_type: Optional[Type[_TreeValue]] = None):
+    return_type = return_type or TreeValue
+
+    def _build_func(v):
+        if dict_ and isinstance(v, dict):
+            pass
+        elif list_ and isinstance(v, list):
+            pass
+        elif tuple_ and isinstance(v, tuple):
+            pass
+        else:
+            pass
 
 
 def shrink(tree: _TreeValue, func):
