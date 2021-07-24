@@ -286,7 +286,6 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
     count, iter_, builder = _build_func(value)
     arguments = list(iter_)
     return_type = return_type or _get_default_type(arguments) or TreeValue
-
     assert count == len(arguments)
 
     from ..func import func_treelize

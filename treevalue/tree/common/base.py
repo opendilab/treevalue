@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import List
 
+from treevalue.utils import build_tree
+
 
 class BaseTree(metaclass=ABCMeta):
     """
@@ -231,8 +233,46 @@ class BaseTree(metaclass=ABCMeta):
             return False
 
     def __repr__(self):
-        return '<{cls} {id} keys: {keys}>'.format(
+        return self.__brief(with_keys=True)
+
+    def __brief(self, with_keys: bool):
+        if with_keys:
+            template = '<{cls} {id} keys: {keys}>'
+        else:
+            template = '<{cls} {id}>'
+
+        return template.format(
             cls=self.__class__.__name__,
             id=hex(id(self.actual())),
             keys=repr(sorted(self.keys()))
         )
+
+    def __str__(self):
+        """
+        Overview:
+            Return tree-formatted string.
+
+        Returns:
+            - string (:obj:`str`): Tree-formatted string.
+
+        Example:
+            >>> t = Tree({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'z': [1, 2], 'v': raw({'1': '2'})})
+            >>> print(t)
+
+            The output will be
+
+            >>> <Tree 0x7f9fa48b9588>
+            >>> ├── 'a' --> 1
+            >>> ├── 'b' --> 2
+            >>> ├── 'v' --> {'1': '2'}
+            >>> ├── 'x' --> <Tree 0x7f9fa48b95c0>
+            >>> │   ├── 'c' --> 3
+            >>> │   └── 'd' --> 4
+            >>> └── 'z' --> [1, 2]
+        """
+        return str(build_tree(
+            self,
+            represent=lambda value: value.__brief(with_keys=False) if isinstance(value, BaseTree) else repr(value),
+            iterate=lambda value: value.items(),
+            recurse=lambda value: isinstance(value, BaseTree),
+        ))

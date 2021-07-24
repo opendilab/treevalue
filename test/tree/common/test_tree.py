@@ -52,7 +52,13 @@ class TestTreeCommonTree:
         assert t == Tree({'x': {'c': 2, 'b': 1}, 'a': 1})
         assert t1 == Tree({'x': {'b1': 1, 'b4': 5, 't': {'v': 33}}, 'a': 1})
 
-    def test_tree_repr_and_len(self):
+    def test_tree_str(self):
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        assert "'a' --> 1" in str(t)
+        assert "'b' --> 1" in str(t)
+        assert "'c' --> 2" in str(t)
+
+    def test_tree_repr(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         t1 = Tree(t)
         t1['x'] = {'b1': 1, 'b2': 2, 'b4': 5, 't': {'v': 33}}
@@ -61,6 +67,11 @@ class TestTreeCommonTree:
         assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['a', 'x']>", repr(t1))
         assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['b1', 'b4', 't']>", repr(t1['x']))
 
+    def test_tree_len(self):
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        t1 = Tree(t)
+        t1['x'] = {'b1': 1, 'b2': 2, 'b4': 5, 't': {'v': 33}}
+        del t1['x']['b2']
         assert len(t) == 2
         assert len(t1) == 2
         assert len(t1['x']) == 3
