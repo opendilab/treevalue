@@ -77,13 +77,13 @@ def test():
     t6 = t1a[::2]
     assert t6.a.shape == (2, 3)
     assert t6.c.d.shape == (4, 2)
-    t6 = t1a[[0, 3]]
-    assert t6.a.shape == (2, 3)
-    assert t6.a[1].eq(t1a.a[3]).all()
-    t6 = t1a[..., 1]
-    assert t6.a.shape == (4, )
-    t6 = t1a[..., 1:2]
-    assert t6.a.shape == (4, 1)
+    t6 = t1a[slice(0, 3)]
+    assert t6.a.shape == (3, 3)
+    assert t6.a[1].eq(t1a.a[1]).all()
+    # t6 = t1a[..., 1]
+    # assert t6.a.shape == (4, )
+    # t6 = t1a[..., 1:2]
+    # assert t6.a.shape == (4, 1)
 
     t7 = cat(t1a, t2a, dim=0)
     assert t7.a.shape == (8, 3)
@@ -99,12 +99,11 @@ def test():
     assert t7.a.shape == (4, 2, 3)
     assert t7.b.shape == (6, 2, 9)
 
-    # t7 = stack_all([t1, t2a, t1a, t2a], dim=1)
-    # assert t7.a.shape == (4, 4, 3)
-
     t8 = split(t1a, 2, 0)
-    assert isinstance(t8.a, tuple)
-    assert t8.a[0].shape == (2, 3)
+    # assert isinstance(t8.a, tuple)
+    # assert t8.a[0].shape == (2, 3)
+    # assert isinstance(t8, tuple)
+    # assert t8[0].a.shape == (2, 3)
 
     t9 = mean(t1a)
     assert t9.a == t1a.a.mean()
@@ -118,12 +117,8 @@ def test():
     t11 = to(t1a, torch.int64)
     assert t11.a.dtype == torch.int64
 
-    @func_treelize(inherit=True)
     def stack_spec(items, *args, **kwargs):
-        return torch.stack(items, *args, **kwargs)
+        return stack_all(FastTreeValue.subside(items), *args, **kwargs)
 
-    def stack_spec_union(items, *args, **kwargs):
-        return stack_spec(union(*items), *args, **kwargs)
-
-    t12 = stack_spec_union([t1a, t2a], dim=0)
-    assert t12.a.shape == (2, 4, 3)
+    t12 = stack_spec([t1a, t2a, t1a], dim=0)
+    assert t12.a.shape == (3, 4, 3)
