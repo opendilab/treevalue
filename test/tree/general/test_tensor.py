@@ -1,11 +1,11 @@
 import pytest
 import torch
 
-from treevalue.tree import func_treelize, TreeValue, FastTreeValue, union
+from treevalue.tree import func_treelize, FastTreeValue
 
 
-@pytest.mark.torchtest
-def test():
+@pytest.mark.unitest
+def test_for_torch_support():
     @func_treelize(inherit=True)
     def add(a, b):
         return a + b
@@ -49,10 +49,10 @@ def test():
 
     t3 = add(t1, t2)
     assert t3.a.shape == (4, 3)
-    assert t3.b.shape == (5, )
+    assert t3.b.shape == (5,)
     t4 = add(1, t2)
     assert t4.a.shape == (4, 3)
-    assert t4.b.shape == (5, )
+    assert t4.b.shape == (5,)
     assert t4.b.eq(t2.b + 1).all()
 
     t5 = sin(t1)
@@ -63,7 +63,7 @@ def test():
     assert t5.b.eq(torch.cos(t1.b)).all()
 
     t6 = t1[0]
-    assert t6.a.shape == (3, )
+    assert t6.a.shape == (3,)
     assert t6.b.shape == ()
 
     # t1a = FastTreeValue({'a': torch.randn(4, 3), 'b': torch.randn(6, 9), 'c': {'d': torch.randn(8, 2)}, 'e': [torch.randn(2, 3), torch.randn(2, 4)]})
@@ -72,8 +72,8 @@ def test():
     t2a = FastTreeValue({'a': torch.randn(4, 3), 'b': torch.randn(6, 9), 'c': {'d': torch.randn(8, 2)}})
 
     t6 = t1a[0]
-    assert t6.a.shape == (3, )
-    assert t6.b.shape == (9, )
+    assert t6.a.shape == (3,)
+    assert t6.b.shape == (9,)
     t6 = t1a[::2]
     assert t6.a.shape == (2, 3)
     assert t6.c.d.shape == (4, 2)
