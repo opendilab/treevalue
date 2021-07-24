@@ -78,16 +78,8 @@ class TreeValue:
         return not not get_data_property(self)
 
     def __repr__(self):
-        return self.__brief(with_keys=True)
-
-    def __brief(self, with_keys: bool):
-        if with_keys:
-            template = "<{cls} {id} keys: {keys}>"
-        else:
-            template = "<{cls} {id}>"
-
         _tree = get_data_property(self)
-        return template.format(
+        return "<{cls} {id} keys: {keys}>".format(
             cls=self.__class__.__name__,
             id=hex(id(_tree.actual())),
             keys=repr(sorted(_tree.keys()))
@@ -96,7 +88,7 @@ class TreeValue:
     def __str__(self):
         return str(build_tree(
             self,
-            represent=lambda x: x.__brief(with_keys=False) if isinstance(x, TreeValue) else repr(x),
+            represent=lambda x: repr(x),
             iterate=lambda x: iter(x),
             recurse=lambda x: isinstance(x, TreeValue),
         ))

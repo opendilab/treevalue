@@ -233,15 +233,7 @@ class BaseTree(metaclass=ABCMeta):
             return False
 
     def __repr__(self):
-        return self.__brief(with_keys=True)
-
-    def __brief(self, with_keys: bool):
-        if with_keys:
-            template = '<{cls} {id} keys: {keys}>'
-        else:
-            template = '<{cls} {id}>'
-
-        return template.format(
+        return '<{cls} {id} keys: {keys}>'.format(
             cls=self.__class__.__name__,
             id=hex(id(self.actual())),
             keys=repr(sorted(self.keys()))
@@ -261,18 +253,18 @@ class BaseTree(metaclass=ABCMeta):
 
             The output will be
 
-            >>> <Tree 0x7f9fa48b9588>
+            >>> <Tree 0x7f9fa48b9588 keys: ['a', 'b', 'v', 'x', 'z']>
             >>> ├── 'a' --> 1
             >>> ├── 'b' --> 2
             >>> ├── 'v' --> {'1': '2'}
-            >>> ├── 'x' --> <Tree 0x7f9fa48b95c0>
+            >>> ├── 'x' --> <Tree 0x7f9fa48b95c0 keys: ['c', 'd']>
             >>> │   ├── 'c' --> 3
             >>> │   └── 'd' --> 4
             >>> └── 'z' --> [1, 2]
         """
         return str(build_tree(
             self,
-            represent=lambda value: value.__brief(with_keys=False) if isinstance(value, BaseTree) else repr(value),
+            represent=lambda value: repr(value),
             iterate=lambda value: value.items(),
             recurse=lambda value: isinstance(value, BaseTree),
         ))
