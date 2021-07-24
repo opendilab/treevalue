@@ -4,7 +4,7 @@ from operator import __mul__
 import pytest
 
 from treevalue.tree import jsonify, TreeValue, view, clone, typetrans, mapping, filter_, mask, union, shrink, raw, \
-    subside
+    subside, rise
 
 
 # noinspection DuplicatedCode
@@ -198,6 +198,30 @@ class TestTreeTreeUtils:
 
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
+    def test_rise(self):
+        t1 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        assert rise(t1) == {
+            'a': TreeValue({'x': [1, 2], 'y': [5, 6, 7]}),
+            'b': [
+                TreeValue({'x': 2, 'y': 7}),
+                TreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+        assert rise(TreeValue({})) == TreeValue({})
+        assert rise(TreeValue({'a': 1, 'b': 2})) == TreeValue({'a': 1, 'b': 2})
+
+        class MyTreeValue(TreeValue):
+            pass
+
+        t2 = MyTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        assert rise(t2) == {
+            'a': MyTreeValue({'x': [1, 2], 'y': [5, 6, 7]}),
+            'b': [
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            ]
+        }
 
     def test_shrink(self):
         class MyTreeValue(TreeValue):

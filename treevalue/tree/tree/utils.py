@@ -1,3 +1,4 @@
+from functools import partial
 from itertools import chain
 from typing import TypeVar, List, Type, Tuple, Union, Any, Optional, Callable
 
@@ -294,6 +295,28 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
 
 
 def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool = True):
+    """
+    Overview:
+        Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.
+        - `list_` (:obj:`bool`): Enable list rise, default is `True`.
+        - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.
+
+    Returns:
+        - risen (:obj:): Risen value.
+
+    Example:
+        >>> t = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        >>> dt = rise(t)
+        >>> # dt will be {'a': <TreeValue 1>, 'b': [<TreeValue 2>, <TreeValue 3>]}
+        >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6, 7]})
+        >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 7})
+        >>> # TreeValue 3 will be TreeValue({'x': 3, 'y': 8})
+    """
+
     def _get_tree_builder(t: _TreeValue):
         if isinstance(t, TreeValue):
             results = sorted([(key, _get_tree_builder(value)) for key, value in t])
@@ -313,9 +336,62 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
         else:
             return 1, (t,).__iter__(), lambda x: raw(x)
 
+    def _get_common_structure_getter(*args):
+        if not args:
+            return 0, [], lambda: clone(tree)
+
+        base_class = common_direct_base(*[type(item) for item in args])
+        if dict_ and issubclass(base_class, dict):
+            keysets = [tuple(sorted(item.keys())) for item in args]
+            if len(set(keysets)) == 1:
+                keyset = sorted(list(keysets)[0])
+                results = [(key, _get_common_structure_getter(*[item[key] for item in args])) for key in keyset]
+                getter_lists = {key: getters for key, (_, getters, _) in results}
+
+                def _new_func(*args_):
+                    position = 0
+                    result = {}
+                    for key, (cnt, _, func) in results:
+                        result[key] = func(*args_[position:position + cnt])
+                        position += cnt
+
+                    return base_class(result)
+
+                return sum([cnt for _, (cnt, _, _) in results]), [
+                    partial(lambda k, g, x: g(x[k]), key, getter)
+                    for key in keyset for getter in getter_lists[key]], _new_func
+
+        elif (list_ and issubclass(base_class, list)) \
+                or (tuple_ and issubclass(base_class, tuple)):
+            lengths = [len(item) for item in args]
+            if len(set(lengths)) == 1:
+                length = list(lengths)[0]
+                results = [_get_common_structure_getter(*[item[i] for item in args]) for i in range(length)]
+                getter_lists = [getters for _, getters, _ in results]
+
+                def _new_func(*args_):
+                    position = 0
+                    result = []
+                    for cnt, _, func in results:
+                        result.append(func(*args_[position: position + cnt]))
+                        position += cnt
+
+                    return base_class(result)
+
+                return sum([cnt for cnt, _, _ in results]), [
+                    partial(lambda i, g, x: g(x[i]), index, getter)
+                    for index in range(length) for getter in getter_lists[index]], _new_func
+
+        return 1, [lambda x: x], (lambda x: x)
+
     value_count, value_iter, tree_builder = _get_tree_builder(tree)
     value_list = list(value_iter)
     assert value_count == len(value_list)
+
+    meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list)
+    assert meta_value_count == len(meta_value_getters)
+
+    return value_builder(*[tree_builder(*[getter_(item_) for item_ in value_list]) for getter_ in meta_value_getters])
 
 
 def shrink(tree: _TreeValue, func):

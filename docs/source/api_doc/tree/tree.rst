@@ -61,6 +61,11 @@ subside
 
 .. autofunction:: treevalue.tree.tree.utils.subside
 
+rise
+~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.utils.rise
+
 
 shrink
 ~~~~~~~~~~~~~~~~
