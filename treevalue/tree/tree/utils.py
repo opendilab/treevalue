@@ -3,7 +3,7 @@ from typing import TypeVar, List, Type, Tuple, Union, Any, Optional, Callable
 
 from .tree import TreeValue, get_data_property
 from ..common import raw
-from ...utils import dynamic_call
+from ...utils import dynamic_call, common_direct_base
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -279,9 +279,9 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
 
     def _get_default_type(args):
         types = {type(item) for item in args if isinstance(item, TreeValue)}
-        if len(types) == 1:
-            return list(types)[0]
-        else:
+        try:
+            return common_direct_base(*list(types))
+        except TypeError:
             return None
 
     count, iter_, builder = _build_func(value)

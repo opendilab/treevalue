@@ -168,6 +168,34 @@ class TestTreeTreeUtils:
             'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
         })
 
+        class MyTreeValue1(MyTreeValue):
+            pass
+
+        class MyTreeValue2(MyTreeValue):
+            pass
+
+        class MyTreeValue3(MyTreeValue):
+            pass
+
+        class MyTreeValue4(MyTreeValue):
+            pass
+
+        original3 = {
+            'a': MyTreeValue1({'a': 1, 'b': 2}),
+            'x': {
+                'c': MyTreeValue2({'a': 3, 'b': 4}),
+                'd': [
+                    MyTreeValue3({'a': 5, 'b': 6}),
+                    MyTreeValue4({'a': 7, 'b': 8}),
+                ]
+            },
+            'k': '233'
+        }
+        assert subside(original3) == MyTreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
+
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
 
