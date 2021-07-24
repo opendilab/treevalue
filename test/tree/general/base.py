@@ -299,4 +299,30 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
                 'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
             })
 
+        def test_rise(self):
+            data = {
+                'a': TreeValue({'a': 1, 'b': 2}),
+                'x': {
+                    'c': TreeValue({'a': 3, 'b': 4}),
+                    'd': [
+                        TreeValue({'a': 5, 'b': 6}),
+                        TreeValue({'a': 7, 'b': 8}),
+                    ]
+                },
+                'k': '233'
+            }
+
+            t1 = tree_number_class.subside(data)
+            assert t1.rise() == {
+                'a': tree_number_class({'a': 1, 'b': 2}),
+                'x': {
+                    'c': tree_number_class({'a': 3, 'b': 4}),
+                    'd': [
+                        tree_number_class({'a': 5, 'b': 6}),
+                        tree_number_class({'a': 7, 'b': 8}),
+                    ]
+                },
+                'k': tree_number_class({'a': '233', 'b': '233'}),
+            }
+
     return _TestClass
