@@ -1,5 +1,7 @@
-from functools import partial, wraps
-from typing import TypeVar, Type
+from functools import partial, wraps, reduce
+from operator import __and__
+from queue import Queue
+from typing import TypeVar, Type, Union, Collection, Set
 
 _ClassType = TypeVar('_ClassType')
 
@@ -75,3 +77,107 @@ def init_magic(init_decorator):
         return _NewClass
 
     return _decorator
+
+
+def _get_all_bases(clazz: Type):
+    queue = Queue()
+    result = {clazz}
+    queue.put(clazz)
+    while not queue.empty():
+        current = queue.get()
+        for _type in current.__bases__:
+            if _type not in result:
+                result.add(_type)
+                queue.put(_type)
+
+    return result
+
+
+def _get_all_direct_bases(clazz: Type):
+    result = set()
+    while True:
+        result.add(clazz)
+        clazz = clazz.__base__
+        if clazz is None:
+            break
+
+    return result
+
+
+def _base_process(base: Union[Collection[Type], Type, None]):
+    if isinstance(base, type):
+        base = (base,)
+    elif base is not None:
+        base = tuple(list(base))
+
+    return base
+
+
+def _all_commons(*classes: Type, func, base: Union[Collection[Type], Type, None] = None) -> Set[Type]:
+    if not classes:
+        return set()
+
+    base = _base_process(base)
+    _intersection = reduce(__and__, [func(item) for item in classes])
+    _result = set()
+
+    for _base_class in _intersection:
+        acceptable = True
+        for _another_base_class in _intersection:
+            if _base_class == _another_base_class:
+                continue
+
+            if issubclass(_another_base_class, _base_class):
+                acceptable = False
+                break
+
+        if acceptable:
+            _result.add(_base_class)
+
+    if base:
+        _result = {item for item in _result if issubclass(item, base)}
+
+    return _result
+
+
+def common_bases(*classes: Type, base: Union[Collection[Type], Type, None] = None) -> Set[Type]:
+    """
+    Overview:
+        Get all the common bases of the classes.
+
+    Arguments:
+        - classes (:obj:`Type`): Target classes.
+        - base (:obj:`Union[Collection[Type], Type, None]`): Limit of the base class, \
+            default is `None` which means no limit.
+
+    Returns:
+        - bases (:obj:`Set[Type]`): A set of classes which is the common bases of the classes, \
+            only high leveled classes will be kept.
+    """
+    return _all_commons(*classes, func=_get_all_bases, base=base)
+
+
+def common_direct_base(*classes: Type, base: Union[Collection[Type], Type, None] = None):
+    """
+    Overview:
+        Get the common direct base of the classes.
+
+    Arguments:
+        - classes (:obj:`Type`): Target classes.
+        - base (:obj:`Union[Collection[Type], Type, None]`): Limit of the base class, \
+            default is `None` which means no limit.
+
+    Returns:
+        - base (:obj:`Type`): A class which is all the bases.
+    """
+    base = _base_process(base)
+    _bases = _all_commons(*classes, func=_get_all_direct_bases, base=base)
+    if _bases:
+        return list(_bases)[0]
+    else:
+        if base:
+            template = "No common base found with {classes} which is based on {bases}."
+        else:
+            template = "No common base found with {classes}."
+
+        raise TypeError(template.format(classes=repr(classes), bases=repr(base)))
