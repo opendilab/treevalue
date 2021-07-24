@@ -2,9 +2,10 @@ import re
 
 import pytest
 
-from treevalue.tree.common import Tree
+from treevalue.tree.common import Tree, raw
 
 
+# noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeCommonTree:
     def test_tree_init_and_eq(self):
@@ -51,7 +52,13 @@ class TestTreeCommonTree:
         assert t == Tree({'x': {'c': 2, 'b': 1}, 'a': 1})
         assert t1 == Tree({'x': {'b1': 1, 'b4': 5, 't': {'v': 33}}, 'a': 1})
 
-    def test_tree_repr_and_len(self):
+    def test_tree_str(self):
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        assert "'a' --> 1" in str(t)
+        assert "'b' --> 1" in str(t)
+        assert "'c' --> 2" in str(t)
+
+    def test_tree_repr(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         t1 = Tree(t)
         t1['x'] = {'b1': 1, 'b2': 2, 'b4': 5, 't': {'v': 33}}
@@ -60,6 +67,11 @@ class TestTreeCommonTree:
         assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['a', 'x']>", repr(t1))
         assert re.fullmatch(r"<Tree 0x[0-9a-f]+ keys: \['b1', 'b4', 't']>", repr(t1['x']))
 
+    def test_tree_len(self):
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        t1 = Tree(t)
+        t1['x'] = {'b1': 1, 'b2': 2, 'b4': 5, 't': {'v': 33}}
+        del t1['x']['b2']
         assert len(t) == 2
         assert len(t1) == 2
         assert len(t1['x']) == 3
@@ -82,3 +94,30 @@ class TestTreeCommonTree:
 
         assert {key: value for key, value in t.items()} == \
                {'a': 1, 'x': Tree({'b': 1, 'c': 2})}
+
+    def test_raw(self):
+        t = Tree({
+            'a': raw({'a': 1, 'b': 2}),
+            'b': raw({'a': 3, 'b': 4}),
+            'x': {
+                'c': raw({'a': 5, 'b': 6}),
+                'd': raw({'a': 7, 'b': 8}),
+            }
+        })
+
+        assert t['a'] == {'a': 1, 'b': 2}
+        assert t['b'] == {'a': 3, 'b': 4}
+        assert t['x']['c'] == {'a': 5, 'b': 6}
+        assert t['x']['d'] == {'a': 7, 'b': 8}
+
+        t1 = t.clone()
+        assert t1['a'] == {'a': 1, 'b': 2}
+        assert t1['b'] == {'a': 3, 'b': 4}
+        assert t1['x']['c'] == {'a': 5, 'b': 6}
+        assert t1['x']['d'] == {'a': 7, 'b': 8}
+
+        t['a'] = raw({'a': 9, 'b': 10})
+        assert t['a'] == {'a': 9, 'b': 10}
+        assert t['b'] == {'a': 3, 'b': 4}
+        assert t['x']['c'] == {'a': 5, 'b': 6}
+        assert t['x']['d'] == {'a': 7, 'b': 8}

@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside
 
 
 @lru_cache()
@@ -65,6 +65,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
         @classmethod
         def union(cls, *trees, return_type=None, inherit=True, **kwargs):
             return union(*trees, return_type=return_type or cls, inherit=inherit, **kwargs)
+
+        @classmethod
+        def subside(cls, value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
+                    return_type: Optional[Type[_TreeValue]] = None, inherit: bool = True, **kwargs):
+            return subside(value, dict_, list_, tuple_,
+                           return_type=return_type or cls, inherit=inherit, **kwargs)
 
         @_decorate
         def __add__(self, other):

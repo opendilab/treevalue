@@ -8,6 +8,7 @@ from .inner import _InnerProcessor
 from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
+from ..common import raw
 from ..tree.tree import TreeValue
 from ...utils import int_enum_loads, SingletonMark
 
@@ -112,10 +113,10 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
             pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
 
             _data = {
-                key: _new_func(
+                key: raw(_new_func(
                     *(item(key) for item in pargs),
                     **{key_: value(key) for key_, value in pkwargs.items()}
-                ) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
+                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
             }
             return return_type(_data) if return_type is not None else None
 

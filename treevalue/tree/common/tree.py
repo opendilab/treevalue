@@ -5,14 +5,71 @@ from .base import BaseTree
 from ...utils import init_magic
 
 
+class _RawWrapped:
+    def __init__(self, value):
+        self.__value = value
+
+    @property
+    def value(self):
+        return self.__value
+
+
+_RAW_NEEDED_TYPES = (dict,)
+
+
+def raw(value) -> _RawWrapped:
+    """
+    Overview:
+        Wrap raw value to init tree or set item, can be used for dict.
+        Can only performs when value is a dict object, otherwise just return the original value.
+
+    Arguments:
+        - value (:obj:): Original value.
+
+    Returns:
+        - wrapped (:obj:`_RawWrapped`): Wrapped value.
+
+    Example:
+        >>> t = Tree({
+        >>>     'a': raw({'a': 1, 'b': 2}),
+        >>>     'b': raw({'a': 3, 'b': 4}),
+        >>>     'x': {
+        >>>         'c': raw({'a': 5, 'b': 6}),
+        >>>         'd': raw({'a': 7, 'b': 8}),
+        >>>     }
+        >>> })
+        >>>
+        >>> t['a']  # {'a': 1, 'b': 2}
+        >>> t['b']  # {'a': 3, 'b': 4}
+        >>> t['x']['c']  # {'a': 5, 'b': 6}
+        >>> t['x']['d']  # {'a': 7, 'b': 8}
+        >>>
+        >>> t['a'] = raw({'a': 9, 'b': 10})
+        >>> t['a']  # {'a': 9, 'b': 10}
+        >>> t['a'] = {'a': 9, 'b': 10}
+        >>> t['a']  # should be a Tree object when raw not used
+    """
+    if not isinstance(value, _RawWrapped) and isinstance(value, _RAW_NEEDED_TYPES):
+        return _RawWrapped(value)
+    else:
+        return value
+
+
+def _unraw(value):
+    if isinstance(value, _RawWrapped):
+        return value.value
+    else:
+        return value
+
+
 def _to_tree_decorator(init_func):
     @wraps(init_func)
     def _new_init_func(data):
         if isinstance(data, BaseTree):
-            _new_init_func(data.json())
+            _new_init_func(_tree_dump(data))
         elif isinstance(data, dict):
             init_func({
-                str(key): Tree(value) if isinstance(value, dict) else value
+                str(key): Tree(value) if isinstance(value, dict) else _unraw(value)
                 for key, value in data.items()
             })
         else:
@@ -20,6 +77,16 @@ def _to_tree_decorator(init_func):
                 "Dict value expected for dispatch value but {type} actually.".format(type=repr(type(data).__name__)))
 
     return _new_init_func
+
+
+def _tree_dump(tree: 'BaseTree'):
+    def _recursion(t):
+        if isinstance(t, BaseTree):
+            return {key: _recursion(value) for key, value in t.items()}
+        else:
+            return raw(t)
+
+    return _recursion(tree.actual())
 
 
 @init_magic(_to_tree_decorator)
@@ -57,7 +124,7 @@ class Tree(BaseTree):
     def __setitem__(self, key, value):
         if isinstance(value, dict):
             value = Tree(value)
-        self.__dict[key] = value
+        self.__dict[key] = _unraw(value)
 
     def __delitem__(self, key):
         self.__check_key_exist(key)

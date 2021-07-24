@@ -2,7 +2,7 @@ from functools import wraps
 from typing import Union
 
 from ..common import BaseTree, Tree
-from ...utils import init_magic
+from ...utils import init_magic, build_tree
 
 _DATA_PROPERTY = '_property__data'
 _PRESERVED_PROPERTIES = {
@@ -84,6 +84,14 @@ class TreeValue:
             id=hex(id(_tree.actual())),
             keys=repr(sorted(_tree.keys()))
         )
+
+    def __str__(self):
+        return str(build_tree(
+            self,
+            represent=lambda x: repr(x),
+            iterate=lambda x: iter(x),
+            recurse=lambda x: isinstance(x, TreeValue),
+        ))
 
     def __hash__(self):
         return hash(get_data_property(self))

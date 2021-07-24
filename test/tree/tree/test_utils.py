@@ -3,9 +3,11 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import jsonify, TreeValue, view, clone, typetrans, mapping, filter_, mask, union, shrink
+from treevalue.tree import jsonify, TreeValue, view, clone, typetrans, mapping, filter_, mask, union, shrink, raw, \
+    subside
 
 
+# noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeTreeUtils:
     def test_jsonify(self):
@@ -73,10 +75,19 @@ class TestTreeTreeUtils:
         tv2 = mapping(tv1, lambda x: x + 2)
         tv3 = mapping(tv1, lambda: 1)
         tv4 = mapping(tv1, lambda x, p: (x, p))
+        tv5 = mapping(tv1, lambda x, p: {'a': x ** (len(p) + 1), 'b': len(p) ** x})
 
         assert tv2 == TreeValue({'a': 3, 'b': 4, 'c': {'x': 4, 'y': 5}})
         assert tv3 == TreeValue({'a': 1, 'b': 1, 'c': {'x': 1, 'y': 1}})
         assert tv4 == TreeValue({'a': (1, ('a',)), 'b': (2, ('b',)), 'c': {'x': (2, ('c', 'x')), 'y': (3, ('c', 'y'))}})
+        assert tv5 == TreeValue({
+            'a': raw({'a': 1, 'b': 1}),
+            'b': raw({'a': 4, 'b': 1}),
+            'c': {
+                'x': raw({'a': 8, 'b': 4}),
+                'y': raw({'a': 27, 'b': 8})
+            }
+        })
 
     def test_mask(self):
         class MyTreeValue(TreeValue):
@@ -110,6 +121,52 @@ class TestTreeTreeUtils:
         assert filter_(t, lambda x: x < 3) == MyTreeValue({'a': 1, 'b': 2})
         assert filter_(t, lambda x: x < 3, remove_empty=False) == MyTreeValue({'a': 1, 'b': 2, 'x': {}})
         assert filter_(t, lambda x: x % 2 == 1) == MyTreeValue({'a': 1, 'x': {'c': 3}})
+
+    def test_subside(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        original1 = {
+            'a': MyTreeValue({'a': 1, 'b': 2}),
+            'x': {
+                'c': MyTreeValue({'a': 3, 'b': 4}),
+                'd': [
+                    MyTreeValue({'a': 5, 'b': 6}),
+                    MyTreeValue({'a': 7, 'b': 8}),
+                ]
+            },
+            'k': '233'
+        }
+
+        assert subside(original1) == MyTreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
+        assert subside(original1) != MyTreeValue({
+            'a': {'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}},
+            'b': {'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}},
+        })
+
+        original2 = {
+            'a': TreeValue({'a': 1, 'b': 2}),
+            'x': {
+                'c': MyTreeValue({'a': 3, 'b': 4}),
+                'd': [
+                    MyTreeValue({'a': 5, 'b': 6}),
+                    MyTreeValue({'a': 7, 'b': 8}),
+                ]
+            },
+            'k': '233'
+        }
+
+        assert subside(original2) == TreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
+        assert subside(original2, return_type=MyTreeValue) == MyTreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
 
     def test_shrink(self):
         class MyTreeValue(TreeValue):
