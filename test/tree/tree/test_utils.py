@@ -142,6 +142,10 @@ class TestTreeTreeUtils:
             'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
             'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
         })
+        assert subside(original1) != MyTreeValue({
+            'a': {'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}},
+            'b': {'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}},
+        })
 
         original2 = {
             'a': TreeValue({'a': 1, 'b': 2}),
