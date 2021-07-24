@@ -168,6 +168,9 @@ class TestTreeTreeUtils:
             'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
         })
 
+        assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
+               {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
     def test_shrink(self):
         class MyTreeValue(TreeValue):
             pass
