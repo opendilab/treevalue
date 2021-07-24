@@ -2,6 +2,7 @@ from itertools import chain
 from typing import TypeVar, List, Type, Tuple, Union, Any, Optional, Callable
 
 from .tree import TreeValue, get_data_property
+from ..common import raw
 from ...utils import dynamic_call
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
@@ -292,6 +293,31 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
     return func_treelize(return_type=return_type, **kwargs)(builder)(*arguments)
 
 
+def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool = True):
+    def _get_tree_builder(t: _TreeValue):
+        if isinstance(t, TreeValue):
+            results = sorted([(key, _get_tree_builder(value)) for key, value in t])
+
+            def _new_func(*args):
+                position = 0
+                returns = {}
+                for key, (cnt, _, func_) in results:
+                    returns[key] = func_(*args[position:position + cnt])
+                    position += cnt
+
+                return tree.__class__(returns)
+
+            return sum([cnt for _, (cnt, _, _) in results]), chain(
+                *[iter_ for _, (_, iter_, _) in results]), _new_func
+
+        else:
+            return 1, (t,).__iter__(), lambda x: raw(x)
+
+    value_count, value_iter, tree_builder = _get_tree_builder(tree)
+    value_list = list(value_iter)
+    assert value_count == len(value_list)
+
+    
 def shrink(tree: _TreeValue, func):
     """
     Overview
