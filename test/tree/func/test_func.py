@@ -64,23 +64,23 @@ class TestTreeFuncFunc:
 
     def test_method_treelize(self):
         class TreeNumber(TreeValue):
-            @method_treelize(inherit=True)
+            @method_treelize()
             def _attr_extern(self, key):
                 return getattr(self, key)
 
-            @method_treelize('outer', inherit=True, missing=0)
+            @method_treelize('outer', missing=0)
             def __add__(self, other):
                 return self + other
 
-            @method_treelize('outer', inherit=True, missing=0)
+            @method_treelize('outer', missing=0)
             def __radd__(self, other):
                 return other + self
 
-            @method_treelize('outer', inherit=True, missing=0)
+            @method_treelize('outer', missing=0)
             def __sub__(self, other):
                 return self - other
 
-            @method_treelize('outer', inherit=True, missing=0)
+            @method_treelize('outer', missing=0)
             def __rsub__(self, other):
                 return other - self
 
@@ -92,7 +92,7 @@ class TestTreeFuncFunc:
             def __neg__(self):
                 return -self
 
-            @method_treelize(inherit=True)
+            @method_treelize()
             def __call__(self, *args, **kwargs):
                 return self(*args, **kwargs)
 
@@ -120,7 +120,7 @@ class TestTreeFuncFunc:
     def test_classmethod_treelize(self):
         class TestUtils:
             @classmethod
-            @classmethod_treelize('outer', inherit=True, missing=0, return_type=TreeValue)
+            @classmethod_treelize('outer', missing=0, return_type=TreeValue)
             def add(cls, a, b):
                 return cls, a + b
 

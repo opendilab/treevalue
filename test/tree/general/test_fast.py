@@ -5,11 +5,11 @@ from .base import get_tree_test
 
 
 class MyFastTreeValue(FastTreeValue):
-    @method_treelize(inherit=True, missing=0, mode='outer')
+    @method_treelize(missing=0, mode='outer')
     def __add__(self, other):
         return self + other
 
-    @method_treelize(inherit=True, missing=0, mode='outer')
+    @method_treelize(missing=0, mode='outer')
     def __radd(self, other):
         return other + self
 

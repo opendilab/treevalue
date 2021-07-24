@@ -47,7 +47,7 @@ MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
 def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeValue,
-                  inherit: bool = False, missing=MISSING_NOT_ALLOW):
+                  inherit: bool = True, missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Wrap a common function to tree-supported function.
@@ -55,7 +55,7 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
     Arguments:
         - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
 
@@ -63,7 +63,7 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
         - new_func (:obj:): Wrapped tree-supported function.
 
     Example:
-        >>> @func_treelize(inherit=True)
+        >>> @func_treelize()
         >>> def ssum(a, b):
         >>>     return a + b  # the a and b will be integers, not TreeValue
         >>>
@@ -129,7 +129,7 @@ AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 
 def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                    inherit: bool = False, missing=MISSING_NOT_ALLOW):
+                    inherit: bool = True, missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Wrap a common instance method to tree-supported method.
@@ -143,7 +143,7 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
         - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
 
@@ -152,7 +152,7 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
 
     Example:
         >>> class MyTreeValue(TreeValue):
-        >>>     @method_treelize(inherit=True)
+        >>>     @method_treelize()
         >>>     def append(self, *args):
         >>>         return sum([self, *args])  # the self will be the integers, not MyTreeValue
         >>>
@@ -174,7 +174,7 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
 
 
 def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                         inherit: bool = False, missing=MISSING_NOT_ALLOW):
+                         inherit: bool = True, missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Wrap a common class method to tree-supported method.
@@ -187,7 +187,7 @@ def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] 
         - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
 

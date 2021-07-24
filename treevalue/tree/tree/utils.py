@@ -174,7 +174,7 @@ def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
     return mask(tree, mapping(tree, func), remove_empty)
 
 
-def union(*trees: TreeValue, return_type=None, inherit=True, **kwargs):
+def union(*trees: TreeValue, return_type=None, **kwargs):
     """
     Overview:
         Union tree values together.
@@ -183,7 +183,7 @@ def union(*trees: TreeValue, return_type=None, inherit=True, **kwargs):
         - tree (:obj:`_TreeValue`): Tree value object
         - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
 
@@ -198,11 +198,11 @@ def union(*trees: TreeValue, return_type=None, inherit=True, **kwargs):
     if return_type is None:
         return_type = trees[0].__class__ if trees else TreeValue
 
-    return subside(tuple(trees), inherit=inherit, return_type=return_type, **kwargs)
+    return subside(tuple(trees), return_type=return_type, **kwargs)
 
 
 def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
-            return_type: Optional[Type[_TreeValue]] = None, inherit: bool = True, **kwargs) -> _TreeValue:
+            return_type: Optional[Type[_TreeValue]] = None, **kwargs) -> _TreeValue:
     """
     Overview:
         Drift down the structures (list, tuple, dict) down to the tree's value.
@@ -216,7 +216,7 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
             will be auto detected when there is exactly one tree value type in this original value, \
             otherwise the default will be `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `False`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
 
@@ -289,7 +289,7 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
     assert count == len(arguments)
 
     from ..func import func_treelize
-    return func_treelize(return_type=return_type, inherit=inherit, **kwargs)(builder)(*arguments)
+    return func_treelize(return_type=return_type, **kwargs)(builder)(*arguments)
 
 
 def shrink(tree: _TreeValue, func):

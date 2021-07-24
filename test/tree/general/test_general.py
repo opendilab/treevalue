@@ -5,12 +5,12 @@ from .base import get_tree_test
 
 
 class TreeNumber(general_tree_value()):
-    @method_treelize(inherit=True)
+    @method_treelize()
     def append(self, *args):
         return sum([self, *args])
 
 
-class NonDefaultTreeNumber(general_tree_value(base=dict(inherit=True), methods=dict(
+class NonDefaultTreeNumber(general_tree_value(base=dict(), methods=dict(
     __add__=dict(missing=0, mode='outer'),
     __radd__=dict(missing=0, mode='outer'),
 ))):

@@ -82,7 +82,7 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
                 }
             })
 
-            npeq = func_treelize(inherit=True, return_type=tree_number_class)(np.array_equal)
+            npeq = func_treelize(return_type=tree_number_class)(np.array_equal)
             assert npeq((t1 @ t2), tree_number_class({
                 'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
                 'b': np.array([[2, 3], [4, 5]]) @ np.array([[3, 4], [5, 6]]),
@@ -208,14 +208,14 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
 
         def test_attr(self):
             t1 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            t2 = func_treelize(inherit=True, return_type=tree_number_class)(Container)(t1)
+            t2 = func_treelize(return_type=tree_number_class)(Container)(t1)
             assert t2 == tree_number_class(
                 {'a': Container(1), 'b': Container(2), 'x': {'c': Container(3), 'd': Container(4)}})
             assert t2.value == t1
 
         def test_call(self):
             t1 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            t2 = func_treelize(inherit=True, return_type=tree_number_class)(Container)(t1)
+            t2 = func_treelize(return_type=tree_number_class)(Container)(t1)
             assert t2.add(10) == tree_number_class({'a': 11, 'b': 12, 'x': {'c': 13, 'd': 14}})
             assert t2.add(x=10) == tree_number_class({'a': 11, 'b': 12, 'x': {'c': 13, 'd': 14}})
             assert t2.add(t1) == tree_number_class({'a': 2, 'b': 4, 'x': {'c': 6, 'd': 8}})

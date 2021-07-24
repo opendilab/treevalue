@@ -13,7 +13,7 @@ def _get_method_by_name(name):
     return _func
 
 
-BASE_CONFIG = dict(inherit=True)
+BASE_CONFIG = {}
 
 
 def general_tree_value(base: Optional[Mapping[str, Any]] = None,
@@ -34,7 +34,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
     _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
     class _GeneralTreeValue(TreeValue):
-        @method_treelize(inherit=True)
+        @method_treelize()
         def _attr_extern(self, key):
             return getattr(self, key)
 
@@ -63,14 +63,14 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return shrink(self, func)
 
         @classmethod
-        def union(cls, *trees, return_type=None, inherit=True, **kwargs):
-            return union(*trees, return_type=return_type or cls, inherit=inherit, **kwargs)
+        def union(cls, *trees, return_type=None, **kwargs):
+            return union(*trees, return_type=return_type or cls, **kwargs)
 
         @classmethod
         def subside(cls, value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
-                    return_type: Optional[Type[_TreeValue]] = None, inherit: bool = True, **kwargs):
+                    return_type: Optional[Type[_TreeValue]] = None, **kwargs):
             return subside(value, dict_, list_, tuple_,
-                           return_type=return_type or cls, inherit=inherit, **kwargs)
+                           return_type=return_type or cls, **kwargs)
 
         @_decorate
         def __add__(self, other):

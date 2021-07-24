@@ -7,7 +7,7 @@ from treevalue.tree import func_treelize, TreeValue
 @pytest.mark.unittest
 class TestTreeFuncStrict:
     def test_strict_raw(self):
-        @func_treelize()
+        @func_treelize(inherit=False)
         def ssum(*args):
             return sum(args)
 
@@ -24,7 +24,7 @@ class TestTreeFuncStrict:
             _ = ssum(t1, 1)
 
     def test_strict_inherit(self):
-        @func_treelize(inherit=True)
+        @func_treelize()
         def ssum(*args):
             return sum(args)
 
