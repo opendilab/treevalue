@@ -317,7 +317,7 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     value_list = list(value_iter)
     assert value_count == len(value_list)
 
-    
+
 def shrink(tree: _TreeValue, func):
     """
     Overview

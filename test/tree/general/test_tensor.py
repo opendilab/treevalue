@@ -4,7 +4,7 @@ import torch
 from treevalue.tree import func_treelize, FastTreeValue
 
 
-@pytest.mark.unitest
+@pytest.mark.unittest
 def test_for_torch_support():
     @func_treelize(inherit=True)
     def add(a, b):
