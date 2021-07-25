@@ -65,7 +65,9 @@ def clone(tree: _TreeValue) -> _TreeValue:
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
     """
     Overview:
-        Transform tree value object to another tree value type.
+        Transform tree value object to another tree value type. \
+        Attention that in this function, no copy will be made, \
+        the original tree value and the transformed tree value are using the same space area.
 
     Arguments:
         - tree (:obj:`TreeValue`): Tree value object
@@ -111,6 +113,8 @@ def mapping(tree: _TreeValue, func) -> _TreeValue:
     Example:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> mapping(t, lambda x: x + 2)  # TreeValue({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
+        >>> mapping(t, lambda: 1)        # TreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
+        >>> mapping(t, lambda x, p: p)   # TreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
     """
 
     from ..func import func_treelize
@@ -169,9 +173,10 @@ def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
 
     Example:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> filter_(t, lambda x: x < 3)         # TreeValue({'a': 1, 'b': 2})
-        >>> filter_(t, lambda x: x < 3, False)  # TreeValue({'a': 1, 'b': 2, 'x': {}})
-        >>> filter_(t, lambda x: x % 2 == 1)    # TreeValue({'a': 1, 'x': {'c': 3}})
+        >>> filter_(t, lambda x: x < 3)                  # TreeValue({'a': 1, 'b': 2})
+        >>> filter_(t, lambda x: x < 3, False)           # TreeValue({'a': 1, 'b': 2, 'x': {}})
+        >>> filter_(t, lambda x: x % 2 == 1)             # TreeValue({'a': 1, 'x': {'c': 3}})
+        >>> filter_(t, lambda x, p: p[0] in {'b', 'x'})  # TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
     """
     return mask(tree, mapping(tree, func), remove_empty)
 
@@ -182,7 +187,7 @@ def union(*trees: TreeValue, return_type=None, **kwargs):
         Union tree values together.
 
     Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object
+        - trees (:obj:`_TreeValue`): Tree value objects.
         - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
