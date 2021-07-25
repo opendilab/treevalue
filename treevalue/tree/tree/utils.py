@@ -4,7 +4,7 @@ from typing import TypeVar, List, Type, Tuple, Union, Any, Optional, Callable
 
 from .tree import TreeValue, get_data_property
 from ..common import raw
-from ...utils import dynamic_call, common_direct_base
+from ...utils import dynamic_call, common_direct_base, SingletonMark
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -299,7 +299,11 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
     return func_treelize(return_type=return_type, **kwargs)(builder)(*arguments)
 
 
-def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool = True):
+NO_RISE_TEMPLATE = SingletonMark("no_rise_template")
+
+
+def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool = True,
+         template=NO_RISE_TEMPLATE):
     """
     Overview:
         Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.
@@ -309,6 +313,7 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
         - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.
         - `list_` (:obj:`bool`): Enable list rise, default is `True`.
         - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.
+        - template (:obj:): Rising template, default is `NO_RISE_TEMPLATE`, which means auto detect.
 
     Returns:
         - risen (:obj:): Risen value.
@@ -320,6 +325,19 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
         >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6, 7]})
         >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 7})
         >>> # TreeValue 3 will be TreeValue({'x': 3, 'y': 8})
+        >>>
+        >>> t2 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8]})})
+        >>> dt2 = rise(t2)
+        >>> # dt2 will be {'a': [<TreeValue 1>, <TreeValue 2>], 'b': [<TreeValue 3>, <TreeValue 4>]}
+        >>> # TreeValue 1 will be TreeValue({'x': 1, 'y': 5})
+        >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 6})
+        >>> # TreeValue 3 will be TreeValue({'x': 2, 'y': 7})
+        >>> # TreeValue 4 will be TreeValue({'x': 3, 'y': 8})
+        >>>
+        >>> dt3 = rise(t2, template={'a': None, 'b': None})
+        >>> # dt3 will be {'a': <TreeValue 1>, 'b': <TreeValue 2>}
+        >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6]})
+        >>> # TreeValue 2 will be TreeValue({'x': [2, 3], 'y': [7, 8]})
     """
 
     def _get_tree_builder(t: _TreeValue):
@@ -393,7 +411,11 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     value_list = list(value_iter)
     assert value_count == len(value_list)
 
-    meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list)
+    if template is NO_RISE_TEMPLATE:
+        value_list_args = value_list
+    else:
+        value_list_args = [template, *value_list]
+    meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list_args)
     assert meta_value_count == len(meta_value_getters)
 
     return value_builder(*[tree_builder(*[getter_(item_) for item_ in value_list]) for getter_ in meta_value_getters])

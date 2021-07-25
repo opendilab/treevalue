@@ -223,6 +223,23 @@ class TestTreeTreeUtils:
             ]
         }
 
+        t3 = MyTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8]})})
+        assert rise(t3) == {
+            'a': [
+                MyTreeValue({'x': 1, 'y': 5}),
+                MyTreeValue({'x': 2, 'y': 6}),
+            ],
+            'b': [
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+        assert rise(t3, template={'a': None, 'b': None}) == {
+            'a': MyTreeValue({'x': [1, 2], 'y': [5, 6]}),
+            'b': MyTreeValue({'x': [2, 3], 'y': [7, 8]}),
+        }
+        assert rise(t3, template=None) == t3
+
     def test_shrink(self):
         class MyTreeValue(TreeValue):
             pass

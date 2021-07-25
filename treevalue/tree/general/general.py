@@ -2,7 +2,8 @@ from functools import lru_cache
 from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
+    NO_RISE_TEMPLATE
 
 
 @lru_cache()
@@ -220,7 +221,8 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return shrink(self, func)
 
-        def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True):
+        def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,
+                 template=NO_RISE_TEMPLATE):
             """
             Overview:
                 Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.
@@ -229,6 +231,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.
                 - `list_` (:obj:`bool`): Enable list rise, default is `True`.
                 - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.
+                - template (:obj:): Rising template, default is `NO_RISE_TEMPLATE`, which means auto detect.
 
             Returns:
                 - risen (:obj:): Risen value.
@@ -236,10 +239,23 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             Example:
                 >>> t = FastTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
                 >>> dt = t.rise()
-                >>> # dt will be {'a': <TreeValue 1>, 'b': [<TreeValue 2>, <TreeValue 3>]}
-                >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6, 7]})
-                >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 7})
-                >>> # TreeValue 3 will be TreeValue({'x': 3, 'y': 8})
+                >>> # dt will be {'a': <FastTreeValue 1>, 'b': [<FastTreeValue 2>, <FastTreeValue 3>]}
+                >>> # FastTreeValue 1 will be FastTreeValue({'x': [1, 2], 'y': [5, 6, 7]})
+                >>> # FastTreeValue 2 will be FastTreeValue({'x': 2, 'y': 7})
+                >>> # FastTreeValue 3 will be FastTreeValue({'x': 3, 'y': 8})
+                >>>
+                >>> t2 = FastTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8]})})
+                >>> dt2 = t2.rise()
+                >>> # dt2 will be {'a': [<FastTreeValue 1>, <FastTreeValue 2>], 'b': [<FastTreeValue 3>, <FastTreeValue 4>]}
+                >>> # FastTreeValue 1 will be FastTreeValue({'x': 1, 'y': 5})
+                >>> # FastTreeValue 2 will be FastTreeValue({'x': 2, 'y': 6})
+                >>> # FastTreeValue 3 will be FastTreeValue({'x': 2, 'y': 7})
+                >>> # FastTreeValue 4 will be FastTreeValue({'x': 3, 'y': 8})
+                >>>
+                >>> dt3 = t2.rise(template={'a': None, 'b': None})
+                >>> # dt3 will be {'a': <FastTreeValue 1>, 'b': <FastTreeValue 2>}
+                >>> # FastTreeValue 1 will be FastTreeValue({'x': [1, 2], 'y': [5, 6]})
+                >>> # FastTreeValue 2 will be FastTreeValue({'x': [2, 3], 'y': [7, 8]})
             """
             return rise(self, dict_, list_, tuple_)
 
