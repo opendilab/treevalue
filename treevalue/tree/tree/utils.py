@@ -359,16 +359,22 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
         else:
             return 1, (t,).__iter__(), lambda x: raw(x)
 
-    def _get_common_structure_getter(*args):
+    def _get_common_structure_getter(*args, tpl=NO_RISE_TEMPLATE):
         if not args:
             return 0, [], lambda: clone(tree)
 
-        base_class = common_direct_base(*[type(item) for item in args])
+        types = [type(item) for item in args]
+        if tpl is not NO_RISE_TEMPLATE:
+            types.append(type(tpl))
+        base_class = common_direct_base(*types)
         if dict_ and issubclass(base_class, dict):
             keysets = [tuple(sorted(item.keys())) for item in args]
             if len(set(keysets)) == 1:
                 keyset = sorted(list(keysets)[0])
-                results = [(key, _get_common_structure_getter(*[item[key] for item in args])) for key in keyset]
+                results = [(key, _get_common_structure_getter(
+                    *[item[key] for item in args],
+                    tpl=NO_RISE_TEMPLATE if tpl is NO_RISE_TEMPLATE else tpl[key]
+                )) for key in keyset]
                 getter_lists = {key: getters for key, (_, getters, _) in results}
 
                 def _new_func(*args_):
@@ -389,7 +395,10 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
             lengths = [len(item) for item in args]
             if len(set(lengths)) == 1:
                 length = list(lengths)[0]
-                results = [_get_common_structure_getter(*[item[i] for item in args]) for i in range(length)]
+                results = [_get_common_structure_getter(
+                    *[item[i] for item in args],
+                    tpl=NO_RISE_TEMPLATE if tpl is NO_RISE_TEMPLATE else tpl[i]
+                ) for i in range(length)]
                 getter_lists = [getters for _, getters, _ in results]
 
                 def _new_func(*args_):
@@ -405,17 +414,18 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
                     partial(lambda i, g, x: g(x[i]), index, getter)
                     for index in range(length) for getter in getter_lists[index]], _new_func
 
+        if tpl is not NO_RISE_TEMPLATE and ((dict_ and isinstance(tpl, dict)) or (
+                list_ and isinstance(tpl, list)) or (tuple_ and isinstance(tpl, tuple))):
+            raise ValueError("Template not able to be applied "
+                             "for schema {tpl} expected but not match is some values.".format(tpl=repr(tpl)))
+
         return 1, [lambda x: x], (lambda x: x)
 
     value_count, value_iter, tree_builder = _get_tree_builder(tree)
     value_list = list(value_iter)
     assert value_count == len(value_list)
 
-    if template is NO_RISE_TEMPLATE:
-        value_list_args = value_list
-    else:
-        value_list_args = [template, *value_list]
-    meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list_args)
+    meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list, tpl=template)
     assert meta_value_count == len(meta_value_getters)
 
     return value_builder(*[tree_builder(*[getter_(item_) for item_ in value_list]) for getter_ in meta_value_getters])
