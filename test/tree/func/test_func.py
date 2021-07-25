@@ -1,3 +1,6 @@
+from functools import reduce
+from operator import __mul__
+
 import pytest
 
 from treevalue.tree import TreeMode, func_treelize, TreeValue, method_treelize, classmethod_treelize
@@ -35,6 +38,29 @@ class TestTreeFuncFunc:
         assert tr1 == _MyTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}})
         assert isinstance(tr1, _MyTreeValue)
         assert isinstance(tr1.x, _MyTreeValue)
+
+        @func_treelize(return_type=_MyTreeValue)
+        def ssum2(*args):
+            return sum(args), reduce(__mul__, args, 1)
+
+        tr2 = ssum2(t1, t2)
+        assert tr2 == _MyTreeValue({'a': (12, 11), 'b': (24, 44), 'x': {'c': (36, 99), 'd': (48, 176)}})
+
+        @func_treelize(return_type=_MyTreeValue, rise=True)
+        def ssum3(*args):
+            return sum(args), reduce(__mul__, args, 1)
+
+        tr3, tr4 = ssum3(t1, t2)
+        assert tr3 == _MyTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}})
+        assert tr4 == _MyTreeValue({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 176}})
+
+        @func_treelize(return_type=_MyTreeValue, subside=True, rise=dict(template=(None, None)))
+        def ssum4(args):
+            return sum(args), reduce(__mul__, args, 1)
+
+        tr5, tr6 = ssum4([t1, t2])
+        assert tr5 == _MyTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}})
+        assert tr6 == _MyTreeValue({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 176}})
 
     def test_tree_value_type_none(self):
         @func_treelize(return_type=None)

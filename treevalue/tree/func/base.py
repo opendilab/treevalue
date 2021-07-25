@@ -17,7 +17,7 @@ class _BaseProcessor(metaclass=SingletonMeta):
     def get_key_set(self, *args, **kwargs):
         raise NotImplementedError  # pragma: no cover
 
-    def check_arguments(self, mode, return_type, inherit, allow_missing, missing_func):
+    def check_arguments(self, mode, return_type, inherit, allow_missing, missing_func, subside, rise):
         if return_type is not None:
             if not isinstance(return_type, type):
                 raise TypeError("Return type should be a type or none, but {type} found.".format(

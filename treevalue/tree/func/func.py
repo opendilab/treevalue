@@ -1,6 +1,6 @@
 from enum import IntEnum
 from functools import wraps, partial
-from typing import Type, TypeVar, Optional
+from typing import Type, TypeVar, Optional, Mapping, Union
 
 import enum_tools
 
@@ -10,6 +10,8 @@ from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..common import raw
 from ..tree.tree import TreeValue
+from ..tree.utils import rise as rise_func
+from ..tree.utils import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
 
 
@@ -47,7 +49,9 @@ MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
 def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeValue,
-                  inherit: bool = True, missing=MISSING_NOT_ALLOW):
+                  inherit: bool = True, missing=MISSING_NOT_ALLOW,
+                  subside: Union[Mapping, bool, None] = None,
+                  rise: Union[Mapping, bool, None] = None):
     """
     Overview:
         Wrap a common function to tree-supported function.
@@ -58,6 +62,13 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
+        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+            and subside configuration, default is `None` which means do not use subside. \
+            When subside is `True`, it will use all the default arguments in `subside` function.
+        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+            and rise configuration, default is `None` which means do not use rise. \
+            When rise is `True`, it will use all the default arguments in `rise` function. \
+            (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
         - new_func (:obj:): Wrapped tree-supported function.
@@ -80,7 +91,14 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
         allow_missing = True
         missing_func = missing if hasattr(missing, '__call__') else (lambda: missing)
 
-    _MODE_PROCESSORS[mode].check_arguments(mode, return_type, inherit, allow_missing, missing_func)
+    if subside is not None and not isinstance(subside, dict):
+        subside = {} if subside else None
+    if rise is not None and not isinstance(rise, dict):
+        rise = {} if rise else None
+
+    _MODE_PROCESSORS[mode].check_arguments(mode, return_type, inherit,
+                                           allow_missing, missing_func,
+                                           subside, rise)
 
     def _value_wrap(item, index):
         if isinstance(item, TreeValue):
@@ -103,22 +121,33 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
             ))
 
     def _decorator(func):
-        @wraps(func)
-        def _new_func(*args, **kwargs) -> Optional[_ClassType]:
-            if all([not isinstance(item, TreeValue) for item in args]) \
-                    and all([not isinstance(value, TreeValue) for value in kwargs.values()]):
-                return func(*args, **kwargs)
+        def _recursion(*args_, **kwargs_) -> Optional[_ClassType]:
+            if all([not isinstance(item, TreeValue) for item in args_]) \
+                    and all([not isinstance(value, TreeValue) for value in kwargs_.values()]):
+                return func(*args_, **kwargs_)
 
-            pargs = [_value_wrap(item, index) for index, item in enumerate(args)]
-            pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
+            pargs = [_value_wrap(item, index) for index, item in enumerate(args_)]
+            pkwargs = {key: _value_wrap(value, key) for key, value in kwargs_.items()}
 
             _data = {
-                key: raw(_new_func(
+                key: raw(_recursion(
                     *(item(key) for item in pargs),
                     **{key_: value(key) for key_, value in pkwargs.items()}
-                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
+                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args_, **kwargs_))
             }
             return return_type(_data) if return_type is not None else None
+
+        @wraps(func)
+        def _new_func(*args, **kwargs):
+            if subside is not None:
+                args = [subside_func(item, **subside) for item in args]
+                kwargs = {key: subside_func(value, **subside) for key, value in kwargs.items()}
+
+            _result = _recursion(*args, **kwargs)
+            if rise is not None:
+                _result = rise_func(_result, **rise)
+
+            return _result
 
         return _new_func
 
@@ -129,7 +158,9 @@ AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 
 def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                    inherit: bool = True, missing=MISSING_NOT_ALLOW):
+                    inherit: bool = True, missing=MISSING_NOT_ALLOW,
+                    subside: Union[Mapping, bool, None] = None,
+                    rise: Union[Mapping, bool, None] = None):
     """
     Overview:
         Wrap a common instance method to tree-supported method.
@@ -146,6 +177,13 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
+        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+            and subside configuration, default is `None` which means do not use subside. \
+            When subside is `True`, it will use all the default arguments in `subside` function.
+        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+            and rise configuration, default is `None` which means do not use rise. \
+            When rise is `True`, it will use all the default arguments in `rise` function. \
+            (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
         - new_method (:obj:): Wrapped tree-supported method.
@@ -166,7 +204,7 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
         @wraps(method)
         def _new_method(self, *args, **kwargs):
             rt = self.__class__ if return_type is AUTO_DETECT_RETURN_TYPE else return_type
-            return func_treelize(mode, rt, inherit, missing)(method)(self, *args, **kwargs)
+            return func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
 
         return _new_method
 
@@ -174,7 +212,9 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
 
 
 def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                         inherit: bool = True, missing=MISSING_NOT_ALLOW):
+                         inherit: bool = True, missing=MISSING_NOT_ALLOW,
+                         subside: Union[Mapping, bool, None] = None,
+                         rise: Union[Mapping, bool, None] = None):
     """
     Overview:
         Wrap a common class method to tree-supported method.
@@ -190,6 +230,13 @@ def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] 
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
             means raise `KeyError` when missing detected.
+        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+            and subside configuration, default is `None` which means do not use subside. \
+            When subside is `True`, it will use all the default arguments in `subside` function.
+        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+            and rise configuration, default is `None` which means do not use rise. \
+            When rise is `True`, it will use all the default arguments in `rise` function. \
+            (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
         - new_method (:obj:): Wrapped tree-supported method.
@@ -211,7 +258,7 @@ def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] 
         @wraps(method)
         def _new_method(cls, *args, **kwargs):
             rt = cls if return_type is AUTO_DETECT_RETURN_TYPE else return_type
-            return func_treelize(mode, rt, inherit, missing)(partial(method, cls))(*args, **kwargs)
+            return func_treelize(mode, rt, inherit, missing, subside, rise)(partial(method, cls))(*args, **kwargs)
 
         return _new_method
 

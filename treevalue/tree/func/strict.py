@@ -18,8 +18,8 @@ class _StrictProcessor(_BaseProcessor):
         return first_keyset
 
     def check_arguments(self, mode, return_type, inherit,
-                        allow_missing, missing_func):
+                        allow_missing, missing_func, subside, rise):
         _BaseProcessor.check_arguments(self, mode, return_type, inherit,
-                                       allow_missing, missing_func)
+                                       allow_missing, missing_func, subside, rise)
         if allow_missing:
             warnings.warn(RuntimeWarning("Allow missing detected, but cannot applied in strict mode."))
