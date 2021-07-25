@@ -53,28 +53,14 @@ jobs:
           CI: 'true'
         run: |
           make unittest
-      - name: Upload coverage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: ${{ format('{0}-{1}', matrix.os, matrix.python-version) }}
-          COVERALLS_PARALLEL: true
-        run: |
-          pip3 install --upgrade 'coveralls<3'
-          coveralls
-
-  coveralls:
-    name: Finish coveralls
-    needs:
-      - unittest
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-      - name: Finished
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pip3 install --upgrade 'coveralls<3'
-          coveralls --finish
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
   test_publish:
     name: Publish to test pypi
