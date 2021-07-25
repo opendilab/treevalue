@@ -121,19 +121,19 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
             ))
 
     def _decorator(func):
-        def _recursion(*args_, **kwargs_) -> Optional[_ClassType]:
-            if all([not isinstance(item, TreeValue) for item in args_]) \
-                    and all([not isinstance(value, TreeValue) for value in kwargs_.values()]):
-                return func(*args_, **kwargs_)
+        def _recursion(*args, **kwargs) -> Optional[_ClassType]:
+            if all([not isinstance(item, TreeValue) for item in args]) \
+                    and all([not isinstance(value, TreeValue) for value in kwargs.values()]):
+                return func(*args, **kwargs)
 
-            pargs = [_value_wrap(item, index) for index, item in enumerate(args_)]
-            pkwargs = {key: _value_wrap(value, key) for key, value in kwargs_.items()}
+            pargs = [_value_wrap(item, index) for index, item in enumerate(args)]
+            pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
 
             _data = {
                 key: raw(_recursion(
                     *(item(key) for item in pargs),
                     **{key_: value(key) for key_, value in pkwargs.items()}
-                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args_, **kwargs_))
+                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
             }
             return return_type(_data) if return_type is not None else None
 
