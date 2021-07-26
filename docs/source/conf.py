@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'enum_tools.autoenum',
+    "sphinx_multiversion",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,3 +78,10 @@ html_static_path = ['_static']
 
 epub_title = project
 epub_exclude_files = ['search.html']
+
+# Whitelist pattern for tags (set to None to ignore all tags)
+smv_tag_whitelist = r'^v.*$'  # Include all tags start with 'v'
+smv_branch_whitelist = r'^.*$'  # Include all branches
+smv_remote_whitelist = r'^.*$'  # Use branches from all remotes
+smv_released_pattern = r'^(tags/v.*|heads/(main|badge-.*|dev-.*|doc-.*))$'  # Branches like "2.1" and all tags
+smv_outputdir_format = '{ref.name}'  # Use the branch/tag name

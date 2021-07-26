@@ -21,4 +21,4 @@ unittest:
 		$(if ${WORKERS},-n ${WORKERS},)
 
 docs:
-	$(MAKE) -C "${DOC_DIR}" html
+	$(MAKE) -C "${DOC_DIR}" build

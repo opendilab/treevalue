@@ -3,18 +3,31 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
+SPHINXOPTS         ?=
+SPHINXBUILD        ?= $(shell which sphinx-build)
+SPHINXMULTIVERSION ?= $(shell which sphinx-multiversion)
+SOURCEDIR          ?= source
+BUILDDIR           ?= build
+
+.EXPORT_ALL_VARIABLES:
+
+PYTHONPATH = $(shell if [ `which git` ]; then git rev-parse --show-toplevel; else readlink -f ..; fi)
 
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help build Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+build:
+	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
+
+clean:
+	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+sourcedir:
+	@echo $(shell readlink -f ${SOURCEDIR})
+builddir:
+	@echo $(shell readlink -f ${BUILDDIR}/html)
