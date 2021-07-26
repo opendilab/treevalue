@@ -1,9 +1,3 @@
-# Minimal makefile for Sphinx documentation
-DIAGRAMS_MK := ./source/diagrams.mk
-DIAGRAMS    := $(MAKE) -f "${DIAGRAMS_MK}"
-GRAPHVIZ_MK := ./source/graphviz.mk
-GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}"
-
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS         ?=
@@ -11,6 +5,12 @@ SPHINXBUILD        ?= $(shell which sphinx-build)
 SPHINXMULTIVERSION ?= $(shell which sphinx-multiversion)
 SOURCEDIR          ?= source
 BUILDDIR           ?= build
+
+# Minimal makefile for Sphinx documentation
+DIAGRAMS_MK := ${SOURCEDIR}/diagrams.mk
+DIAGRAMS    := $(MAKE) -f "${DIAGRAMS_MK}" SOURCE=${SOURCEDIR}
+GRAPHVIZ_MK := ${SOURCEDIR}/graphviz.mk
+GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}" SOURCE=${SOURCEDIR}
 
 .EXPORT_ALL_VARIABLES:
 
