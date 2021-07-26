@@ -14,13 +14,33 @@ This is a fxxking graphviz image.
 Main Features
 ---------------
 
+
+
+Tutorials
+-----------
+
 .. toctree::
     :maxdepth: 2
-    :caption: User Guide
+    :caption: Tutorials
 
+    tutorials/installation
+    tutorials/quick_start
+
+Best Practice
+---------------
 
 .. toctree::
     :maxdepth: 2
-    :caption: Developer Guide
+    :caption: Best Practice
 
-    api_doc/index
+
+API Documentation
+---------------------
+
+.. toctree::
+    :maxdepth: 2
+    :caption: API Documentation
+
+    api_doc/config/index
+    api_doc/tree/index
+    api_doc/utils/index

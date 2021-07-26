@@ -72,3 +72,12 @@ shrink
 
 .. autofunction:: treevalue.tree.tree.utils.shrink
 
+
+NO_RISE_TEMPLATE
+~~~~~~~~~~~~~~~~~~~~
+
+.. data:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
+
+    Means no template is given to the rise function, \
+    and the decorated function will automatically try \
+    to match the format patterns as template.
