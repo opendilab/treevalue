@@ -95,3 +95,8 @@ The result should be
 Luckily, the wrapped function can still used \
 as the original function as well.
 
+The structure of the trees in this part is like below.
+
+.. image:: tree_support.gv.svg
+    :align: center
+
