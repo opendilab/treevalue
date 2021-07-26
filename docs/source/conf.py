@@ -83,5 +83,5 @@ epub_exclude_files = ['search.html']
 smv_tag_whitelist = r'^v.*$'  # Include all tags start with 'v'
 smv_branch_whitelist = r'^.*$'  # Include all branches
 smv_remote_whitelist = r'^.*$'  # Use branches from all remotes
-smv_released_pattern = r'^(tags/v.*|heads/(main|badge-.*|dev-.*|doc-.*))$'  # Branches like "2.1" and all tags
+smv_released_pattern = r'^tags/.*$'  # Tags only
 smv_outputdir_format = '{ref.name}'  # Use the branch/tag name
