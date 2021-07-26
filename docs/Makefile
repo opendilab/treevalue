@@ -24,6 +24,7 @@ help:
 build:
 	@$(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
 	@cp main_page.html "$(BUILDDIR)/html/index.html"
+	@touch "$(BUILDDIR)/html/.nojekyll"
 
 clean:
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
