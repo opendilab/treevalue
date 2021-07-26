@@ -60,6 +60,12 @@ The result should be
     :language: text
     :linenos:
 
+The values is processed one to one between the tree.
+The structures of the trees involved in `__add__` calculation is like below.
+
+.. image:: calculation.gv.svg
+    :align: center
+
 Actually, More common operators are supported in treevalue.
 
 Make function tree supported
