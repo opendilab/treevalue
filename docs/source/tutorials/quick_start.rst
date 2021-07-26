@@ -63,7 +63,12 @@ The result should be
 The values is processed one to one between the tree.
 The structures of the trees involved in `__add__` calculation is like below.
 
-.. image:: calculation.gv.svg
+.. image:: calculation_add.gv.svg
+    :align: center
+
+The structures of the trees involved in `__getitem__` calculation is like below.
+
+.. image:: calculation_getitem.gv.svg
     :align: center
 
 Actually, More common operators are supported in treevalue.
