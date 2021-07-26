@@ -38,6 +38,19 @@ The values on the tree has been changed or deleted properly.
 Do calculation on the tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Common calculation is supported in treevalue.
+
+.. literalinclude:: calculation.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: calculation.demo.py.txt
+    :language: text
+    :linenos:
+
+Actually, More common operators are supported in treevalue.
 
 Make function tree supported
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
