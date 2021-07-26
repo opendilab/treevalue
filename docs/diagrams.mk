@@ -2,8 +2,8 @@ PLANTUMLCLI := $(shell which plantumlcli)
 
 SOURCE := ./source
 PUMLS := $(shell find ${SOURCE} -name *.puml)
-PNGS  := $(addsuffix .puml.png, $(basename ${DOTS}))
-SVGS  := $(addsuffix .puml.svg, $(basename ${DOTS}))
+PNGS  := $(addsuffix .puml.png, $(basename ${PUMLS}))
+SVGS  := $(addsuffix .puml.svg, $(basename ${PUMLS}))
 
 %.puml.png: %.puml
 	$(PLANTUMLCLI) -t png -o $@ $<
