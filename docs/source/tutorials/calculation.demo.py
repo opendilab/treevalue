@@ -16,6 +16,6 @@ if __name__ == '__main__':
             'd': [-2, -4, -8]
         }
     })
-    print("Result of t3[0]:", t3[0], sep=os.linesep)
+    print("Result of t3[0]:", t3[0], sep=os.linesep)  # __getitem__ operator
     print("Result of t3[::-1]:", t3[::-1], sep=os.linesep)
     print("Result of t3.x[1:]", t3.x[1:], sep=os.linesep)

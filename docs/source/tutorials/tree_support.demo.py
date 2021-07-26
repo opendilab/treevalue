@@ -4,7 +4,7 @@ from treevalue import FastTreeValue, func_treelize
 
 
 @func_treelize()
-def gcd(a, b):
+def gcd(a, b):  # GCD calculation
     while True:
         r = a % b
         a, b = b, r
