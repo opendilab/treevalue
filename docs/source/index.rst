@@ -6,6 +6,11 @@ Overview
 
 `TreeValue` is a generalized tree-based data structure.
 
+This is a fxxking graphviz image.
+
+.. image:: demo.dot.svg
+    :align: center
+
 Main Features
 ---------------
 

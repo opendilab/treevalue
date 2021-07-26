@@ -44,6 +44,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx.ext.todo',
+    'sphinx.ext.graphviz',
     'enum_tools.autoenum',
     "sphinx_multiversion",
 ]
@@ -85,3 +87,5 @@ smv_branch_whitelist = r'^.*$'  # Include all branches
 smv_remote_whitelist = r'^.*$'  # Use branches from all remotes
 smv_released_pattern = r'^tags/.*$'  # Tags only
 smv_outputdir_format = '{ref.name}'  # Use the branch/tag name
+
+graphviz_output_format = 'svg'

@@ -22,3 +22,5 @@ unittest:
 
 docs:
 	$(MAKE) -C "${DOC_DIR}" build
+pdocs:
+	$(MAKE) -C "${DOC_DIR}" prod
