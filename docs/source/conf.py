@@ -17,14 +17,20 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'treevalue'
-copyright = '2021, HansBug'
-author = 'HansBug'
+from datetime import datetime
+
+from packaging import version as version_
+
+from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
+
+project = __TITLE__
+copyright = '{year}, {author}'.format(year=datetime.now().year, author=__AUTHOR__)
+author = __AUTHOR__
 
 # The short X.Y version
-version = ''
+version = version_.parse(__VERSION__).base_version
 # The full version, including alpha/beta/rc tags
-release = '0.0.1b0'
+release = __VERSION__
 
 # -- General configuration ---------------------------------------------------
 
