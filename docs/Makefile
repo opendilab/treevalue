@@ -19,14 +19,14 @@ DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
 PYTHONPATH = $(shell if [ `which git` ]; then git rev-parse --show-toplevel; else readlink -f ..; fi)
 NO_CONTENTS_BUILD = true
 
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 # Put it first so that "make" without argument is like "make help".
+.PHONY: help contents build html prod clean sourcedir builddir Makefile
+
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help contents build html prod clean sourcedir builddir Makefile
-
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 contents:
 	@$(DIAGRAMS) build
 	@$(GRAPHVIZ) build

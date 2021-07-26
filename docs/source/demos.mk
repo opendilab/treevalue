@@ -1,6 +1,6 @@
 PYTHON := $(shell which python)
 
-SOURCE ?= .
+SOURCE         ?= .
 PYTHON_DEMOS   := $(shell find ${SOURCE} -name *.demo.py)
 PYTHON_RESULTS := $(addsuffix .py.txt, $(basename ${PYTHON_DEMOS}))
 SHELL_DEMOS    := $(shell find ${SOURCE} -name *.demo.sh)
