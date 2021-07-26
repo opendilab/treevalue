@@ -18,7 +18,7 @@ The result should be
 
 A simple tree value structure is created successfully with the structure below.
 
-.. image:: create_a_tree.dot.svg
+.. image:: create_a_tree.gv.svg
     :align: center
 
 Edit the tree
