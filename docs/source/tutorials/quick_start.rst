@@ -37,6 +37,13 @@ The result should be
     :linenos:
 
 The values on the tree has been changed or deleted properly.
+And the full life circle of the tree `t` is like below.
+
+.. image:: edit_tree_1.gv.svg
+    :align: center
+
+.. image:: edit_tree_2.gv.svg
+    :align: center
 
 Do calculation on the tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

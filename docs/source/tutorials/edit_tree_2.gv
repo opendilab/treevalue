@@ -1,0 +1,51 @@
+digraph edit_tree {
+    graph [bgcolor = "#ffffff00"];
+
+    subgraph cluster_step3 {
+    label = "(3) After t.x = {'e': 5, 'f': 6}"
+    root3 [label = "t"];
+    n31 [label = "233"];
+    n32 [label = "2"];
+    n33 [label = "t.x"];
+    n34 [label = "5"];
+    n35 [label = "6"];
+    root3 -> n31 [label = "a"];
+    root3 -> n32 [label = "b"];
+    root3 -> n33 [label = "x"];
+    n33 -> n34 [label = "e"];
+    n33 -> n35 [label = "f"];
+    }
+
+    subgraph cluster_step4 {
+    label = "(4) After t.x.g = raw({'e': 5, 'f': 6})"
+    root4 [label = "t"];
+    n41 [label = "233"];
+    n42 [label = "2"];
+    n43 [label = "t.x"];
+    n44 [label = "5"];
+    n45 [label = "6"];
+    n46 [label = "{'e': 5, 'f': 6}"];
+    root4 -> n41 [label = "a"];
+    root4 -> n42 [label = "b"];
+    root4 -> n43 [label = "x"];
+    n43 -> n44 [label = "e"];
+    n43 -> n45 [label = "f"];
+    n43 -> n46 [label = "g"];
+    }
+
+    subgraph cluster_step5 {
+    label = "(5) After del t.x.g"
+    root5 [label = "t"];
+    n51 [label = "233"];
+    n52 [label = "2"];
+    n53 [label = "t.x"];
+    n54 [label = "5"];
+    n55 [label = "6"];
+    root5 -> n51 [label = "a"];
+    root5 -> n52 [label = "b"];
+    root5 -> n53 [label = "x"];
+    n53 -> n54 [label = "e"];
+    n53 -> n55 [label = "f"];
+    }
+
+}

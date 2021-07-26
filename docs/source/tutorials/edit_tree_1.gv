@@ -1,0 +1,49 @@
+digraph edit_tree {
+    graph [bgcolor = "#ffffff00"];
+
+
+    subgraph cluster_original {
+    label = "(0) Original tree 't'"
+    root0 [label = "t"];
+    n01 [label = "1"];
+    n02 [label = "2"];
+    n03 [label = "t.x"];
+    n04 [label = "3"];
+    n05 [label = "4"];
+    root0 -> n01 [label = "a"];
+    root0 -> n02 [label = "b"];
+    root0 -> n03 [label = "x"];
+    n03 -> n04 [label = "c"];
+    n03 -> n05 [label = "d"];
+    }
+
+    subgraph cluster_step1 {
+    label = "(1) After t.a = 233"
+    root1 [label = "t"];
+    n11 [label = "233"];
+    n12 [label = "2"];
+    n13 [label = "t.x"];
+    n14 [label = "3"];
+    n15 [label = "4"];
+    root1 -> n11 [label = "a"];
+    root1 -> n12 [label = "b"];
+    root1 -> n13 [label = "x"];
+    n13 -> n14 [label = "c"];
+    n13 -> n15 [label = "d"];
+    }
+
+    subgraph cluster_step2 {
+    label = "(2) After t.x.d = -1"
+    root2 [label = "t"];
+    n21 [label = "233"];
+    n22 [label = "2"];
+    n23 [label = "t.x"];
+    n24 [label = "3"];
+    n25 [label = "-1"];
+    root2 -> n21 [label = "a"];
+    root2 -> n22 [label = "b"];
+    root2 -> n23 [label = "x"];
+    n23 -> n24 [label = "c"];
+    n23 -> n25 [label = "d"];
+    }
+}
