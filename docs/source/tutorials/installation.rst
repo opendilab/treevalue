@@ -17,11 +17,14 @@ You can also install with the newest version through GitHub:
 
 After installation, open your python console and type
 
-.. code:: python
+.. literalinclude:: install_check.demo.py
+    :language: python
+    :linenos:
 
-    from treevalue.config.meta import __VERSION__
-    print(__VERSION__)
+If the output is like below and no error occurs, you have successfully installed Treevalue.
 
-If no error occurs, you have successfully installed Treevalue.
+.. literalinclude:: install_check.demo.py.txt
+    :language: text
+    :linenos:
 
 Treevalue is still under development, you can also check out the documents in stable version through `https://opendilab.github.io/treevalue/ <https://opendilab.github.io/treevalue/>`_.
