@@ -16,7 +16,10 @@ The result should be
     :language: text
     :linenos:
 
-A simple tree value structure is created successfully.
+A simple tree value structure is created successfully with the structure below.
+
+.. image:: create_a_tree.dot.svg
+    :align: center
 
 Edit the tree
 ~~~~~~~~~~~~~~~~~~
