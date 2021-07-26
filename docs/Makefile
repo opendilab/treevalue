@@ -17,7 +17,7 @@ DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
 .EXPORT_ALL_VARIABLES:
 
 PYTHONPATH = $(shell if [ `which git` ]; then git rev-parse --show-toplevel; else readlink -f ..; fi)
-NO_IMAGES_BUILD = true
+NO_CONTENTS_BUILD = true
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -36,7 +36,7 @@ html: contents
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@touch "$(BUILDDIR)/html/.nojekyll"
 prod:
-	@NO_IMAGES_BUILD='' $(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
+	@NO_CONTENTS_BUILD='' $(SPHINXMULTIVERSION) "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
 	@cp main_page.html "$(BUILDDIR)/html/index.html"
 	@touch "$(BUILDDIR)/html/.nojekyll"
 

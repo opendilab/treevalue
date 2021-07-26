@@ -27,7 +27,7 @@ from packaging import version as version_
 
 from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
 
-if not os.environ.get("NO_IMAGES_BUILD"):
+if not os.environ.get("NO_CONTENTS_BUILD"):
     print("Building diagrams and graphviz...")
     diagrams = Popen([where.first('make'), '-f', "diagrams.mk", "build"], stdout=sys.stdout, stderr=sys.stderr)
     if diagrams.wait() != 0:
@@ -41,7 +41,7 @@ if not os.environ.get("NO_IMAGES_BUILD"):
     if demos.wait() != 0:
         raise ChildProcessError("Demos failed with %d." % (demos.returncode,))
 
-    print("Build of diagrams and graphviz complete.")
+    print("Build of contents complete.")
 
 project = __TITLE__
 copyright = '{year}, {author}'.format(year=datetime.now().year, author=__AUTHOR__)
