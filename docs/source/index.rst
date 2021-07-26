@@ -5,19 +5,9 @@ Overview
 -------------
 
 `TreeValue` is a generalized tree-based data structure.
-
-This is a fxxking graphviz image.
-
-.. image:: demo.dot.svg
-    :align: center
-
-Main Features
----------------
-
-
-
-Tutorials
------------
+Almost all the operation can be supported \
+in form of trees in a convenient way to simplify the \
+structure processing when the calculation is tree-based.
 
 .. toctree::
     :maxdepth: 2
@@ -25,17 +15,13 @@ Tutorials
 
     tutorials/installation
     tutorials/quick_start
+    tutorials/architecture
 
-Best Practice
----------------
 
 .. toctree::
     :maxdepth: 2
     :caption: Best Practice
 
-
-API Documentation
----------------------
 
 .. toctree::
     :maxdepth: 2

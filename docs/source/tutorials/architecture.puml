@@ -1,0 +1,54 @@
+@startuml
+skinparam rectangle<<behavior>> {
+	roundCorner 25
+}
+sprite $primitive jar:archimate/application-component
+sprite $data jar:archimate/application-service
+sprite $logic jar:archimate/business-process
+
+rectangle "Logic Layer" as logiclayer {
+    rectangle "TreeValue\n(Basic logic framework)" as treevalue <<$logic>> #Business
+    rectangle "**func_treelize**\n(Function wrapper)" as func_treelize <<$logic>> #Application
+
+    rectangle "**FastTreeValue**\n(Common treevalue)" as fasttreevalue <<$logic>> #Business
+    rectangle "method_treelize" as method_treelize <<$logic>> #Application
+    rectangle "classmethod_treelize" as classmethod_treelize <<$logic>> #Application
+
+    method_treelize <-- func_treelize: Special wrapper \nfor instance method
+    classmethod_treelize <-- func_treelize: Special wrapper \nfor class method
+    fasttreevalue <-down- treevalue: Logic extension
+    method_treelize --> fasttreevalue: Wrapper support
+    classmethod_treelize --> fasttreevalue: Wrapper support
+}
+
+rectangle "Data Layer" as datalayer {
+    rectangle "BaseTree" as basetree <<$data>><<behavior>> #Application
+    rectangle "Tree\n(Primitive tree)" as tree <<$data>><<behavior>> #Application
+    rectangle "TreeView\n(Logic tree)" as treeview <<$data>><<behavior>> #Application
+
+    tree -up-> treevalue: "TreeValue can \nbe based on Tree."
+    treeview -up-> treevalue: "TreeValue can \nbe based on TreeView."
+
+    basetree *- tree : "BaseTree is parent \nclass of Tree."
+    basetree *- treeview : "BaseTree is parent \nclass of TreeView."
+    tree -> treeview : "TreeView is a \nlogic view of Tree."
+}
+
+rectangle "Primitive Python" as python {
+    rectangle "Python Dict" as dict <<$primitive>> #Application
+    rectangle "Python Operators" as operators <<$primitive>> #Application
+    python -up-> tree : "Tree is based on \nprimitive python dict."
+}
+
+
+
+legend left
+Examples of Architecture
+====
+<$logic> : Logic Layer
+====
+<$data> : Data Layer
+====
+<$primitive> : Primitive Python
+endlegend
+@enduml
