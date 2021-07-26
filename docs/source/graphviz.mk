@@ -13,7 +13,7 @@ SVGS   := $(addsuffix .dot.svg, $(basename ${DOTS}))
 
 build: ${SVGS} ${PNGS}
 
-all: ../build
+all: build
 
 clean:
 	rm -rf \
