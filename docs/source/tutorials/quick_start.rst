@@ -21,7 +21,7 @@ A simple tree value structure is created successfully.
 Edit the tree
 ~~~~~~~~~~~~~~~~~~
 
-After the tree is created, you can access and edit it with `__getitem__`, `__setitem__` and `__delitem__`.
+After the tree is created, you can access and edit it with `__getattr__`, `__setattr__` and `__delattr__`.
 
 .. literalinclude:: edit_tree.demo.py
     :language: python
