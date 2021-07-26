@@ -55,4 +55,22 @@ Actually, More common operators are supported in treevalue.
 Make function tree supported
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Sometimes we need to do some complex calculation \
+which are not able to be represented by raw operators.
+
+In this situation, we can wrap the common function \
+to tree supported function like the code below.
+
+.. literalinclude:: tree_support.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: tree_support.demo.py.txt
+    :language: text
+    :linenos:
+
+Luckily, the wrapped function can still used \
+as the original function as well.
 
