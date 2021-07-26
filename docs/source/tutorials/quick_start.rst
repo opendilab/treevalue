@@ -68,7 +68,10 @@ The structures of the trees involved in `__add__` calculation is like below.
 
 The structures of the trees involved in `__getitem__` calculation is like below.
 
-.. image:: calculation_getitem.gv.svg
+.. image:: calculation_getitem_1.gv.svg
+    :align: center
+
+.. image:: calculation_getitem_2.gv.svg
     :align: center
 
 Actually, More common operators are supported in treevalue.
@@ -97,6 +100,8 @@ as the original function as well.
 
 The structure of the trees in this part is like below.
 
-.. image:: tree_support.gv.svg
+.. image:: tree_support_1.gv.svg
     :align: center
 
+.. image:: tree_support_2.gv.svg
+    :align: center

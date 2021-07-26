@@ -1,0 +1,27 @@
+digraph calculation {
+    graph [bgcolor = "#ffffff00"];
+
+    subgraph cluster_t3_xx_1 {
+    label = "Result of t3[::-1]"
+    root2 [label = "t3[::-1]"];
+    n21 [label = "[3, 2, 1]"];
+    n22 [label = "[16, 9, 4]"];
+    n23 [label = "t3[::-1].x"];
+    n24 [label = "[17, 13, 11]"];
+    n25 [label = "[-8, -4, -2]"];
+    root2 -> n21 [label = "a"];
+    root2 -> n22 [label = "b"];
+    root2 -> n23 [label = "x"];
+    n23 -> n24 [label = "c"];
+    n23 -> n25 [label = "d"];
+    }
+
+    subgraph cluster_t3_x_1_0 {
+    label = "Result of t3.x[1:]"
+    n33 [label = "t3.x[1:]"];
+    n34 [label = "[13, 17]"];
+    n35 [label = "[-4, -8]"];
+    n33 -> n34 [label = "c"];
+    n33 -> n35 [label = "d"];
+    }
+}
