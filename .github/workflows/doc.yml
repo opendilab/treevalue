@@ -31,6 +31,10 @@ jobs:
           python -m pip install -r requirements-doc.txt
       - name: Generate
         run: |
+          git pull
+          git branch -av
+          git remote -v
+          git tag
           make pdocs
           mv ./docs/build/html ./public
       - name: Deploy to Github Page
