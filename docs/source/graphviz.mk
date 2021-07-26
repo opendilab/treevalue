@@ -1,9 +1,9 @@
 DOT := $(shell which dot)
 
-SOURCE := ./source
-DOTS := $(shell find ${SOURCE} -name *.dot)
-PNGS  := $(addsuffix .dot.png, $(basename ${DOTS}))
-SVGS  := $(addsuffix .dot.svg, $(basename ${DOTS}))
+SOURCE ?= .
+DOTS   := $(shell find ${SOURCE} -name *.dot)
+PNGS   := $(addsuffix .dot.png, $(basename ${DOTS}))
+SVGS   := $(addsuffix .dot.svg, $(basename ${DOTS}))
 
 %.dot.png: %.dot
 	$(DOT) -Tpng -o$@ $<
@@ -13,7 +13,7 @@ SVGS  := $(addsuffix .dot.svg, $(basename ${DOTS}))
 
 build: ${SVGS} ${PNGS}
 
-all: build
+all: ../build
 
 clean:
 	rm -rf \

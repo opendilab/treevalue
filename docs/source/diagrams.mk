@@ -1,9 +1,9 @@
 PLANTUMLCLI := $(shell which plantumlcli)
 
-SOURCE := ./source
-PUMLS := $(shell find ${SOURCE} -name *.puml)
-PNGS  := $(addsuffix .puml.png, $(basename ${PUMLS}))
-SVGS  := $(addsuffix .puml.svg, $(basename ${PUMLS}))
+SOURCE ?= .
+PUMLS  := $(shell find ${SOURCE} -name *.puml)
+PNGS   := $(addsuffix .puml.png, $(basename ${PUMLS}))
+SVGS   := $(addsuffix .puml.svg, $(basename ${PUMLS}))
 
 %.puml.png: %.puml
 	$(PLANTUMLCLI) -t png -o $@ $<
@@ -13,7 +13,7 @@ SVGS  := $(addsuffix .puml.svg, $(basename ${PUMLS}))
 
 build: ${SVGS} ${PNGS}
 
-all: build
+all: ../build
 
 clean:
 	rm -rf \

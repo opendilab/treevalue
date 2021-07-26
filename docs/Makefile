@@ -1,7 +1,7 @@
 # Minimal makefile for Sphinx documentation
-DIAGRAMS_MK := diagrams.mk
+DIAGRAMS_MK := ./source/diagrams.mk
 DIAGRAMS    := $(MAKE) -f "${DIAGRAMS_MK}"
-GRAPHVIZ_MK := graphviz.mk
+GRAPHVIZ_MK := ./source/graphviz.mk
 GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}"
 
 # You can set these variables from the command line, and also
@@ -15,6 +15,7 @@ BUILDDIR           ?= build
 .EXPORT_ALL_VARIABLES:
 
 PYTHONPATH = $(shell if [ `which git` ]; then git rev-parse --show-toplevel; else readlink -f ..; fi)
+NO_IMAGES_BUILD = true
 
 # Put it first so that "make" without argument is like "make help".
 help:

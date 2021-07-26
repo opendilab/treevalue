@@ -17,11 +17,27 @@
 
 # -- Project information -----------------------------------------------------
 
+import os
+import sys
 from datetime import datetime
+from subprocess import Popen
 
+import where
 from packaging import version as version_
 
 from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
+
+if not os.environ.get("NO_IMAGES_BUILD"):
+    print("Building diagrams and graphviz...")
+    diagrams = Popen([where.first('make'), '-f', "diagrams.mk"], stdout=sys.stdout, stderr=sys.stderr)
+    if diagrams.wait() != 0:
+        raise ChildProcessError("Diagrams failed with %d." % (diagrams.returncode,))
+
+    graphviz = Popen([where.first('make'), '-f', "graphviz.mk"], stdout=sys.stdout, stderr=sys.stderr)
+    if graphviz.wait() != 0:
+        raise ChildProcessError("Graphviz failed with %d." % (graphviz.returncode,))
+
+    print("Build of diagrams and graphviz complete.")
 
 project = __TITLE__
 copyright = '{year}, {author}'.format(year=datetime.now().year, author=__AUTHOR__)
