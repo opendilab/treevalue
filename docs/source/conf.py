@@ -37,6 +37,10 @@ if not os.environ.get("NO_IMAGES_BUILD"):
     if graphviz.wait() != 0:
         raise ChildProcessError("Graphviz failed with %d." % (graphviz.returncode,))
 
+    demos = Popen([where.first('make'), '-f', "demos.mk", "build"], stdout=sys.stdout, stderr=sys.stderr)
+    if demos.wait() != 0:
+        raise ChildProcessError("Demos failed with %d." % (demos.returncode,))
+
     print("Build of diagrams and graphviz complete.")
 
 project = __TITLE__

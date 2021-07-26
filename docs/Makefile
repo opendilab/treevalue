@@ -11,6 +11,8 @@ DIAGRAMS_MK := ${SOURCEDIR}/diagrams.mk
 DIAGRAMS    := $(MAKE) -f "${DIAGRAMS_MK}" SOURCE=${SOURCEDIR}
 GRAPHVIZ_MK := ${SOURCEDIR}/graphviz.mk
 GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}" SOURCE=${SOURCEDIR}
+DEMOS_MK    := ${SOURCEDIR}/demos.mk
+DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
 
 .EXPORT_ALL_VARIABLES:
 
@@ -21,15 +23,16 @@ NO_IMAGES_BUILD = true
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help diagrams build html prod clean sourcedir builddir Makefile
+.PHONY: help contents build html prod clean sourcedir builddir Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-diagrams:
+contents:
 	@$(DIAGRAMS) build
 	@$(GRAPHVIZ) build
+	@$(DEMOS) build
 build: html
-html: diagrams
+html: contents
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@touch "$(BUILDDIR)/html/.nojekyll"
 prod:
@@ -40,6 +43,7 @@ prod:
 clean:
 	@$(DIAGRAMS) clean
 	@$(GRAPHVIZ) clean
+	@$(DEMOS) clean
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 sourcedir:
