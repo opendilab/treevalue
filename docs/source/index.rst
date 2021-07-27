@@ -15,7 +15,6 @@ structure processing when the calculation is tree-based.
 
     tutorials/installation
     tutorials/quick_start
-    tutorials/architecture
 
 
 .. toctree::
@@ -30,3 +29,9 @@ structure processing when the calculation is tree-based.
     api_doc/config/index
     api_doc/tree/index
     api_doc/utils/index
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Contributor Guide
+
+    contribute/architecture
