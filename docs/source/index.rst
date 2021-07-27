@@ -15,6 +15,9 @@ structure processing when the calculation is tree-based.
 
     tutorials/installation
     tutorials/quick_start
+    tutorials/main_idea
+    tutorials/basic_usage
+    tutorials/advanced_usage
 
 
 .. toctree::

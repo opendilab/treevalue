@@ -108,4 +108,6 @@ smv_remote_whitelist = r'^.*$'  # Use branches from all remotes
 smv_released_pattern = r'^tags/.*$'  # Tags only
 smv_outputdir_format = '{ref.name}'  # Use the branch/tag name
 
-graphviz_output_format = 'svg'
+if not os.environ.get("ENV_PROD"):
+    todo_include_todos = True
+    todo_emit_warnings = True
