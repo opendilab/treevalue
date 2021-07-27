@@ -1,4 +1,4 @@
-Understanding Architecture
+Architecture
 =============================
 
 In this part, the generic architecture of tree value will be introduced.
