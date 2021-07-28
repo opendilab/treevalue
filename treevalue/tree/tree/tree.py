@@ -286,3 +286,20 @@ class TreeValue:
                 just raise an exception here.
         """
         raise KeyError("Attribute {key} not found.".format(key=repr(key)))
+
+    def __setstate__(self, tree: Tree):
+        """
+        Overview:
+            Deserialize operation, can support `pickle.loads`.
+
+        Arguments:
+            - tree (:obj:`Tree`): Deserialize tree.
+        """
+        setattr(self, _DATA_PROPERTY, tree)
+
+    def __getstate__(self):
+        """
+        Overview:
+            Serialize operation, can support `pickle.dumps`.
+        """
+        return getattr(self, _DATA_PROPERTY).actual()
