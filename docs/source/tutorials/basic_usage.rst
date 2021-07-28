@@ -50,7 +50,25 @@ And the full life circle of the tree `t` is like below.
 Do index or slice calculation on the tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: complete do index part
+Index and slice index operation can be applied all once, like the example below.
+
+.. literalinclude:: index_and_slice.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: index_and_slice.demo.py.txt
+    :language: text
+    :linenos:
+
+The structures oof the trees is like the graph below.
+
+.. image:: index_operation.gv.svg
+    :align: center
+
+.. image:: slice_index_operation.gv.svg
+    :align: center
 
 
 Do calculation on the tree
