@@ -8,4 +8,5 @@ if __name__ == '__main__':
 
     print("Result of t1 + t2:", t1 + t2, sep=os.linesep)  # __add__ operator
     print("Result of t1 - t2:", t1 - t2, sep=os.linesep)  # __sub__ operator
-    print("Result of t1 + t2 * (-4 + t1 ** t2)", t1 + t2 * (-4 + t1 ** t2))  # mathematics calculation
+    print("Result of t1 ^ t2:", t1 ^ t2, sep=os.linesep)  # __xor__ operator
+    print("Result of t1 + t2 * (-4 + t1 ** t2)", t1 + t2 * (-4 + t1 ** -t2))  # mathematics calculation

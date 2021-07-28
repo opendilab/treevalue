@@ -92,12 +92,7 @@ The structures of the trees involved in `__add__` calculation is like below.
 .. image:: calculation_add.gv.svg
     :align: center
 
-The structures of the trees involved in `__getitem__` calculation is like below.
-
-.. image:: calculation_getitem_1.gv.svg
-    :align: center
-
-.. image:: calculation_getitem_2.gv.svg
+.. image:: calculation_sub_and_xor.gv.svg
     :align: center
 
 Actually, More common operators are supported in treevalue.
