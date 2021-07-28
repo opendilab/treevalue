@@ -5,16 +5,7 @@ from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
     NO_RISE_TEMPLATE
 
-
-@lru_cache()
-def _get_method_by_name(name):
-    def _func(self, *args, **kwargs):
-        return getattr(self, name)(*args, **kwargs)
-
-    return _func
-
-
-BASE_CONFIG = {}
+_BASE_GENERATION_CONFIG = {}
 
 
 def general_tree_value(base: Optional[Mapping[str, Any]] = None,
@@ -35,7 +26,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
     @lru_cache()
     def _decorator_config(name):
-        _config = BASE_CONFIG.copy()
+        _config = _BASE_GENERATION_CONFIG.copy()
         _config.update(base)
         _config.update(methods.get(name, None) or {})
         return _config
@@ -339,7 +330,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
                 >>> t1 + t2  # FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 33, 'd': 44}})
             """
-            return _get_method_by_name('__add__')(self, other)
+            return self + other
 
         @_decorate
         def __radd__(self, other):
@@ -351,7 +342,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 1 + t1  # FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
             """
-            return _get_method_by_name('__radd__')(self, other)
+            return other + self
 
         @_decorate
         def __sub__(self, other):
@@ -364,7 +355,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
                 >>> t1 - t2  # FastTreeValue({'a': -10, 'b': -20, 'x': {'c': -27, 'd': -36}})
             """
-            return _get_method_by_name('__sub__')(self, other)
+            return self - other
 
         @_decorate
         def __rsub__(self, other):
@@ -376,7 +367,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 1 - t1  # FastTreeValue({'a': 0, 'b': -1, 'x': {'c': -2, 'd': -3}})
             """
-            return _get_method_by_name('__rsub__')(self, other)
+            return other - self
 
         @_decorate
         def __mul__(self, other):
@@ -389,7 +380,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
                 >>> t1 * t2  # FastTreeValue({'a': 11, 'b': 44, 'x': {'c': 90, 'd': 160}})
             """
-            return _get_method_by_name('__mul__')(self, other)
+            return self * other
 
         @_decorate
         def __rmul__(self, other):
@@ -401,7 +392,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 2 * t1  # FastTreeValue({'a': 2, 'b': 4, 'x': {'c': 6, 'd': 8}})
             """
-            return _get_method_by_name('__rmul__')(self, other)
+            return other * self
 
         @_decorate
         def __matmul__(self, other):
@@ -409,7 +400,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             Overview:
                 Matrix tree values together, can be used in numpy or torch.
             """
-            return _get_method_by_name('__matmul__')(self, other)
+            return self @ other
 
         @_decorate
         def __rmatmul__(self, other):
@@ -417,7 +408,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             Overview:
                 Right version of `__matmul__`.
             """
-            return _get_method_by_name('__rmatmul__')(self, other)
+            return other @ self
 
         @_decorate
         def __truediv__(self, other):
@@ -430,7 +421,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
                 >>> t1 / t2  # FastTreeValue({'a': 0.1, 'b': 0.08, 'x': {'c': 0.1, 'd': 0.1}})
             """
-            return _get_method_by_name('__truediv__')(self, other)
+            return self / other
 
         @_decorate
         def __rtruediv__(self, other):
@@ -442,7 +433,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 6 / t1  # FastTreeValue({'a': 6, 'b': 3, 'x': {'c': 2, 'd': 1.5}})
             """
-            return _get_method_by_name('__rtruediv__')(self, other)
+            return other / self
 
         @_decorate
         def __floordiv__(self, other):
@@ -455,7 +446,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
                 >>> t2 // t1  # FastTreeValue({'a': 10, 'b': 12, 'x': {'c': 10, 'd': 10}})
             """
-            return _get_method_by_name('__floordiv__')(self, other)
+            return self // other
 
         @_decorate
         def __rfloordiv__(self, other):
@@ -467,7 +458,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 6 // t1  # FastTreeValue({'a': 6, 'b': 3, 'x': {'c': 2, 'd': 1}})
             """
-            return _get_method_by_name('__rfloordiv__')(self, other)
+            return other // self
 
         @_decorate
         def __mod__(self, other):
@@ -480,7 +471,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
                 >>> t2 % t1  # FastTreeValue({'a': 0, 'b': 1, 'x': {'c': 0, 'd': 0}})
             """
-            return _get_method_by_name('__mod__')(self, other)
+            return self % other
 
         @_decorate
         def __rmod__(self, other):
@@ -492,10 +483,10 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 6 % t1  # FastTreeValue({'a': 0, 'b': 0, 'x': {'c': 0, 'd': 2}})
             """
-            return _get_method_by_name('__rmod__')(self, other)
+            return other % self
 
         @_decorate
-        def __pow__(self, power, modulo=None):
+        def __pow__(self, power):
             """
             Overview:
                 Mod tree values.
@@ -505,7 +496,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1 ** t2  # FastTreeValue({'a': 1, 'b': 8, 'x': {'c': 81, 'd': 1024}})
             """
-            return _get_method_by_name('__pow__')(self, power, modulo)
+            return self ** power
 
         @_decorate
         def __rpow__(self, other):
@@ -517,7 +508,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 2 ** t1  # FastTreeValue({'a': 2, 'b': 4, 'x': {'c': 8, 'd': 16}})
             """
-            return _get_method_by_name('__rpow__')(self, other)
+            return other ** self
 
         @_decorate
         def __and__(self, other):
@@ -530,7 +521,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1 & t2  # FastTreeValue({'a': 0, 'b': 2, 'x': {'c': 0, 'd': 4}})
             """
-            return _get_method_by_name('__and__')(self, other)
+            return self & other
 
         @_decorate
         def __rand__(self, other):
@@ -542,7 +533,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 5 & t1  # FastTreeValue({'a': 1, 'b': 0, 'x': {'c': 1, 'd': 4}})
             """
-            return _get_method_by_name('__rand__')(self, other)
+            return other & self
 
         @_decorate
         def __or__(self, other):
@@ -555,7 +546,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1 | t2  # FastTreeValue({'a': 3, 'b': 3, 'x': {'c': 7, 'd': 5}})
             """
-            return _get_method_by_name('__or__')(self, other)
+            return self | other
 
         @_decorate
         def __ror__(self, other):
@@ -567,7 +558,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 5 | t1  # FastTreeValue({'a': 5, 'b': 7, 'x': {'c': 7, 'd': 5}})
             """
-            return _get_method_by_name('__ror__')(self, other)
+            return other | self
 
         @_decorate
         def __xor__(self, other):
@@ -580,7 +571,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1 ^ t2  # FastTreeValue({'a': 3, 'b': 1, 'x': {'c': 7, 'd': 1}})
             """
-            return _get_method_by_name('__xor__')(self, other)
+            return self ^ other
 
         @_decorate
         def __rxor__(self, other):
@@ -592,7 +583,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 5 ^ t1  # FastTreeValue({'a': 4, 'b': 7, 'x': {'c': 6, 'd': 1}})
             """
-            return _get_method_by_name('__rxor__')(self, other)
+            return other ^ self
 
         @_decorate
         def __lshift__(self, other):
@@ -605,7 +596,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1 << t2  # FastTreeValue({'a': 4, 'b': 16, 'x': {'c': 48, 'd': 128}})
             """
-            return _get_method_by_name('__lshift__')(self, other)
+            return self << other
 
         @_decorate
         def __rlshift__(self, other):
@@ -617,7 +608,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 3 << t1  # FastTreeValue({'a': 6, 'b': 12, 'x': {'c': 24, 'd': 48}})
             """
-            return _get_method_by_name('__rlshift__')(self, other)
+            return other << self
 
         @_decorate
         def __rshift__(self, other):
@@ -630,7 +621,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t2 = FastTreeValue({'a': 20, 'b': 30, 'x': {'c': 40, 'd': 50}})
                 >>> t2 >> t1  # FastTreeValue({'a': 10, 'b': 7, 'x': {'c': 5, 'd': 3}})
             """
-            return _get_method_by_name('__rshift__')(self, other)
+            return self >> other
 
         @_decorate
         def __rrshift__(self, other):
@@ -642,7 +633,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> 64 >> t1  # FastTreeValue({'a': 32, 'b': 16, 'x': {'c': 8, 'd': 4}})
             """
-            return _get_method_by_name('__rrshift__')(self, other)
+            return other >> self
 
         @_decorate
         def __pos__(self):
@@ -654,7 +645,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> +t1  # FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             """
-            return _get_method_by_name('__pos__')(self)
+            return +self
 
         @_decorate
         def __neg__(self):
@@ -666,7 +657,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> -t1  # FastTreeValue({'a': -1, 'b': -2, 'x': {'c': -3, 'd': -4}})
             """
-            return _get_method_by_name('__neg__')(self)
+            return -self
 
         @_decorate
         def __invert__(self):
@@ -678,7 +669,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': 1, 'b': -2, 'x': {'c': 3, 'd': -4}})
                 >>> ~t1  # FastTreeValue({'a': -2, 'b': 1, 'x': {'c': -4, 'd': 3}})
             """
-            return _get_method_by_name('__invert__')(self)
+            return ~self
 
         @_decorate
         def __getitem__(self, item):
@@ -692,7 +683,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1[-1]    # FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1[::-1]  # FastTreeValue({'a': [2, 1], 'b': [3, 2], 'x': {'c': [4, 3], 'd': [5, 4]}})
             """
-            return _get_method_by_name('__getitem__')(self, item)
+            return self[item]
 
         @_decorate
         def __setitem__(self, key, value):
@@ -706,7 +697,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1[0] = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> # FastTreeValue({'a': [2, 2], 'b': [3, 3], 'x': {'c': [4, 4], 'd': [5, 5]}})
             """
-            return _get_method_by_name('__setitem__')(self, key, value)
+            self[key] = value
 
         @_decorate
         def __delitem__(self, key):
@@ -718,7 +709,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': [1, 2], 'b': [2, 3], 'x': {'c': [3, 4], 'd': [4, 5]}})
                 >>> del t1[0]  # FastTreeValue({'a': [2], 'b': [3], 'x': {'c': [4], 'd': [5]}})
             """
-            return _get_method_by_name('__delitem__')(self, key)
+            del self[key]
 
         @_decorate
         def __call__(self, *args, **kwargs):
@@ -738,6 +729,6 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t.append(2)  # FastTreeValue({'a': 3, 'b': 4})
                 >>> t.append(FastTreeValue({'a': 10, 'b': 20}))  # FastTreeValue({'a': 11, 'b': 22})
             """
-            return _get_method_by_name('__call__')(self, *args, **kwargs)
+            return self(*args, **kwargs)
 
     return _GeneralTreeValue
