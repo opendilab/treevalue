@@ -54,6 +54,10 @@ class TreeView(BaseTree):
     def clone(self):
         return self.__get_actual_tree().clone()
 
+    def copy_from(self, other: 'BaseTree'):
+        self.actual().copy_from(other.actual())
+        return self
+
     def items(self):
         return self.__get_actual_tree().items()
 
@@ -63,5 +67,5 @@ class TreeView(BaseTree):
     def values(self):
         return self.__get_actual_tree().values()
 
-    def actual(self):
+    def actual(self) -> Tree:
         return self.__get_actual_tree().actual()

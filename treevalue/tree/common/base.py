@@ -131,6 +131,23 @@ class BaseTree(metaclass=ABCMeta):
         raise NotImplementedError  # pragma: no cover
 
     @abstractmethod
+    def copy_from(self, other: 'BaseTree'):
+        """
+        Overview:
+            Copy data from another tree.
+
+        Arguments:
+            - other (:obj:`BaseTree`): Another target tree.
+
+        Returns:
+            - self (:obj:`BaseTree`): Self object
+
+        Example:
+            >>> # todo, complete this demo
+        """
+        raise NotImplementedError  # pragma: no cover
+
+    @abstractmethod
     def items(self):
         """
         Overview:

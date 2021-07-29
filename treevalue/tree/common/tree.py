@@ -137,6 +137,23 @@ class Tree(BaseTree):
     def clone(self):
         return self.__class__(self)
 
+    def copy_from(self, other: 'BaseTree'):
+        other = other.actual()
+        all_keys = sorted(set(other.keys()) | set(self.keys()))
+        for key in all_keys:
+            if key not in other.keys():
+                del self[key]
+            else:
+                if isinstance(other[key], BaseTree):
+                    if key in self.keys() and isinstance(self[key], BaseTree):
+                        self[key].actual().copy_from(other[key].actual())
+                    else:
+                        self[key] = other[key].clone()
+                else:
+                    self[key] = other[key]
+
+        return self
+
     def items(self):
         return self.__dict.items()
 
@@ -146,5 +163,5 @@ class Tree(BaseTree):
     def values(self):
         return self.__dict.values()
 
-    def actual(self):
+    def actual(self) -> 'Tree':
         return self
