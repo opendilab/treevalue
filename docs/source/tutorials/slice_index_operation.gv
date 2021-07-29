@@ -1,0 +1,27 @@
+digraph slice_index {
+    graph [bgcolor = "#ffffff00"];
+
+    subgraph cluster_t_xx_1 {
+    label = "Result of t[::-1]"
+    root2 [label = "t[::-1]"];
+    n21 [label = "[3, 2, 1] = t.a[::-1"];
+    n22 [label = "[16, 9, 4] = t.b[::-1]"];
+    n23 [label = "t[::-1].x"];
+    n24 [label = "[17, 13, 11] = t.x.c[::-1]"];
+    n25 [label = "[-8, -4, -2] = t.x.d[::-1]"];
+    root2 -> n21 [label = "a"];
+    root2 -> n22 [label = "b"];
+    root2 -> n23 [label = "x"];
+    n23 -> n24 [label = "c"];
+    n23 -> n25 [label = "d"];
+    }
+
+    subgraph cluster_t_x_1_0 {
+    label = "Result of t.x[1:]"
+    n33 [label = "t.x[1:]"];
+    n34 [label = "[13, 17] = t.x.c[1:]"];
+    n35 [label = "[-4, -8] = t.x.d[1:]"];
+    n33 -> n34 [label = "c"];
+    n33 -> n35 [label = "d"];
+    }
+}
