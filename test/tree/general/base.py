@@ -64,6 +64,15 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
             t2 = tree_number_class({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
             assert (2 * t1 * t2) == tree_number_class({'a': 22, 'b': 88, 'x': {'c': 198, 'd': 40}})
 
+            i, j = 1, 1.0
+            assert i.__mul__(j) == NotImplemented
+            assert j.__mul__(i) == 1.0
+            assert i * j == j.__mul__(i)
+
+            t3 = tree_number_class({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5.2}})
+            assert (t1 * t3) == tree_number_class({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 20.8}})
+            assert (t3 * t1) == tree_number_class({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 20.8}})
+
         def test_numeric_matmul(self):
             t1 = tree_number_class({
                 'a': np.array([[1, 2], [3, 4]]),
