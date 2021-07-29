@@ -9,3 +9,4 @@ treevalue.utils
     final
     func
     singleton
+    tree
