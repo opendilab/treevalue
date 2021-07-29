@@ -135,3 +135,17 @@ class TestTreeCommonTree:
         assert t['b'] == {'a': 3, 'b': 4}
         assert t['x']['c'] == {'a': 5, 'b': 6}
         assert t['x']['d'] == {'a': 7, 'b': 8}
+
+    def test_invalid_key(self):
+        with pytest.raises(KeyError):
+            _ = Tree({'a': 123, '\uffff': 321})
+
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        with pytest.raises(KeyError):
+            t['\uffff'] = 233
+        with pytest.raises(KeyError):
+            t['a' * 0x1ffff] = 233
+        with pytest.raises(KeyError):
+            t[''] = 233
+        with pytest.raises(KeyError):
+            t['0'] = 233

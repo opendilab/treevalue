@@ -1,3 +1,4 @@
+import re
 from functools import wraps
 from typing import Dict, Any, Union, List
 
@@ -62,6 +63,16 @@ def _unraw(value):
         return value
 
 
+_KEY_PATTERN = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]{0,65534}$')
+
+
+def _check_key(key):
+    if not isinstance(key, str) or not _KEY_PATTERN.fullmatch(key):
+        raise KeyError("Tree's key should be an ascii string matching regex of {regexp}, "
+                       "but {key} found.".format(regexp=repr(_KEY_PATTERN.pattern), key=repr(key)))
+    return key
+
+
 def _to_tree_decorator(init_func):
     @wraps(init_func)
     def _new_init_func(data):
@@ -69,7 +80,7 @@ def _to_tree_decorator(init_func):
             _new_init_func(_tree_dump(data))
         elif isinstance(data, dict):
             init_func({
-                str(key): Tree(value) if isinstance(value, dict) else _unraw(value)
+                _check_key(key): Tree(value) if isinstance(value, dict) else _unraw(value)
                 for key, value in data.items()
             })
         else:
@@ -122,6 +133,7 @@ class Tree(BaseTree):
         return self.__dict[key]
 
     def __setitem__(self, key, value):
+        key = _check_key(key)
         if isinstance(value, dict):
             value = Tree(value)
         self.__dict[key] = _unraw(value)
