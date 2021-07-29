@@ -4,4 +4,4 @@ from .final import FinalMeta
 from .func import args_iter, dynamic_call
 from .random import seed_random, random_hex, random_hex_with_timestamp
 from .singleton import SingletonMeta, ValueBasedSingletonMeta, SingletonMark
-from .tree import build_tree
+from .tree import build_tree, build_graph
