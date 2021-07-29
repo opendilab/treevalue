@@ -21,5 +21,5 @@ Overview:
 
 __TITLE__ = "treevalue"
 __VERSION__ = "0.0.1b0"
-__AUTHOR__ = "HansBug, DIEngine's Contributors"
+__AUTHOR__ = "HansBug, DI-engine's Contributors"
 __AUTHOR_EMAIL__ = "hansbug@buaa.edu.cn"
