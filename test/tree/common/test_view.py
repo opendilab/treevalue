@@ -49,3 +49,16 @@ class TestTreeCommonView:
         assert set(tv1.values()) == {
             3, 2, 1, Tree({'t': -1, 'q': -2})
         }
+
+    def test_copy_from(self):
+        t = Tree({'a': 1, 'x': {'b': 233, 'c': 'sdklfgjl', 'f': {'t': 2, 'p': 3}}})
+        tv1 = t.view(['x'])
+        t2 = Tree({'bf': 233, 'c': 'sdklfgjl', 'f': {'t': 2, 'p': 3, 'tp': 3}})
+
+        original_id_x = id(t['x'].actual())
+        original_id_x_f = id(t['x']['f'].actual())
+
+        tv1.copy_from(t2)
+        assert tv1 == t2
+        assert id(tv1.actual()) == original_id_x
+        assert id(tv1['f'].actual()) == original_id_x_f

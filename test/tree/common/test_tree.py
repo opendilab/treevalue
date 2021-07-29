@@ -36,6 +36,20 @@ class TestTreeCommonTree:
         assert h[t1] == 2
         assert h[Tree(t1.json())] == 2
 
+    def test_copy_from(self):
+        t1 = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        t2 = Tree({'a': 11, 'b': 24, 'x': {'b': 12, 'e': {'dfkj': 892374}}})
+        original_id = id(t1.actual())
+        original_id_x = id(t1['x'].actual())
+
+        t1.copy_from(t2)
+        assert t1 == t2
+        assert t1 is not t2
+        assert id(t1.actual()) == original_id
+        assert id(t1['x'].actual()) == original_id_x
+        assert t1['x']['e'] == t2['x']['e']
+        assert t1['x']['e'] is not t2['x']['e']
+
     def test_tree_items(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         assert t['a'] == 1
