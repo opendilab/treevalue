@@ -1,9 +1,10 @@
-from functools import lru_cache
+from functools import lru_cache, wraps
 from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
     NO_RISE_TEMPLATE
+from ..tree.tree import get_data_property
 
 _BASE_GENERATION_CONFIG = {}
 
@@ -33,6 +34,17 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
     def _decorate(func):
         return method_treelize(**_decorator_config(func.__name__))(func)
+
+    def _decorate_and_replace(func):
+        _dec_func = _decorate(func)
+
+        @wraps(func)
+        def _new_func(_self, *args, **kwargs):
+            _result = _dec_func(_self, *args, **kwargs)
+            get_data_property(_self).copy_from(get_data_property(_result).actual())
+            return _self
+
+        return _new_func
 
     _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -344,6 +356,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other + self
 
+        @_decorate_and_replace
+        def __iadd__(self, other):
+            """
+            Overview:
+                Self version of `__add__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 += t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 33, 'd': 44}})
+            """
+            return self + other
+
         @_decorate
         def __sub__(self, other):
             """
@@ -368,6 +395,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> 1 - t1  # FastTreeValue({'a': 0, 'b': -1, 'x': {'c': -2, 'd': -3}})
             """
             return other - self
+
+        @_decorate_and_replace
+        def __isub__(self, other):
+            """
+            Overview:
+                Self version of `__sub__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 -= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': -10, 'b': -20, 'x': {'c': -27, 'd': -36}})
+            """
+            return self - other
 
         @_decorate
         def __mul__(self, other):
@@ -394,6 +436,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other * self
 
+        @_decorate_and_replace
+        def __imul__(self, other):
+            """
+            Overview:
+                Self version of `__mul__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 *= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 11, 'b': 44, 'x': {'c': 90, 'd': 160}})
+            """
+            return self * other
+
         @_decorate
         def __matmul__(self, other):
             """
@@ -409,6 +466,15 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 Right version of `__matmul__`.
             """
             return other @ self
+
+        @_decorate_and_replace
+        def __imatmul__(self, other):
+            """
+            Overview:
+                Self version of `__matmul__`.
+                Original id of self will be kept.
+            """
+            return self @ other
 
         @_decorate
         def __truediv__(self, other):
@@ -435,6 +501,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other / self
 
+        @_decorate_and_replace
+        def __itruediv__(self, other):
+            """
+            Overview:
+                Self version of `__truediv__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t1 /= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 0.1, 'b': 0.08, 'x': {'c': 0.1, 'd': 0.1}})
+            """
+            return self / other
+
         @_decorate
         def __floordiv__(self, other):
             """
@@ -459,6 +540,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> 6 // t1  # FastTreeValue({'a': 6, 'b': 3, 'x': {'c': 2, 'd': 1}})
             """
             return other // self
+
+        @_decorate_and_replace
+        def __ifloordiv__(self, other):
+            """
+            Overview:
+                Self version of `__floordiv__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t2 //= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 10, 'b': 12, 'x': {'c': 10, 'd': 10}})
+            """
+            return self // other
 
         @_decorate
         def __mod__(self, other):
@@ -485,6 +581,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other % self
 
+        @_decorate_and_replace
+        def __imod__(self, other):
+            """
+            Overview:
+                Self version of `__mod__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t2 %= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 0, 'b': 1, 'x': {'c': 0, 'd': 0}})
+            """
+            return self % other
+
         @_decorate
         def __pow__(self, power):
             """
@@ -509,6 +620,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> 2 ** t1  # FastTreeValue({'a': 2, 'b': 4, 'x': {'c': 8, 'd': 16}})
             """
             return other ** self
+
+        @_decorate_and_replace
+        def __ipow__(self, other):
+            """
+            Overview:
+                Self version of `__pow__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 **= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 1, 'b': 8, 'x': {'c': 81, 'd': 1024}})
+            """
+            return self ** other
 
         @_decorate
         def __and__(self, other):
@@ -535,6 +661,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other & self
 
+        @_decorate_and_replace
+        def __iand__(self, other):
+            """
+            Overview:
+                Self version of `__and__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 &= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 0, 'b': 2, 'x': {'c': 0, 'd': 4}})
+            """
+            return self & other
+
         @_decorate
         def __or__(self, other):
             """
@@ -559,6 +700,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> 5 | t1  # FastTreeValue({'a': 5, 'b': 7, 'x': {'c': 7, 'd': 5}})
             """
             return other | self
+
+        @_decorate_and_replace
+        def __ior__(self, other):
+            """
+            Overview:
+                Self version of `__or__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 |= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 3, 'b': 3, 'x': {'c': 7, 'd': 5}})
+            """
+            return self | other
 
         @_decorate
         def __xor__(self, other):
@@ -585,6 +741,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other ^ self
 
+        @_decorate_and_replace
+        def __ixor__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 ^= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 3, 'b': 1, 'x': {'c': 7, 'd': 1}})
+            """
+            return self ^ other
+
         @_decorate
         def __lshift__(self, other):
             """
@@ -610,6 +781,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other << self
 
+        @_decorate_and_replace
+        def __ilshift__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 <<= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 4, 'b': 16, 'x': {'c': 48, 'd': 128}})
+            """
+            return self << other
+
         @_decorate
         def __rshift__(self, other):
             """
@@ -634,6 +820,21 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> 64 >> t1  # FastTreeValue({'a': 32, 'b': 16, 'x': {'c': 8, 'd': 4}})
             """
             return other >> self
+
+        @_decorate_and_replace
+        def __irshift__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 20, 'b': 30, 'x': {'c': 40, 'd': 50}})
+                >>> t2 >>= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 10, 'b': 7, 'x': {'c': 5, 'd': 3}})
+            """
+            return self >> other
 
         @_decorate
         def __pos__(self):
