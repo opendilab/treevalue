@@ -39,6 +39,11 @@ Decorators
 .. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
     method_treelize is also supported to property getter.
 
+DIY new treevalue class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. todo:: introduce general_treelize here, especially how to support add.
+
 Other
 ~~~~~~~~~~~~~~~~~~~~
 
