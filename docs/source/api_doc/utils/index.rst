@@ -8,4 +8,5 @@ treevalue.utils
     enum
     final
     func
+    random
     singleton

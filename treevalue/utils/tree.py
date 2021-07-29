@@ -1,6 +1,10 @@
+import re
 from queue import Queue
 
+from graphviz import Digraph
 from treelib import Tree as LibTree
+
+from .random import random_hex_with_timestamp
 
 _ROOT_ID = '_root'
 _NODE_ID_TEMP = '_node_{id}'
@@ -31,3 +35,23 @@ def build_tree(root, represent=None, iterate=None, recurse=None) -> LibTree:
                 _queue.put((_current_id, value))
 
     return _tree
+
+
+_NAME_PATTERN = re.compile('^[a-zA-Z_][a-zA-Z0-9_]*$')
+
+
+def _title_flatten(title):
+    title = re.sub(r'[^a-zA-Z0-9_]+', '_', str(title))
+    title = re.sub(r'_+', '_', title)
+    title = title.strip('_').lower()
+    return title
+
+
+def build_graph(root, name=None, title=None, represent=None, iterate=None, recurse=None):
+    represent = represent or repr
+    iterate = iterate or (lambda x: x.items())
+    recurse = recurse or (lambda x: hasattr(x, 'items'))
+
+    title = title or 'untitled_' + random_hex_with_timestamp()
+    name = name or _title_flatten(title)
+    graph = Digraph(name=name, comment=title)
