@@ -1,23 +1,24 @@
-from functools import lru_cache, wraps
+from functools import lru_cache, wraps, partial
 from typing import List, Mapping, Optional, Any, Type, TypeVar
 
 from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
     NO_RISE_TEMPLATE
 from ..tree.tree import get_data_property
+from ...utils import dynamic_call
 
 _BASE_GENERATION_CONFIG = {}
 
 
 def general_tree_value(base: Optional[Mapping[str, Any]] = None,
-                       methods: Optional[Mapping[str, Optional[Mapping[str, Any]]]] = None):
+                       methods: Optional[Mapping[str, Any]] = None):
     """
     Overview:
         Get general tree value class.
 
     Arguments:
         - base (:obj:`Optional[Mapping[str, Any]]`): Base configuration of `func_treelize`.
-        - methods (:obj:`Optional[Mapping[str, Optional[Mapping[str, Any]]]]`): Method configurations of `func_treelize`.
+        - methods (:obj:`Optional[Mapping[str, Any]]`): Method configurations of `func_treelize`.
 
     Returns:
         - clazz (:obj:`Type[TreeValue]`): General tree value class.
@@ -25,18 +26,38 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
     base = base or {}
     methods = methods or {}
 
-    @lru_cache()
-    def _decorator_config(name):
-        _config = _BASE_GENERATION_CONFIG.copy()
-        _config.update(base)
-        _config.update(methods.get(name, None) or {})
-        return _config
+    def _dynamic_suffix_dec(func, f):
+        return wraps(func)(dynamic_call(f))
 
-    def _decorate(func):
-        return method_treelize(**_decorator_config(func.__name__))(func)
+    @lru_cache()
+    def _get_decorator(name, treelize: bool):
+        _item = methods.get(name, None)
+
+        if treelize and isinstance(_item or {}, dict):
+            _config = _BASE_GENERATION_CONFIG.copy()
+            _config.update(base)
+            _config.update(_item or {})
+            return lambda func: method_treelize(**_config)(func)
+        elif isinstance(_item, BaseException) or (isinstance(_item, type) and issubclass(_item, BaseException)):
+            def _new_func():
+                raise _item
+
+            return lambda func: _dynamic_suffix_dec(func, _new_func)
+        elif hasattr(_item, '__call__'):
+            return lambda func: _dynamic_suffix_dec(func, _item)
+        elif name in methods.keys():
+            return lambda func: _dynamic_suffix_dec(func, lambda: methods[name])
+        else:
+            return lambda func: func
+
+    def _decorate(func, treelize: bool):
+        return _get_decorator(func.__name__, treelize)(func)
+
+    _decorate_treelize = partial(_decorate, treelize=True)
+    _decorate_method = partial(_decorate, treelize=False)
 
     def _decorate_and_replace(func):
-        _dec_func = _decorate(func)
+        _dec_func = _decorate_treelize(func)
 
         @wraps(func)
         def _new_func(_self, *args, **kwargs):
@@ -81,6 +102,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return getattr(self, key)
 
+        @_decorate_method
         def json(self):
             """
             Overview:
@@ -95,6 +117,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return jsonify(self)
 
+        @_decorate_method
         def view(self, path: List[str]):
             """
             Overview:
@@ -112,6 +135,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return view(self, path)
 
+        @_decorate_method
         def clone(self):
             """
             Overview:
@@ -126,6 +150,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return clone(self)
 
+        @_decorate_method
         def type(self, clazz: Type[_TreeValue]) -> _TreeValue:
             """
             Overview:
@@ -145,6 +170,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return typetrans(self, clazz)
 
+        @_decorate_method
         def map(self, mapper):
             """
             Overview:
@@ -164,6 +190,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return mapping(self, mapper)
 
+        @_decorate_method
         def mask(self, mask_: TreeValue, remove_empty: bool = True):
             """
             Overview:
@@ -183,6 +210,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return mask(self, mask_, remove_empty)
 
+        @_decorate_method
         def filter(self, func, remove_empty: bool = True):
             """
             Overview:
@@ -204,6 +232,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return filter_(self, func, remove_empty)
 
+        @_decorate_method
         def shrink(self, func):
             """
             Overview
@@ -224,6 +253,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return shrink(self, func)
 
+        @_decorate_method
         def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,
                  template=NO_RISE_TEMPLATE):
             """
@@ -263,6 +293,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return rise(self, dict_, list_, tuple_)
 
         @classmethod
+        @_decorate_method
         def union(cls, *trees, return_type=None, **kwargs):
             """
             Overview:
@@ -287,6 +318,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return union(*trees, return_type=return_type or cls, **kwargs)
 
         @classmethod
+        @_decorate_method
         def subside(cls, value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
                     return_type: Optional[Type[_TreeValue]] = None, **kwargs):
             """
@@ -331,7 +363,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return subside(value, dict_, list_, tuple_,
                            return_type=return_type or cls, **kwargs)
 
-        @_decorate
+        @_decorate_treelize
         def __add__(self, other):
             """
             Overview:
@@ -344,7 +376,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self + other
 
-        @_decorate
+        @_decorate_treelize
         def __radd__(self, other):
             """
             Overview:
@@ -371,7 +403,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self + other
 
-        @_decorate
+        @_decorate_treelize
         def __sub__(self, other):
             """
             Overview:
@@ -384,7 +416,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self - other
 
-        @_decorate
+        @_decorate_treelize
         def __rsub__(self, other):
             """
             Overview:
@@ -411,7 +443,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self - other
 
-        @_decorate
+        @_decorate_treelize
         def __mul__(self, other):
             """
             Overview:
@@ -424,7 +456,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self * other
 
-        @_decorate
+        @_decorate_treelize
         def __rmul__(self, other):
             """
             Overview:
@@ -451,7 +483,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self * other
 
-        @_decorate
+        @_decorate_treelize
         def __matmul__(self, other):
             """
             Overview:
@@ -459,7 +491,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self @ other
 
-        @_decorate
+        @_decorate_treelize
         def __rmatmul__(self, other):
             """
             Overview:
@@ -476,7 +508,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self @ other
 
-        @_decorate
+        @_decorate_treelize
         def __truediv__(self, other):
             """
             Overview:
@@ -489,7 +521,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self / other
 
-        @_decorate
+        @_decorate_treelize
         def __rtruediv__(self, other):
             """
             Overview:
@@ -516,7 +548,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self / other
 
-        @_decorate
+        @_decorate_treelize
         def __floordiv__(self, other):
             """
             Overview:
@@ -529,7 +561,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self // other
 
-        @_decorate
+        @_decorate_treelize
         def __rfloordiv__(self, other):
             """
             Overview:
@@ -556,7 +588,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self // other
 
-        @_decorate
+        @_decorate_treelize
         def __mod__(self, other):
             """
             Overview:
@@ -569,7 +601,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self % other
 
-        @_decorate
+        @_decorate_treelize
         def __rmod__(self, other):
             """
             Overview:
@@ -596,7 +628,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self % other
 
-        @_decorate
+        @_decorate_treelize
         def __pow__(self, power):
             """
             Overview:
@@ -609,7 +641,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ** power
 
-        @_decorate
+        @_decorate_treelize
         def __rpow__(self, other):
             """
             Overview:
@@ -636,7 +668,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ** other
 
-        @_decorate
+        @_decorate_treelize
         def __and__(self, other):
             """
             Overview:
@@ -649,7 +681,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self & other
 
-        @_decorate
+        @_decorate_treelize
         def __rand__(self, other):
             """
             Overview:
@@ -676,7 +708,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self & other
 
-        @_decorate
+        @_decorate_treelize
         def __or__(self, other):
             """
             Overview:
@@ -689,7 +721,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self | other
 
-        @_decorate
+        @_decorate_treelize
         def __ror__(self, other):
             """
             Overview:
@@ -716,7 +748,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self | other
 
-        @_decorate
+        @_decorate_treelize
         def __xor__(self, other):
             """
             Overview:
@@ -729,7 +761,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ^ other
 
-        @_decorate
+        @_decorate_treelize
         def __rxor__(self, other):
             """
             Overview:
@@ -756,7 +788,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ^ other
 
-        @_decorate
+        @_decorate_treelize
         def __lshift__(self, other):
             """
             Overview:
@@ -769,7 +801,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self << other
 
-        @_decorate
+        @_decorate_treelize
         def __rlshift__(self, other):
             """
             Overview:
@@ -796,7 +828,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self << other
 
-        @_decorate
+        @_decorate_treelize
         def __rshift__(self, other):
             """
             Overview:
@@ -809,7 +841,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self >> other
 
-        @_decorate
+        @_decorate_treelize
         def __rrshift__(self, other):
             """
             Overview:
@@ -836,7 +868,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self >> other
 
-        @_decorate
+        @_decorate_treelize
         def __pos__(self):
             """
             Overview:
@@ -848,7 +880,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return +self
 
-        @_decorate
+        @_decorate_treelize
         def __neg__(self):
             """
             Overview:
@@ -860,7 +892,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return -self
 
-        @_decorate
+        @_decorate_treelize
         def __invert__(self):
             """
             Overview:
@@ -872,7 +904,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return ~self
 
-        @_decorate
+        @_decorate_treelize
         def __getitem__(self, item):
             """
             Overview:
@@ -886,7 +918,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self[item]
 
-        @_decorate
+        @_decorate_treelize
         def __setitem__(self, key, value):
             """
             Overview:
@@ -900,7 +932,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             self[key] = value
 
-        @_decorate
+        @_decorate_treelize
         def __delitem__(self, key):
             """
             Overview:
@@ -912,7 +944,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             del self[key]
 
-        @_decorate
+        @_decorate_treelize
         def __call__(self, *args, **kwargs):
             """
             Overview:
