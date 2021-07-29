@@ -10,3 +10,4 @@ treevalue.utils
     func
     random
     singleton
+    tree
