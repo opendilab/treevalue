@@ -7,7 +7,7 @@ SHELL_DEMOS    := $(shell find ${SOURCE} -name *.demo.sh)
 SHELL_RESULTS  := $(addsuffix .sh.txt, $(basename ${SHELL_DEMOS}))
 
 %.demo.py.txt: %.demo.py
-	$(PYTHON) $< > $@
+	PYTHONPATH="$(shell dirname $(shell readlink -f $<)):${PYTHONPATH}" $(PYTHON) $< > $@
 
 %.demo.sh.txt: %.demo.sh
 	$(SHELL) $< > $@
