@@ -20,3 +20,4 @@ clean:
 	rm -rf \
 		$(shell find ${SOURCE} -name *.py.txt) \
 		$(shell find ${SOURCE} -name *.sh.txt) \
+		$(shell find ${SOURCE} -name *.dat.*)
