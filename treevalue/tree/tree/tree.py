@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Union
+from typing import Union, Any, Mapping
 
 from ..common import BaseTree, Tree
 from ...utils import init_magic, build_tree
@@ -14,16 +14,22 @@ def get_data_property(t: 'TreeValue') -> BaseTree:
     return getattr(t, _DATA_PROPERTY)
 
 
+def _dict_unpack(t: Union['TreeValue', Mapping[str, Any]]) -> Union[BaseTree, Any]:
+    if isinstance(t, BaseTree):
+        return t
+    elif isinstance(t, TreeValue):
+        return get_data_property(t)
+    elif isinstance(t, dict):
+        return Tree({str(key): _dict_unpack(value) for key, value in t.items()})
+    else:
+        return t
+
+
 def _init_decorate(init_func):
     @wraps(init_func)
     def _new_init_func(data):
-        if isinstance(data, TreeValue):
-            _new_init_func(get_data_property(data))
-        elif isinstance(data, dict):
-            _new_init_func(Tree({
-                str(key): get_data_property(value) if isinstance(value, TreeValue) else value
-                for key, value in data.items()
-            }))
+        if isinstance(data, (TreeValue, dict)):
+            _new_init_func(_dict_unpack(data))
         elif isinstance(data, BaseTree):
             init_func(data)
         else:

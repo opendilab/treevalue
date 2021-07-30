@@ -2,7 +2,7 @@ from functools import wraps
 
 import pytest
 
-from treevalue.utils import args_iter, dynamic_call, static_call
+from treevalue.utils import args_iter, dynamic_call, static_call, post_process
 
 
 @pytest.mark.unittest
@@ -51,3 +51,16 @@ class TestUtilsFunc:
 
         with pytest.raises(TypeError):
             _ = static_call(another_f, static_ok=False)
+
+    def test_post_process(self):
+        @post_process(lambda x: -x)
+        def plus(a, b):
+            return a + b
+
+        assert plus(1, 2) == -3
+
+        @post_process(lambda: None)
+        def plus2(a, b):
+            return a + b
+
+        assert plus2(1, 2) is None

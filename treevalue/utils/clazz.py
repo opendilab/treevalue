@@ -181,3 +181,21 @@ def common_direct_base(*classes: Type, base: Union[Collection[Type], Type, None]
             template = "No common base found with {classes}."
 
         raise TypeError(template.format(classes=repr(classes), bases=repr(base)))
+
+
+def get_class_full_name(clazz: type):
+    """
+    Overview:
+        Get full name of a class.
+
+    Arguments:
+        - clazz (:obj:`type`): Given class.
+
+    Returns:
+        - name (:obj:`str`): Full name of the given class.
+    """
+    module = clazz.__module__
+    if not module or module == 'builtins':
+        return clazz.__name__
+    else:
+        return module + '.' + clazz.__name__

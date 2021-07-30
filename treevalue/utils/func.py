@@ -101,3 +101,34 @@ def static_call(func: Callable, static_ok: bool = True):
         raise TypeError("Given callable is already static.")
 
     return getattr(func, '__wrapped__', func)
+
+
+def post_process(processor: Callable):
+    """
+    Overview:
+        Post processor for function.
+
+    Arguments:
+        - processor (:obj:`Callable`): Post processor.
+
+    Returns:
+        - result (:obj:`Any`): Final result.
+
+    Example:
+        >>> @post_process(lambda x: -x)
+        >>> def plus(a, b):
+        >>>     return a + b
+        >>>
+        >>> plus(1, 2)  # -3
+    """
+    processor = dynamic_call(processor)
+
+    def _decorator(func):
+        @wraps(func)
+        def _new_func(*args, **kwargs):
+            _result = func(*args, **kwargs)
+            return processor(_result)
+
+        return _new_func
+
+    return _decorator

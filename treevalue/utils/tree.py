@@ -6,7 +6,7 @@ from typing import Optional, Mapping, Any, Callable
 from graphviz import Digraph
 from treelib import Tree as LibTree
 
-from .func import dynamic_call
+from .func import dynamic_call, post_process
 from .random import random_hex_with_timestamp
 
 _ROOT_ID = '_root'
@@ -81,14 +81,20 @@ def _title_flatten(title):
     return title
 
 
+def _value_to_string(dict_) -> dict:
+    return type(dict_)({key: str(value) for key, value in dict_.items()})
+
+
 def _no_none_value(dict_) -> dict:
     return type(dict_)({key: value for key, value in dict_.items() if value is not None})
 
 
 def _none_value_filter(func):
     @wraps(func)
+    @post_process(_value_to_string)
+    @post_process(_no_none_value)
     def _new_func(*args, **kwargs):
-        return _no_none_value(func(*args, **kwargs))
+        return func(*args, **kwargs)
 
     return _new_func
 
@@ -188,7 +194,7 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
         if root_node_id not in _queued_node_ids:
             graph.node(
                 name=root_node_id, label=root_title,
-                **node_cfg_gen(root, [])
+                **node_cfg_gen(root, None, [], [], True, True)
             )
             _queue.put((root_node_id, root, root_title, []))
             _queued_node_ids.add(root_node_id)
@@ -198,21 +204,22 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
 
         for key, _current_node in iter_gen(_parent_node, _parent_path):
             _current_path = [*_parent_path, key]
-            _current_id = node_id_gen(_current_node, _parent_node, _current_path, _parent_path,
-                                      not not iter_gen(_current_node, _current_path))
+            _is_node = not not iter_gen(_current_node, _current_path)
+            _current_id = node_id_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node)
             if iter_gen(_current_node, _current_path):
                 _current_label = '.'.join([_root_title, *_current_path])
             else:
                 _current_label = repr_gen(_current_node, _current_path)
 
             if _current_id not in _queued_node_ids:
-                graph.node(_current_id, label=_current_label, **node_cfg_gen(_current_node, _current_path))
+                graph.node(_current_id, label=_current_label,
+                           **node_cfg_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node, False))
                 if iter_gen(_current_node, _current_path):
                     _queue.put((_current_id, _current_node, _root_title, _current_path))
                 _queued_node_ids.add(_current_id)
             if (_parent_id, _current_id) not in _queued_edges:
                 graph.edge(_parent_id, _current_id, label=key,
-                           **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path))
+                           **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node))
                 _queued_edges.add((_parent_id, _current_id))
 
     return graph
