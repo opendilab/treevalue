@@ -1,4 +1,4 @@
-PLANTUMLCLI := $(shell which plantumlcli)
+PLANTUMLCLI ?= $(shell which plantumlcli)
 
 SOURCE ?= .
 PUMLS  := $(shell find ${SOURCE} -name *.puml)
