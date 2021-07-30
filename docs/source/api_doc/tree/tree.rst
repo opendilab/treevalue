@@ -81,3 +81,27 @@ NO_RISE_TEMPLATE
     Means no template is given to the rise function, \
     and the decorated function will automatically try \
     to match the format patterns as template.
+
+
+graphics
+~~~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.tree.tree.graph.graphics
+
+Here is an example of `graphics` function. The source code is
+
+.. literalinclude:: graphics.demo.py
+    :language: python
+    :linenos:
+
+The generated graphviz source code should be
+
+.. literalinclude:: graphics.dat.gv
+    :language: text
+    :linenos:
+
+The graph should be
+
+.. image:: graphics.dat.gv.svg
+    :align: center
+
