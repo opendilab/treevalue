@@ -9,11 +9,11 @@ SHELL_RESULTS  := $(addsuffix .sh.txt, $(basename ${SHELL_DEMOS}))
 %.demo.py.txt: %.demo.py
 	cd "$(shell dirname $(shell readlink -f $<))" && \
 		PYTHONPATH="$(shell dirname $(shell readlink -f $<)):${PYTHONPATH}" \
-		$(PYTHON) $(shell readlink -f $<) > $(shell readlink -f $@)
+		$(PYTHON) "$(shell readlink -f $<)" > "$(shell readlink -f $@)"
 
 %.demo.sh.txt: %.demo.sh
 	cd "$(shell dirname $(shell readlink -f $<))" && \
-		$(SHELL) $(shell readlink -f $<) > $(shell readlink -f $@)
+		$(SHELL) "$(shell readlink -f $<)" > "$(shell readlink -f $@)"
 
 build: ${PYTHON_RESULTS} ${SHELL_RESULTS}
 

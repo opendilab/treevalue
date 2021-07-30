@@ -6,10 +6,10 @@ PNGS   := $(addsuffix .gv.png, $(basename ${GVS}))
 SVGS   := $(addsuffix .gv.svg, $(basename ${GVS}))
 
 %.gv.png: %.gv
-	$(DOT) -Tpng -o$(shell readlink -f $@) $(shell readlink -f $<)
+	$(DOT) -Tpng -o"$(shell readlink -f $@)" "$(shell readlink -f $<)"
 
 %.gv.svg: %.gv
-	$(DOT) -Tsvg -o$(shell readlink -f $@) $(shell readlink -f $<)
+	$(DOT) -Tsvg -o"$(shell readlink -f $@)" "$(shell readlink -f $<)"
 
 build: ${SVGS} ${PNGS}
 
