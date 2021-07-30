@@ -55,7 +55,7 @@ def dynamic_call(func: Callable):
     enable_args, args_count = False, 0
     enable_kwargs, kwargs_set = False, set()
 
-    for name, param in signature(func).parameters.items():
+    for name, param in signature(func, follow_wrapped=False).parameters.items():
         if param.kind in {Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD}:
             args_count += 1
         if param.kind in (Parameter.KEYWORD_ONLY, Parameter.POSITIONAL_OR_KEYWORD):
