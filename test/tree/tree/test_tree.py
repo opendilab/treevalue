@@ -4,6 +4,7 @@ import re
 import pytest
 
 from treevalue.tree.tree import TreeValue
+from treevalue.tree.tree.tree import get_data_property
 
 
 class _Container:
@@ -48,6 +49,21 @@ class TestTreeTreeTree:
 
         with pytest.raises(TypeError):
             TreeValue(1)
+
+        class MyTreeValue(TreeValue):
+            pass
+
+        tv4 = MyTreeValue({'a': tv1.c, 'x': {'b': tv1, 'c': tv2.c}})
+        assert isinstance(tv4.a, MyTreeValue)
+        assert isinstance(tv4.x, MyTreeValue)
+        assert isinstance(tv4.x.b, MyTreeValue)
+        assert isinstance(tv4.x.c, MyTreeValue)
+
+        tv5 = MyTreeValue({'a': tv1.c, 'x': {'b': get_data_property(tv1), 'c': tv2.c}})
+        assert isinstance(tv5.a, MyTreeValue)
+        assert isinstance(tv5.x, MyTreeValue)
+        assert isinstance(tv5.x.b, MyTreeValue)
+        assert isinstance(tv5.x.c, MyTreeValue)
 
     def test_tree_value_operate(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
