@@ -25,11 +25,13 @@ from subprocess import Popen
 import where
 from packaging import version as version_
 
+# Get current location
 _current_path = os.path.dirname(os.path.abspath(__file__))
 _current_project_path = os.path.abspath(os.path.join(_current_path, '..', '..'))
 os.chdir(_current_project_path)
-sys.path.insert(0, _current_project_path)
 
+# Set environment, remove the pre-installed package
+sys.path.insert(0, _current_project_path)
 modnames = [mname for mname in sys.modules if mname.startswith('treevalue')]
 for modname in modnames:
     del sys.modules[modname]
