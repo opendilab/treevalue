@@ -34,8 +34,6 @@ modnames = [mname for mname in sys.modules if mname.startswith('treevalue')]
 for modname in modnames:
     del sys.modules[modname]
 
-import treevalue
-
 from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
 
 if not os.environ.get("NO_CONTENTS_BUILD"):
