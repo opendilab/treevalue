@@ -16,7 +16,7 @@ DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
 
 .EXPORT_ALL_VARIABLES:
 
-PYTHONPATH = $(shell if [ `which git` ]; then git rev-parse --show-toplevel; else readlink -f ..; fi)
+PYTHONPATH = $(shell readlink -f ${CURDIR}/..)
 NO_CONTENTS_BUILD = true
 
 # Catch-all target: route all unknown targets to Sphinx using the new

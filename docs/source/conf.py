@@ -27,17 +27,31 @@ from packaging import version as version_
 
 from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
 
+_current_path = os.path.dirname(os.path.abspath(__file__))
+_current_project_path = os.path.abspath(os.path.join(_current_path, '..', '..'))
+os.chdir(_current_project_path)
+
 if not os.environ.get("NO_CONTENTS_BUILD"):
-    print("Building diagrams and graphviz...")
-    diagrams = Popen([where.first('make'), '-f', "diagrams.mk", "build"], stdout=sys.stdout, stderr=sys.stderr)
+    _env = dict(os.environ)
+    _env.update(dict(
+        PYTHONPATH=_current_project_path,
+    ))
+
+    diagrams_cmd = (where.first('make'), '-f', "diagrams.mk", "build")
+    print("Building diagrams {cmd} at {cp}...".format(cmd=repr(diagrams_cmd), cp=repr(_current_path)))
+    diagrams = Popen(diagrams_cmd, stdout=sys.stdout, stderr=sys.stderr, env=_env, cwd=_current_path)
     if diagrams.wait() != 0:
         raise ChildProcessError("Diagrams failed with %d." % (diagrams.returncode,))
 
-    graphviz = Popen([where.first('make'), '-f', "graphviz.mk", "build"], stdout=sys.stdout, stderr=sys.stderr)
+    graphviz_cmd = (where.first('make'), '-f', "graphviz.mk", "build")
+    print("Building graphs {cmd} at {cp}...".format(cmd=repr(graphviz_cmd), cp=repr(_current_path)))
+    graphviz = Popen(graphviz_cmd, stdout=sys.stdout, stderr=sys.stderr, env=_env, cwd=_current_path)
     if graphviz.wait() != 0:
         raise ChildProcessError("Graphviz failed with %d." % (graphviz.returncode,))
 
-    demos = Popen([where.first('make'), '-f', "demos.mk", "build"], stdout=sys.stdout, stderr=sys.stderr)
+    demos_cmd = (where.first('make'), '-f', "demos.mk", "build")
+    print("Building demos {cmd} at {cp}...".format(cmd=repr(demos_cmd), cp=repr(_current_path)))
+    demos = Popen(demos_cmd, stdout=sys.stdout, stderr=sys.stderr, env=_env, cwd=_current_path)
     if demos.wait() != 0:
         raise ChildProcessError("Demos failed with %d." % (demos.returncode,))
 
