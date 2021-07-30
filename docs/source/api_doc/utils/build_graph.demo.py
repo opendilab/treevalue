@@ -4,7 +4,7 @@ from treevalue.utils import build_graph
 
 if __name__ == '__main__':
     t = {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
-    g = build_graph((t, 't'))
+    g = build_graph((t, 't'), graph_title="Demo of build_graph.")
 
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     print(g.source)
