@@ -128,10 +128,3 @@ The structure of the trees in this part is like below.
 .. image:: tree_support_2.gv.svg
     :align: center
 
-
-
-Do complex calculation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. todo:: do complex calculation
-
