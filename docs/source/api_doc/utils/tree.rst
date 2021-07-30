@@ -28,3 +28,15 @@ The graph should be
 
 .. image:: build_graph_demo.dat.gv.svg
     :align: center
+
+Also, multiple rooted graph is supported, this function will detect
+the pointer of the objects. Just like another complex source code below.
+
+.. literalinclude:: build_graph_complex.demo.py
+    :language: python
+    :linenos:
+
+The exported graph should be
+
+.. image:: build_graph_complex_demo.dat.gv.svg
+    :align: center
