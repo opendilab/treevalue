@@ -34,6 +34,9 @@ def args_iter(*args, **kwargs):
         yield _index, _item
 
 
+_STATICAL = '__statical__'
+
+
 def dynamic_call(func: Callable):
     """
     Overview:
@@ -52,10 +55,13 @@ def dynamic_call(func: Callable):
         >>> dynamic_call(lambda x, y: (x, y))(y=2, x=1)  # (1, 2), key word supported
         >>> dynamic_call(lambda x, y, **kwargs: (kwargs, x, y))(1, k=2, y=3)  # ({'k': 2}, 1, 3)
     """
+    if getattr(func, _STATICAL, None):
+        return func
+
     enable_args, args_count = False, 0
     enable_kwargs, kwargs_set = False, set()
 
-    for name, param in signature(func).parameters.items():
+    for name, param in signature(func, follow_wrapped=False).parameters.items():
         if param.kind in {Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD}:
             args_count += 1
         if param.kind in (Parameter.KEYWORD_ONLY, Parameter.POSITIONAL_OR_KEYWORD):
@@ -75,4 +81,23 @@ def dynamic_call(func: Callable):
     def _new_func(*args, **kwargs):
         return func(*_get_args(*args), **_get_kwargs(**kwargs))
 
+    setattr(_new_func, _STATICAL, True)
     return _new_func
+
+
+def static_call(func: Callable, static_ok: bool = True):
+    """
+    Overview:
+        Static call, anti-calculation of dynamic call.
+
+    Arguments:
+        - func (:obj:`Callable`): Given dynamic function.
+        - static_ok (:obj:`bool`): Allow given function to be static, default is `True`.
+
+    Returns:
+        - static (:obj:`Callable`): Static function.
+    """
+    if not static_ok and not getattr(func, _STATICAL, None):
+        raise TypeError("Given callable is already static.")
+
+    return getattr(func, '__wrapped__', func)

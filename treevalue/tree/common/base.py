@@ -281,7 +281,5 @@ class BaseTree(metaclass=ABCMeta):
         """
         return str(build_tree(
             self,
-            represent=lambda value: repr(value),
-            iterate=lambda value: value.items(),
-            recurse=lambda value: isinstance(value, BaseTree),
+            repr_gen=lambda value: repr(value),
         ))

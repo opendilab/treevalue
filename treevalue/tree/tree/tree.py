@@ -231,9 +231,8 @@ class TreeValue:
         """
         return str(build_tree(
             self,
-            represent=lambda x: repr(x),
-            iterate=lambda x: iter(x),
-            recurse=lambda x: isinstance(x, TreeValue),
+            repr_gen=lambda x: repr(x),
+            iter_gen=lambda x: iter(x) if isinstance(x, TreeValue) else None,
         ))
 
     def __hash__(self):
