@@ -26,7 +26,7 @@ common_direct_base
 
 
 get_class_full_name
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 .. autofunction:: treevalue.utils.clazz.get_class_full_name
 

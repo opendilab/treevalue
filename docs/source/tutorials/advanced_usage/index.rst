@@ -43,7 +43,7 @@ In this part, all of the 4 modes will be introduced \
 with details and samples one by one.
 
 Strict Mode
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Strict mode is the most frequently-used mode in real cases. \
 It is also the default value of the `mode` argument in the \
@@ -87,19 +87,19 @@ The stdout and stderr should like below, a `KeyError` is raised.
     :linenos:
 
 Left Mode
-~~~~~~~~~~~~~~~~
+----------------
 
 .. todo:: describe left mode and samples
 
 
 Inner Mode
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. todo:: describe inner mode and samples
 
 
 Outer Mode
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 .. todo:: describe outer mode and samples
 

@@ -84,7 +84,7 @@ NO_RISE_TEMPLATE
 
 
 graphics
-~~~~~~~~~~~~~~~~
+----------------
 
 .. autofunction:: treevalue.tree.tree.graph.graphics
 
