@@ -13,7 +13,7 @@ you may take a look at the following pages:
 * `FastTreeValue` and its operators, methods: :doc:`../../api_doc/tree/general`.
 
 Function modes
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 In the basic usage description in :ref:`tutorials_basicusage_func`, \
 we can see that a common function which only support the calculation \
@@ -46,7 +46,7 @@ The type of `mode` argument is `TreeMode`, which documentation is like this.
 .. _tutorials_advancedusage_inherit:
 
 Inherit mode
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 .. todo:: introduce how this framework process inherited values
 
@@ -54,39 +54,39 @@ Inherit mode
 .. _tutorials_advancedusage_missing:
 
 Process missing values
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 .. todo:: introduce how this framework process key missing situation
 
 
 Functional utilities
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 .. todo:: writing mapping, filter, mask, shrink here
 
 Structural utilities
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. todo:: writing union, subside, rise here
 
 Tree utilities
-~~~~~~~~~~~~~~~~~~
+------------------
 
 .. todo:: writing jsonify, view, clone, typetrans here
 
 Decorators
-~~~~~~~~~~~~~~
+--------------
 
 .. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
     method_treelize is also supported to property getter.
 
 DIY new treevalue class
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 .. todo:: introduce general_treelize here, especially how to support add.
 
 Other
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 
 

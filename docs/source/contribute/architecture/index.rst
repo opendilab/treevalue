@@ -16,14 +16,14 @@ The core architecture is like this:
     :align: center
 
 Tree
-~~~~~~~~~
+---------
 
 
 TreeValue
-~~~~~~~~~~~~~~~
+---------------
 
 
 func_treelize
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 
