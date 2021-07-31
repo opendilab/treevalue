@@ -1,6 +1,8 @@
 Basic Usage
 =====================
 
+In this part, basic usages of `TreeValue` will be introduced one \
+by one with sample code and graph to explain them.
 
 Create a tree
 ~~~~~~~~~~~~~~~~~

@@ -1,7 +1,16 @@
 Advanced Usage
 ===================
 
-.. todo:: complete this part
+In this part, Some of the advanced usages of `TreeValue` \
+will be introduced one by one with sample code and \
+graph to explain them.
+
+For further information or usage of `TreeValue` and `FastTreeValue`, \
+you may take a look at the following pages:
+
+* `TreeValue` and its utilities: :doc:`../../api_doc/tree/tree`.
+* `func_treelize` and other wrappers: :doc:`../../api_doc/tree/func`.
+* `FastTreeValue` and its operators, methods: :doc:`../../api_doc/tree/general`.
 
 Function modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
