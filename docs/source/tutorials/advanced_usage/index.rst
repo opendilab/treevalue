@@ -72,8 +72,19 @@ be raised due to the missing of key `a` in `t1` and key `f` in `t2.x`.
 
 Here is a real code example of strict mode.
 
-.. todo:: write a code example here
+.. literalinclude:: strict_demo.demox.py
+    :language: python
+    :linenos:
 
+The stdout and stderr should like below, a `KeyError` is raised.
+
+.. literalinclude:: strict_demo.demox.py.txt
+    :language: text
+    :linenos:
+
+.. literalinclude:: strict_demo.demox.py.err
+    :language: text
+    :linenos:
 
 Left Mode
 ~~~~~~~~~~~~~~~~
