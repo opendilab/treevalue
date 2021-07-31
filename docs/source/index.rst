@@ -13,11 +13,11 @@ structure processing when the calculation is tree-based.
     :maxdepth: 2
     :caption: Tutorials
 
-    tutorials/installation
-    tutorials/quick_start
-    tutorials/main_idea
-    tutorials/basic_usage
-    tutorials/advanced_usage
+    tutorials/installation/index
+    tutorials/quick_start/index
+    tutorials/main_idea/index
+    tutorials/basic_usage/index
+    tutorials/advanced_usage/index
 
 
 .. toctree::
