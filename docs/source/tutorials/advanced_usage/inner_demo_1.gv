@@ -1,5 +1,5 @@
 digraph {
-    label = "strict_demo_2 \n(KeyError raised due to t1.a and t2.x.f's non-existence)";
+    label = "inner_demo_1 \n(Runnable, t3 is sum of t1 and t2, t2.a and t1.x.f is ignored.)";
     graph [bgcolor = "#ffffff00"];
 
     subgraph cluster_t1 {
@@ -36,5 +36,21 @@ digraph {
     t2_x -> t2_x_c [label = "c"];
     t2_x -> t2_x_d [label = "d"];
     t2_x -> t2_x_e [label = "e"];
+    }
+
+    subgraph cluster_t3 {
+    label = "Tree t3";
+    t3 [label = "t3 = t1 + t2"];
+    t3_b [label = "24 = 2 + 22"];
+    t3_x [label = "t3.x = t1.x + t2.x"];
+    t3_x_c [label = "33 = 3 + 30"];
+    t3_x_d [label = "52 = 4 + 48"];
+    t3_x_e [label = "59 = 5 + 54"];
+
+    t3 -> t3_b [label = "b"];
+    t3 -> t3_x [label = "x"];
+    t3_x -> t3_x_c [label = "c"];
+    t3_x -> t3_x_d [label = "d"];
+    t3_x -> t3_x_e [label = "e"];
     }
 }

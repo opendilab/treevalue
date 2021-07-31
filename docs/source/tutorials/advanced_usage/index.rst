@@ -102,8 +102,8 @@ first tree from the left.
 
 In the trees in `left_demo_1`, `t3` is the plus result of `t1` \
 and `t2`. We can see that `t2.a` is ignored \
-because of `t1.a` 's non-existance. Finally no error will be \
-raise, the calculation will be processed properly with the \
+because of `t1.a` 's non-existence. Finally no error will be \
+raised, the calculation will be processed properly with the \
 tree structure of `t1`.
 
 .. image:: left_demo_1.gv.svg
@@ -150,7 +150,41 @@ will fail.
 Inner Mode
 ~~~~~~~~~~~~~~~~~~~~
 
-.. todo:: describe inner mode and samples
+In inner mode, the result tree's key set will be aligned \
+to the intersection set of all the tree's key set in arguments.
+
+In the trees in `inner_demo_1`, `t3` is the plus result of `t1` \
+and `t2`. We can see that `t2.a` and `t1.x.f` is ignored \
+because of `t1.a`  and `t2.x.f`'s non-existence. Finally \
+no error will be raised, the calculation will be processed \
+properly with the tree structure of the intersection between \
+tree `t1` and `t2`.
+
+.. image:: inner_demo_1.gv.svg
+    :align: center
+
+In most cases of inner mode (HansBug says that he failed \
+to construct even one case of inner mode's structural failure), \
+the calculation will be processed properly because of the \
+intersection operation on the key set and key missing or \
+overage are both avoided completely. But the shortage of \
+inner mode is the loss of some information, for keys and its \
+value or subtrees will be directly ignored without any warning. \
+So **before using inner mode, please confirm that you know its \
+running logic**.
+
+Here is a real code example of inner mode.
+
+.. literalinclude:: inner_demo.demo.py
+    :language: python
+    :linenos:
+
+The stdout (no stderr content in this case) should like below, \
+no errors occurred with exit code 0.
+
+.. literalinclude:: inner_demo.demo.py.txt
+    :language: text
+    :linenos:
 
 
 Outer Mode
