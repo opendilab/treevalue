@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import IntEnum, unique
 from functools import wraps, partial
 from typing import Type, TypeVar, Optional, Mapping, Union
 
@@ -17,6 +17,7 @@ from ...utils import int_enum_loads, SingletonMark
 
 @enum_tools.documentation.document_enum
 @int_enum_loads(name_preprocess=str.upper)
+@unique
 class TreeMode(IntEnum):
     """
     Overview:

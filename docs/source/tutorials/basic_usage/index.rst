@@ -5,7 +5,7 @@ In this part, basic usages of `TreeValue` will be introduced one \
 by one with sample code and graph to explain them.
 
 Create a tree
-~~~~~~~~~~~~~~~~~
+-----------------
 
 You can easily create a tree value object based on `FastTreeValue`.
 
@@ -26,7 +26,7 @@ A simple tree value structure is created successfully with the structure below.
 
 
 Edit the tree
-~~~~~~~~~~~~~~~~~~
+------------------
 
 After the tree is created, you can access and edit it with `__getattr__`, `__setattr__` and `__delattr__`.
 
@@ -50,7 +50,7 @@ And the full life circle of the tree `t` is like below.
     :align: center
 
 Do index or slice calculation on the tree
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------------
 
 Index and slice index operation can be applied all once, like the example below.
 
@@ -74,7 +74,7 @@ The structures oof the trees is like the graph below.
 
 
 Do calculation on the tree
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 Common calculation is supported in treevalue.
 
@@ -100,8 +100,10 @@ The structures of the trees involved in `__add__` calculation is like below.
 Actually, More common operators are supported in treevalue.
 
 
+.. _tutorials_basicusage_func:
+
 Make function tree supported
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------
 
 Sometimes we need to do some complex calculation \
 which are not able to be represented by raw operators.

@@ -2,31 +2,31 @@ treevalue.tree.func
 =============================
 
 func_treelize
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. autofunction:: treevalue.tree.func.func_treelize
 
 
 method_treelize
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. autofunction:: treevalue.tree.func.method_treelize
 
 
 classmethod_treelize
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. autofunction:: treevalue.tree.func.classmethod_treelize
 
 
 TreeMode
-~~~~~~~~~~~~~~
+--------------
 
 .. autoenum:: treevalue.tree.func.TreeMode
     :members: loads
 
 MISSING_NOT_ALLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 .. data:: treevalue.tree.func.MISSING_NOT_ALLOW
 
@@ -37,7 +37,7 @@ MISSING_NOT_ALLOW
     (raise `KeyError` when missing is detected).
 
 AUTO_DETECT_RETURN_TYPE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 .. data:: treevalue.tree.func.AUTO_DETECT_RETURN_TYPE
 
