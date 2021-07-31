@@ -54,7 +54,7 @@ be strictly mapped one by one, missing or overage of the keys \
 are both forbidden in strict mode, which means `KeyError` will \
 be raised.
 
-For example, In the trees in `strict_demo_1`, \
+For example, in the trees in `strict_demo_1`, \
 if we need to added `t1` and `t2` together, `t3` will be the result. \
 Because all the keys (`a`, `b`, `x` of the root nodes, \
 and `c`, `d`, `e` of the `x` node) can be mapped one by one.
@@ -76,7 +76,8 @@ Here is a real code example of strict mode.
     :language: python
     :linenos:
 
-The stdout and stderr should like below, a `KeyError` is raised.
+The stdout and stderr should like below, \
+a `KeyError` is raised at the second `print` statement.
 
 .. literalinclude:: strict_demo.demox.py.txt
     :language: text
@@ -86,11 +87,65 @@ The stdout and stderr should like below, a `KeyError` is raised.
     :language: text
     :linenos:
 
+In strict mode, missing or overage of keys are not tolerated \
+at all. So in some of the cases, especially when you can not \
+suppose that all the trees involved in calculation has \
+exactly the same structure. Based on this demand, left mode, \
+inner mode and outer mode is designed, and they will be \
+introduced with details and examples in the next 3 sections.
+
 Left Mode
 ----------------
 
-.. todo:: describe left mode and samples
+In left mode, the result tree's key set will be aligned to the \
+first tree from the left.
 
+In the trees in `left_demo_1`, `t3` is the plus result of `t1` \
+and `t2`. We can see that `t2.a` is ignored \
+because of `t1.a` 's non-existance. Finally no error will be \
+raise, the calculation will be processed properly with the \
+tree structure of `t1`.
+
+.. image:: left_demo_1.gv.svg
+    :align: center
+
+But in the `left_demo_2` (actually it is exactly \
+the same as `strict_demo_2`), `KeyError` will be raised \
+because `t2.x.f` not found in tree `t2`, so the result \
+can not be aligned to tree `t1`, calculation failed.
+
+.. image:: left_demo_2.gv.svg
+    :align: center
+
+When you decorate a function as left mode, the decorated function \
+will try to find the first tree from left. If there is no less than \
+1 positional arguments detected, the first positional argument \
+will be used as the left tree. Otherwise, \
+the tree with the smallest lexicographic key will be assigned \
+as the left tree. Obviously, As least 1 positional or \
+key-word-based argument should be in the arguments.
+
+Here is a real code example of left mode.
+
+.. literalinclude:: left_demo.demox.py
+    :language: python
+    :linenos:
+
+The stdout and stderr should like below, \
+a `KeyError` is raised at the second `print` statement.
+
+.. literalinclude:: left_demo.demox.py.txt
+    :language: text
+    :linenos:
+
+.. literalinclude:: left_demo.demox.py.err
+    :language: text
+    :linenos:
+
+In the code example above, the result is aligned to \
+tree `a` in wrapped function `plus`. So the first plus \
+calculation will get the proper result, but the second one \
+will fail.
 
 Inner Mode
 --------------------
