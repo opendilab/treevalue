@@ -1,11 +1,13 @@
 import colorsys
 from functools import wraps
-from typing import Type
+from typing import Type, Callable, Union, Optional
 
 from graphviz import Digraph
 
 from .tree import TreeValue, get_data_property
 from ...utils import get_class_full_name, seed_random, post_process, build_graph, dynamic_call
+from ...utils.func import freduce
+from ...utils.tree import SUFFIXED_TAG
 
 _PRIME_P, _PRIME_Q, _PRIME_R, _PRIME_S = 482480892821, 697797055633, 251526220339, 572076910547
 
@@ -69,6 +71,7 @@ def _color_from_node(n, alpha=None):
     return _color_from_class(type(n), alpha)
 
 
+@freduce(init=lambda: (lambda: {}))
 def _dict_call_merge(d1, d2):
     d1 = dynamic_call(d1)
     d2 = dynamic_call(d2)
@@ -84,11 +87,73 @@ def _dict_call_merge(d1, d2):
     return _new_func
 
 
-def graphics(*trees, title=None, cfg=None, repr_gen=None,
-             node_cfg_gen=None, edge_cfg_gen=None) -> Digraph:
+@dynamic_call
+def _node_id(current):
+    return 'node_%x' % (id(get_data_property(current).actual()))
+
+
+@dynamic_call
+def _default_value_id(_, parent, current_path, parent_path):
+    return '%s__%s' % (_node_id(parent, parent_path), current_path[-1])
+
+
+@post_process(lambda f: dynamic_call(f) if f is not None else None)
+def _dup_value_func(dup_value):
+    if dup_value:
+        _id_getter = dynamic_call(dup_value if hasattr(dup_value, '__call__') else (lambda v: id(v)))
+
+        def _new_func(current, parent, current_path, parent_path):
+            _id = _id_getter(current, parent, current_path, parent_path)
+            if isinstance(_id, int):
+                return 'value_%x' % (_id,)
+            else:
+                return 'value_%s' % (_id,)
+
+        return _new_func
+    else:
+        return None
+
+
+def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
+             dup_value: Union[bool, Callable] = False, repr_gen: Optional[Callable] = None,
+             node_cfg_gen: Optional[Callable] = None, edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+    """
+    Overview:
+        Draw graph by tree values.
+        Multiple tree values is supported.
+
+    Args:
+        - trees: Given tree values, tuples of `Tuple[TreeValue, str]` or tree values are both accepted.
+        - title (:obj:`Optional[str]`): Title of the graph.
+        - cfg (:obj:`Optional[dict]`): Configuration of the graph.
+        - dup_value (:obj:`Union[bool, Callable]`): Value duplicator, \
+            set `True` to make value with same id use the same node in graph, \
+            you can also define your own node id algorithm by this argument. \
+            Default is `False` which means do not use value duplicator.
+        - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \
+            default is `None` which means using `repr` function.
+        - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \
+            default is `None` which means no configuration.
+        - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \
+            default is `None` which means no configuration.
+
+    Returns:
+        - graph (:obj:`Digraph`): Generated graph of tree values.
+    """
+
+    def _node_tag(current, parent, current_path, parent_path, is_node):
+        if is_node:
+            return _node_id(current, current_path)
+        else:
+            return dynamic_call(
+                _dup_value_func(dup_value) or _default_value_id
+            )(current, parent, current_path, parent_path)
+
+    setattr(_node_tag, SUFFIXED_TAG, True)
+
     return build_graph(
         *trees,
-        node_id_gen=lambda n: 'node_%x' % (id(get_data_property(n).actual())),
+        node_id_gen=_node_tag,
         graph_title=title or "<untitled>",
         graph_cfg=cfg or {},
         repr_gen=repr_gen or (lambda x: repr(x)),

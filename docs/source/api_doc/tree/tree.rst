@@ -105,3 +105,16 @@ The graph should be
 .. image:: graphics.dat.gv.svg
     :align: center
 
+Also, `graphics` function can support value duplication. For if \
+the value nodes are using the same object, they will be displayed \
+in the same node of the generated graph, such as the source code
+below
+
+.. literalinclude:: graphics_dup_value.demo.py
+    :language: python
+    :linenos:
+
+The graph of the case with `dup_value` should be
+
+.. image:: graphics_dup_value.dat.gv.svg
+    :align: center

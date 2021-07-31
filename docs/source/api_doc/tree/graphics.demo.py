@@ -20,8 +20,7 @@ if __name__ == '__main__':
     t2 = TreeValue({'ppp': t.x, 'x': {'t': t, 'y': t.x}})
 
     g = graphics(
-        (t, 't'),
-        (t2, 't2'),
+        (t, 't'), (t2, 't2'),
         title="This is a demo of 2 trees.",
         cfg={'bgcolor': '#ffffff00'},
     )

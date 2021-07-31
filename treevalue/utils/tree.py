@@ -99,11 +99,11 @@ def _none_value_filter(func):
     return _new_func
 
 
-_SUFFIXED = '__suffixed__'
+SUFFIXED_TAG = '__suffixed__'
 
 
 def suffixed_node_id(func):
-    if getattr(func, _SUFFIXED, None):
+    if getattr(func, SUFFIXED_TAG, None):
         return func
 
     func = dynamic_call(func)
@@ -116,7 +116,7 @@ def suffixed_node_id(func):
         else:
             return '%s__%s' % (func(parent, parent_path), current_path[-1])
 
-    setattr(_new_func, _SUFFIXED, True)
+    setattr(_new_func, SUFFIXED_TAG, True)
     return _new_func
 
 
@@ -217,9 +217,9 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 if iter_gen(_current_node, _current_path):
                     _queue.put((_current_id, _current_node, _root_title, _current_path))
                 _queued_node_ids.add(_current_id)
-            if (_parent_id, _current_id) not in _queued_edges:
+            if (_parent_id, _current_id, key) not in _queued_edges:
                 graph.edge(_parent_id, _current_id, label=key,
                            **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node))
-                _queued_edges.add((_parent_id, _current_id))
+                _queued_edges.add((_parent_id, _current_id, key))
 
     return graph
