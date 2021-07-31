@@ -15,17 +15,49 @@ you may take a look at the following pages:
 Function modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+In the basic usage description in :ref:`tutorials_basicusage_func`, \
+we can see that a common function which only support the calculation \
+of the common values can be wrapped to support the tree-based \
+calculation painlessly.
+
+Here is the documentation of function `treevalue.tree.func.func_treelize`.
+
+.. autofunction:: treevalue.tree.func.func_treelize
+    :noindex:
+
+In the arguments listed above, 3 of them are key arguments:
+
+* **mode**, Tree process mode of the calculation. Will be introduced in this section.
+* **inherit**, Inheriting mode of the calculation on the tree. Will be introduced in :ref:`tutorials_advancedusage_inherit`.
+* **missing**, Missing processor of the calculation on the tree. Will be introduced in :ref:`tutorials_advancedusage_missing`.
+
+The mode argument is the most important argument in function `func_treelize`. \
+For it depends the basic logic of the graph calculation.
+
+The type of `mode` argument is `TreeMode`, which documentation is like this.
+
+.. autoenum:: treevalue.tree.func.TreeMode
+    :noindex:
+
+
 .. todo:: introduce strict, left, inner, outer mode and their differences
+
+
+.. _tutorials_advancedusage_inherit:
+
+Inherit mode
+~~~~~~~~~~~~~~~~~~~
+
+.. todo:: introduce how this framework process inherited values
+
+
+.. _tutorials_advancedusage_missing:
 
 Process missing values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. todo:: introduce how this framework process key missing situation
 
-Inherit mode
-~~~~~~~~~~~~~~~~~~~
-
-.. todo:: introduce how this framework process inherited values
 
 Functional utilities
 ~~~~~~~~~~~~~~~~~~~~~~~

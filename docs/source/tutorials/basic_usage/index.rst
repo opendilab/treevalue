@@ -100,6 +100,8 @@ The structures of the trees involved in `__add__` calculation is like below.
 Actually, More common operators are supported in treevalue.
 
 
+.. _tutorials_basicusage_func:
+
 Make function tree supported
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
