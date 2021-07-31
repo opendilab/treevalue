@@ -38,4 +38,4 @@ structure processing when the calculation is tree-based.
     :maxdepth: 2
     :caption: Contributor Guide
 
-    contribute/architecture
+    contribute/architecture/index
