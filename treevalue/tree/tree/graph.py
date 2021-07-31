@@ -1,6 +1,6 @@
 import colorsys
 from functools import wraps
-from typing import Type, Callable, Union, Optional
+from typing import Type, Callable, Union, Optional, Tuple
 
 from graphviz import Digraph
 
@@ -94,17 +94,25 @@ def _node_id(current):
 
 @dynamic_call
 def _default_value_id(_, parent, current_path, parent_path):
-    return '%s__%s' % (_node_id(parent, parent_path), current_path[-1])
+    return 'value__%s__%s' % (_node_id(parent, parent_path), current_path[-1])
 
 
 @post_process(lambda f: dynamic_call(f) if f is not None else None)
 def _dup_value_func(dup_value):
     if dup_value:
-        _id_getter = dynamic_call(dup_value if hasattr(dup_value, '__call__') else (lambda v: id(v)))
+        if isinstance(dup_value, (type, tuple)):
+            _dup_value = lambda v: id(v) if isinstance(v, dup_value) else None
+        elif hasattr(dup_value, '__call__'):
+            _dup_value = dup_value
+        else:
+            _dup_value = lambda v: id(v)
+        _id_getter = dynamic_call(_dup_value)
 
         def _new_func(current, parent, current_path, parent_path):
             _id = _id_getter(current, parent, current_path, parent_path)
-            if isinstance(_id, int):
+            if not _id:
+                return _default_value_id(current, parent, current_path, parent_path)
+            elif isinstance(_id, int):
                 return 'value_%x' % (_id,)
             else:
                 return 'value_%s' % (_id,)
@@ -115,8 +123,10 @@ def _dup_value_func(dup_value):
 
 
 def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
-             dup_value: Union[bool, Callable] = False, repr_gen: Optional[Callable] = None,
-             node_cfg_gen: Optional[Callable] = None, edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+             dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
+             repr_gen: Optional[Callable] = None,
+             node_cfg_gen: Optional[Callable] = None,
+             edge_cfg_gen: Optional[Callable] = None) -> Digraph:
     """
     Overview:
         Draw graph by tree values.
@@ -126,7 +136,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         - trees: Given tree values, tuples of `Tuple[TreeValue, str]` or tree values are both accepted.
         - title (:obj:`Optional[str]`): Title of the graph.
         - cfg (:obj:`Optional[dict]`): Configuration of the graph.
-        - dup_value (:obj:`Union[bool, Callable]`): Value duplicator, \
+        - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \
             set `True` to make value with same id use the same node in graph, \
             you can also define your own node id algorithm by this argument. \
             Default is `False` which means do not use value duplicator.
