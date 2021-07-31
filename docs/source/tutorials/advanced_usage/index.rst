@@ -43,7 +43,7 @@ In this part, all of the 4 modes will be introduced \
 with details and samples one by one.
 
 Strict Mode
------------------
+~~~~~~~~~~~~~~~~~
 
 Strict mode is the most frequently-used mode in real cases. \
 It is also the default value of the `mode` argument in the \
@@ -95,7 +95,7 @@ inner mode and outer mode is designed, and they will be \
 introduced with details and examples in the next 3 sections.
 
 Left Mode
-----------------
+~~~~~~~~~~~~~~~~
 
 In left mode, the result tree's key set will be aligned to the \
 first tree from the left.
@@ -148,13 +148,13 @@ calculation will get the proper result, but the second one \
 will fail.
 
 Inner Mode
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 .. todo:: describe inner mode and samples
 
 
 Outer Mode
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 .. todo:: describe outer mode and samples
 
