@@ -24,7 +24,7 @@ structure processing when the calculation is tree-based.
     :maxdepth: 2
     :caption: Best Practice
 
-    best_practice/numpy/page
+    best_practice/numpy/index
 
 .. toctree::
     :maxdepth: 2
@@ -38,4 +38,4 @@ structure processing when the calculation is tree-based.
     :maxdepth: 2
     :caption: Contributor Guide
 
-    contribute/architecture
+    contribute/architecture/index
