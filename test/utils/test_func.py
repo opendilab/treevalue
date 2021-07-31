@@ -3,6 +3,7 @@ from functools import wraps
 import pytest
 
 from treevalue.utils import args_iter, dynamic_call, static_call, post_process
+from treevalue.utils.func import freduce
 
 
 @pytest.mark.unittest
@@ -64,3 +65,36 @@ class TestUtilsFunc:
             return a + b
 
         assert plus2(1, 2) is None
+
+    def test_freduce(self):
+        @freduce(init=lambda neg=False: 1 if neg else 0)
+        def plus(a, b, neg: bool = False):
+            return a + b if not neg else a * b
+
+        assert plus() == 0
+        assert plus(1) == 1
+        assert plus(1, 2) == 3
+        assert plus(1, 2, 3, 4, 5) == 15
+        assert plus(1, 2, 3, 4, neg=True) == 24
+
+        @freduce()
+        def plus2(a, b, neg: bool = False):
+            return a + b if not neg else a * b
+
+        with pytest.raises(SyntaxError):
+            _ = plus2()
+        assert plus2(1) == 1
+        assert plus2(1, 2) == 3
+        assert plus2(1, 2, 3, 4, 5) == 15
+        assert plus2(1, 2, 3, 4, neg=True) == 24
+
+        @freduce(init=lambda neg=False: 1 if neg else 0, pass_kwargs=False)
+        def plus3(a, b, neg: bool = False):
+            return a + b if not neg else a * b
+
+        assert plus3() == 0
+        assert plus3(1) == 1
+        assert plus3(1, 2) == 3
+        assert plus3(1, 2, 3, 4, 5) == 15
+        with pytest.warns(SyntaxWarning):
+            assert plus3(1, 2, 3, 4, neg=True) == 10

@@ -24,3 +24,9 @@ post_process
 
 .. autofunction:: treevalue.utils.func.post_process
 
+
+freduce
+~~~~~~~~~~~~~~
+
+.. autofunction:: treevalue.utils.func.freduce
+

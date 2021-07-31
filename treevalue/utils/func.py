@@ -1,7 +1,10 @@
+import warnings
 from functools import wraps
 from inspect import signature, Parameter
 from itertools import chain
-from typing import Callable
+from typing import Callable, TypeVar
+
+from .singleton import SingletonMark
 
 
 def args_iter(*args, **kwargs):
@@ -128,6 +131,71 @@ def post_process(processor: Callable):
         def _new_func(*args, **kwargs):
             _result = func(*args, **kwargs)
             return processor(_result)
+
+        return _new_func
+
+    return _decorator
+
+
+NO_INITIAL = SingletonMark("no_initial")
+
+_ElementType = TypeVar("_ElementType")
+
+
+def freduce(init=NO_INITIAL, pass_kwargs: bool = True):
+    """
+    Overview:
+        Make binary function be reducible.
+
+    Arguments:
+        - init (:obj:`Any`): Initial data generator or \
+            initial data, default is `NO_INITIAL` which means no initial data. \
+            Missing of positional arguments is forbidden.
+        - pass_kwargs (:obj:`bool`): Pass kwargs into initial function and wrapped function or not, \
+            default is `True` which means pass the arguments in.
+
+    Returns:
+        - decorator (:obj:`Callable`): Decorator for the original function.
+
+    Example:
+        >>> @freduce(init=0)
+        >>> def plus(a, b):
+        >>>     return a + b
+        >>>
+        >>> plus()            # 0
+        >>> plus(1)           # 1
+        >>> plus(1, 2)        # 3
+        >>> plus(1, 2, 3, 4)  # 10
+    """
+    if init is NO_INITIAL:
+        init_func = None
+    else:
+        init_func = dynamic_call(init if hasattr(init, '__call__') else (lambda: init))
+
+    def _decorator(func):
+        func = dynamic_call(func)
+
+        @wraps(func)
+        def _new_func(*args, **kwargs) -> _ElementType:
+            if not pass_kwargs and kwargs:
+                warnings.warn(SyntaxWarning(
+                    "Key-word arguments detected but will not be passed due to the pass_kwargs setting - {kwargs}.".format(
+                        kwargs=repr(kwargs))))
+            kwargs = kwargs if pass_kwargs else {}
+
+            if init_func is None:
+                if not args:
+                    raise SyntaxError(
+                        "No less than 1 argument expected in function {func} but 0 found.".format(func=repr(func)))
+                current = args[0]
+                args = args[1:]
+            else:
+                current = init_func(**kwargs)
+
+            for arg in args:
+                current = func(current, arg, **kwargs)
+
+            return current
 
         return _new_func
 
