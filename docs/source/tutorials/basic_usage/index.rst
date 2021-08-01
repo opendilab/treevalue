@@ -150,5 +150,7 @@ integers**.
     :language: text
     :linenos:
 
-.. todo:: add link of further information here.
+For further information of how the tree-supported function works, take a look \
+at :ref:`How the treelized function works<tutorials_advancedusage_mode_strict>` , \
+this note may give you more information.
 

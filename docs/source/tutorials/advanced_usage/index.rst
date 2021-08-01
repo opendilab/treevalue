@@ -15,7 +15,7 @@ you may take a look at the following pages:
 Function modes
 -------------------------
 
-In the basic usage description in :ref:``tutorials_basicusage_func``, \
+In the basic usage description in :ref:`tutorials_basicusage_func`, \
 we can see that a common function which only support the calculation \
 of the common values can be wrapped to support the tree-based \
 calculation painlessly.
@@ -28,8 +28,8 @@ Here is the documentation of function `treevalue.tree.func.func_treelize`.
 In the arguments listed above, 3 of them are key arguments:
 
 * **mode**, Tree process mode of the calculation. Will be introduced in this section.
-* **inherit**, Inheriting mode of the calculation on the tree. Will be introduced in :ref:``tutorials_advancedusage_inherit``.
-* **missing**, Missing processor of the calculation on the tree. Will be introduced in :ref:``tutorials_advancedusage_missing``.
+* **inherit**, Inheriting mode of the calculation on the tree. Will be introduced in :ref:`tutorials_advancedusage_inherit`.
+* **missing**, Missing processor of the calculation on the tree. Will be introduced in :ref:`tutorials_advancedusage_missing`.
 
 The mode argument is the most important argument in function ``func_treelize``. \
 For it depends the basic logic of the graph calculation.
@@ -86,6 +86,45 @@ a ``KeyError`` is raised at the second ``print`` statement.
 .. literalinclude:: strict_demo.demox.py.err
     :language: text
     :linenos:
+
+.. _tutorials_advancedusage_mode_strict:
+
+.. note::
+
+    How does the treelized function work?
+
+    Here is another example which show the actual calculation \
+    process of the wrapped function.
+
+    .. literalinclude:: strict_demo_show.demox.py
+        :language: python
+        :linenos:
+
+    In this code, once the original function ``plus`` is called, \
+    the actual value of argument ``a`` and ``b`` will be printed to \
+    stdout.
+
+    In the ``plus(t1, t2)``, all the calculation can be carried \
+    on because add operator between primitive ``int`` and \
+    ``np.ndarray`` is supported, so no error occurs and \
+    the result of ``+`` between ``int`` and ``np.ndarray`` will \
+    be one of the values of the result tree.
+
+    But in ``plus(t1, t3)``, when get the result of \
+    ``plus(t1, t3).b``, it will try to add ``t1.b`` and \
+    ``t2.b`` together, but there is no implement of operator \
+    ``+`` between primitive ``int`` and ``list`` objects, so \
+    ``TypeError`` will be raised when do this calculation.
+
+    The complete stdout and stderr should be like this.
+
+    .. literalinclude:: strict_demo_show.demox.py.txt
+        :language: text
+        :linenos:
+
+    .. literalinclude:: strict_demo_show.demox.py.err
+        :language: text
+        :linenos:
 
 In strict mode, missing or overage of keys are not tolerated \
 at all. So in some of the cases, especially when you can not \
