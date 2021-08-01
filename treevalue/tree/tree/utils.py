@@ -98,14 +98,14 @@ def _build_path_tree(tree: _TreeValue) -> _TreeValue:
     return _recursion([], tree)
 
 
-def mapping(tree: _TreeValue, func) -> _TreeValue:
+def mapping(tree: _TreeValue, func: Callable) -> _TreeValue:
     """
     Overview:
         Do mapping on every value in this tree.
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:): Function for mapping
+        - func (:obj:`Callable`): Function for mapping
 
     Returns:
         - tree (:obj:`_TreeValue`): Mapped tree value object.
@@ -158,14 +158,14 @@ def mask(tree: _TreeValue, mask_: Union[TreeValue, bool], remove_empty: bool = T
     return _filter_by_masked_tree(union(mask_, tree, return_type=tree.__class__), remove_empty)
 
 
-def filter_(tree: _TreeValue, func, remove_empty: bool = True) -> _TreeValue:
+def filter_(tree: _TreeValue, func: Callable, remove_empty: bool = True) -> _TreeValue:
     """
     Overview:
         Filter the element in the tree with a predict function.
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:): Function for filtering
+        - func (:obj:`Callable`): Function for filtering
         - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
 
     Returns:

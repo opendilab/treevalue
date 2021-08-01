@@ -453,7 +453,151 @@ properly, like the result in ``missing_demo_2``.
 Functional Utilities
 -----------------------
 
-.. todo:: writing mapping, filter, mask, shrink here
+In the primitive python, some convenient functional operations \
+are supported, such as
+
+.. literalinclude:: functional_python_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: functional_python_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+Actually, functional operations are supported in tree values \
+as well, and they will be introduced in this section.
+
+Mapping
+~~~~~~~~~~~~~~~~~~
+
+Mapping function is similar to the primitive ``map`` function. \
+The relation between ``TreeValue`` and ``mapping`` function \
+is like that between ``list`` and ``map`` function.
+
+Here is a simple real code example
+
+.. literalinclude:: mapping_demo.demo.py
+    :language: python
+    :linenos:
+
+The mapped tree result should be like below.
+
+.. literalinclude:: mapping_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``mapping``, \
+take a look at :ref:`apidoc_tree_tree_mapping`.
+
+Filter
+~~~~~~~~~~~~~
+
+Filter function is similar to the primitive ``filter`` \
+function. The relation between ``TreeValue`` and ``filter_`` \
+function is like that between ``list`` and ``filter`` function .
+
+Here is a simple real code example
+
+.. literalinclude:: filter_demo.demo.py
+    :language: python
+    :linenos:
+
+The filtered tree result should be like below. \
+When ``remove_empty`` is disabled, the empty tree node will \
+be kept to make sure the structure of the result tree is \
+similar to the unfiltered tree.
+
+.. literalinclude:: filter_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+    Actually, the code above is equal to the code below. \
+    The ``filter_`` function can be seen as a combination \
+    of ``mask`` function and ``mapping`` function.
+
+    .. literalinclude:: filter_eq_demo.demo.py
+        :language: python
+        :linenos:
+
+    The result should be like below, exactly the same as \
+    the code above.
+
+    .. literalinclude:: filter_eq_demo.demo.py.txt
+        :language: text
+        :linenos:
+
+    For further information about ``mask`` function, \
+    take a look at :ref:`tutorials_advancedusage_functional_mask`.
+
+For further definition or source \
+code implement of function ``filter_``, \
+take a look at :ref:`apidoc_tree_tree_filter`.
+
+.. _tutorials_advancedusage_functional_mask:
+
+Mask
+~~~~~~~~~~~~~~~
+
+Mask function allow your choice in one tree, by another tree \
+of true-or-false flags. A simple code example is
+
+.. literalinclude:: mask_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, values mapped with the tree \
+``m`` which mask flag is ``False`` are all deleted. Also, \
+``remove_empty`` argument is supported.
+
+.. literalinclude:: mask_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``mask``, \
+take a look at :ref:`apidoc_tree_tree_mask`.
+
+Shrink
+~~~~~~~~~~~~~~~~~~~~
+
+By using ``shrink`` function, you can get some calculation \
+result based on the tree structure. Its meaning is similar \
+to primitive ``reduce`` function, but its base structure is \
+``TreeValue`` instead of sequence or iterator. For example, \
+we can get the sum and multiply accumulation of the values \
+in the tree.
+
+.. literalinclude:: shrink_demo_1.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: shrink_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+If we use ``shrink`` function with ``mapping`` function, \
+huffman weight sum can also be easily calculated with \
+the code below.
+
+.. literalinclude:: shrink_demo_2.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: shrink_demo_2.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``shrink``, \
+take a look at :ref:`apidoc_tree_tree_shrink`.
 
 Structural Utilities
 --------------------
