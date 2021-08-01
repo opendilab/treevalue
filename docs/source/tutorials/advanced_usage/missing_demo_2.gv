@@ -1,0 +1,54 @@
+digraph {
+    label = "missing_demo_2 \n(Runnable, t3 is sum of t1 and t2, t1.a and t2.x.e's values are actually treated as [].)";
+    graph [bgcolor = "#ffffff00"];
+
+    subgraph cluster_t1 {
+    label = "Tree t1";
+    t1 [label = t1];
+    t1_b [label = "[2, 3]"];
+    t1_x [label = "t1.x"];
+    t1_x_c [label = "[5]"];
+    t1_x_d [label = "[7, 11, 13]"];
+    t1_x_e [label = "[17, 19]"];
+
+    t1 -> t1_b [label = "b"];
+    t1 -> t1_x [label = "x"];
+    t1_x -> t1_x_c [label = "c"];
+    t1_x -> t1_x_d [label = "d"];
+    t1_x -> t1_x_e [label = "e"];
+    }
+
+    subgraph cluster_t2 {
+    label = "Tree t2";
+    t2 [label = t2];
+    t2_a [label = "[23]"];
+    t2_b [label = "[29, 31]"];
+    t2_x [label = "t2.x"];
+    t2_x_c [label = "[37]"];
+    t2_x_d [label = "[41, 43]"];
+
+    t2 -> t2_a [label = "a"];
+    t2 -> t2_b [label = "b"];
+    t2 -> t2_x [label = "x"];
+    t2_x -> t2_x_c [label = "c"];
+    t2_x -> t2_x_d [label = "d"];
+    }
+
+    subgraph cluster_t3 {
+    label = "Tree t3";
+    t3 [label = "t3 = t1 + t2"];
+    t3_a [label = "[23]"];
+    t3_b [label = "[2, 3, 29, 31]"];
+    t3_x [label = "t3.x = t1.x + t2.x"];
+    t3_x_c [label = "[5, 37]"];
+    t3_x_d [label = "[7, 11, 13, 41, 43]"];
+    t3_x_e [label = "[17, 19]"];
+
+    t3 -> t3_a [label = "a"];
+    t3 -> t3_b [label = "b"];
+    t3 -> t3_x [label = "x"];
+    t3_x -> t3_x_c [label = "c"];
+    t3_x -> t3_x_d [label = "d"];
+    t3_x -> t3_x_e [label = "e"];
+    }
+}

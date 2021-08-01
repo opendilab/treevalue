@@ -371,7 +371,83 @@ last one will failed due to the disablement of inheriting.
 Process Missing Values
 --------------------------
 
-.. todo:: introduce how this framework process key missing situation
+In some cases of left mode and outer mode, some of keys in \
+result tree can not find the node nor value at the \
+corresponding path position in some of the argument trees. \
+In order the make these cases be processable, missing value \
+can be used by setting value or lambda expression in ``missing`` \
+argument.
+
+Just like the example ``outer_demo_1`` mentioned forwards, \
+when ``t1.a`` and ``t2.x.f`` not found in trees, the given \
+missing value ``0`` will be used instead.
+
+.. image:: outer_demo_1.gv.svg
+    :align: center
+
+Another case is the ``missing_demo_1`` which is based \
+on left mode. In this case, ``t2.a`` is ignore due to the \
+property of left mode, ``t2.x.f`` is missing but ``t1.x.f`` \
+can be found, so ``t2.x.f`` will use the missing value ``0``. \
+Finally, ``t3`` will be the result of left addition of ``t1`` \
+and ``t2``, with missing value of ``0``.
+
+.. image:: missing_demo_1.gv.svg
+    :align: center
+
+Considering another complex case, when the values of tree are \
+primitive lists, like the ``missing_demo_2`` which is based on \
+outer mode. At this time, if we need to do addition with \
+missing value supported, we can set the missing value to \
+an empty list. The result is like below.
+
+.. image:: missing_demo_2.gv.svg
+    :align: center
+
+.. note::
+    In ``missing_demo_2``, ``lambda :[]`` will be the \
+    value of ``missing`` argument in actual code.
+
+    In ``missing`` argument, its value will be automatically \
+    executed when it is callable, and its execution's return \
+    value will be the actual missing value.
+
+    By passing a lambda expression in, you can construct a \
+    new object everytime missing value is required, and the \
+    duplication of the missing value's object will be avoided. \
+    So it is not recommended to use ``missing`` argument like \
+    ``[]``, ``{}`` or ``myobject()`` in python code, but \
+    ``lambda :[]``, ``lambda :{}`` and ``lambda :myobject()`` \
+    are better practices.
+
+Here is a real code example of missing_value.
+
+.. literalinclude:: missing_demo.demo.py
+    :language: python
+    :linenos:
+
+The stdout (no error occurred) should be like below, \
+the calculation of ``plus`` function  will be processed \
+properly, like the result in ``missing_demo_2``.
+
+.. literalinclude:: missing_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    Missing value will be only applied in left mode and outer mode.
+
+    In strict mode, missing or overage of keys are absolutely \
+    not tolerated, missing value will make no sense and a \
+    ``RuntimeWarning`` will be logged.
+
+    In inner mode, missing value will never be actually \
+    in use because all the key sets of final result are \
+    intersection set of argument trees. There will never be \
+    any key missing cases at all when inner mode is used, \
+    a ``RuntimeWarning`` will be logged with the usage of \
+    missing value in inner mode.
 
 
 Functional Utilities
