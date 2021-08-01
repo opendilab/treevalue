@@ -229,6 +229,24 @@ no errors occurred with exit code 0.
 Outer Mode
 ~~~~~~~~~~~~~~~~~~~
 
+In outer mode, the result tree's key set will be aligned to \
+the union set of the tree's key set in arguments.
+
+In the trees in ``outer_demo_1``, ``t3`` is the plus result of \
+``t1`` and ``t2``.
+
+.. note::
+    In outer mode, it is strongly recommended to set the \
+    value of argument ``missing``. When ``missing``'s \
+    value is not set and there are key missing in \
+    some of the argument trees, ``KeyError`` will be raised
+    due to this missing and value of ``missing``.
+
+    For further information and examples of ``missing`` \
+    argument, take a look at
+    :ref:`tutorials_advancedusage_missing`.
+
+
 .. todo:: describe outer mode and samples
 
 
