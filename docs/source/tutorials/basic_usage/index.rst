@@ -132,3 +132,23 @@ The structure of the trees in this part is like below.
 .. image:: tree_support_2.gv.svg
     :align: center
 
+Besides, the ``func_treelize`` function will never change the \
+original logical properties of the original function. In the \
+example below, the calculation with original values instead of \
+usage of the trees can be processed properly with the \
+result of the primitive value.
+
+.. literalinclude:: tree_support_primitive.demo.py
+    :language: python
+    :linenos:
+
+The output should be like below, the ``gcd`` **function can \
+still support the greatest common divisor of the primitive \
+integers**.
+
+.. literalinclude:: tree_support_primitive.demo.py.txt
+    :language: text
+    :linenos:
+
+.. todo:: add link of further information here.
+
