@@ -12,7 +12,9 @@ you may take a look at the following pages:
 * ``func_treelize`` and other wrappers: :doc:`../../api_doc/tree/func`.
 * ``FastTreeValue`` and its operators, methods: :doc:`../../api_doc/tree/general`.
 
-Function modes
+.. _tutorials_advancedusage_modes:
+
+Function Modes
 -------------------------
 
 In the basic usage description in :ref:`tutorials_basicusage_func`, \
@@ -202,15 +204,17 @@ tree ``t1`` and ``t2``.
 .. image:: inner_demo_1.gv.svg
     :align: center
 
-In most cases of inner mode (HansBug says that he failed \
-to construct even one case of inner mode's structural failure), \
-the calculation will be processed properly because of the \
-intersection operation on the key set and key missing or \
-overage are both avoided completely. But the shortage of \
-inner mode is the loss of some information, for keys and its \
-value or subtrees will be directly ignored without any warning. \
-So **before using inner mode, please confirm that you know its \
-running logic**.
+.. note::
+    In most cases of inner mode, \
+    the calculation will be processed properly because of the \
+    intersection operation on the key set and key missing or \
+    overage are both avoided completely.
+
+    But the shortage of inner mode is the loss of \
+    some information, for keys and its value or subtrees \
+    will be directly ignored without any warning. So \
+    **before using inner mode, please confirm that you \
+    know its running logic and the missing of some nodes**.
 
 Here is a real code example of inner mode.
 
@@ -229,43 +233,384 @@ no errors occurred with exit code 0.
 Outer Mode
 ~~~~~~~~~~~~~~~~~~~
 
-.. todo:: describe outer mode and samples
+In outer mode, the result tree's key set will be aligned to \
+the union set of the tree's key set in arguments.
 
+In the trees in ``outer_demo_1``, ``t3`` is the plus result of \
+``t1`` and ``t2``, with the missing value of ``0``. We can see \
+that all the values in tree ``t1`` and ``t2`` are involved \
+in this calculation, and because of the missing of ``t1.a`` and \
+``t2.x.f`` they will be actually treated as ``0`` in \
+calculation process. Finally no error will be raised, and \
+sum of the tree nodes' value will form the result tree ``t3``.
+
+.. image:: outer_demo_1.gv.svg
+    :align: center
+
+.. note::
+    In outer mode, it is strongly recommended to set the \
+    value of argument ``missing``. When ``missing``'s \
+    value is not set and there are key missing in \
+    some of the argument trees, ``KeyError`` will be raised
+    due to this missing and value of ``missing``.
+
+    For further information and examples of ``missing`` \
+    argument, take a look at
+    :ref:`tutorials_advancedusage_missing`.
+
+Here is a real code example of inner mode.
+
+.. literalinclude:: outer_demo.demo.py
+    :language: python
+    :linenos:
+
+The stdout (no stderr content in this case) should like below, \
+no errors occurred with exit code 0.
+
+.. literalinclude:: outer_demo.demo.py.txt
+    :language: text
+    :linenos:
 
 
 .. _tutorials_advancedusage_inherit:
 
-Inherit mode
+Inheriting on Trees
 -------------------
 
-.. todo:: introduce how this framework process inherited values
+Inheriting is another important feature of treelize functions. \
+It will be introduced in this section with necessary examples.
 
+In some cases, we need to calculation between values with \
+different dimensions, such as in ``numpy``, you can add \
+primitive integer with a ``ndarray`` object, like this
+
+.. literalinclude:: inherit_numpy_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, result of ``ar1 + 9`` is \
+actually the same as the result of \
+expression ``ar1 + np.array([[9, 9], [9, 9]])``.
+
+.. literalinclude:: inherit_numpy_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+In treelize functions, you can achieve this processing way \
+by use the ``inherit`` argument. Considering this situation \
+can be find almost anywhere, so the default value of \
+``inherit`` argument is ``True``, which means the inheriting \
+option is on by default.
+
+We can see the example in ``inherit_demo_1``, the tree ``t1`` \
+and tree ``t2`` have different structures, and cannot be \
+processed by any modes in :ref:`tutorials_advancedusage_modes`, \
+because ``t1.x`` is a primitive integer value but ``t2.x`` is \
+a subtree node, their types are structurally different.
+
+.. image:: inherit_demo_1.gv.svg
+    :align: center
+
+But when inheriting is enabled, this adding operation can \
+still be carried on, for the value of ``t1.x`` (is ``9`` \
+in ``inherit_demo_1``) will be applied to the whole \
+subtree ``t2.x``, like the result tree ``t3`` shows. \
+The result of tree ``t3.x`` can be considered as the sum \
+of primitive integer ``9`` and subtree ``t2.x``.
+
+Based on the structural properties above, in the example of \
+``inherit_demo_2``, a primitive value can be directly added \
+with a complete tree, like the result \
+tree ``t2 = t1 + 5`` shows.
+
+.. image:: inherit_demo_2.gv.svg
+    :align: center
+
+When inheriting is disabled, all the cases with primitive value \
+and tree node at the same path position will cause ``TypeError``. \
+For example, when inheriting is disabled, ``inherit_demo_1`` \
+and ``inherit_demo_2`` will failed, but ``strict_demo_1`` will \
+still success because no primitive value appears at the same \
+path position of tree node.
+
+.. image:: strict_demo_1.gv.svg
+    :align: center
+
+Here is a real code example of inheriting.
+
+.. literalinclude:: inherit_demo.demox.py
+    :language: python
+    :linenos:
+
+The stdout and stderr should be like below, the the \
+calculation of ``plus`` function and the first calculation \
+of ``plusx`` function will be processed properly, but the \
+last one will failed due to the disablement of inheriting.
+
+.. literalinclude:: inherit_demo.demox.py.txt
+    :language: text
+    :linenos:
+
+.. literalinclude:: inherit_demo.demox.py.err
+    :language: text
+    :linenos:
+
+.. note::
+
+    In most cases, disablement of inheriting is not recommended \
+    because it will cause some errors. Disable inheriting can \
+    increase the structural strictness of calculation, \
+    but all the cross-dimensional tree operation will be \
+    forbidden as well.
+
+    So before disabling inheriting, make sure you know well \
+    about what you are going to do.
 
 .. _tutorials_advancedusage_missing:
 
-Process missing values
+Process Missing Values
 --------------------------
 
-.. todo:: introduce how this framework process key missing situation
+In some cases of left mode and outer mode, some of keys in \
+result tree can not find the node nor value at the \
+corresponding path position in some of the argument trees. \
+In order the make these cases be processable, missing value \
+can be used by setting value or lambda expression in ``missing`` \
+argument.
+
+Just like the example ``outer_demo_1`` mentioned forwards, \
+when ``t1.a`` and ``t2.x.f`` not found in trees, the given \
+missing value ``0`` will be used instead.
+
+.. image:: outer_demo_1.gv.svg
+    :align: center
+
+Another case is the ``missing_demo_1`` which is based \
+on left mode. In this case, ``t2.a`` is ignore due to the \
+property of left mode, ``t2.x.f`` is missing but ``t1.x.f`` \
+can be found, so ``t2.x.f`` will use the missing value ``0``. \
+Finally, ``t3`` will be the result of left addition of ``t1`` \
+and ``t2``, with missing value of ``0``.
+
+.. image:: missing_demo_1.gv.svg
+    :align: center
+
+Considering another complex case, when the values of tree are \
+primitive lists, like the ``missing_demo_2`` which is based on \
+outer mode. At this time, if we need to do addition with \
+missing value supported, we can set the missing value to \
+an empty list. The result is like below.
+
+.. image:: missing_demo_2.gv.svg
+    :align: center
+
+.. note::
+    In ``missing_demo_2``, ``lambda :[]`` will be the \
+    value of ``missing`` argument in actual code.
+
+    In ``missing`` argument, its value will be automatically \
+    executed when it is callable, and its execution's return \
+    value will be the actual missing value.
+
+    By passing a lambda expression in, you can construct a \
+    new object everytime missing value is required, and the \
+    duplication of the missing value's object will be avoided. \
+    So it is not recommended to use ``missing`` argument like \
+    ``[]``, ``{}`` or ``myobject()`` in python code, but \
+    ``lambda :[]``, ``lambda :{}`` and ``lambda :myobject()`` \
+    are better practices.
+
+Here is a real code example of missing_value.
+
+.. literalinclude:: missing_demo.demo.py
+    :language: python
+    :linenos:
+
+The stdout (no error occurred) should be like below, \
+the calculation of ``plus`` function  will be processed \
+properly, like the result in ``missing_demo_2``.
+
+.. literalinclude:: missing_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    Missing value will be only applied in left mode and outer mode.
+
+    In strict mode, missing or overage of keys are absolutely \
+    not tolerated, missing value will make no sense and a \
+    ``RuntimeWarning`` will be logged.
+
+    In inner mode, missing value will never be actually \
+    in use because all the key sets of final result are \
+    intersection set of argument trees. There will never be \
+    any key missing cases at all when inner mode is used, \
+    a ``RuntimeWarning`` will be logged with the usage of \
+    missing value in inner mode.
 
 
-Functional utilities
+Functional Utilities
 -----------------------
 
-.. todo:: writing mapping, filter, mask, shrink here
+In the primitive python, some convenient functional operations \
+are supported, such as
 
-Structural utilities
+.. literalinclude:: functional_python_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: functional_python_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+Actually, functional operations are supported in tree values \
+as well, and they will be introduced in this section.
+
+Mapping
+~~~~~~~~~~~~~~~~~~
+
+Mapping function is similar to the primitive ``map`` function. \
+The relation between ``TreeValue`` and ``mapping`` function \
+is like that between ``list`` and ``map`` function.
+
+Here is a simple real code example
+
+.. literalinclude:: mapping_demo.demo.py
+    :language: python
+    :linenos:
+
+The mapped tree result should be like below.
+
+.. literalinclude:: mapping_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``mapping``, \
+take a look at :ref:`apidoc_tree_tree_mapping`.
+
+Filter
+~~~~~~~~~~~~~
+
+Filter function is similar to the primitive ``filter`` \
+function. The relation between ``TreeValue`` and ``filter_`` \
+function is like that between ``list`` and ``filter`` function .
+
+Here is a simple real code example
+
+.. literalinclude:: filter_demo.demo.py
+    :language: python
+    :linenos:
+
+The filtered tree result should be like below. \
+When ``remove_empty`` is disabled, the empty tree node will \
+be kept to make sure the structure of the result tree is \
+similar to the unfiltered tree.
+
+.. literalinclude:: filter_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+    Actually, the code above is equal to the code below. \
+    The ``filter_`` function can be seen as a combination \
+    of ``mask`` function and ``mapping`` function.
+
+    .. literalinclude:: filter_eq_demo.demo.py
+        :language: python
+        :linenos:
+
+    The result should be like below, exactly the same as \
+    the code above.
+
+    .. literalinclude:: filter_eq_demo.demo.py.txt
+        :language: text
+        :linenos:
+
+    For further information about ``mask`` function, \
+    take a look at :ref:`tutorials_advancedusage_functional_mask`.
+
+For further definition or source \
+code implement of function ``filter_``, \
+take a look at :ref:`apidoc_tree_tree_filter`.
+
+.. _tutorials_advancedusage_functional_mask:
+
+Mask
+~~~~~~~~~~~~~~~
+
+Mask function allow your choice in one tree, by another tree \
+of true-or-false flags. A simple code example is
+
+.. literalinclude:: mask_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, values mapped with the tree \
+``m`` which mask flag is ``False`` are all deleted. Also, \
+``remove_empty`` argument is supported.
+
+.. literalinclude:: mask_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``mask``, \
+take a look at :ref:`apidoc_tree_tree_mask`.
+
+Shrink
+~~~~~~~~~~~~~~~~~~~~
+
+By using ``shrink`` function, you can get some calculation \
+result based on the tree structure. Its meaning is similar \
+to primitive ``reduce`` function, but its base structure is \
+``TreeValue`` instead of sequence or iterator. For example, \
+we can get the sum and multiply accumulation of the values \
+in the tree.
+
+.. literalinclude:: shrink_demo_1.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: shrink_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+If we use ``shrink`` function with ``mapping`` function, \
+huffman weight sum can also be easily calculated with \
+the code below.
+
+.. literalinclude:: shrink_demo_2.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: shrink_demo_2.demo.py.txt
+    :language: text
+    :linenos:
+
+For further definition or source \
+code implement of function ``shrink``, \
+take a look at :ref:`apidoc_tree_tree_shrink`.
+
+Structural Utilities
 --------------------
 
 .. todo:: writing union, subside, rise here
 
-Tree utilities
+Tree Utilities
 ------------------
 
 .. todo:: writing jsonify, view, clone, typetrans here
 
-Decorators
---------------
+Treelize Decorators
+-------------------------
 
 .. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
     method_treelize is also supported to property getter.

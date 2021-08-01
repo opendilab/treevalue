@@ -1,0 +1,40 @@
+digraph {
+    label = "inherit_demo_2 \n(Runnable, t2 is sum of t1 and 5 due to enablement of inheriting)";
+    graph [bgcolor = "#ffffff00"];
+
+    subgraph cluster_t1 {
+    label = "Tree t1";
+    t1 [label = t1];
+    t1_a [label = 11];
+    t1_b [label = 22];
+    t1_x [label = "t1.x"];
+    t1_x_c [label = 30];
+    t1_x_d [label = 48];
+    t1_x_e [label = 54];
+
+    t1 -> t1_a [label = "a"];
+    t1 -> t1_b [label = "b"];
+    t1 -> t1_x [label = "x"];
+    t1_x -> t1_x_c [label = "c"];
+    t1_x -> t1_x_d [label = "d"];
+    t1_x -> t1_x_e [label = "e"];
+    }
+
+    subgraph cluster_t2 {
+    label = "Tree t2";
+    t2 [label = "t2 = t1 + 5"];
+    t2_a [label = "16 = 11 + 5"];
+    t2_b [label = "27 = 22 + 5"];
+    t2_x [label = "t2.x = t1.x + 5"];
+    t2_x_c [label = "35 = 30 + 5"];
+    t2_x_d [label = "53 = 48 + 5"];
+    t2_x_e [label = "59 = 54 + 5"];
+
+    t2 -> t2_a [label = "a"];
+    t2 -> t2_b [label = "b"];
+    t2 -> t2_x [label = "x"];
+    t2_x -> t2_x_c [label = "c"];
+    t2_x -> t2_x_d [label = "d"];
+    t2_x -> t2_x_e [label = "e"];
+    }
+}

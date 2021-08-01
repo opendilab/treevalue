@@ -32,17 +32,23 @@ typetrans
 .. autofunction:: treevalue.tree.tree.utils.typetrans
 
 
+.. _apidoc_tree_tree_mapping:
+
 mapping
 --------------
 
 .. autofunction:: treevalue.tree.tree.utils.mapping
 
 
+.. _apidoc_tree_tree_mask:
+
 mask
 -------------------
 
 .. autofunction:: treevalue.tree.tree.utils.mask
 
+
+.. _apidoc_tree_tree_filter:
 
 filter\_
 ----------------------
@@ -66,6 +72,8 @@ rise
 
 .. autofunction:: treevalue.tree.tree.utils.rise
 
+
+.. _apidoc_tree_tree_shrink:
 
 shrink
 ----------------

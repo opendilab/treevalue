@@ -1,6 +1,6 @@
 from enum import IntEnum, unique
 from functools import wraps, partial
-from typing import Type, TypeVar, Optional, Mapping, Union
+from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
 import enum_tools
 
@@ -49,8 +49,9 @@ _ClassType = TypeVar("_ClassType", bound=TreeValue)
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
-def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeValue,
-                  inherit: bool = True, missing=MISSING_NOT_ALLOW,
+def func_treelize(mode: Union[str, TreeMode] = 'strict',
+                  return_type: Optional[Type[_ClassType]] = TreeValue, inherit: bool = True,
+                  missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                   subside: Union[Mapping, bool, None] = None,
                   rise: Union[Mapping, bool, None] = None):
     """
@@ -58,11 +59,11 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
         Wrap a common function to tree-supported function.
 
     Arguments:
-        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
-        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
-            means raise `KeyError` when missing detected.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.
@@ -158,8 +159,9 @@ def func_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = TreeV
 AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 
-def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                    inherit: bool = True, missing=MISSING_NOT_ALLOW,
+def method_treelize(mode: Union[str, TreeMode] = 'strict',
+                    return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
+                    missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                     subside: Union[Mapping, bool, None] = None,
                     rise: Union[Mapping, bool, None] = None):
     """
@@ -172,12 +174,12 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
             but the single element of the tree instead.
 
     Arguments:
-        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
-        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
-            means raise `KeyError` when missing detected.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.
@@ -212,8 +214,9 @@ def method_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUT
     return _decorator
 
 
-def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE,
-                         inherit: bool = True, missing=MISSING_NOT_ALLOW,
+def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
+                         return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
+                         missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                          subside: Union[Mapping, bool, None] = None,
                          rise: Union[Mapping, bool, None] = None):
     """
@@ -225,12 +228,12 @@ def classmethod_treelize(mode='strict', return_type: Optional[Type[_ClassType]] 
         - When decorated instance method is called, the `cls` argument will still be the calling class.
 
     Arguments:
-        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
-        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
-            means raise `KeyError` when missing detected.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.

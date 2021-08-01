@@ -22,3 +22,19 @@ class TestTreeFuncOuter:
             'a': 23, 'b': 46, 'c': 33, 'f': 344,
             'x': {'c': 69, 'd': 92, 'p': 76, 'e': 595, 'v': -100}
         })
+
+    def test_outer_inherit_without_missing(self):
+        with pytest.warns(RuntimeWarning):
+            @func_treelize('outer')
+            def ssum(*args):
+                return sum(args)
+
+        t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 44}})
+        t3 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 44, 'p': 76, 'e': 45}, 'f': 344})
+        assert ssum(1, 2, 3) == 6
+        assert ssum(t1, t2) == TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}})
+        assert ssum(t1.x, t2.x) == TreeValue({'c': 36, 'd': 48})
+
+        with pytest.raises(KeyError):
+            _ = ssum(t1, t3)
