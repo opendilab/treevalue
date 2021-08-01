@@ -202,15 +202,17 @@ tree ``t1`` and ``t2``.
 .. image:: inner_demo_1.gv.svg
     :align: center
 
-In most cases of inner mode (HansBug says that he failed \
-to construct even one case of inner mode's structural failure), \
-the calculation will be processed properly because of the \
-intersection operation on the key set and key missing or \
-overage are both avoided completely. But the shortage of \
-inner mode is the loss of some information, for keys and its \
-value or subtrees will be directly ignored without any warning. \
-So **before using inner mode, please confirm that you know its \
-running logic**.
+.. note::
+    In most cases of inner mode, \
+    the calculation will be processed properly because of the \
+    intersection operation on the key set and key missing or \
+    overage are both avoided completely.
+
+    But the shortage of inner mode is the loss of \
+    some information, for keys and its value or subtrees \
+    will be directly ignored without any warning. So \
+    **before using inner mode, please confirm that you \
+    know its running logic and the missing of some nodes**.
 
 Here is a real code example of inner mode.
 
@@ -233,7 +235,15 @@ In outer mode, the result tree's key set will be aligned to \
 the union set of the tree's key set in arguments.
 
 In the trees in ``outer_demo_1``, ``t3`` is the plus result of \
-``t1`` and ``t2``.
+``t1`` and ``t2``, with the missing value of ``0``. We can see \
+that all the values in tree ``t1`` and ``t2`` are involved \
+in this calculation, and because of the missing of ``t1.a`` and \
+``t2.x.f`` they will be actually treated as ``0`` in \
+calculation process. Finally no error will be raised, and \
+sum of the tree nodes' value will form the result tree ``t3``.
+
+.. image:: outer_demo_1.gv.svg
+    :align: center
 
 .. note::
     In outer mode, it is strongly recommended to set the \
@@ -246,9 +256,18 @@ In the trees in ``outer_demo_1``, ``t3`` is the plus result of \
     argument, take a look at
     :ref:`tutorials_advancedusage_missing`.
 
+Here is a real code example of inner mode.
 
-.. todo:: describe outer mode and samples
+.. literalinclude:: outer_demo.demo.py
+    :language: python
+    :linenos:
 
+The stdout (no stderr content in this case) should like below, \
+no errors occurred with exit code 0.
+
+.. literalinclude:: outer_demo.demo.py.txt
+    :language: text
+    :linenos:
 
 
 .. _tutorials_advancedusage_inherit:
