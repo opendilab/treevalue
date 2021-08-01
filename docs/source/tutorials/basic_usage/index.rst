@@ -1,13 +1,13 @@
 Basic Usage
 =====================
 
-In this part, basic usages of `TreeValue` will be introduced one \
+In this part, basic usages of ``TreeValue`` will be introduced one \
 by one with sample code and graph to explain them.
 
 Create a tree
 -----------------
 
-You can easily create a tree value object based on `FastTreeValue`.
+You can easily create a tree value object based on ``FastTreeValue``.
 
 .. literalinclude:: ../quick_start/create_a_tree.demo.py
     :language: python
@@ -28,7 +28,7 @@ A simple tree value structure is created successfully with the structure below.
 Edit the tree
 ------------------
 
-After the tree is created, you can access and edit it with `__getattr__`, `__setattr__` and `__delattr__`.
+After the tree is created, you can access and edit it with ``__getattr__``, ``__setattr__`` and ``__delattr__``.
 
 .. literalinclude:: edit_tree.demo.py
     :language: python
@@ -41,7 +41,7 @@ The result should be
     :linenos:
 
 The values on the tree has been changed or deleted properly.
-And the full life circle of the tree `t` is like below.
+And the full life circle of the tree ``t`` is like below.
 
 .. image:: edit_tree_1.gv.svg
     :align: center
@@ -89,7 +89,7 @@ The result should be
     :linenos:
 
 The values is processed one to one between the tree.
-The structures of the trees involved in `__add__` calculation is like below.
+The structures of the trees involved in ``__add__`` calculation is like below.
 
 .. image:: calculation_add.gv.svg
     :align: center
@@ -131,4 +131,24 @@ The structure of the trees in this part is like below.
 
 .. image:: tree_support_2.gv.svg
     :align: center
+
+Besides, the ``func_treelize`` function will never change the \
+original logical properties of the original function. In the \
+example below, the calculation with original values instead of \
+usage of the trees can be processed properly with the \
+result of the primitive value.
+
+.. literalinclude:: tree_support_primitive.demo.py
+    :language: python
+    :linenos:
+
+The output should be like below, the ``gcd`` **function can \
+still support the greatest common divisor of the primitive \
+integers**.
+
+.. literalinclude:: tree_support_primitive.demo.py.txt
+    :language: text
+    :linenos:
+
+.. todo:: add link of further information here.
 
