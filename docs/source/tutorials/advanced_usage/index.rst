@@ -12,7 +12,9 @@ you may take a look at the following pages:
 * ``func_treelize`` and other wrappers: :doc:`../../api_doc/tree/func`.
 * ``FastTreeValue`` and its operators, methods: :doc:`../../api_doc/tree/general`.
 
-Function modes
+.. _tutorials_advancedusage_modes:
+
+Function Modes
 -------------------------
 
 In the basic usage description in :ref:`tutorials_basicusage_func`, \
@@ -272,37 +274,123 @@ no errors occurred with exit code 0.
 
 .. _tutorials_advancedusage_inherit:
 
-Inherit mode
+Inheriting on Trees
 -------------------
 
-.. todo:: introduce how this framework process inherited values
+Inheriting is another important feature of treelize functions. \
+It will be introduced in this section with necessary examples.
 
+In some cases, we need to calculation between values with \
+different dimensions, such as in ``numpy``, you can add \
+primitive integer with a ``ndarray`` object, like this
+
+.. literalinclude:: inherit_numpy_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, result of ``ar1 + 9`` is \
+actually the same as the result of \
+expression ``ar1 + np.array([[9, 9], [9, 9]])``.
+
+.. literalinclude:: inherit_numpy_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+In treelize functions, you can achieve this processing way \
+by use the ``inherit`` argument. Considering this situation \
+can be find almost anywhere, so the default value of \
+``inherit`` argument is ``True``, which means the inheriting \
+option is on by default.
+
+We can see the example in ``inherit_demo_1``, the tree ``t1`` \
+and tree ``t2`` have different structures, and cannot be \
+processed by any modes in :ref:`tutorials_advancedusage_modes`, \
+because ``t1.x`` is a primitive integer value but ``t2.x`` is \
+a subtree node, their types are structurally different.
+
+.. image:: inherit_demo_1.gv.svg
+    :align: center
+
+But when inheriting is enabled, this adding operation can \
+still be carried on, for the value of ``t1.x`` (is ``9`` \
+in ``inherit_demo_1``) will be applied to the whole \
+subtree ``t2.x``, like the result tree ``t3`` shows. \
+The result of tree ``t3.x`` can be considered as the sum \
+of primitive integer ``9`` and subtree ``t2.x``.
+
+Based on the structural properties above, in the example of \
+``inherit_demo_2``, a primitive value can be directly added \
+with a complete tree, like the result \
+tree ``t2 = t1 + 5`` shows.
+
+.. image:: inherit_demo_2.gv.svg
+    :align: center
+
+When inheriting is disabled, all the cases with primitive value \
+and tree node at the same path position will cause ``TypeError``. \
+For example, when inheriting is disabled, ``inherit_demo_1`` \
+and ``inherit_demo_2`` will failed, but ``strict_demo_1`` will \
+still success because no primitive value appears at the same \
+path position of tree node.
+
+.. image:: strict_demo_1.gv.svg
+    :align: center
+
+Here is a real code example of inheriting.
+
+.. literalinclude:: inherit_demo.demox.py
+    :language: python
+    :linenos:
+
+The stdout and stderr should be like below, the the \
+calculation of ``plus`` function and the first calculation \
+of ``plusx`` function will be processed properly, but the \
+last one will failed due to the disablement of inheriting.
+
+.. literalinclude:: inherit_demo.demox.py.txt
+    :language: text
+    :linenos:
+
+.. literalinclude:: inherit_demo.demox.py.err
+    :language: text
+    :linenos:
+
+.. note::
+
+    In most cases, disablement of inheriting is not recommended \
+    because it will cause some errors. Disable inheriting can \
+    increase the structural strictness of calculation, \
+    but all the cross-dimensional tree operation will be \
+    forbidden as well.
+
+    So before disabling inheriting, make sure you know well \
+    about what you are going to do.
 
 .. _tutorials_advancedusage_missing:
 
-Process missing values
+Process Missing Values
 --------------------------
 
 .. todo:: introduce how this framework process key missing situation
 
 
-Functional utilities
+Functional Utilities
 -----------------------
 
 .. todo:: writing mapping, filter, mask, shrink here
 
-Structural utilities
+Structural Utilities
 --------------------
 
 .. todo:: writing union, subside, rise here
 
-Tree utilities
+Tree Utilities
 ------------------
 
 .. todo:: writing jsonify, view, clone, typetrans here
 
-Decorators
---------------
+Treelize Decorators
+-------------------------
 
 .. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
     method_treelize is also supported to property getter.
