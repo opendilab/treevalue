@@ -151,6 +151,6 @@ integers**.
     :linenos:
 
 For further information of how the tree-supported function works, take a look \
-at :ref:`How the treelized function works<tutorials_advancedusage_mode_strict>` , \
+at :ref:`How the treelized function works<tutorials_advancedusage_how_works>` , \
 this note may give you more information.
 

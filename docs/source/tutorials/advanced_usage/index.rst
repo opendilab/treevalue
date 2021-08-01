@@ -87,7 +87,7 @@ a ``KeyError`` is raised at the second ``print`` statement.
     :language: text
     :linenos:
 
-.. _tutorials_advancedusage_mode_strict:
+.. _tutorials_advancedusage_how_works:
 
 .. note::
 
