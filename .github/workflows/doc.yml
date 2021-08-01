@@ -16,6 +16,12 @@ jobs:
       matrix:
         python-version: [ 3.7 ]
 
+    services:
+      plantuml:
+        image: plantuml/plantuml-server
+        ports:
+          - 18080:8080
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -32,11 +38,13 @@ jobs:
       - name: Generate
         env:
           ENV_PROD: 'true'
+          PLANTUML_HOST: http://localhost:18080
         run: |
           git pull
           git branch -av
           git remote -v
           git tag
+          plantumlcli -c
           make pdocs
           mv ./docs/build/html ./public
       - name: Deploy to Github Page
