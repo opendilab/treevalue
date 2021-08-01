@@ -88,7 +88,7 @@ graphics
 
 .. autofunction:: treevalue.tree.tree.graph.graphics
 
-Here is an example of `graphics` function. The source code is
+Here is an example of ``graphics`` function. The source code is
 
 .. literalinclude:: graphics.demo.py
     :language: python
@@ -105,7 +105,7 @@ The graph should be
 .. image:: graphics.dat.gv.svg
     :align: center
 
-Also, `graphics` function can support value duplication. For if \
+Also, ``graphics`` function can support value duplication. For if \
 the value nodes are using the same object, they will be displayed \
 in the same node of the generated graph, such as the source code
 below
@@ -114,7 +114,7 @@ below
     :language: python
     :linenos:
 
-The graph of the case with `dup_value` should be
+The graph of the case with ``dup_value`` should be
 
 .. image:: graphics_dup_value.dat.gv.svg
     :align: center
