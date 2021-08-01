@@ -4,7 +4,7 @@ Welcome to TreeValue's Documentation
 Overview
 -------------
 
-`TreeValue` is a generalized tree-based data structure.
+``TreeValue`` is a generalized tree-based data structure.
 Almost all the operation can be supported \
 in form of trees in a convenient way to simplify the \
 structure processing when the calculation is tree-based.

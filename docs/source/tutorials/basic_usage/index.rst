@@ -1,13 +1,13 @@
 Basic Usage
 =====================
 
-In this part, basic usages of `TreeValue` will be introduced one \
+In this part, basic usages of ``TreeValue`` will be introduced one \
 by one with sample code and graph to explain them.
 
 Create a tree
 -----------------
 
-You can easily create a tree value object based on `FastTreeValue`.
+You can easily create a tree value object based on ``FastTreeValue``.
 
 .. literalinclude:: ../quick_start/create_a_tree.demo.py
     :language: python
@@ -28,7 +28,7 @@ A simple tree value structure is created successfully with the structure below.
 Edit the tree
 ------------------
 
-After the tree is created, you can access and edit it with `__getattr__`, `__setattr__` and `__delattr__`.
+After the tree is created, you can access and edit it with ``__getattr__``, ``__setattr__`` and ``__delattr__``.
 
 .. literalinclude:: edit_tree.demo.py
     :language: python
@@ -41,7 +41,7 @@ The result should be
     :linenos:
 
 The values on the tree has been changed or deleted properly.
-And the full life circle of the tree `t` is like below.
+And the full life circle of the tree ``t`` is like below.
 
 .. image:: edit_tree_1.gv.svg
     :align: center
@@ -89,7 +89,7 @@ The result should be
     :linenos:
 
 The values is processed one to one between the tree.
-The structures of the trees involved in `__add__` calculation is like below.
+The structures of the trees involved in ``__add__`` calculation is like below.
 
 .. image:: calculation_add.gv.svg
     :align: center
