@@ -694,7 +694,10 @@ The ``TreeValue`` objects can be cloned deeply by \
 
 The result will be like below, all the memory address \
 of the tree nodes in cloned tree are different from \
-those in the original tree ``t``.
+those in the original tree ``t`` when ``copy_value`` \
+argument is not set. But when ``copy_value`` is assigned \
+as ``True``, the address of values will be changed because \
+of the deep copy of value.
 
 .. literalinclude:: clone_demo.demo.py.txt
     :language: text
@@ -703,9 +706,19 @@ those in the original tree ``t``.
 .. note::
 
     Attention that in function ``clone``, the values \
-    will not be deeply copied together with the tree nodes. \
-    **The newly cloned tree's values have the same memory \
+    will not be deeply copied together with \
+    the tree nodes by default. **The newly cloned \
+    tree's values have the same memory \
     address with those in original tree**.
+
+    If deep copy of values is required when using ``clone``, \
+    ``copy_value`` argument need to be assigned as ``True``. \
+    And then a pickle dumps and loads will be processed in \
+    ``clone`` function in order to do the deep copy. \
+    Also, you can define your own copy function in \
+    ``copy_value`` argument by just assign it as \
+    a lambda expression \
+    like ``lambda x: pickle.loads(pickle.dumps(x))``.
 
 For further informaon of function ``clone``, \
 take a look at :ref:`apidoc_tree_tree_clone`.

@@ -325,4 +325,28 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
                 'k': tree_number_class({'a': '233', 'b': '233'}),
             }
 
+        def test_deep_clone(self):
+            t = tree_number_class({
+                'a': raw({'a': 1, 'b': 2}),
+                'b': raw({'a': 3, 'b': 4}),
+                'x': {
+                    'c': raw({'a': 5, 'b': 6}),
+                    'd': raw({'a': 7, 'b': 8}),
+                }
+            })
+
+            t1 = t.clone()
+            assert t1 == t
+            assert t1.a is t.a
+            assert t1.b is t.b
+            assert t1.x.c is t.x.c
+            assert t1.x.d is t.x.d
+
+            t2 = t.clone(copy_value=True)
+            assert t2 == t
+            assert t2.a is not t.a
+            assert t2.b is not t.b
+            assert t2.x.c is not t.x.c
+            assert t2.x.d is not t.x.d
+
     return _TestClass

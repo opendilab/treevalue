@@ -44,13 +44,16 @@ def view(tree: _TreeValue, path: List[str]) -> _TreeValue:
     return tree.__class__(get_data_property(tree).view(path))
 
 
-def clone(tree: _TreeValue) -> _TreeValue:
+def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:
     """
     Overview:
         Create a fully clone of the given tree.
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
+        - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
+            default is `None` which means do not deep copy the values. \
+            If deep copy is required, just set it to `True`.
 
     Returns:
         - tree (:obj:`_TreeValue`): Cloned tree value object.
@@ -59,7 +62,7 @@ def clone(tree: _TreeValue) -> _TreeValue:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
-    return tree.__class__(get_data_property(tree).clone())
+    return tree.__class__(get_data_property(tree).clone(copy_value))
 
 
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:

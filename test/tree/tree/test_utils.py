@@ -54,6 +54,29 @@ class TestTreeTreeUtils:
             'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
         }
 
+        tv3 = TreeValue({
+            'a': raw({'a': 1, 'b': 2}),
+            'b': raw({'a': 3, 'b': 4}),
+            'x': {
+                'c': raw({'a': 5, 'b': 6}),
+                'd': raw({'a': 7, 'b': 8}),
+            }
+        })
+
+        tv4 = clone(tv3)
+        assert tv4 == tv3
+        assert tv4.a is tv3.a
+        assert tv4.b is tv3.b
+        assert tv4.x.c is tv3.x.c
+        assert tv4.x.d is tv3.x.d
+
+        tv5 = clone(tv3, copy_value=True)
+        assert tv5 == tv3
+        assert tv5.a is not tv3.a
+        assert tv5.b is not tv3.b
+        assert tv5.x.c is not tv3.x.c
+        assert tv5.x.d is not tv3.x.d
+
     def test_typetrans(self):
         class MyTreeValue(TreeValue):
             pass

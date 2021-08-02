@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union, Callable, Any
 
 from .base import BaseTree
 from .tree import Tree
@@ -51,8 +51,8 @@ class TreeView(BaseTree):
     def view(self, path: List[str]):
         return TreeView(self.__tree, self.__path + [str(segment) for segment in path])
 
-    def clone(self):
-        return self.__get_actual_tree().clone()
+    def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
+        return self.__get_actual_tree().clone(copy_value)
 
     def items(self):
         return self.__get_actual_tree().items()

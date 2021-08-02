@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import List
+from typing import List, Union, Callable, Any
 
 from treevalue.utils import build_tree
 
@@ -113,10 +113,15 @@ class BaseTree(metaclass=ABCMeta):
         raise NotImplementedError  # pragma: no cover
 
     @abstractmethod
-    def clone(self):
+    def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
         """
         Overview:
             Fully clone this tree.
+
+        Arguments:
+            - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
+                default is `None` which means do not deep copy the values. \
+                If deep copy is required, just set it to `True`.
 
         Returns:
             - cloned (:obj:`Tree`): Cloned new tree.

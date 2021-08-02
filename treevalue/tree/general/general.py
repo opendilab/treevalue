@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import List, Mapping, Optional, Any, Type, TypeVar
+from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable
 
 from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
@@ -100,19 +100,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return view(self, path)
 
-        def clone(self):
+        def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
             """
             Overview:
                 Create a fully clone of the current tree.
 
             Returns:
                 - tree (:obj:`_TreeValue`): Cloned tree value object.
+                - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
+                    default is `None` which means do not deep copy the values. \
+                    If deep copy is required, just set it to `True`.
 
             Example:
                 >>> t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> t.x.clone()  # FastTreeValue({'c': 3, 'd': 4})
             """
-            return clone(self)
+            return clone(self, copy_value)
 
         def type(self, clazz: Type[_TreeValue]) -> _TreeValue:
             """
