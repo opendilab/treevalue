@@ -967,9 +967,3 @@ and ``classmethod_treelize``, just take a look at:
 * :ref:`apidoc_tree_func_utilsclass`
 * :ref:`apidoc_tree_func_classmethodtreelize`
 
-
-Other
---------------------
-
-
-
