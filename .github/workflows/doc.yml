@@ -8,6 +8,8 @@ on:
     branches: [ main, 'doc/*', 'dev/*' ]
   pull_request:
     branches: [ main, 'doc/*', 'dev/*' ]
+  release:
+    types: [ published ]
 
 jobs:
   doc:
@@ -40,7 +42,9 @@ jobs:
           ENV_PROD: 'true'
           PLANTUML_HOST: http://localhost:18080
         run: |
-          git pull
+          git fetch --all
+          git pull --all
+          for b in $(git branch -a | grep 'remotes/origin' | grep -v 'HEAD' | cut -c 18-); do git checkout $b; done
           git branch -av
           git remote -v
           git tag
