@@ -1,6 +1,8 @@
 Main Idea
 ============================
 
+.. _tutorials_mainidea_why:
+
 Why TreeValue is designed?
 ----------------------------
 
@@ -101,7 +103,122 @@ This code will have the same function with the codes above.
     :language: text
     :linenos:
 
+
+.. _tutorials_mainidea_definition:
+
 Definitions for Key Conceptions
 ---------------------------------
 
-.. todo:: complete the definitions
+In this section, the following key conceptions will be \
+introduced:
+
+* TreeValue
+* Tree Calculation
+* Tree Function Wrapper
+
+
+.. _tutorials_mainidea_definition_treevalue:
+
+TreeValue
+~~~~~~~~~~~~~~~~~~~~
+
+TreeValue is a data structure which is based on \
+tree structure. Nested features of tree structure \
+are natively supported in TreeValue. In this project, \
+**TreeValue is the basic calculation unit of any \
+operations**.
+
+From a data structure perspective, TreeValue is a \
+rooted, directed tree, and their nodes can be divided \
+into two categories:
+
+* Non-leaf node, represents the subtree structure.
+* Leaf node, which stores the value.
+
+Also, each edge of the tree has one string key which length \
+is no less than ``1``, and all edges from the same parent \
+node have different keys with each other. The following \
+graph shows a simple example, the TreeValue ``t`` is \
+a TreeValue instance, for the diamond-shaped node is the \
+root node, the circle-shaped node is the non-leaf nodes \
+and the rectangle-shaped node is the leaf nodes with \
+their values.
+
+.. image:: treevalue_demo.gv.svg
+    :align: center
+
+
+.. _tutorials_mainidea_definition_treelize:
+
+Treelize
+~~~~~~~~~~~~~~~~~~~~~~
+
+Base on the definition of TreeValue, the calculation based \
+on it is named `Tree Calculation`.
+
+Usually, the native calculation, operations in python \
+are all able to be abstracted to functions, for the \
+values can be mapped as the arguments of the function, \
+and the function's return value is the calculation's \
+result. For example, native ``+`` operator can be transformed \
+to ``__add__`` function (actually it has already been \
+define in ``operators`` module and can be imported in \
+your code), the expression :math:`1 + 2 = 3` can be \
+transformed to function-based expression of \
+:math:`\_\_add\_\_(1, 2) = 3`. In mathematical form, \
+the transformed functions can be tagged as :math:`f`.
+
+.. image:: treelize_demo.gv.svg
+    :align: center
+
+And if we need to expand these function to support the \
+similar calculation on the TreeValue instances (just like \
+the graph shows above), we will need to expand the \
+function :math:`f` to a new tree-supported function \
+which is named :math:`f_T`. For example, the ``__add__`` \
+function for native integers can be seen as function \
+:math:`f`, while the ``_add__`` function on the TreeValue \
+in the example above is the expanded function :math:`f_T`.
+
+.. note::
+
+    Actually, the function :math:`f_T` will not change \
+    any mathematical properties when all the arguments \
+    are native values. Expressed in symbolic expression \
+    is (all the :math:`a_i \left(0 \leq i \leq n\right)`, \
+    satisfies that :math:`a_i` is a native value).
+
+    .. math::
+
+        \forall \left\{ a_i \right\} \left( 0 \leq i \leq n\right), f_T\left(a_0, a_1, \cdots, a_n\right) = f\left(a_0, a_1, \cdots, a_n\right)
+
+    Based on this mathematical property, treelize \
+    operation to the native functions will not change its \
+    original property, when you are using it as a \
+    native function, you will feel native special than usual.
+
+So we can define this kind of mappings from \
+function :math:`f` to :math:`f_T` as \
+mapping :math:`T`, so the treelize process can be \
+expressed in the following symbolic form:
+
+.. math::
+
+    f_T = T\left( f \right)
+
+Based on this, the actual tree-based calculation's \
+process can be expressed as:
+
+.. math::
+
+    f_T\left(a_0, a_1, \cdots, a_n\right) \
+    = T\left(f\right)\left(a_0, a_1, \cdots, a_n\right)
+
+The TreeValue and treelize functions are the core \
+features that supported this project, and all of the \
+calculation. The TreeValue is implemented as class \
+``TreeValue`` in this project (the extended one is \
+called ``FastTreeValue``), and treelize is implemented \
+as function ``func_treelize`` in this project (the treelize \
+function for instance methods and class methods are \
+called ``method_treelize`` and ``classmethod_treelize``.
