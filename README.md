@@ -20,7 +20,7 @@
 [![Contributors](https://img.shields.io/github/contributors/opendilab/treevalue)](https://github.com/opendilab/treevalue/graphs/contributors)
 [![GitHub license](https://img.shields.io/github/license/opendilab/treevalue)](https://github.com/opendilab/treevalue/blob/master/LICENSE)
 
-`TreeValue` is a generalized tree-based data structure developed by [HansBug](https://github.com/HansBug).
+`TreeValue` is a generalized tree-based data structure mainly developed by [HansBug](https://github.com/HansBug).
 
 Almost all the operation can be supported in form of trees in a convenient way to simplify the structure processing when the calculation is tree-based.
 
