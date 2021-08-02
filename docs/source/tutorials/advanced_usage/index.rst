@@ -633,7 +633,7 @@ leaf values are tuples, like the simple example below.
     :language: python
     :linenos:
 
-The result shoule be like below, the leaf values are \
+The result should be like below, the leaf values are \
 unionised as tuples.
 
 .. literalinclude:: union_demo.demo.py.txt
@@ -651,6 +651,28 @@ take a look at :ref:`apidoc_tree_tree_union`.
 
 Subside
 ~~~~~~~~~~~~~~~~~~~~
+
+The ``subside`` function can transform the collections or \
+mapping nested ``TreeValue`` objects into one ``TreeValue`` \
+object which leaf values has the dispatch's structure. \
+The ``union`` function mentioned above is also based on \
+the ``subside`` function. Function ``subside`` will greatly \
+simplify the code when the structured data need to be \
+calculated. Just like this following example code.
+
+.. literalinclude:: subside_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below, the leaf values are \
+combined as the dispatch structure of ``st``.
+
+.. literalinclude:: subside_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further information and arguments of function ``subside``, \
+take a look at :ref:`apidoc_tree_tree_subside`.
 
 
 Rise
