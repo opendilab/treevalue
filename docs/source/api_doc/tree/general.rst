@@ -1,6 +1,8 @@
 treevalue.tree.general
 =============================
 
+.. _apidoc_tree_general_fasttreevalue:
+
 FastTreeValue
 -------------------
 

@@ -607,7 +607,65 @@ Structural Utilities
 Tree Utilities
 ------------------
 
+In this section, utilities with ``TreeValue`` class and \
+its objects themselves will be introduced with examples.
+
+Jsonify
+~~~~~~~~~~~~~~~~~~~
+
+With the usage of ``jsonify`` function, you can \
+transform a ``TreeValue`` object to json-formatted data.
+
+For example, the following real code
+
+.. literalinclude:: jsonify_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: jsonify_demo.demo.py.txt
+    :language: json
+    :linenos:
+
+.. note::
+
+    The function ``raw`` in the example code above is \
+    a wrapped for dictionary object. It can be used to \
+    pass ``dict`` object as simple value in ``TreeValue`` \
+    instead of be treated as sub tree.
+
+    For further information of function ``raw``, \
+    take a look at :ref:`apidoc_tree_common_raw`.
+
+For further informaon of function ``jsonify``, \
+take a look at :ref:`apidoc_tree_tree_jsonify`.
+
+View
+~~~~~~~~~~~~~
+
+
+
+Clone
+~~~~~~~~~~~~~~~~
+
+
+Typetrans
+~~~~~~~~~~~~~~~
+
+
 .. todo:: writing jsonify, view, clone, typetrans here
+
+
+Object Oriented Usage
+----------------------------
+
+.. todo:: given a few simple code examples here
+
+For further information of ``FastTreeValue`` class, \
+take a look at :ref:`apidoc_tree_general_fasttreevalue`, \
+all the supported methods and operators are listed here.
+
 
 Treelize Decorators
 -------------------------
