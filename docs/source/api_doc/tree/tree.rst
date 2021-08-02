@@ -1,6 +1,8 @@
 treevalue.tree.tree
 ======================
 
+.. _apidoc_tree_tree_treevalue:
+
 TreeValue
 ---------------
 

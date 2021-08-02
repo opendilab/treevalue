@@ -726,8 +726,41 @@ take a look at :ref:`apidoc_tree_tree_clone`.
 Typetrans
 ~~~~~~~~~~~~~~~
 
+You can use function ``typetrans`` to change the type of \
+tree value object, just like the example below.
 
-.. todo:: writing jsonify, view, clone, typetrans here
+.. literalinclude:: typetrans_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below. After the type transformation, \
+``**`` operator can not be used in ``t2`` but method ``pw`` \
+which is implemented in ``MyTreeValue`` will be enabled.
+
+.. literalinclude:: typetrans_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    In treevalue library, there can be more classes \
+    based on ``TreeValue`` class by your definition.
+
+    Different tree value class will have the different \
+    operators, methods and class methods for service, and \
+    the ``__eq__`` operator's result between different \
+    type of tree values will always be ``False`` because of \
+    the difference of their types.
+
+    For further information of ``TreeValue`` class and \
+    user's definition practice, just take a look at:
+
+    * :ref:`API documentation of TreeValue<apidoc_tree_tree_treevalue>`.
+    * :ref:`API documentation of FastTreeValue<apidoc_tree_general_fasttreevalue>`.
+    * :ref:`tutorials_advancedusage_diy`.
+
+For further informaon of function ``typetrans``, \
+take a look at :ref:`apidoc_tree_tree_typetrans`.
 
 
 Object Oriented Usage
@@ -746,7 +779,10 @@ Treelize Decorators
 .. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
     method_treelize is also supported to property getter.
 
-DIY new treevalue class
+
+.. _tutorials_advancedusage_diy:
+
+DIY New TreeValue class
 -----------------------------
 
 .. todo:: introduce general_treelize here, especially how to support add.
