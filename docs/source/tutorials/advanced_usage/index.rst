@@ -561,43 +561,43 @@ For further definition or source \
 code implement of function ``mask``, \
 take a look at :ref:`apidoc_tree_tree_mask`.
 
-Shrink
+Reduce
 ~~~~~~~~~~~~~~~~~~~~
 
-By using ``shrink`` function, you can get some calculation \
+By using ``reduce_`` function, you can get some calculation \
 result based on the tree structure. Its meaning is similar \
-to primitive ``reduce`` function, but its base structure is \
+to primitive ``reduce_`` function, but its base structure is \
 ``TreeValue`` instead of sequence or iterator. For example, \
 we can get the sum and multiply accumulation of the values \
 in the tree.
 
-.. literalinclude:: shrink_demo_1.demo.py
+.. literalinclude:: reduce_demo_1.demo.py
     :language: python
     :linenos:
 
 The result should be like below.
 
-.. literalinclude:: shrink_demo_1.demo.py.txt
+.. literalinclude:: reduce_demo_1.demo.py.txt
     :language: text
     :linenos:
 
-If we use ``shrink`` function with ``mapping`` function, \
+If we use ``reduce_`` function with ``mapping`` function, \
 huffman weight sum can also be easily calculated with \
 the code below.
 
-.. literalinclude:: shrink_demo_2.demo.py
+.. literalinclude:: reduce_demo_2.demo.py
     :language: python
     :linenos:
 
 The result should be like below.
 
-.. literalinclude:: shrink_demo_2.demo.py.txt
+.. literalinclude:: reduce_demo_2.demo.py.txt
     :language: text
     :linenos:
 
 For further definition or source \
-code implement of function ``shrink``, \
-take a look at :ref:`apidoc_tree_tree_shrink`.
+code implement of function ``reduce_``, \
+take a look at :ref:`apidoc_tree_tree_reduce`.
 
 Structural Utilities
 --------------------
@@ -607,18 +607,197 @@ Structural Utilities
 Tree Utilities
 ------------------
 
-.. todo:: writing jsonify, view, clone, typetrans here
+In this section, utilities with ``TreeValue`` class and \
+its objects themselves will be introduced with examples.
 
-Treelize Decorators
--------------------------
+Jsonify
+~~~~~~~~~~~~~~~~~~~
 
-.. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
-    method_treelize is also supported to property getter.
+With the usage of ``jsonify`` function, you can \
+transform a ``TreeValue`` object to json-formatted data.
 
-DIY new treevalue class
+For example, the following real code
+
+.. literalinclude:: jsonify_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be
+
+.. literalinclude:: jsonify_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    The function ``raw`` in the example code above is \
+    a wrapper for dictionary object. It can be used to \
+    pass ``dict`` object as simple value in ``TreeValue`` \
+    instead of being treated as sub tree.
+
+    For further information of function ``raw``, \
+    take a look at :ref:`apidoc_tree_common_raw`.
+
+For further informaon of function ``jsonify``, \
+take a look at :ref:`apidoc_tree_tree_jsonify`.
+
+View
+~~~~~~~~~~~~~
+
+Another magic function named ``view`` is also provided, \
+to process logic viewing cases.
+
+.. literalinclude:: view_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, ``t_x_y`` and ``vt_x_y``'s \
+value is different after the replacement of the sub tree \
+named ``t.x``, for ``vt_x_y``'s value's equality to the \
+current ``t.x.y``.
+
+.. literalinclude:: view_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    Attention that the ``view`` operation is different \
+    from sub node getting operation. In viewed tree, \
+    it is based on a logic link based on the tree be viewed, \
+    and the actual operations are performed in the actual \
+    tree node. The main difference between ``view`` and \
+    getting sub node is that the view tree will be \
+    affected by the replacement of sub nodes in viewed tree.
+
+    Like the code example above, in the view tree ``vt_x_y``, \
+    before do tree operations, the viewed tree will \
+    be approached from root tree ``t`` by keys of ``x`` and \
+    ``y``, so after the replacement of the whole subtree \
+    ``t.x``, ``vt_x_y`` is still the latest value of ``t.x.y``, \
+    while ``t_x_y`` is still the old sub tree of tree ``t``, \
+    before replacement.
+
+
+For further informaon of function ``view``, \
+take a look at :ref:`apidoc_tree_tree_view`.
+
+Clone
+~~~~~~~~~~~~~~~~
+
+The ``TreeValue`` objects can be cloned deeply by \
+``clone`` function.
+
+.. literalinclude:: clone_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below, all the memory address \
+of the tree nodes in cloned tree are different from \
+those in the original tree ``t`` when ``copy_value`` \
+argument is not set. But when ``copy_value`` is assigned \
+as ``True``, the address of values will be changed because \
+of the deep copy of value.
+
+.. literalinclude:: clone_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    Attention that in function ``clone``, the values \
+    will not be deeply copied together with \
+    the tree nodes by default. **The newly cloned \
+    tree's values have the same memory \
+    address with those in original tree**.
+
+    If deep copy of values is required when using ``clone``, \
+    ``copy_value`` argument need to be assigned as ``True``. \
+    And then a ``copy.deepcopy`` will be performed in \
+    ``clone`` function in order to do the deep copy. \
+    Also, you can define your own copy function in \
+    ``copy_value`` argument by just assign it as \
+    a lambda expression \
+    like ``lambda x: pickle.loads(pickle.dumps(x))``.
+
+For further informaon of function ``clone``, \
+take a look at :ref:`apidoc_tree_tree_clone`.
+
+Typetrans
+~~~~~~~~~~~~~~~
+
+You can use function ``typetrans`` to change the type of \
+tree value object, just like the example below.
+
+.. literalinclude:: typetrans_demo.demo.py
+    :language: python
+    :linenos:
+
+The result will be like below. After the type transformation, \
+``**`` operator can not be used in ``t2`` but method ``pw`` \
+which is implemented in ``MyTreeValue`` will be enabled.
+
+.. literalinclude:: typetrans_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    In treevalue library, there can be more classes \
+    based on ``TreeValue`` class by your definition.
+
+    Different tree value class will have the different \
+    operators, methods and class methods for service, and \
+    the ``__eq__`` operator's result between different \
+    type of tree values will always be ``False`` because of \
+    the difference of their types.
+
+    For further information of ``TreeValue`` class and \
+    user's definition practice, just take a look at:
+
+    * :ref:`API documentation of TreeValue<apidoc_tree_tree_treevalue>`.
+    * :ref:`API documentation of FastTreeValue<apidoc_tree_general_fasttreevalue>`.
+    * :ref:`tutorials_advancedusage_diy`.
+
+For further informaon of function ``typetrans``, \
+take a look at :ref:`apidoc_tree_tree_typetrans`.
+
+
+Object Oriented Usage
+----------------------------
+
+In ``FastTreeValue`` class, plenty of object-oriented \
+operators, methods and classmethods are supported in order \
+to simplify the actual usage. Here is a simple code example.
+
+.. literalinclude:: oo_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: oo_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further information of ``FastTreeValue`` class, \
+take a look at :ref:`apidoc_tree_general_fasttreevalue`, \
+all the supported methods and operators are listed here.
+
+
+.. _tutorials_advancedusage_diy:
+
+DIY TreeValue Class
 -----------------------------
 
 .. todo:: introduce general_treelize here, especially how to support add.
+
+
+DIY TreeValue Utility Class
+-------------------------------
+
+.. todo:: introduce utils_class here
+
 
 Other
 --------------------

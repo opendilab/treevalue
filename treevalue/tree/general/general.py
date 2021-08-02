@@ -1,8 +1,9 @@
-from functools import lru_cache, wraps, partial
-from typing import List, Mapping, Optional, Any, Type, TypeVar
+from functools import lru_cache
+from functools import wraps, partial
+from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
     NO_RISE_TEMPLATE
 from ..tree.tree import get_data_property
 from ...utils import dynamic_call
@@ -136,19 +137,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return view(self, path)
 
         @_decorate_method
-        def clone(self):
+        def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
             """
             Overview:
                 Create a fully clone of the current tree.
 
             Returns:
                 - tree (:obj:`_TreeValue`): Cloned tree value object.
+                - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
+                    default is `None` which means do not deep copy the values. \
+                    If deep copy is required, just set it to `True`.
 
             Example:
                 >>> t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
                 >>> t.x.clone()  # FastTreeValue({'c': 3, 'd': 4})
             """
-            return clone(self)
+            return clone(self, copy_value)
 
         @_decorate_method
         def type(self, clazz: Type[_TreeValue]) -> _TreeValue:
@@ -233,25 +237,25 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return filter_(self, func, remove_empty)
 
         @_decorate_method
-        def shrink(self, func):
+        def reduce(self, func):
             """
             Overview
-                Shrink the tree to value.
+                Reduce the tree to value.
 
             Arguments:
-                - func (:obj:): Function for shrinking
+                - func (:obj:): Function for reducing
 
             Returns:
-                - result (:obj:): Shrunk result
+                - result (:obj:): Reduce result
 
             Examples:
                 >>> from functools import reduce
                 >>>
                 >>> t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-                >>> t.shrink(lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
-                >>> t.shrink(lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
+                >>> t.reduce(lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
+                >>> t.reduce(lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
             """
-            return shrink(self, func)
+            return reduce_(self, func)
 
         @_decorate_method
         def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,

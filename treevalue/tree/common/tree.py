@@ -1,6 +1,7 @@
 import re
+from copy import deepcopy
 from functools import wraps
-from typing import Dict, Any, Union, List
+from typing import Dict, Any, Union, List, Callable
 
 from .base import BaseTree
 from ...utils import init_magic
@@ -90,12 +91,27 @@ def _to_tree_decorator(init_func):
     return _new_init_func
 
 
-def _tree_dump(tree: 'BaseTree'):
+def _copy_func(copy):
+    if hasattr(copy, '__call__'):
+        return copy
+    elif copy is None or isinstance(copy, (bool,)):
+        return (lambda x: deepcopy(x)) if copy else (lambda x: x)
+    elif isinstance(copy, (list, tuple)):
+        dumper, loader = copy[:2]
+        return lambda x: loader(dumper(x))
+    else:
+        dumper, loader = getattr(copy, 'dumps'), getattr(copy, 'loads')
+        return lambda x: loader(dumper(x))
+
+
+def _tree_dump(tree: 'BaseTree', copy_value: Union[None, bool, Callable] = None):
+    copy_value = _copy_func(copy_value)
+
     def _recursion(t):
         if isinstance(t, BaseTree):
             return {key: _recursion(value) for key, value in t.items()}
         else:
-            return raw(t)
+            return raw(copy_value(t))
 
     return _recursion(tree.actual())
 
@@ -146,8 +162,8 @@ class Tree(BaseTree):
         from .view import TreeView
         return TreeView(self, path)
 
-    def clone(self):
-        return self.__class__(self)
+    def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
+        return self.__class__(_tree_dump(self, copy_value))
 
     def copy_from(self, other: 'BaseTree'):
         other = other.actual()

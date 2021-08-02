@@ -7,10 +7,22 @@ func_treelize
 .. autofunction:: treevalue.tree.func.func_treelize
 
 
+tree_class
+----------------------
+
+.. autofunction:: treevalue.tree.func.tree_class
+
+
 method_treelize
 --------------------
 
 .. autofunction:: treevalue.tree.func.method_treelize
+
+
+utils_class
+----------------------
+
+.. autofunction:: treevalue.tree.func.utils_class
 
 
 classmethod_treelize

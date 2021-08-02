@@ -44,13 +44,16 @@ def view(tree: _TreeValue, path: List[str]) -> _TreeValue:
     return tree.__class__(get_data_property(tree).view(path))
 
 
-def clone(tree: _TreeValue) -> _TreeValue:
+def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:
     """
     Overview:
         Create a fully clone of the given tree.
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
+        - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
+            default is `None` which means do not deep copy the values. \
+            If deep copy is required, just set it to `True`.
 
     Returns:
         - tree (:obj:`_TreeValue`): Cloned tree value object.
@@ -59,7 +62,7 @@ def clone(tree: _TreeValue) -> _TreeValue:
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
-    return tree.__class__(get_data_property(tree).clone())
+    return tree.__class__(get_data_property(tree).clone(copy_value))
 
 
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
@@ -431,24 +434,24 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     return value_builder(*[tree_builder(*[getter_(item_) for item_ in value_list]) for getter_ in meta_value_getters])
 
 
-def shrink(tree: _TreeValue, func):
+def reduce_(tree: _TreeValue, func):
     """
     Overview
-        Shrink the tree to value.
+        Reduce the tree to value.
 
     Arguments:
         - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:): Function for shrinking
+        - func (:obj:): Function for reducing
 
     Returns:
-        - result (:obj:): Shrunk result
+        - result (:obj:): Reduce result
 
     Examples:
         >>> from functools import reduce
         >>>
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> shrink(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
-        >>> shrink(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
+        >>> reduce_(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
+        >>> reduce_(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
     """
 
     def _recursion(t: _TreeValue):

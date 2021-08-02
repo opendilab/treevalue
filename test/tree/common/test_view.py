@@ -1,10 +1,12 @@
+import pickle
 import re
 
 import pytest
 
-from treevalue.tree.common import Tree
+from treevalue.tree.common import Tree, raw
 
 
+# noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeCommonView:
     def test_simple_view(self):
@@ -62,3 +64,53 @@ class TestTreeCommonView:
         assert tv1 == t2
         assert id(tv1.actual()) == original_id_x
         assert id(tv1['f'].actual()) == original_id_x_f
+
+    def test_deep_clone(self):
+        tx = Tree({
+            'a': {
+                'a': raw({'a': 1, 'b': 2}),
+                'b': raw({'a': 3, 'b': 4}),
+                'x': {
+                    'c': raw({'a': 5, 'b': 6}),
+                    'd': raw({'a': 7, 'b': 8}),
+                }
+            }
+        })
+
+        t = tx.view(['a'])
+
+        t1 = t.clone()
+        t2 = t.clone(copy_value=True)
+
+        assert t1 == t
+        assert t1['a'] is t['a']
+        assert t1['b'] is t['b']
+        assert t1['x']['c'] is t['x']['c']
+        assert t1['x']['d'] is t['x']['d']
+
+        assert t2 == t
+        assert t2['a'] is not t['a']
+        assert t2['b'] is not t['b']
+        assert t2['x']['c'] is not t['x']['c']
+        assert t2['x']['d'] is not t['x']['d']
+
+        t3 = t.clone(copy_value=pickle)
+        assert t3 == t
+        assert t3['a'] is not t['a']
+        assert t3['b'] is not t['b']
+        assert t3['x']['c'] is not t['x']['c']
+        assert t3['x']['d'] is not t['x']['d']
+
+        t4 = t.clone(copy_value=lambda x: pickle.loads(pickle.dumps(x)))
+        assert t4 == t
+        assert t4['a'] is not t['a']
+        assert t4['b'] is not t['b']
+        assert t4['x']['c'] is not t['x']['c']
+        assert t4['x']['d'] is not t['x']['d']
+
+        t5 = t.clone(copy_value=(pickle.dumps, pickle.loads))
+        assert t5 == t
+        assert t5['a'] is not t['a']
+        assert t5['b'] is not t['b']
+        assert t5['x']['c'] is not t['x']['c']
+        assert t5['x']['d'] is not t['x']['d']

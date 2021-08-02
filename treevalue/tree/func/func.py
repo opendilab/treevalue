@@ -156,7 +156,71 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
     return _decorator
 
 
+_CONFIGS_TAG = '__configs__'
+
+
+def _tree_check(clazz, allow_none=False):
+    if clazz is None:
+        if not allow_none:
+            raise TypeError("Tree value class is not allowed to be none, but None found.")
+        else:
+            return
+
+    if not isinstance(clazz, type):
+        raise TypeError("Tree value class should be a type, but {type} found.".format(
+            type=repr(type(clazz).__name__)
+        ))
+    elif not issubclass(clazz, TreeValue):
+        raise TypeError("Tree value class should be subclass of TreeValue, but {type} found.".format(
+            type=repr(clazz.__name__)
+        ))
+
+
+def _class_config(return_type: Optional[Type[_ClassType]] = None,
+                  allow_none_return_type: bool = True,
+                  clazz_must_be_tree_value: bool = True):
+    _tree_check(return_type, allow_none=allow_none_return_type)
+
+    def _decorator(clazz: type) -> type:
+        if clazz_must_be_tree_value:
+            _tree_check(clazz, allow_none=False)
+
+        config = _get_configs(clazz)
+        config.update(dict(
+            return_type=return_type,
+        ))
+        setattr(clazz, _CONFIGS_TAG, config)
+        return clazz
+
+    return _decorator
+
+
+def tree_class(return_type: Optional[Type[_ClassType]] = None):
+    """
+    Overview:
+        Wrap tree configs for ``TreeValue`` class.
+
+    Arguments:
+        - return_type (:obj:`Optional[Type[_ClassType]]`): Default return type of current class, \
+            default is ``None`` which means use the class itself.
+
+    Returns:
+        - decorator (:obj:`Callable`): A class decorator.
+    """
+    return _class_config(
+        return_type, True, True,
+    )
+
+
+def _get_configs(clazz: type):
+    return dict(getattr(clazz, _CONFIGS_TAG, None) or {})
+
+
 AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
+
+
+def _auto_detect_type(clazz: type):
+    return _get_configs(clazz).get('return_type', None) or clazz
 
 
 def method_treelize(mode: Union[str, TreeMode] = 'strict',
@@ -206,12 +270,43 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
     def _decorator(method):
         @wraps(method)
         def _new_method(self, *args, **kwargs):
-            rt = self.__class__ if return_type is AUTO_DETECT_RETURN_TYPE else return_type
+            rt = _auto_detect_type(self.__class__) if return_type is AUTO_DETECT_RETURN_TYPE else return_type
             return func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
 
         return _new_method
 
     return _decorator
+
+
+def utils_class(return_type: Type[_ClassType]):
+    """
+    Overview:
+        Wrap tree configs for utils class.
+
+    Arguments:
+        - return_type (:obj:`Optional[Type[_ClassType]]`): Default return type of current class.
+
+    Returns:
+        - decorator (:obj:`Callable`): A class decorator.
+
+    Examples:
+        >>> class MyTreeValue(TreeValue):
+        >>>     pass
+        >>>
+        >>> @utils_class(return_type=MyTreeValue)
+        >>> class MyTreeUtils:
+        >>>     @classmethod
+        >>>     @classmethod_treelize()
+        >>>     def add(cls, a, b):
+        >>>         return a + b
+        >>>
+        >>> t1 = TreeValue({'a': 1, 'b': 2})
+        >>> t2 = TreeValue({'a': 3, 'b': 4})
+        >>> MyTreeUtils.add(t1, t2)  # MyTreeValue({'a': 4, 'b': 6})
+    """
+    return _class_config(
+        return_type, False, False,
+    )
 
 
 def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
@@ -261,7 +356,7 @@ def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
     def _decorator(method):
         @wraps(method)
         def _new_method(cls, *args, **kwargs):
-            rt = cls if return_type is AUTO_DETECT_RETURN_TYPE else return_type
+            rt = _auto_detect_type(cls) if return_type is AUTO_DETECT_RETURN_TYPE else return_type
             return func_treelize(mode, rt, inherit, missing, subside, rise)(partial(method, cls))(*args, **kwargs)
 
         return _new_method
