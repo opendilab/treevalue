@@ -713,7 +713,7 @@ of the deep copy of value.
 
     If deep copy of values is required when using ``clone``, \
     ``copy_value`` argument need to be assigned as ``True``. \
-    And then a pickle dumps and loads will be processed in \
+    And then a ``copy.deepcopy`` will be performed in \
     ``clone`` function in order to do the deep copy. \
     Also, you can define your own copy function in \
     ``copy_value`` argument by just assign it as \

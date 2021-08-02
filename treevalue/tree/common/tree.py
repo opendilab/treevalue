@@ -1,4 +1,4 @@
-import pickle
+from copy import deepcopy
 from functools import wraps
 from typing import Dict, Any, Union, List, Callable
 
@@ -84,10 +84,7 @@ def _copy_func(copy):
     if hasattr(copy, '__call__'):
         return copy
     elif copy is None or isinstance(copy, (bool,)):
-        if copy:
-            return lambda x: pickle.loads(pickle.dumps(x))
-        else:
-            return lambda x: x
+        return (lambda x: deepcopy(x)) if copy else (lambda x: x)
     elif isinstance(copy, (list, tuple)):
         dumper, loader = copy[:2]
         return lambda x: loader(dumper(x))
