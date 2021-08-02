@@ -671,6 +671,12 @@ combined as the dispatch structure of ``st``.
     :language: text
     :linenos:
 
+.. note::
+
+    In function ``subside``, only primitive list, tuple \
+    and dict (or subclasses) objects will be subsided to \
+    leaf values.
+
 For further information and arguments of function ``subside``, \
 take a look at :ref:`apidoc_tree_tree_subside`.
 
@@ -678,9 +684,76 @@ take a look at :ref:`apidoc_tree_tree_subside`.
 Rise
 ~~~~~~~~~~~~~~~~
 
+Function ``rise`` can be seen as the inverse operation of \
+function ``subside``, it will try to extract the greatest \
+common structure of the leaf values, and rise them up to \
+the dispatch above the ``TreeValue`` objects. \
+Like the following example code.
 
+.. literalinclude:: rise_demo_1.demo.py
+    :language: python
+    :linenos:
 
-.. todo:: writing union, subside, rise here
+The result should be like below, the subsided tree ``st`` \
+can be extract back to the original structure.
+
+.. literalinclude:: rise_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    In function ``rise``, only primitive list, tuple \
+    and dict (or subclasses) objects will join the \
+    rising operation.
+
+    Actually, when ``template`` argument is not assigned, \
+    the ``rise`` function will try to find the greatest \
+    common structure and rise them to the dispatch. The \
+    following rules will be strictly followed when doing \
+    this:
+
+    * If the values in current level have the same type ( \
+      must all be list, all be tuple or all be dict), the \
+      rising function will carry on the find sub structure, \
+      otherwise values in current level will be treated as \
+      atomic values.
+    * If all of them are dicts, and they have exactly the \
+      same key sets with each other, the finding of sub \
+      structures will be carried on, otherwise these dicts will \
+      be treated as atomic values.
+    * If all of them are lists, and they have the same length \
+      with each other, the finding of sub structures \
+      will be carried on, otherwise these dicts will \
+      be treated as atomic values.
+    * If all of them are tuples, and they have the same length \
+      with each other, the finding of sub structures \
+      will be carried on, otherwise these dicts will \
+      be treated as atomic values. (Actually, this rule \
+      is the same as the last one which is about lists.)
+
+    Considering this automatic structure finding process, \
+    if you only want to extract some of the structure (\
+    make sure the extraction will not be too deep or too \
+    shallow, and make sure the result will have the same \
+    structure as your expectation), you can assign value in \
+    ``template`` arguments. Like the example code below.
+
+    .. literalinclude:: rise_demo_2.demo.py
+        :language: python
+        :linenos:
+
+    The result should be like below, \
+    the subsided tree ``st`` can be extract back \
+    to the structure of dict with only ``first`` \
+    and ``second`` keys.
+
+    .. literalinclude:: rise_demo_2.demo.py.txt
+        :language: text
+        :linenos:
+
+For further information and arguments of function ``rise``, \
+take a look at :ref:`apidoc_tree_tree_rise`.
 
 Tree Utilities
 ------------------
