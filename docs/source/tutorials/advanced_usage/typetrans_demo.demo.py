@@ -4,7 +4,7 @@ from treevalue import TreeValue, method_treelize, FastTreeValue, typetrans
 class MyTreeValue(TreeValue):
     @method_treelize()
     def pw(self):
-        return (self + 1) * (self * 2)
+        return (self + 1) * (self + 2)
 
 
 if __name__ == '__main__':
