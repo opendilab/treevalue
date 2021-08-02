@@ -615,6 +615,49 @@ take a look at :ref:`apidoc_tree_tree_reduce`.
 Structural Utilities
 --------------------
 
+In order to process some structured data, especially when \
+you need to process a sort of ``TreeValue`` objects which is \
+in the primitive collections or mappings, the structural \
+utilities are designed, and they will be introduced in \
+this section with examples.
+
+Union
+~~~~~~~~~~~~~~~~~~~~~~
+
+The ``union`` function is similar to the primitive \
+``zip`` function some ways, it can combine a list of \
+``TreeValue`` objects as one ``TreeValue`` object which \
+leaf values are tuples, like the simple example below.
+
+.. literalinclude:: union_demo.demo.py
+    :language: python
+    :linenos:
+
+The result shoule be like below, the leaf values are \
+unionised as tuples.
+
+.. literalinclude:: union_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+    In ``union`` function (actually ``subside`` function \
+    has the same property), all the trees to be unionised \
+    need to have the same structure. You can just \
+    consider it as strict mode with inheriting is enabled.
+
+For further information and arguments of function ``union``, \
+take a look at :ref:`apidoc_tree_tree_union`.
+
+Subside
+~~~~~~~~~~~~~~~~~~~~
+
+
+Rise
+~~~~~~~~~~~~~~~~
+
+
+
 .. todo:: writing union, subside, rise here
 
 Tree Utilities
