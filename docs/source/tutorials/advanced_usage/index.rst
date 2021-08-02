@@ -595,6 +595,19 @@ The result should be like below.
     :language: text
     :linenos:
 
+Besides, we can easily calculate sum of the ``np.ndarray`` \
+objects' bytes size, like the following code.
+
+.. literalinclude:: reduce_demo_3.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: reduce_demo_3.demo.py.txt
+    :language: text
+    :linenos:
+
 For further definition or source \
 code implement of function ``reduce_``, \
 take a look at :ref:`apidoc_tree_tree_reduce`.
