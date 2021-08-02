@@ -24,6 +24,7 @@ if __name__ == "__main__":
 
     assert np.abs(mean0 - mean1) < 1e-6
     print('mean0 & mean1:', mean0, mean1)
+    print('\n')
 
     assert np.abs((even_index_a0 - even_index_a1).max()) < 1e-6
     print('even_index_a0:', even_index_a0)

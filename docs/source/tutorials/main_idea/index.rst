@@ -1,4 +1,4 @@
-Main Idea of TreeValue
+Main Idea
 ============================
 
 .. _tutorials_mainidea_why:
@@ -6,17 +6,22 @@ Main Idea of TreeValue
 Why TreeValue is designed?
 ----------------------------
 
-When we build programs, especially when we need to deal \
-with tree-like data structures, python-based native \
-dictionaries often need to write a lot of code, and \
-edit more complex and non-intuitive calculation logic.
+When we build programs, we often encounter some structured data with complicated nested
+components, and the usual practice is to model them with tree-like data structures.
+In Python, native dict/list are commonly used containers.
 
-In fact, the root cause of this problem is that the \
+However, it takes a lot of codes and some complex and non-intuitive calculation logics.
+It could be inconvenient to modify and extend related code and data. And parallelization
+is more impossible.
+
+In fact, the root reason of this problem is that the \
 native python dictionary data type is a basic data \
-structure that is biased towards functional \
+structure which is biased towards functional \
 generalization, and it does not fully meet the various \
 data processing and operations based on the tree data \
-structure. The TreeValue library needs to solve this problem.
+structure. 
+
+Therefore, we need a kind of more proper data container —— ``TreeValue``.
 
 For example, if we need to add all the integers of the 2 \
 dictionaries together with native python, the code will be \
@@ -37,13 +42,13 @@ accustomed to such a native recursive writing method, \
 but from the perspective of actual engineering \
 construction, such a writing method is not intuitive enough:
 
-* First of all, this way of writing has been quite \
+* **Ease of Use**: First of all, this way of writing has been quite \
   different from the original simple addition in terms of \
   look and feel and engineering structure. In order to \
   support dictionary-based operations, the original \
   simple addition operations have become completely \
   unrecognizable.
-* Secondly, in the actual tree structure operation, \
+* **Diversity of Data**: Secondly, in the actual tree structure operation, \
   there may be various exception handling situations \
   (such as the missing of some key values, the \
   corresponding positions on the two trees, one is an \
@@ -52,7 +57,7 @@ construction, such a writing method is not intuitive enough:
   that can often be expected with a high probability \
   are more complete and satisfactory processing, and \
   the code needs to be further complicated.
-* In addition, the above code shows only operations \
+* **Scalability and Parallelization**: In addition, the above code shows only operations \
   based on two trees. If we need to extend the calculation \
   itself, such as extending to operations with more than \
   two trees, or operations with less than two trees, \
@@ -67,7 +72,7 @@ construction, such a writing method is not intuitive enough:
 
 So the ``TreeValue`` is designed to solve the above \
 problems and provided sufficient secondary development \
-support for developers, so that more complex and \
+support for developers, and some more complex and \
 comprehensive applications can be developed based \
 on this framework.
 
