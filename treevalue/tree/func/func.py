@@ -73,7 +73,7 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
             (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
-        - new_func (:obj:): Wrapped tree-supported function.
+        - decorator (:obj:`Callable`): Wrapper for tree-supported function.
 
     Example:
         >>> @func_treelize()
@@ -253,7 +253,7 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
             (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
-        - new_method (:obj:): Wrapped tree-supported method.
+        - decorator (:obj:`Callable`): Wrapper for tree-supported method.
 
     Example:
         >>> class MyTreeValue(TreeValue):
@@ -338,7 +338,7 @@ def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
             (Not recommend to use auto mode when your return structure is not so strict.)
 
     Returns:
-        - new_method (:obj:): Wrapped tree-supported method.
+        - decorator (:obj:`Callable`): Wrapper for tree-supported class method.
 
     Example:
         >>> class TestUtils:

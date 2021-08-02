@@ -66,16 +66,23 @@ filter\_
 .. autofunction:: treevalue.tree.tree.utils.filter_
 
 
+.. _apidoc_tree_tree_union:
+
 union
 -----------
 
 .. autofunction:: treevalue.tree.tree.utils.union
 
 
+.. _apidoc_tree_tree_subside:
+
 subside
 -----------
 
 .. autofunction:: treevalue.tree.tree.utils.subside
+
+
+.. _apidoc_tree_tree_rise:
 
 rise
 ------------

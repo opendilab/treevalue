@@ -595,6 +595,19 @@ The result should be like below.
     :language: text
     :linenos:
 
+Besides, we can easily calculate sum of the ``np.ndarray`` \
+objects' bytes size, like the following code.
+
+.. literalinclude:: reduce_demo_3.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: reduce_demo_3.demo.py.txt
+    :language: text
+    :linenos:
+
 For further definition or source \
 code implement of function ``reduce_``, \
 take a look at :ref:`apidoc_tree_tree_reduce`.
@@ -602,7 +615,145 @@ take a look at :ref:`apidoc_tree_tree_reduce`.
 Structural Utilities
 --------------------
 
-.. todo:: writing union, subside, rise here
+In order to process some structured data, especially when \
+you need to process a sort of ``TreeValue`` objects which is \
+in the primitive collections or mappings, the structural \
+utilities are designed, and they will be introduced in \
+this section with examples.
+
+Union
+~~~~~~~~~~~~~~~~~~~~~~
+
+The ``union`` function is similar to the primitive \
+``zip`` function some ways, it can combine a list of \
+``TreeValue`` objects as one ``TreeValue`` object which \
+leaf values are tuples, like the simple example below.
+
+.. literalinclude:: union_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below, the leaf values are \
+unionised as tuples.
+
+.. literalinclude:: union_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+    In ``union`` function (actually ``subside`` function \
+    has the same property), all the trees to be unionised \
+    need to have the same structure. You can just \
+    consider it as strict mode with inheriting is enabled.
+
+For further information and arguments of function ``union``, \
+take a look at :ref:`apidoc_tree_tree_union`.
+
+Subside
+~~~~~~~~~~~~~~~~~~~~
+
+The ``subside`` function can transform the collections or \
+mapping nested ``TreeValue`` objects into one ``TreeValue`` \
+object which leaf values has the dispatch's structure. \
+The ``union`` function mentioned above is also based on \
+the ``subside`` function. Function ``subside`` will greatly \
+simplify the code when the structured data need to be \
+calculated. Just like this following example code.
+
+.. literalinclude:: subside_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below, the leaf values are \
+combined as the dispatch structure of ``st``.
+
+.. literalinclude:: subside_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    In function ``subside``, only primitive list, tuple \
+    and dict (or subclasses) objects will be subsided to \
+    leaf values.
+
+For further information and arguments of function ``subside``, \
+take a look at :ref:`apidoc_tree_tree_subside`.
+
+
+Rise
+~~~~~~~~~~~~~~~~
+
+Function ``rise`` can be seen as the inverse operation of \
+function ``subside``, it will try to extract the greatest \
+common structure of the leaf values, and rise them up to \
+the dispatch above the ``TreeValue`` objects. \
+Like the following example code.
+
+.. literalinclude:: rise_demo_1.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below, the subsided tree ``st`` \
+can be extract back to the original structure.
+
+.. literalinclude:: rise_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    In function ``rise``, only primitive list, tuple \
+    and dict (or subclasses) objects will join the \
+    rising operation.
+
+    Actually, when ``template`` argument is not assigned, \
+    the ``rise`` function will try to find the greatest \
+    common structure and rise them to the dispatch. The \
+    following rules will be strictly followed when doing \
+    this:
+
+    * If the values in current level have the same type ( \
+      must all be list, all be tuple or all be dict), the \
+      rising function will carry on the find sub structure, \
+      otherwise values in current level will be treated as \
+      atomic values.
+    * If all of them are dicts, and they have exactly the \
+      same key sets with each other, the finding of sub \
+      structures will be carried on, otherwise these dicts will \
+      be treated as atomic values.
+    * If all of them are lists, and they have the same length \
+      with each other, the finding of sub structures \
+      will be carried on, otherwise these dicts will \
+      be treated as atomic values.
+    * If all of them are tuples, and they have the same length \
+      with each other, the finding of sub structures \
+      will be carried on, otherwise these dicts will \
+      be treated as atomic values. (Actually, this rule \
+      is the same as the last one which is about lists.)
+
+    Considering this automatic structure finding process, \
+    if you only want to extract some of the structure (\
+    make sure the extraction will not be too deep or too \
+    shallow, and make sure the result will have the same \
+    structure as your expectation), you can assign value in \
+    ``template`` arguments. Like the example code below.
+
+    .. literalinclude:: rise_demo_2.demo.py
+        :language: python
+        :linenos:
+
+    The result should be like below, \
+    the subsided tree ``st`` can be extract back \
+    to the structure of dict with only ``first`` \
+    and ``second`` keys.
+
+    .. literalinclude:: rise_demo_2.demo.py.txt
+        :language: text
+        :linenos:
+
+For further information and arguments of function ``rise``, \
+take a look at :ref:`apidoc_tree_tree_rise`.
 
 Tree Utilities
 ------------------
@@ -790,17 +941,48 @@ all the supported methods and operators are listed here.
 DIY TreeValue Class
 -----------------------------
 
-.. todo:: introduce general_treelize here, especially how to support add.
+You can define your own ``TreeValue`` class with \
+your own method and class methods. Like the \
+example code below.
+
+.. literalinclude:: diy_class_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: diy_class_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further information of function ``method_treelize`` \
+and ``classmethod_treelize``, just take a look at:
+
+* :ref:`apidoc_tree_func_methodtreelize`
+* :ref:`apidoc_tree_func_classmethodtreelize`
+
 
 
 DIY TreeValue Utility Class
 -------------------------------
 
-.. todo:: introduce utils_class here
+You can define a pure utility class in with function \
+``utils_class`` and ``classmethod_treelize``. Like the \
+following example code.
 
+.. literalinclude:: utils_demo.demo.py
+    :language: python
+    :linenos:
 
-Other
---------------------
+The result should be like below.
 
+.. literalinclude:: utils_demo.demo.py.txt
+    :language: text
+    :linenos:
 
+For further information of function ``utils_class`` \
+and ``classmethod_treelize``, just take a look at:
+
+* :ref:`apidoc_tree_func_utilsclass`
+* :ref:`apidoc_tree_func_classmethodtreelize`
 

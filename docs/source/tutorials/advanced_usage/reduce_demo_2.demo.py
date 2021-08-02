@@ -5,4 +5,5 @@ if __name__ == '__main__':
 
     weights = mapping(t, lambda v, p: v * len(p))
     print("Weight tree:", weights)
-    print("Huffman weight sum of t:", reduce_(weights, lambda **kwargs: sum(kwargs.values())))
+    print("Huffman weight sum of t:",
+          reduce_(weights, lambda **kwargs: sum(kwargs.values())))
