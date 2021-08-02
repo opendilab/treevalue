@@ -1,0 +1,53 @@
+digraph {
+    label = "An example of tree-based function __add__ (f_T)";
+    compound = true;
+    graph [bgcolor = "#ffffff00"]
+
+    subgraph cluster_t1 {
+    label = "TreeValue t1";
+    root1 [label = "t1" shape = diamond];
+    root1_n1 [label = "1" shape = box];
+    root1_n2 [label = "2" shape = box];
+    root1_n3 [label = "t1.x"];
+    root1_n4 [label = "3" shape = box];
+    root1_n5 [label = "4" shape = box];
+
+    root1 -> root1_n1 [label = "a"];
+    root1 -> root1_n2 [label = "b"];
+    root1 -> root1_n3 [label = "x"];
+    root1_n3 -> root1_n4 [label = "c"];
+    root1_n3 -> root1_n5 [label = "d"];
+    }
+
+    subgraph cluster_t2 {
+    label = "TreeValue t2";
+    root2 [label = "t2" shape = diamond];
+    root2_n1 [label = "11" shape = box];
+    root2_n2 [label = "22" shape = box];
+    root2_n3 [label = "t2.x"];
+    root2_n4 [label = "30" shape = box];
+    root2_n5 [label = "48" shape = box];
+
+    root2 -> root2_n1 [label = "a"];
+    root2 -> root2_n2 [label = "b"];
+    root2 -> root2_n3 [label = "x"];
+    root2_n3 -> root2_n4 [label = "c"];
+    root2_n3 -> root2_n5 [label = "d"];
+    }
+
+    subgraph cluster_sum {
+    label = "Result of __add__(t1, t2)";
+    root3 [label = "__add__(t1, t2)" shape = diamond];
+    root3_n1 [label = "12 = __add__(1, 11)" shape = box];
+    root3_n2 [label = "24 = __add__(2, 22)" shape = box];
+    root3_n3 [label = "__add__(t1.x, t2.x)"];
+    root3_n4 [label = "33 = __add__(3, 30)" shape = box];
+    root3_n5 [label = "52 = __add__(4, 48)" shape = box];
+
+    root3 -> root3_n1 [label = "a"];
+    root3 -> root3_n2 [label = "b"];
+    root3 -> root3_n3 [label = "x"];
+    root3_n3 -> root3_n4 [label = "c"];
+    root3_n3 -> root3_n5 [label = "d"];
+    }
+}
