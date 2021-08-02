@@ -1,14 +1,27 @@
 # treevalue
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Docs Deploy](https://github.com/opendilab/treevalue/workflows/Docs%20Deploy/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Docs+Deploy%22)
-[![Code Test](https://github.com/opendilab/treevalue/workflows/Code%20Test/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Code+Test%22)
-[![codecov](https://codecov.io/gh/opendilab/treevalue/branch/main/graph/badge.svg?token=XJVDP4EFAT)](https://codecov.io/gh/opendilab/treevalue)
-
+[![PyPI](https://img.shields.io/pypi/v/treevalue)](https://pypi.org/project/treevalue/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/treevalue)
 ![Loc](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/loc.json)
 ![Comments](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/comments.json)
 
-`TreeValue` is a generalized tree-based data structure.
+
+[![Docs Deploy](https://github.com/opendilab/treevalue/workflows/Docs%20Deploy/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Docs+Deploy%22)
+[![Code Test](https://github.com/opendilab/treevalue/workflows/Code%20Test/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Code+Test%22)
+[![Badge Creation](https://github.com/opendilab/treevalue/workflows/Badge%20Creation/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Badge+Creation%22)
+[![Package Release](https://github.com/opendilab/treevalue/workflows/Package%20Release/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Package+Release%22)
+[![codecov](https://codecov.io/gh/opendilab/treevalue/branch/main/graph/badge.svg?token=XJVDP4EFAT)](https://codecov.io/gh/opendilab/treevalue)
+
+[![GitHub stars](https://img.shields.io/github/stars/opendilab/treevalue)](https://github.com/opendilab/treevalue/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/opendilab/treevalue)](https://github.com/opendilab/treevalue/network)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/opendilab/treevalue)
+[![GitHub issues](https://img.shields.io/github/issues/opendilab/treevalue)](https://github.com/opendilab/treevalue/issues)
+[![GitHub pulls](https://img.shields.io/github/issues-pr/opendilab/treevalue)](https://github.com/opendilab/treevalue/pulls)
+[![Contributors](https://img.shields.io/github/contributors/opendilab/treevalue)](https://github.com/opendilab/treevalue/graphs/contributors)
+[![GitHub license](https://img.shields.io/github/license/opendilab/treevalue)](https://github.com/opendilab/treevalue/blob/master/LICENSE)
+
+`TreeValue` is a generalized tree-based data structure developed by [HansBug](https://github.com/HansBug).
+
 Almost all the operation can be supported in form of trees in a convenient way to simplify the structure processing when the calculation is tree-based.
 
 ## Installation
