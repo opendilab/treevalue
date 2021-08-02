@@ -766,26 +766,38 @@ take a look at :ref:`apidoc_tree_tree_typetrans`.
 Object Oriented Usage
 ----------------------------
 
-.. todo:: given a few simple code examples here
+In ``FastTreeValue`` class, plenty of object-oriented \
+operators, methods and classmethods are supported in order \
+to simplify the actual usage. Here is a simple code example.
+
+.. literalinclude:: oo_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: oo_demo.demo.py.txt
+    :language: text
+    :linenos:
 
 For further information of ``FastTreeValue`` class, \
 take a look at :ref:`apidoc_tree_general_fasttreevalue`, \
 all the supported methods and operators are listed here.
 
 
-Treelize Decorators
--------------------------
-
-.. todo:: writing func_treelize, method_treelize and classmethod_treelize, \
-    method_treelize is also supported to property getter.
-
-
 .. _tutorials_advancedusage_diy:
 
-DIY New TreeValue class
+DIY TreeValue Class
 -----------------------------
 
 .. todo:: introduce general_treelize here, especially how to support add.
+
+
+DIY TreeValue Utility Class
+-------------------------------
+
+.. todo:: introduce utils_class here
+
 
 Other
 --------------------
