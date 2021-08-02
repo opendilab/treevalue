@@ -247,12 +247,12 @@ def get_tree_test(tree_number_class: Type[TreeValue]):
             assert t1.mask(mask2) == tree_number_class({'a': 13})
             assert t1.mask(mask2, False) == tree_number_class({'a': 13, 'x': {}})
 
-        def test_shrink(self):
+        def test_reduce(self):
             t1 = tree_number_class({'a': 13, 'b': 27, 'x': {'c': 39, 'd': 45}})
             t2 = tree_number_class({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
 
-            assert t1.shrink(lambda **kwargs: sum(kwargs.values())) == 124
-            assert t2.shrink(lambda **kwargs: reduce(__mul__, kwargs.values())) == 24
+            assert t1.reduce(lambda **kwargs: sum(kwargs.values())) == 124
+            assert t2.reduce(lambda **kwargs: reduce(__mul__, kwargs.values())) == 24
 
         def test_union(self):
             t1 = tree_number_class({'a': 13, 'b': 27, 'x': {'c': 39, 'd': 45}})

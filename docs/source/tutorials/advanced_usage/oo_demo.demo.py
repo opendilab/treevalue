@@ -14,8 +14,8 @@ if __name__ == '__main__':
     # utilities support
     print('t1.map(lambda x: (x + 1) * (x + 2)):')
     print(t1.map(lambda x: (x + 1) * (x + 2)))
-    print('t1.shrink(lambda **kwargs: sum(kwargs.values())):',
-          t1.shrink(lambda **kwargs: sum(kwargs.values())))
+    print('t1.reduce(lambda **kwargs: sum(kwargs.values())):',
+          t1.reduce(lambda **kwargs: sum(kwargs.values())))
     print()
     print()
 

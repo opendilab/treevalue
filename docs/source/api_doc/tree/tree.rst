@@ -83,12 +83,12 @@ rise
 .. autofunction:: treevalue.tree.tree.utils.rise
 
 
-.. _apidoc_tree_tree_shrink:
+.. _apidoc_tree_tree_reduce:
 
-shrink
+reduce\_
 ----------------
 
-.. autofunction:: treevalue.tree.tree.utils.shrink
+.. autofunction:: treevalue.tree.tree.utils.reduce_
 
 
 NO_RISE_TEMPLATE

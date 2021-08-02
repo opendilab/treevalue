@@ -2,7 +2,7 @@ from functools import lru_cache
 from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable
 
 from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, shrink, union, subside, rise, \
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
     NO_RISE_TEMPLATE
 
 _BASE_GENERATION_CONFIG = {}
@@ -195,25 +195,25 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return filter_(self, func, remove_empty)
 
-        def shrink(self, func):
+        def reduce(self, func):
             """
             Overview
-                Shrink the tree to value.
+                Reduce the tree to value.
 
             Arguments:
-                - func (:obj:): Function for shrinking
+                - func (:obj:): Function for reducing
 
             Returns:
-                - result (:obj:): Shrunk result
+                - result (:obj:): Reduce result
 
             Examples:
                 >>> from functools import reduce
                 >>>
                 >>> t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-                >>> t.shrink(lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
-                >>> t.shrink(lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
+                >>> t.reduce(lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
+                >>> t.reduce(lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
             """
-            return shrink(self, func)
+            return reduce_(self, func)
 
         def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,
                  template=NO_RISE_TEMPLATE):

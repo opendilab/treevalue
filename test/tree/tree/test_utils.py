@@ -3,7 +3,7 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import jsonify, TreeValue, view, clone, typetrans, mapping, filter_, mask, union, shrink, raw, \
+from treevalue.tree import jsonify, TreeValue, view, clone, typetrans, mapping, filter_, mask, union, reduce_, raw, \
     subside, rise
 
 
@@ -278,16 +278,16 @@ class TestTreeTreeUtils:
         with pytest.raises(ValueError):
             rise(t3, template={'a': (None, None), 'b': [None, None]})
 
-    def test_shrink(self):
+    def test_reduce(self):
         class MyTreeValue(TreeValue):
             pass
 
         t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        assert shrink(t, lambda **kwargs: sum(kwargs.values())) == 10
-        assert shrink(t, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
+        assert reduce_(t, lambda **kwargs: sum(kwargs.values())) == 10
+        assert reduce_(t, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
 
-        assert shrink(t, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
+        assert reduce_(t, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
                == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
 
-        t.x = shrink(t.x, lambda **kwargs: sum(kwargs.values()))
+        t.x = reduce_(t.x, lambda **kwargs: sum(kwargs.values()))
         assert t == MyTreeValue({'a': 1, 'b': 2, 'x': 7})

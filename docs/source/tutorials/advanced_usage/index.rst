@@ -561,43 +561,43 @@ For further definition or source \
 code implement of function ``mask``, \
 take a look at :ref:`apidoc_tree_tree_mask`.
 
-Shrink
+Reduce
 ~~~~~~~~~~~~~~~~~~~~
 
-By using ``shrink`` function, you can get some calculation \
+By using ``reduce_`` function, you can get some calculation \
 result based on the tree structure. Its meaning is similar \
-to primitive ``reduce`` function, but its base structure is \
+to primitive ``reduce_`` function, but its base structure is \
 ``TreeValue`` instead of sequence or iterator. For example, \
 we can get the sum and multiply accumulation of the values \
 in the tree.
 
-.. literalinclude:: shrink_demo_1.demo.py
+.. literalinclude:: reduce_demo_1.demo.py
     :language: python
     :linenos:
 
 The result should be like below.
 
-.. literalinclude:: shrink_demo_1.demo.py.txt
+.. literalinclude:: reduce_demo_1.demo.py.txt
     :language: text
     :linenos:
 
-If we use ``shrink`` function with ``mapping`` function, \
+If we use ``reduce_`` function with ``mapping`` function, \
 huffman weight sum can also be easily calculated with \
 the code below.
 
-.. literalinclude:: shrink_demo_2.demo.py
+.. literalinclude:: reduce_demo_2.demo.py
     :language: python
     :linenos:
 
 The result should be like below.
 
-.. literalinclude:: shrink_demo_2.demo.py.txt
+.. literalinclude:: reduce_demo_2.demo.py.txt
     :language: text
     :linenos:
 
 For further definition or source \
-code implement of function ``shrink``, \
-take a look at :ref:`apidoc_tree_tree_shrink`.
+code implement of function ``reduce_``, \
+take a look at :ref:`apidoc_tree_tree_reduce`.
 
 Structural Utilities
 --------------------
