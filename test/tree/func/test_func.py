@@ -3,7 +3,8 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import TreeMode, func_treelize, TreeValue, method_treelize, classmethod_treelize
+from treevalue.tree import TreeMode, func_treelize, TreeValue, method_treelize, classmethod_treelize, utils_class, \
+    tree_class
 
 
 # noinspection DuplicatedCode
@@ -159,3 +160,84 @@ class TestTreeFuncFunc:
         assert TestUtils.add(TreeValue({'a': 1, 'b': 2}), 2) == TreeValue({'a': (TestUtils, 3), 'b': (TestUtils, 4)})
         assert TestUtils.add2(TreeValue({'a': 1, 'b': 2}), TreeValue({'a': 12, 'b': 22})) == TreeValue(
             {'a': (TestUtils, 13), 'b': (TestUtils, 24)})
+
+    # noinspection PyTypeChecker
+    def test_tree_class(self):
+        class AnotherClazz:
+            pass
+
+        class MyTreeValueX(TreeValue):
+            pass
+
+        @tree_class()
+        class MyTreeValue(TreeValue):
+            @method_treelize()
+            def add(self, b):
+                return self + b
+
+        @tree_class(return_type=MyTreeValueX)
+        class MyTreeValue2(TreeValue):
+            @method_treelize()
+            def add(self, b):
+                return self + b
+
+        t1 = MyTreeValue({'a': 1, 'b': 2})
+        t2 = TreeValue({'a': 3, 'b': 4})
+        t3 = t1.add(t2)
+
+        assert isinstance(t3, MyTreeValue)
+        assert t3 == MyTreeValue({'a': 4, 'b': 6})
+
+        t1 = MyTreeValue2({'a': 1, 'b': 2})
+        t2 = TreeValue({'a': 3, 'b': 4})
+        t3 = t1.add(t2)
+
+        assert isinstance(t3, MyTreeValueX)
+        assert t3 == MyTreeValueX({'a': 4, 'b': 6})
+
+        with pytest.raises(TypeError):
+            @tree_class(return_type=AnotherClazz)
+            class MyTreeValue3:
+                pass
+
+        with pytest.raises(TypeError):
+            @tree_class(return_type=1)
+            class MyTreeValue4:
+                pass
+
+    # noinspection PyTypeChecker
+    def test_utils_class(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        class AnotherClazz:
+            pass
+
+        @utils_class(return_type=MyTreeValue)
+        class MyTreeUtils:
+            @classmethod
+            @classmethod_treelize()
+            def add(cls, a, b):
+                return a + b
+
+        t1 = TreeValue({'a': 1, 'b': 2})
+        t2 = TreeValue({'a': 3, 'b': 4})
+        t3 = MyTreeUtils.add(t1, t2)
+
+        assert isinstance(t3, MyTreeValue)
+        assert t3 == MyTreeValue({'a': 4, 'b': 6})
+
+        with pytest.raises(TypeError):
+            @utils_class(return_type=AnotherClazz)
+            class MyTreeUtils2:
+                pass
+
+        with pytest.raises(TypeError):
+            @utils_class(return_type=1)
+            class MyTreeUtils2:
+                pass
+
+        with pytest.raises(TypeError):
+            @utils_class(return_type=None)
+            class MyTreeUtils2:
+                pass
