@@ -1,6 +1,8 @@
 Main Idea of TreeValue
 ============================
 
+.. _tutorials_mainidea_why:
+
 Why TreeValue is designed?
 ----------------------------
 
@@ -96,6 +98,9 @@ This code will have the same function with the codes above.
     :language: text
     :linenos:
 
+
+.. _tutorials_mainidea_definition:
+
 Definitions for Key Conceptions
 ---------------------------------
 
@@ -105,6 +110,9 @@ introduced:
 * TreeValue
 * Tree Calculation
 * Tree Function Wrapper
+
+
+.. _tutorials_mainidea_definition_treevalue:
 
 TreeValue
 ~~~~~~~~~~~~~~~~~~~~
@@ -134,6 +142,8 @@ their values.
 .. image:: treevalue_demo.gv.svg
     :align: center
 
+
+.. _tutorials_mainidea_definition_treelize:
 
 Treelize
 ~~~~~~~~~~~~~~~~~~~~~~

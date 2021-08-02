@@ -1,12 +1,16 @@
 treevalue.tree.common
 ======================
 
+.. _apidoc_tree_common_basetree:
+
 BaseTree
 -----------
 
 .. autoclass:: treevalue.tree.common.base.BaseTree
     :members: __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__
 
+
+.. _apidoc_tree_common_tree:
 
 Tree
 ---------
@@ -22,6 +26,8 @@ raw
 
 .. autofunction:: treevalue.tree.common.tree.raw
 
+
+.. _apidoc_tree_common_treeview:
 
 TreeView
 -------------
