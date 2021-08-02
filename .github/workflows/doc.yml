@@ -44,6 +44,7 @@ jobs:
         run: |
           git fetch --all
           git pull --all
+          for b in $(git branch -a | grep 'remotes/origin' | grep -v 'HEAD' | cut -c 18-); do git checkout $b; done
           git branch -av
           git remote -v
           git tag
