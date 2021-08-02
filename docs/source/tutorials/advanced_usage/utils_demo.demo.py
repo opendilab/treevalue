@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from functools import reduce
 from operator import __mul__
 
@@ -10,13 +11,15 @@ class MyTreeValue(TreeValue):
 
 # this is the utils class
 @utils_class(return_type=MyTreeValue)
-class CalcUtils:
+class CalcUtils(metaclass=ABCMeta):
+    # return type will be detected as `MyTreeValue` as for the utils_class
     @classmethod
     @classmethod_treelize()
     def sum(cls, *args):
         print("Sum arguments:", cls, *args)
         return sum(args)
 
+    # return type will be detected as `MyTreeValue` as for the utils_class
     @classmethod
     @classmethod_treelize()
     def mul(cls, *args):

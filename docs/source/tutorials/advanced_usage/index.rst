@@ -941,7 +941,26 @@ all the supported methods and operators are listed here.
 DIY TreeValue Class
 -----------------------------
 
-.. todo:: introduce general_treelize here, especially how to support add.
+You can define your own ``TreeValue`` class with \
+your own method and class methods. Like the \
+example code below.
+
+.. literalinclude:: diy_class_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below.
+
+.. literalinclude:: diy_class_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further information of function ``method_treelize`` \
+and ``classmethod_treelize``, just take a look at:
+
+* :ref:`apidoc_tree_func_methodtreelize`
+* :ref:`apidoc_tree_func_classmethodtreelize`
+
 
 
 DIY TreeValue Utility Class
