@@ -2,8 +2,7 @@ from functools import wraps
 
 import pytest
 
-from treevalue.utils import args_iter, dynamic_call, static_call, post_process
-from treevalue.utils.func import freduce
+from treevalue.utils import args_iter, dynamic_call, static_call, post_process, pre_process, freduce
 
 
 @pytest.mark.unittest
@@ -52,6 +51,37 @@ class TestUtilsFunc:
 
         with pytest.raises(TypeError):
             _ = static_call(another_f, static_ok=False)
+
+    def test_pre_process(self):
+        @pre_process(lambda x, y: (-x, (x + 2) * y))
+        def plus(a, b):
+            return a + b
+
+        assert plus(1, 2) == 5
+
+        @pre_process(lambda x, y: ((), {'a': -x, 'b': (x + 2) * y}))
+        def plus2(a, b):
+            return a + b
+
+        assert plus2(1, 2) == 5
+
+        @pre_process(lambda x, y: {'a': -x, 'b': (x + 2) * y})
+        def plus3(a, b):
+            return a + b
+
+        assert plus3(1, 2) == 5
+
+        @pre_process(lambda x, y: ((-x, -x + 1, -x + 2), (y, y + 1, y + 2)))
+        def plus4(a, b):
+            return a + b
+
+        assert plus4(1, 2) == (-1, 0, 1, 2, 3, 4)
+
+        @pre_process(lambda x: -x)
+        def pw(a):
+            return a ** a
+
+        assert pw(-3) == 27
 
     def test_post_process(self):
         @post_process(lambda x: -x)

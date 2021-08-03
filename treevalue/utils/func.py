@@ -106,6 +106,49 @@ def static_call(func: Callable, static_ok: bool = True):
     return getattr(func, '__wrapped__', func)
 
 
+def pre_process(processor: Callable):
+    """
+    Overview:
+        Pre processor for function.
+
+    Arguments:
+        - processor (:obj:`Callable`): Pre processor.
+
+    Returns:
+        - decorator (:obj:`Callable`): Function decorator
+
+    Example:
+        >>> @pre_process(lambda x, y: (-x, (x + 2) * y))
+        >>> def plus(a, b):
+        >>>     return a + b
+        >>>
+        >>> plus(1, 2)  # 5, 5 = -1 + (1 + 2) * 2
+    """
+    _processor = dynamic_call(processor)
+
+    def _decorator(func):
+        @wraps(func)
+        def _new_func(*args, **kwargs):
+            pargs = _processor(*args, **kwargs)
+
+            if isinstance(pargs, tuple) and len(pargs) == 2 \
+                    and isinstance(pargs[0], (list, tuple)) \
+                    and isinstance(pargs[1], (dict,)):
+                args_, kwargs_ = tuple(pargs[0]), dict(pargs[1])
+            elif isinstance(pargs, (tuple, list)):
+                args_, kwargs_ = tuple(pargs), {}
+            elif isinstance(pargs, (dict,)):
+                args_, kwargs_ = (), dict(pargs)
+            else:
+                args_, kwargs_ = (pargs,), {}
+
+            return func(*args_, **kwargs_)
+
+        return _new_func
+
+    return _decorator
+
+
 def post_process(processor: Callable):
     """
     Overview:
@@ -115,7 +158,7 @@ def post_process(processor: Callable):
         - processor (:obj:`Callable`): Post processor.
 
     Returns:
-        - result (:obj:`Any`): Final result.
+        - decorator (:obj:`Callable`): Function decorator
 
     Example:
         >>> @post_process(lambda x: -x)

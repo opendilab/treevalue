@@ -133,9 +133,9 @@ def _root_process(root, index):
         elif len(root) == 1:
             return _root_process(root[0], index)
         else:
-            return root[0], str(root[1])
+            return root[0], str(root[1]), index
     else:
-        return root, '<root_%d>' % (index,)
+        return root, '<root_%d>' % (index,), index
 
 
 def build_graph(*roots, node_id_gen: Optional[Callable] = None,
@@ -189,18 +189,20 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
     _queue = Queue()
     _queued_node_ids = set()
     _queued_edges = set()
-    for root, root_title in roots:
+    for root_info in roots:
+        root, root_title, root_index = root_info
         root_node_id = node_id_gen(root, None, [], [], True)
         if root_node_id not in _queued_node_ids:
             graph.node(
                 name=root_node_id, label=root_title,
-                **node_cfg_gen(root, None, [], [], True, True)
+                **node_cfg_gen(root, None, [], [], True, True, root_info)
             )
-            _queue.put((root_node_id, root, root_title, []))
+            _queue.put((root_node_id, root, (root, root_title, root_index), []))
             _queued_node_ids.add(root_node_id)
 
     while not _queue.empty():
-        _parent_id, _parent_node, _root_title, _parent_path = _queue.get()
+        _parent_id, _parent_node, _root_info, _parent_path = _queue.get()
+        _root_node, _root_title, _root_index = _root_info
 
         for key, _current_node in iter_gen(_parent_node, _parent_path):
             _current_path = [*_parent_path, key]
@@ -213,13 +215,15 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
 
             if _current_id not in _queued_node_ids:
                 graph.node(_current_id, label=_current_label,
-                           **node_cfg_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node, False))
+                           **node_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
+                                          _is_node, False, _root_info))
                 if iter_gen(_current_node, _current_path):
-                    _queue.put((_current_id, _current_node, _root_title, _current_path))
+                    _queue.put((_current_id, _current_node, _root_info, _current_path))
                 _queued_node_ids.add(_current_id)
             if (_parent_id, _current_id, key) not in _queued_edges:
                 graph.edge(_parent_id, _current_id, label=key,
-                           **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path, _is_node))
+                           **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
+                                          _is_node, _root_info))
                 _queued_edges.add((_parent_id, _current_id, key))
 
     return graph
