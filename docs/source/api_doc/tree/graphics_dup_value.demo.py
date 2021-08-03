@@ -33,6 +33,7 @@ if __name__ == '__main__':
         # np.ndarray and list type will use the same value node,
         # but set type is not in this tuple, so will not share the same node.
         dup_value=(np.ndarray, list),
+        color_theme_gen='index',
         title="This is a demo of 2 trees with dup value.",
         cfg={'bgcolor': '#ffffff00'},
     )
