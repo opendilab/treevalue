@@ -52,10 +52,11 @@ def _rgb_str_wrap(func):
     return _new_func
 
 
+@post_process(lambda s: '#%s' % (s,))
 @_rgb_str_wrap
 @_rrgb_wrap
-def _color_from_class_raw(type_: Type[TreeValue], alpha=None):
-    with seed_random(_str_hash(get_class_full_name(type_))) as rnd:
+def _color_from_tag(tag: str, alpha=None):
+    with seed_random(_str_hash(tag)) as rnd:
         h, s, v = rnd.random(), rnd.random() * 0.4 + 0.6, rnd.random() * 0.4 + 0.6
         r, g, b = colorsys.hsv_to_rgb(h, s, v)
         if alpha is None:
@@ -64,11 +65,12 @@ def _color_from_class_raw(type_: Type[TreeValue], alpha=None):
             return r, g, b, alpha
 
 
-_color_from_class = post_process(lambda s: '#%s' % (s,))(_color_from_class_raw)
+def _color_from_type(type_: Type[TreeValue], alpha=None):
+    return _color_from_tag(get_class_full_name(type_), alpha)
 
 
 def _color_from_node(n, alpha=None):
-    return _color_from_class(type(n), alpha)
+    return _color_from_type(type(n), alpha)
 
 
 @freduce(init=lambda: (lambda: {}))
