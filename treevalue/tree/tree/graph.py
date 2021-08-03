@@ -229,7 +229,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
             'arrowhead': 'vee' if is_node else 'dot',
             'arrowsize': 1.0 if is_node else 0.5,
             'color': _color_from_data(color_theme_gen(*root), 0.7 if is_node else 0.9),
-            'fontcolor': _color_from_data(color_theme_gen(*root), 2.0),
+            'fontcolor': _color_from_data(color_theme_gen(*root), 1.0),
             'fontname': "Times-Roman bold",
         }, (edge_cfg_gen or (lambda: {}))),
     )
