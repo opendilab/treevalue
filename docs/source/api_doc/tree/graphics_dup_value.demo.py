@@ -28,7 +28,7 @@ if __name__ == '__main__':
     })
 
     g = graphics(
-        (t, 't'), (t1, 't1'),
+        (t, 't'), (t1, 't1'), (MyFastTreeValue({'a': t, 'b': t1, 'c': [1, 2], 'd': t1.xx}), 't2'),
         # Here is the dup value, with several types
         # np.ndarray and list type will use the same value node,
         # but set type is not in this tuple, so will not share the same node.

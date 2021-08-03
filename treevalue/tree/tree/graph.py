@@ -111,7 +111,7 @@ class ColorTheme(IntEnum):
         elif self == self.__class__.INDEX:
             return root_index, 'root_%d' % (root_index,)
         elif self == self.__class__.NAME:
-            return root_title
+            return 'title_%x' % (_str_hash(root_title),)
 
 
 @freduce(init=lambda: (lambda: {}))
