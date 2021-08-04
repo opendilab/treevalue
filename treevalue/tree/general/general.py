@@ -1,10 +1,12 @@
 from functools import lru_cache
 from functools import wraps, partial
-from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable
+from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
+
+from graphviz import Digraph
 
 from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
-    NO_RISE_TEMPLATE
+    NO_RISE_TEMPLATE, graphics
 from ..tree.tree import get_data_property
 from ...utils import dynamic_call
 
@@ -294,7 +296,45 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> # FastTreeValue 1 will be FastTreeValue({'x': [1, 2], 'y': [5, 6]})
                 >>> # FastTreeValue 2 will be FastTreeValue({'x': [2, 3], 'y': [7, 8]})
             """
-            return rise(self, dict_, list_, tuple_)
+            return rise(self, dict_, list_, tuple_, template)
+
+        @_decorate_method
+        def graph(self, root: Optional[str] = None, title: Optional[str] = None,
+                  cfg: Optional[dict] = None,
+                  dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
+                  repr_gen: Optional[Callable] = None,
+                  node_cfg_gen: Optional[Callable] = None,
+                  edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+            """
+            Overview:
+                Draw graph of this tree value.
+
+            Args:
+                - root (:obj:`Optional[str]`): Root name of the graph, default is ``None``, \
+                    this name will be automatically generated.
+                - title (:obj:`Optional[str]`): Title of the graph, default is ``None``, \
+                    this title will be automatically generated from ``root`` argument.
+                - cfg (:obj:`Optional[dict]`): Configuration of the graph.
+                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \
+                    set `True` to make value with same id use the same node in graph, \
+                    you can also define your own node id algorithm by this argument. \
+                    Default is `False` which means do not use value duplicator.
+                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \
+                    default is `None` which means using `repr` function.
+                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \
+                    default is `None` which means no configuration.
+                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \
+                    default is `None` which means no configuration.
+
+            Returns:
+                - graph (:obj:`Digraph`): Generated graph of tree values.
+            """
+            root = root or ('<%s #%x>' % (type(self).__name__, id(get_data_property(self).actual())))
+            title = title or ('Graph of tree %s.' % (root,))
+            return graphics(
+                (self, root), title=title, cfg=cfg, dup_value=dup_value,
+                repr_gen=repr_gen, node_cfg_gen=node_cfg_gen, edge_cfg_gen=edge_cfg_gen,
+            )
 
         @classmethod
         @_decorate_method
@@ -366,6 +406,41 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return subside(value, dict_, list_, tuple_,
                            return_type=return_type or cls, **kwargs)
+
+        @classmethod
+        @_decorate_method
+        def graphics(cls, *trees, title: Optional[str] = None, cfg: Optional[dict] = None,
+                     dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
+                     repr_gen: Optional[Callable] = None,
+                     node_cfg_gen: Optional[Callable] = None,
+                     edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+            """
+            Overview:
+                Draw graph by tree values.
+                Multiple tree values is supported.
+
+            Args:
+                - trees: Given tree values, tuples of `Tuple[TreeValue, str]` or tree values are both accepted.
+                - title (:obj:`Optional[str]`): Title of the graph.
+                - cfg (:obj:`Optional[dict]`): Configuration of the graph.
+                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \
+                    set `True` to make value with same id use the same node in graph, \
+                    you can also define your own node id algorithm by this argument. \
+                    Default is `False` which means do not use value duplicator.
+                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \
+                    default is `None` which means using `repr` function.
+                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \
+                    default is `None` which means no configuration.
+                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \
+                    default is `None` which means no configuration.
+
+            Returns:
+                - graph (:obj:`Digraph`): Generated graph of tree values.
+            """
+            return graphics(
+                *trees, title=title, cfg=cfg, dup_value=dup_value,
+                repr_gen=repr_gen, node_cfg_gen=node_cfg_gen, edge_cfg_gen=edge_cfg_gen,
+            )
 
         @_decorate_treelize
         def __add__(self, other):
