@@ -2,7 +2,7 @@ from functools import wraps
 
 import pytest
 
-from treevalue.utils import args_iter, dynamic_call, static_call, post_process, pre_process, freduce
+from treevalue.utils import args_iter, dynamic_call, static_call, post_process, pre_process, freduce, raising
 
 
 @pytest.mark.unittest
@@ -128,3 +128,20 @@ class TestUtilsFunc:
         assert plus3(1, 2, 3, 4, 5) == 15
         with pytest.warns(SyntaxWarning):
             assert plus3(1, 2, 3, 4, neg=True) == 10
+
+    def test_raising(self):
+        f1 = raising(lambda: RuntimeError)
+        f2 = raising(RuntimeError)
+        f3 = raising(RuntimeError())
+        with pytest.raises(RuntimeError):
+            f1()
+        with pytest.raises(RuntimeError):
+            f2()
+        with pytest.raises(RuntimeError):
+            f3()
+
+        f4 = raising(lambda x: RuntimeError if x < 0 else x)
+        assert f4(0) == 0
+        assert f4(1) == 1
+        with pytest.raises(RuntimeError):
+            f4(-1)

@@ -5,6 +5,7 @@ treevalue.utils
     :maxdepth: 3
 
     clazz
+    color
     enum
     final
     func

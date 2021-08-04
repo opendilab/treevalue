@@ -2,7 +2,7 @@ import warnings
 from functools import wraps
 from inspect import signature, Parameter
 from itertools import chain
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Union, Type
 
 from .singleton import SingletonMark
 
@@ -178,6 +178,34 @@ def post_process(processor: Callable):
         return _new_func
 
     return _decorator
+
+
+def _is_throwable(err):
+    return isinstance(err, BaseException) or (isinstance(err, type) and issubclass(err, BaseException))
+
+
+def _post_for_raising(ret):
+    if _is_throwable(ret):
+        raise ret
+    else:
+        return ret
+
+
+def raising(func: Union[Callable, BaseException, Type[BaseException]]):
+    """
+    Overview:
+        Decorate function with exception object return value to a raisisng function.
+
+    Arguments:
+        - func (:obj:`Union[Callable, BaseException, Type[BaseException]]`): Not decorated function or class
+
+    Returns:
+        - decorated (:obj:`Callable`): Decorated new function
+    """
+    if _is_throwable(func):
+        return raising(dynamic_call(lambda: func))
+    else:
+        return post_process(_post_for_raising)(func)
 
 
 NO_INITIAL = SingletonMark("no_initial")
