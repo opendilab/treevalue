@@ -986,3 +986,27 @@ and ``classmethod_treelize``, just take a look at:
 * :ref:`apidoc_tree_func_utilsclass`
 * :ref:`apidoc_tree_func_classmethodtreelize`
 
+
+Draw Graph For TreeValue
+-----------------------------
+
+You can easily draw a graph of the ``TreeValue`` objects \
+with function ``graphics``. Like the following example \
+code.
+
+.. literalinclude:: ../../api_doc/tree/graphics.demo.py
+    :language: python
+    :linenos:
+
+The generated code and graph should be like below
+
+.. literalinclude:: ../../api_doc/tree/graphics.dat.gv
+    :language: text
+    :linenos:
+
+.. image:: ../../api_doc/tree/graphics.dat.gv.svg
+    :align: center
+
+For further information of function ``graphics``, \
+just take a look at :ref:`apidoc_tree_tree_graphics`.
+

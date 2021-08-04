@@ -108,6 +108,8 @@ NO_RISE_TEMPLATE
     to match the format patterns as template.
 
 
+.. _apidoc_tree_tree_graphics:
+
 graphics
 ----------------
 
