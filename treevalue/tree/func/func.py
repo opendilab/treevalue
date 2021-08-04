@@ -9,7 +9,7 @@ from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..common import raw
-from ..tree.tree import TreeValue
+from ..tree.tree import TreeValue, get_data_property
 from ..tree.utils import rise as rise_func
 from ..tree.utils import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
@@ -227,7 +227,7 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
                     return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
                     missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                     subside: Union[Mapping, bool, None] = None,
-                    rise: Union[Mapping, bool, None] = None):
+                    rise: Union[Mapping, bool, None] = None, self_copy: bool = False):
     """
     Overview:
         Wrap a common instance method to tree-supported method.
@@ -251,6 +251,9 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
             and rise configuration, default is `None` which means do not use rise. \
             When rise is `True`, it will use all the default arguments in `rise` function. \
             (Not recommend to use auto mode when your return structure is not so strict.)
+        - self_copy (:obj:`bool`): Self copy mode, if enabled, the result data will be copied to \
+            ``self`` argument and ``self`` will be returned as result. Default is ``False``, \
+            which means do not do self copy.
 
     Returns:
         - decorator (:obj:`Callable`): Wrapper for tree-supported method.
@@ -271,7 +274,13 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
         @wraps(method)
         def _new_method(self, *args, **kwargs):
             rt = _auto_detect_type(self.__class__) if return_type is AUTO_DETECT_RETURN_TYPE else return_type
-            return func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
+            _result = func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
+
+            if self_copy:
+                get_data_property(self).copy_from(get_data_property(_result))
+                return self
+            else:
+                return _result
 
         return _new_method
 

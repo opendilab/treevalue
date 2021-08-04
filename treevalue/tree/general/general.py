@@ -8,7 +8,7 @@ from ..func import method_treelize
 from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
     NO_RISE_TEMPLATE, graphics
 from ..tree.tree import get_data_property
-from ...utils import dynamic_call
+from ...utils import dynamic_call, raising
 
 _BASE_GENERATION_CONFIG = {}
 
@@ -33,19 +33,17 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
         return wraps(func)(dynamic_call(f))
 
     @lru_cache()
-    def _get_decorator(name, treelize: bool):
+    def _get_decorator(name, treelize: bool, ext_cfg: Optional[tuple] = None):
         _item = methods.get(name, None)
 
         if treelize and isinstance(_item or {}, dict):
             _config = _BASE_GENERATION_CONFIG.copy()
             _config.update(base)
             _config.update(_item or {})
+            _config.update(dict(ext_cfg or ()))
             return lambda func: method_treelize(**_config)(func)
         elif isinstance(_item, BaseException) or (isinstance(_item, type) and issubclass(_item, BaseException)):
-            def _new_func():
-                raise _item
-
-            return lambda func: _dynamic_suffix_dec(func, _new_func)
+            return lambda func: _dynamic_suffix_dec(func, raising(_item))
         elif hasattr(_item, '__call__'):
             return lambda func: _dynamic_suffix_dec(func, _item)
         elif name in methods.keys():
@@ -53,22 +51,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
         else:
             return lambda func: func
 
-    def _decorate(func, treelize: bool):
-        return _get_decorator(func.__name__, treelize)(func)
+    def _decorate(func, treelize: bool, ext_cfg: Optional[dict] = None):
+        return _get_decorator(func.__name__, treelize, tuple(sorted((ext_cfg or {}).items())))(func)
 
     _decorate_treelize = partial(_decorate, treelize=True)
     _decorate_method = partial(_decorate, treelize=False)
-
-    def _decorate_and_replace(func):
-        _dec_func = _decorate_treelize(func)
-
-        @wraps(func)
-        def _new_func(_self, *args, **kwargs):
-            _result = _dec_func(_self, *args, **kwargs)
-            get_data_property(_self).copy_from(get_data_property(_result).actual())
-            return _self
-
-        return _new_func
+    _decorate_and_replace = partial(_decorate, treelize=True, ext_cfg=dict(self_copy=True))
 
     _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
