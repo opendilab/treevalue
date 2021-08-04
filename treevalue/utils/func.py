@@ -201,11 +201,66 @@ def raising(func: Union[Callable, BaseException, Type[BaseException]]):
 
     Returns:
         - decorated (:obj:`Callable`): Decorated new function
+
+    Examples:
+        >>> raising(RuntimeError)()  # RuntimeError
+        >>> raising(lambda x: ValueError('value error - %s' % (repr(x), )))(1)  # ValueError, value error - 1
     """
     if _is_throwable(func):
         return raising(dynamic_call(lambda: func))
     else:
         return post_process(_post_for_raising)(func)
+
+
+def _is_warning(w):
+    return isinstance(w, (Warning, str)) or (isinstance(w, type) and issubclass(w, Warning))
+
+
+def _warn(w):
+    return w() if _is_warning(w) and isinstance(w, type) and issubclass(w, Warning) else w
+
+
+def _post_for_warning(ret):
+    _matched = False
+    if _is_warning(ret):
+        _matched, _w, args_, kwargs_ = True, ret, (), {}
+    elif isinstance(ret, tuple) and len(ret) >= 1 and _is_warning(ret[0]):
+        _w, ret = ret[0], ret[1:]
+        if len(ret) == 1:
+            if isinstance(ret[0], tuple):
+                _matched, args_, kwargs_ = True, ret[0], {}
+            elif isinstance(ret[0], dict):
+                _matched, args_, kwargs_ = True, (), ret[0]
+        elif len(ret) == 2:
+            if isinstance(ret[0], tuple) and isinstance(ret[1], dict):
+                _matched, args_, kwargs_ = True, ret[0], ret[1]
+
+    if not _matched:
+        return ret
+    else:
+        # noinspection PyUnboundLocalVariable
+        warnings.warn(_warn(_w), *args_, **kwargs_)
+
+
+def warning_(func: Union[Callable, Warning, Type[Warning], str]):
+    """
+    Overview:
+        Decorate function with exception object return value to a ``warning_`` function.
+
+    Arguments:
+        - func (:obj:`Union[Callable, Warning, Type[Warning], str]`): Not decorated function or class
+
+    Returns:
+        - decorated (:obj:`Callable`): Decorated new function
+
+    Examples:
+        >>> warning_(RuntimeWarning)()  # RuntimeWarning
+        >>> raising(lambda x: Warning('value warning - %s' % (repr(x), )))(1)  # Warning, value warning - 1
+    """
+    if _is_warning(func):
+        return warning_(dynamic_call(lambda: func))
+    else:
+        return post_process(_post_for_warning)(func)
 
 
 NO_INITIAL = SingletonMark("no_initial")

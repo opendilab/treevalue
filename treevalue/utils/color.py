@@ -1,9 +1,43 @@
 import colorsys
+import math
 import random
 import re
-from typing import Optional, Union
+from typing import Optional, Union, Tuple
 
-from .func import post_process, raising
+from .func import post_process, raising, freduce, dynamic_call
+
+
+def _round_mapper(min_: float, max_: float):
+    min_, max_ = min(min_, max_), max(min_, max_)
+    round_ = max_ - min_
+
+    def _func(v):
+        if v < min_:
+            v += math.ceil((min_ - v) / round_) * round_
+        if v > max_:
+            v -= math.ceil((v - max_) / round_) * round_
+
+        return v
+
+    return _func
+
+
+def _range_mapper(min_: Optional[float], max_: Optional[float], warning=None):
+    if min_ is not None and max_ is not None:
+        min_, max_ = min(min_, max_), max(min_, max_)
+    warning = dynamic_call(raising(warning) if warning is not None else lambda: None)
+
+    def _func(v):
+        if max_ is not None and v > max_:
+            warning(v, min_, max_)
+            return max_
+        elif min_ is not None and v < min_:
+            warning(v, min_, max_)
+            return min_
+        else:
+            return v
+
+    return _func
 
 
 class GetSetProxy:
@@ -18,8 +52,17 @@ class GetSetProxy:
         return self.__getter()
 
 
+_r_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Red value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+_g_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Green value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+_b_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Blue value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+
+
 class RGBColorProxy:
-    def __init__(self, r: GetSetProxy, g: GetSetProxy, b: GetSetProxy):
+    def __init__(self, this: 'Color', r: GetSetProxy, g: GetSetProxy, b: GetSetProxy):
+        self.__this = this
         self.__rp = r
         self.__gp = g
         self.__bp = b
@@ -62,8 +105,16 @@ class RGBColorProxy:
         )
 
 
+_hsv_h_mapper = _round_mapper(0.0, 1.0)
+_hsv_s_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Saturation value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+_hsv_v_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Brightness(value) value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+
+
 class HSVColorProxy:
-    def __init__(self, h: GetSetProxy, s: GetSetProxy, v: GetSetProxy):
+    def __init__(self, this: 'Color', h: GetSetProxy, s: GetSetProxy, v: GetSetProxy):
+        this.__this = this
         self.__hp = h
         self.__sp = s
         self.__vp = v
@@ -74,7 +125,7 @@ class HSVColorProxy:
 
     @hue.setter
     def hue(self, new: float):
-        self.__hp.set(new)
+        self.__hp.set(_hsv_h_mapper(new))
 
     @property
     def saturation(self) -> float:
@@ -82,7 +133,7 @@ class HSVColorProxy:
 
     @saturation.setter
     def saturation(self, new: float):
-        self.__sp.set(new)
+        self.__sp.set(_hsv_s_mapper(new))
 
     @property
     def value(self) -> float:
@@ -90,7 +141,7 @@ class HSVColorProxy:
 
     @value.setter
     def value(self, new: float):
-        self.__vp.set(new)
+        self.__vp.set(_hsv_v_mapper(new))
 
     def __iter__(self):
         yield self.hue
@@ -106,6 +157,58 @@ class HSVColorProxy:
         )
 
 
+_hls_h_mapper = _round_mapper(0.0, 1.0)
+_hls_l_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Lightness value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+_hls_s_mapper = _range_mapper(0.0, 1.0, lambda v, min_, max_: ValueError(
+    'Saturation value should be no less than %.3d and no more than %.3d, but %.3d found.' % (min_, max_, v)))
+
+
+class HLSColorProxy:
+    def __init__(self, this: 'Color', h: GetSetProxy, l: GetSetProxy, s: GetSetProxy):
+        this.__this = this
+        self.__hp = h
+        self.__lp = l
+        self.__sp = s
+
+    @property
+    def hue(self) -> float:
+        return self.__hp.get()
+
+    @hue.setter
+    def hue(self, new: float):
+        self.__hp.set(_hls_h_mapper(new))
+
+    @property
+    def lightness(self) -> float:
+        return self.__lp.get()
+
+    @lightness.setter
+    def lightness(self, new: float):
+        self.__lp.set(_hls_l_mapper(new))
+
+    @property
+    def saturation(self) -> float:
+        return self.__sp.get()
+
+    @saturation.setter
+    def saturation(self, new: float):
+        self.__sp.set(_hls_s_mapper(new))
+
+    def __iter__(self):
+        yield self.hue
+        yield self.lightness
+        yield self.saturation
+
+    def __repr__(self):
+        return '<{cls} hue: {hue}, lightness: {lightness}, saturation: {saturation}>'.format(
+            cls=self.__class__.__name__,
+            hue='%.3f' % (self.hue,),
+            lightness='%.3f' % (self.lightness,),
+            saturation='%.3f' % (self.saturation,),
+        )
+
+
 _ratio_to_255 = lambda x: int(round(x * 255))
 _ratio_to_hex = post_process(lambda x: '%02x' % (x,))(_ratio_to_255)
 _hex_to_255 = lambda x: int(x, base=16) if x is not None else None
@@ -114,8 +217,28 @@ _hex_to_ratio = post_process(lambda x: x / 255.0 if x is not None else None)(_he
 _RGB_COLOR_PATTERN = re.compile(r'^#?([a-zA-Z\d]{2})([a-zA-Z\d]{2})([a-zA-Z\d]{2})([a-zA-Z\d]{2}|)$')
 
 
+@freduce(init=None)
+def _ratio_or(a, b):
+    return b if a is None else a
+
+
 class Color:
-    def __init__(self, c, alpha: float = None):
+    """
+    Overview:
+        Color utility object.
+    """
+
+    def __init__(self, c: Union[str, Tuple[float, float, float]], alpha: Optional[float] = None):
+        """
+        Overview:
+            Constructor of ``Color``.
+
+        Arguments:
+            - c (:obj:`Union[str, Tuple[float, float, float]]`): Color value, can be hex string value \
+                or tuple rgb value.
+            - alpha: (:obj:`Optional[float]`): Alpha value of color, \
+                default is `None` which means no alpha value.
+        """
         if isinstance(c, tuple):
             self.__r, self.__g, self.__b = c
             self.__alpha = alpha
@@ -139,76 +262,128 @@ class Color:
             raise TypeError('Unknown color value - {c}.'.format(c=repr(c)))
 
     def __set_r(self, new):
-        self.__r = new
+        self.__r = _r_mapper(new)
 
     def __set_g(self, new):
-        self.__g = new
+        self.__g = _g_mapper(new)
 
     def __set_b(self, new):
-        self.__b = new
+        self.__b = _b_mapper(new)
 
     @property
     def rgb(self) -> RGBColorProxy:
         return RGBColorProxy(
-            GetSetProxy(lambda: self.__r, self.__set_r),
-            GetSetProxy(lambda: self.__g, self.__set_g),
-            GetSetProxy(lambda: self.__b, self.__set_b),
+            self,
+            GetSetProxy(
+                lambda: self.__r,
+                lambda x: self.__set_r(x),
+            ),
+            GetSetProxy(
+                lambda: self.__g,
+                lambda x: self.__set_g(x),
+            ),
+            GetSetProxy(
+                lambda: self.__b,
+                lambda x: self.__set_b(x),
+            ),
         )
 
     def __get_hsv(self):
         return colorsys.rgb_to_hsv(self.__r, self.__g, self.__b)
 
     def __set_hsv(self, h=None, s=None, v=None):
-        ch, cs, cv = self.__get_hsv()
-        self.__r, self.__g, self.__b = colorsys.hsv_to_rgb(h or ch, s or cs, v or cv)
+        h, s, v = map(lambda args: _ratio_or(*args), zip((h, s, v), self.__get_hsv()))
+        self.__r, self.__g, self.__b = colorsys.hsv_to_rgb(h, s, v)
 
     @property
     def hsv(self) -> HSVColorProxy:
         return HSVColorProxy(
+            self,
             GetSetProxy(
-                post_process(lambda x: x[0])(self.__get_hsv),
+                lambda: self.__get_hsv()[0],
                 lambda x: self.__set_hsv(h=x),
             ),
             GetSetProxy(
-                post_process(lambda x: x[1])(self.__get_hsv),
+                lambda: self.__get_hsv()[1],
                 lambda x: self.__set_hsv(s=x),
             ),
             GetSetProxy(
-                post_process(lambda x: x[2])(self.__get_hsv),
+                lambda: self.__get_hsv()[2],
                 lambda x: self.__set_hsv(v=x),
+            ),
+        )
+
+    def __get_hls(self):
+        return colorsys.rgb_to_hls(self.__r, self.__g, self.__b)
+
+    def __set_hls(self, h=None, l_=None, s=None):
+        h, l, s = map(lambda args: _ratio_or(*args), zip((h, l_, s), self.__get_hls()))
+        self.__r, self.__g, self.__b = colorsys.hls_to_rgb(h, l, s)
+
+    @property
+    def hls(self) -> HLSColorProxy:
+        return HLSColorProxy(
+            self,
+            GetSetProxy(
+                lambda: self.__get_hls()[0],
+                lambda x: self.__set_hls(h=x),
+            ),
+            GetSetProxy(
+                lambda: self.__get_hls()[1],
+                lambda x: self.__set_hls(l_=x),
+            ),
+            GetSetProxy(
+                lambda: self.__get_hls()[2],
+                lambda x: self.__set_hls(s=x),
             ),
         )
 
     @property
     def alpha(self) -> Optional[float]:
-        return self.__alpha if self.__alpha is not None else 1.0
+        return self.__alpha
 
     @alpha.setter
     def alpha(self, new: Optional[float]):
         self.__alpha = new
 
+    def __get_hex(self, include_alpha: bool):
+        rs, gs, bs = _ratio_to_hex(self.__r), _ratio_to_hex(self.__g), _ratio_to_hex(self.__b)
+        as_ = _ratio_to_hex(self.__alpha) if self.__alpha is not None and include_alpha else ''
+
+        return '#' + rs + gs + bs + as_
+
     def __repr__(self):
         if self.__alpha is not None:
-            return '<{cls} r: {r}, g: {g}, b: {b}, a: {a}>'.format(
+            return '<{cls} {hex}, alpha: {alpha}>'.format(
                 cls=self.__class__.__name__,
-                r='%.3f' % (self.__r,),
-                g='%.3f' % (self.__g,),
-                b='%.3f' % (self.__b,),
-                a='%.3f' % (self.__alpha,),
+                hex=self.__get_hex(False),
+                alpha='%.3f' % (self.__alpha,),
             )
         else:
-            return '<{cls} r: {r}, g: {g}, b: {b}>'.format(
+            return '<{cls} {hex}>'.format(
                 cls=self.__class__.__name__,
-                r='%.3f' % (self.__r,),
-                g='%.3f' % (self.__g,),
-                b='%.3f' % (self.__b,),
+                hex=self.__get_hex(False),
             )
 
     def __str__(self):
-        rs, gs, bs = _ratio_to_hex(self.__r), _ratio_to_hex(self.__g), _ratio_to_hex(self.__b)
-        as_ = _ratio_to_hex(self.__alpha) if self.__alpha is not None else ''
+        return self.__get_hex(True)
 
-        return '#' + rs + gs + bs + as_
+    def __getstate__(self):
+        return self.__r, self.__g, self.__b, self.__alpha
+
+    def __setstate__(self, v):
+        self.__r, self.__g, self.__b, self.__alpha = v
+
+    def __hash__(self):
+        return hash(self.__getstate__())
+
+    def __eq__(self, other):
+        if other is self:
+            return True
+        elif type(other) == type(self):
+            return other.__getstate__() == self.__getstate__()
+        else:
+            return False
 
     @classmethod
     def random(cls, rnd=None, alpha: Union[bool, None, int, float] = None):
@@ -223,3 +398,7 @@ class Color:
     @classmethod
     def from_hsv(cls, h, s, v, alpha=None):
         return cls(colorsys.hsv_to_rgb(h, s, v), alpha)
+
+    @classmethod
+    def from_hls(cls, h, l, s, alpha=None):
+        return cls(colorsys.hls_to_rgb(h, l, s), alpha)

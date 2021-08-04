@@ -37,6 +37,12 @@ raising
 .. autofunction:: treevalue.utils.func.raising
 
 
+warning\_
+---------------------
+
+.. autofunction:: treevalue.utils.func.warning_
+
+
 freduce
 --------------
 

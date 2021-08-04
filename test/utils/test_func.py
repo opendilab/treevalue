@@ -2,7 +2,7 @@ from functools import wraps
 
 import pytest
 
-from treevalue.utils import args_iter, dynamic_call, static_call, post_process, pre_process, freduce, raising
+from treevalue.utils import args_iter, dynamic_call, static_call, post_process, pre_process, freduce, raising, warning_
 
 
 @pytest.mark.unittest
@@ -145,3 +145,41 @@ class TestUtilsFunc:
         assert f4(1) == 1
         with pytest.raises(RuntimeError):
             f4(-1)
+
+    def test_warning(self):
+        f1 = warning_(lambda: RuntimeWarning)
+        f2 = warning_(RuntimeWarning)
+        f3 = warning_(RuntimeWarning())
+        f4 = warning_('warning')
+        with pytest.warns(RuntimeWarning):
+            f1()
+        with pytest.warns(RuntimeWarning):
+            f2()
+        with pytest.warns(RuntimeWarning):
+            f3()
+        with pytest.warns(UserWarning):
+            f4()
+
+        f5 = warning_(lambda x: RuntimeWarning if x < 0 else x)
+        with pytest.warns(None):
+            f5(1)
+        with pytest.warns(RuntimeWarning):
+            f5(-1)
+
+        f6 = warning_(lambda x: (RuntimeWarning, (), {}) if x < 0 else x)
+        with pytest.warns(None):
+            f6(1)
+        with pytest.warns(RuntimeWarning):
+            f6(-1)
+
+        f7 = warning_(lambda x: (RuntimeWarning, ()) if x < 0 else x)
+        with pytest.warns(None):
+            f7(1)
+        with pytest.warns(RuntimeWarning):
+            f7(-1)
+
+        f8 = warning_(lambda x: (RuntimeWarning, {}) if x < 0 else x)
+        with pytest.warns(None):
+            f8(1)
+        with pytest.warns(RuntimeWarning):
+            f8(-1)
