@@ -6,5 +6,4 @@ if __name__ == '__main__':
     g = build_graph((t1, 't1'), (t2, 't2'), graph_title="Complex demo of build_graph.")
 
     print(g.source)
-    print(g.save('build_graph_complex_demo.dat.gv'))
-    print(g.render(format='svg'))
+    print(g.render('build_graph_complex_demo.dat.gv', format='svg'))

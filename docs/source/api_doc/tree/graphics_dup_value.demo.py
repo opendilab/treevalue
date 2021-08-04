@@ -37,5 +37,4 @@ if __name__ == '__main__':
         title="This is a demo of 2 trees with dup value.",
         cfg={'bgcolor': '#ffffff00'},
     )
-    g.save('graphics_dup_value.dat.gv')
-    g.render(format='svg')
+    g.render('graphics_dup_value.dat.gv', format='svg')

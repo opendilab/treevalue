@@ -24,5 +24,4 @@ if __name__ == '__main__':
         title="This is a demo of 2 trees.",
         cfg={'bgcolor': '#ffffff00'},
     )
-    g.save('graphics.dat.gv')
-    g.render(format='svg')
+    g.render('graphics.dat.gv', format='svg')
