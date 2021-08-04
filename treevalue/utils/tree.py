@@ -81,17 +81,13 @@ def _title_flatten(title):
     return title
 
 
-def _value_to_string(dict_) -> dict:
-    return type(dict_)({key: str(value) for key, value in dict_.items()})
-
-
 def _no_none_value(dict_) -> dict:
     return type(dict_)({key: value for key, value in dict_.items() if value is not None})
 
 
-def _none_value_filter(func):
+def _cfg_func_wrap(func):
     @wraps(func)
-    @post_process(_value_to_string)
+    @post_process(lambda d: type(d)({str(key): str(value) for key, value in d.items()}))
     @post_process(_no_none_value)
     def _new_func(*args, **kwargs):
         return func(*args, **kwargs)
@@ -179,8 +175,8 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
 
     repr_gen = dynamic_call(repr_gen or repr)
     iter_gen = dynamic_call(iter_gen or (lambda x: x.items() if hasattr(x, 'items') else None))
-    node_cfg_gen = _none_value_filter(dynamic_call(node_cfg_gen or (lambda: {})))
-    edge_cfg_gen = _none_value_filter(dynamic_call(edge_cfg_gen or (lambda: {})))
+    node_cfg_gen = _cfg_func_wrap(dynamic_call(node_cfg_gen or (lambda: {})))
+    edge_cfg_gen = _cfg_func_wrap(dynamic_call(edge_cfg_gen or (lambda: {})))
 
     graph = Digraph(name=graph_name, comment=graph_title)
     graph.graph_attr.update(graph_cfg or {})
