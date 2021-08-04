@@ -145,3 +145,13 @@ The graph of the case with ``dup_value`` should be
 
 .. image:: graphics_dup_value.dat.gv.svg
     :align: center
+
+The return value's type of function ``graphics`` is \
+class ``graphviz.dot.Digraph``, from the opensource \
+library ``graphviz``, for further information of \
+this project and ``graphviz.dot.Digraph``'s usage, \
+take a look at:
+
+* `Official site of Graphviz <https://graphviz.org/>`_.
+* `User Guide of Graphviz <https://graphviz.readthedocs.io/en/stable/manual.html#formats>`_.
+* `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.

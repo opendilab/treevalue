@@ -1007,6 +1007,19 @@ The generated code and graph should be like below
 .. image:: ../../api_doc/tree/graphics.dat.gv.svg
     :align: center
 
-For further information of function ``graphics``, \
-just take a look at :ref:`apidoc_tree_tree_graphics`.
+.. note::
 
+    The return value's type of function ``graphics`` is \
+    class ``graphviz.dot.Digraph``, from the opensource \
+    library ``graphviz``, for further information of \
+    this project and ``graphviz.dot.Digraph``'s usage, \
+    take a look at:
+
+    * `Official site of Graphviz <https://graphviz.org/>`_.
+    * `User Guide of Graphviz <https://graphviz.readthedocs.io/en/stable/manual.html#formats>`_.
+    * `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.
+
+For further information of function ``graphics``, \
+just take a look at
+
+* :ref:`apidoc_tree_tree_graphics`.
