@@ -193,3 +193,10 @@ class Tree(BaseTree):
 
     def actual(self) -> 'Tree':
         return self
+
+    def __getstate__(self):
+        return {key: value.actual() if isinstance(value, BaseTree) else value
+                for key, value in self.__dict.items()}
+
+    def __setstate__(self, state):
+        self.__dict = state

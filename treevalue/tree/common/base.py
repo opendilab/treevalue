@@ -284,7 +284,4 @@ class BaseTree(metaclass=ABCMeta):
             >>> │   └── 'd' --> 4
             >>> └── 'z' --> [1, 2]
         """
-        return str(build_tree(
-            self,
-            repr_gen=lambda value: repr(value),
-        ))
+        return str(build_tree(self, repr_gen=lambda value: repr(value)))

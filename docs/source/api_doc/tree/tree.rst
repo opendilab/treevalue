@@ -155,3 +155,28 @@ take a look at:
 * `Official site of Graphviz <https://graphviz.org/>`_.
 * `User Guide of Graphviz <https://graphviz.readthedocs.io/en/stable/manual.html#formats>`_.
 * `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.
+
+
+dump
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.dump
+
+
+dumps
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.dumps
+
+
+load
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.load
+
+
+loads
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.loads
+
