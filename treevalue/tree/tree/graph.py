@@ -1,117 +1,89 @@
-import colorsys
-from enum import IntEnum, unique
-from functools import wraps
-from typing import Type, Callable, Union, Optional, Tuple, Any
+from functools import lru_cache
+from math import sqrt
+from typing import Type, Callable, Union, Optional, Tuple
 
-import enum_tools
 from graphviz import Digraph
 
 from .tree import TreeValue, get_data_property
-from ...utils import get_class_full_name, seed_random, post_process, build_graph, dynamic_call, \
-    int_enum_loads, freduce
+from ...utils import post_process, build_graph, dynamic_call, \
+    freduce, Color
 from ...utils.tree import SUFFIXED_TAG
 
-_PRIME_P, _PRIME_Q, _PRIME_R, _PRIME_S = 482480892821, 697797055633, 251526220339, 572076910547
+
+def _mean(values):
+    return sum(values) / len(values)
 
 
-def _str_hash(string):
-    sum_ = 0
-    for ch in str(string):
-        sum_ = (sum_ + ord(ch) * _PRIME_P) % _PRIME_Q
-    return sum_
+def _std(values):
+    _m = _mean(values)
+    return sqrt(sum([(item - _m) ** 2 for item in values]) / (len(values) - 1))
 
 
-_MAX_RGB = 0xff
+def _distance(l_, n):
+    list_ = sorted(l_)
+    return _std([abs(a - b) for a, b in zip(list_, list_[1:] + [list_[0] + n])])
 
 
-def _max_mul(r):
-    return int(round(r * _MAX_RGB))
+def _mean_distance(n, s, t):
+    l_ = [(i * t + s) % n for i in range(n)]
+    aps = [_distance(l_[:i], n) for i in range(3, n)]
+    mean = sum(aps) / len(aps)
+
+    return mean
 
 
-def _rrgb_wrap(func):
-    @wraps(func)
-    def _new_func(*args, **kwargs):
-        _result = func(*args, **kwargs)
-        if len(_result) > 3:
-            r, g, b, a = _result[:4]
-            return _max_mul(r), _max_mul(g), _max_mul(b), _max_mul(a)
-        else:
-            r, g, b = _result[:3]
-            return _max_mul(r), _max_mul(g), _max_mul(b)
-
-    return _new_func
-
-
-def _rgb_str_wrap(func):
-    @wraps(func)
-    def _new_func(*args, **kwargs):
-        _result = func(*args, **kwargs)
-        if len(_result) > 3:
-            return '%02x%02x%02x%02x' % tuple(_result[:4])
-        else:
-            return '%02x%02x%02x' % tuple(_result[:3])
-
-    return _new_func
-
-
-_H_CLUSTERS = 18
-_H_UNIT = 1 / _H_CLUSTERS
-_H_MIN = 0
-_H_MAX = _H_CLUSTERS - 1
-_H_CLUSTER_MAPPING = [11, 8, 7, 4, 16, 0, 13, 6, 14, 3, 15, 2, 17, 1, 12, 9, 10, 5]
-
-_S_CLUSTERS = 12
-_S_UNIT = 1 / _S_CLUSTERS
-_S_MIN = 6
-_S_MAX = 9
-
-
-@post_process(lambda s: '#%s' % (s,))
-@_rgb_str_wrap
-@_rrgb_wrap
-def _color_from_tag(tag: str, alpha=None, hx: int = None, sr: float = None):
-    if not isinstance(tag, str):
-        tag = 'hash_%x' % (hash(tag),)
-
-    with seed_random(_str_hash(tag)) as rnd:
-        h, s, v = _H_CLUSTER_MAPPING[rnd.randint(_H_MIN, _H_MAX)] * _H_UNIT, \
-                  rnd.randint(_S_MIN, _S_MAX) * _S_UNIT, rnd.random() * 0.12 + 0.88
-        if hx is not None:
-            h = _H_CLUSTER_MAPPING[hx % _H_CLUSTERS] * _H_UNIT
-        if sr is not None:
-            s = max(0.0, min(1.0, sr))
-
-        r, g, b = colorsys.hsv_to_rgb(h, s, v)
-        if alpha is None:
-            return r, g, b
-        else:
-            return r, g, b, alpha
-
-
-def _color_from_data(data, alpha=None, is_edge: bool = False):
-    if isinstance(data, tuple):
-        hx, tag = data
-        return _color_from_tag(tag, alpha, hx)
+@lru_cache()
+def _gcd(x, y):
+    if y == 0:
+        return x
     else:
-        return _color_from_tag(data, alpha, None)
+        return _gcd(y, x % y)
 
 
-@enum_tools.documentation.document_enum
-@int_enum_loads(name_preprocess=str.upper)
-@unique
-class ColorTheme(IntEnum):
-    TYPE = 1  # doc: Distinct colors by the tree types
-    INDEX = 2  # doc: Distinct colors by the index of the argument tree
-    NAME = 3  # doc: Distinct colors by the index of the argument's name
+@lru_cache()
+def _best_t_for_n_s(n, s):
+    _final_mean, _final_t = None, None
+    for _current_t in range(1, (n + 1) // 2 + 1):
+        if _gcd(_current_t, n) == 1:
+            _current_mean = _mean_distance(n, s, _current_t)
+            if _final_mean is None or _current_mean < _final_mean:
+                _final_mean, _final_t = _current_mean, _current_t
 
-    @dynamic_call
-    def __call__(self, root_node, root_title: str, root_index: int):
-        if self == self.__class__.TYPE:
-            return get_class_full_name(type(root_node))
-        elif self == self.__class__.INDEX:
-            return root_index, 'root_%d' % (root_index,)
-        elif self == self.__class__.NAME:
-            return 'title_%x' % (_str_hash(root_title),)
+    return n, _final_t, _final_mean
+
+
+@lru_cache()
+def _hue_id_mapping(n, s):
+    _, t, _ = _best_t_for_n_s(n, s)
+    return [(t * i + s) % n for i in range(n)]
+
+
+@lru_cache()
+def _base_hue(n, s, i):
+    return (_hue_id_mapping(n, s)[i] + 0.5) / n
+
+
+@lru_cache()
+def _all_color(n, s, i):
+    h = _base_hue(n, s, i)
+
+    # line color
+    _line = Color.from_hsv(h, 0.8, 0.6, alpha=0.8)
+
+    # key font color
+    _key = Color.from_hsv(h, 1.0, 0.45, alpha=1.0)
+
+    # border color
+    _border_1 = Color.from_hsv(h, 0.65, 0.7, alpha=0.6)
+    _border_2 = Color.from_hsv(h, 0.65, 0.7, alpha=0.0)
+
+    # shape color
+    _shape = Color.from_hsv(h, 0.55, 1.0, alpha=0.6)
+
+    # data font color
+    _data = Color.from_hsv(h, 1.0, 0.2, alpha=1.0)
+
+    return _line, _key, _border_1, _border_2, _shape, _data
 
 
 @freduce(init=lambda: (lambda: {}))
@@ -165,9 +137,12 @@ def _dup_value_func(dup_value):
         return None
 
 
+_GENERIC_N = 36
+_GENERIC_S = 12
+
+
 def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
              dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
-             color_theme_gen: Union[Callable, str, ColorTheme, Any, None] = None,
              repr_gen: Optional[Callable] = None,
              node_cfg_gen: Optional[Callable] = None,
              edge_cfg_gen: Optional[Callable] = None) -> Digraph:
@@ -195,11 +170,6 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         - graph (:obj:`Digraph`): Generated graph of tree values.
     """
 
-    color_theme_gen = color_theme_gen or ColorTheme.TYPE
-    if not hasattr(color_theme_gen, '__call__'):
-        color_theme_gen = ColorTheme.loads(color_theme_gen)
-    color_theme_gen = post_process(lambda x: '%x' % _str_hash(x))(dynamic_call(color_theme_gen))
-
     def _node_tag(current, parent, current_path, parent_path, is_node):
         if is_node:
             return _node_id(current, current_path)
@@ -210,6 +180,12 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
 
     setattr(_node_tag, SUFFIXED_TAG, True)
 
+    _line_color = lambda i: _all_color(_GENERIC_N, _GENERIC_S, i)[0]
+    _key_font_color = lambda i: _all_color(_GENERIC_N, _GENERIC_S, i)[1]
+    _border_color = lambda i, is_node: _all_color(_GENERIC_N, _GENERIC_S, i)[2 if is_node else 3]
+    _shape_color = lambda i: _all_color(_GENERIC_N, _GENERIC_S, i)[4]
+    _data_font_color = lambda i: _all_color(_GENERIC_N, _GENERIC_S, i)[5]
+
     return build_graph(
         *trees,
         node_id_gen=_node_tag,
@@ -218,8 +194,9 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         repr_gen=repr_gen or (lambda x: repr(x)),
         iter_gen=lambda n: iter(n) if isinstance(n, TreeValue) else None,
         node_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, is_root, root: {
-            'fillcolor': _color_from_data(color_theme_gen(*root), 0.5),
-            'color': _color_from_data(color_theme_gen(*root), 0.7 if is_node else 0.0),
+            'fillcolor': _shape_color(root[2]),
+            'color': _border_color(root[2], is_node),
+            'fontcolor': _data_font_color(root[2]),
             'style': 'filled',
             'shape': 'diamond' if is_root else ('ellipse' if is_node else 'box'),
             'penwidth': 3 if is_root else 1.5,
@@ -228,8 +205,8 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         edge_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, root: {
             'arrowhead': 'vee' if is_node else 'dot',
             'arrowsize': 1.0 if is_node else 0.5,
-            'color': _color_from_data(color_theme_gen(*root), 0.7 if is_node else 0.9),
-            'fontcolor': _color_from_data(color_theme_gen(*root), 1.0),
+            'color': _line_color(root[2]),
+            'fontcolor': _key_font_color(root[2]),
             'fontname': "Times-Roman bold",
         }, (edge_cfg_gen or (lambda: {}))),
     )
