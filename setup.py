@@ -36,6 +36,7 @@ setup(
     packages=find_packages(
         include=(_package_name, "%s.*" % _package_name)
     ),
+    description=meta['__DESCRIPTION__'],
     long_description=readme,
     long_description_content_type='text/markdown',
     author=meta['__AUTHOR__'],
