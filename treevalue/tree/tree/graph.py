@@ -1,5 +1,4 @@
 from functools import lru_cache
-from math import sqrt
 from typing import Type, Callable, Union, Optional, Tuple
 
 from graphviz import Digraph
@@ -10,26 +9,20 @@ from ...utils import post_process, build_graph, dynamic_call, \
 from ...utils.tree import SUFFIXED_TAG
 
 
-def _mean(values):
-    return sum(values) / len(values)
-
-
-def _std(values):
-    _m = _mean(values)
-    return sqrt(sum([(item - _m) ** 2 for item in values]) / (len(values) - 1))
-
-
-def _distance(l_, n):
+def _min_distance(l_, n):
     list_ = sorted(l_)
-    return _std([abs(a - b) for a, b in zip(list_, list_[1:] + [list_[0] + n])])
+    return min([abs(a - b) for a, b in zip(list_, list_[1:] + [list_[0] + n])])
 
 
-def _mean_distance(n, s, t):
+_FIRST_DIS_CNT = 2
+
+
+def _dis_ratios(n, s, t):
     l_ = [(i * t + s) % n for i in range(n)]
-    aps = [_distance(l_[:i], n) for i in range(3, n)]
-    mean = sum(aps) / len(aps)
-
-    return mean
+    _dis = [_min_distance(l_[:i], n) for i in range(_FIRST_DIS_CNT, n)]
+    _exp = [n // i for i in range(_FIRST_DIS_CNT, n)]
+    _ratios = [e / d for d, e in zip(_dis, _exp)]
+    return max(_ratios), tuple(_ratios)
 
 
 @lru_cache()
@@ -45,7 +38,7 @@ def _best_t_for_n_s(n, s):
     _final_mean, _final_t = None, None
     for _current_t in range(1, (n + 1) // 2 + 1):
         if _gcd(_current_t, n) == 1:
-            _current_mean = _mean_distance(n, s, _current_t)
+            _current_mean = _dis_ratios(n, s, _current_t)
             if _final_mean is None or _current_mean < _final_mean:
                 _final_mean, _final_t = _current_mean, _current_t
 
@@ -138,7 +131,7 @@ def _dup_value_func(dup_value):
 
 
 _GENERIC_N = 36
-_GENERIC_S = 12
+_GENERIC_S = _GENERIC_N // 3
 
 
 def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
