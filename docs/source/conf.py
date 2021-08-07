@@ -28,6 +28,7 @@ from packaging import version as version_
 # Get current location
 _DOC_PATH = os.path.dirname(os.path.abspath(__file__))
 _PROJ_PATH = os.path.abspath(os.path.join(_DOC_PATH, '..', '..'))
+_SHIMS_PATH = os.path.join(_DOC_PATH, '_shims')
 os.chdir(_PROJ_PATH)
 
 # Set environment, remove the pre-installed package
@@ -41,6 +42,7 @@ if not os.environ.get("NO_CONTENTS_BUILD"):
     _env = dict(os.environ)
     _env.update(dict(
         PYTHONPATH=_PROJ_PATH,
+        PATH=_SHIMS_PATH + ':' + os.environ.get('PATH', ''),
     ))
 
     pip_cmd = (where.first('pip'), 'install', '-r', os.path.join(_PROJ_PATH, 'requirements.txt'))

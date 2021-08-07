@@ -14,9 +14,12 @@ GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}" SOURCE=${SOURCEDIR}
 DEMOS_MK    := ${SOURCEDIR}/demos.mk
 DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
 
+_CURRENT_PATH := ${PATH}
+
 .EXPORT_ALL_VARIABLES:
 
 PYTHONPATH = $(shell readlink -f ${CURDIR}/..)
+PATH       = $(shell readlink -f ${SOURCEDIR}/_shims):${_CURRENT_PATH}
 NO_CONTENTS_BUILD = true
 
 # Catch-all target: route all unknown targets to Sphinx using the new

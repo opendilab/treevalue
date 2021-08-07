@@ -27,4 +27,15 @@ If the output is like below and no error occurs, you have successfully installed
     :language: text
     :linenos:
 
+In newest version of treevalue, cli is supported to do some \
+data processing. Here is the version and help display.
+
+.. literalinclude:: cli_demo.demo.sh
+    :language: shell
+    :linenos:
+
+.. literalinclude:: cli_demo.demo.sh.txt
+    :language: text
+    :linenos:
+
 Treevalue is still under development, you can also check out the documents in stable version through `https://opendilab.github.io/treevalue/ <https://opendilab.github.io/treevalue/>`_.
