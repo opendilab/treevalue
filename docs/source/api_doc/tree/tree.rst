@@ -101,11 +101,8 @@ reduce\_
 NO_RISE_TEMPLATE
 --------------------
 
-.. data:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
-
-    Means no template is given to the rise function, \
-    and the decorated function will automatically try \
-    to match the format patterns as template.
+.. autodata:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
+    :annotation:
 
 
 .. _apidoc_tree_tree_graphics:

@@ -1,30 +1,19 @@
 """
 Overview:
     Meta information for treevalue package.
-
-.. data:: __TITLE__
-
-    Title of this project (should be `treevalue`).
-
-.. data:: __VERSION__
-
-    Version of this project.
-
-.. data: __DESCRIPTION__
-
-    Short description of the project, will be included in ``setup.py``.
-
-.. data:: __AUTHOR__
-
-    Author of this project.
-
-.. data:: __AUTHOR_EMAIL__
-
-    Email of the author.
 """
 
+#: Title of this project (should be `treevalue`).
 __TITLE__ = "treevalue"
+
+#: Version of this project.
 __VERSION__ = "0.0.1"
+
+#: Short description of the project, will be included in ``setup.py``.
 __DESCRIPTION__ = 'An easy-to-use plantuml cli for everyone.'
+
+#: Author of this project.
 __AUTHOR__ = "HansBug, DI-engine's Contributors"
+
+#: Email of the authors'.
 __AUTHOR_EMAIL__ = "hansbug@buaa.edu.cn"

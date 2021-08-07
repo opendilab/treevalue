@@ -46,6 +46,10 @@ def _any_getattr(value):
 
 
 _ClassType = TypeVar("_ClassType", bound=TreeValue)
+
+#: Default value of the ``missing`` arguments of ``func_treelize``, ``method_treelize`` \
+#: and ``classmethod_treelize``, which means missing is not allowed \
+#: (raise ``KeyError`` when missing is detected).
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
@@ -216,6 +220,10 @@ def _get_configs(clazz: type):
     return dict(getattr(clazz, _CONFIGS_TAG, None) or {})
 
 
+#: Default value of the ``return_type`` arguments \
+#: of ``method_treelize`` and ``classmethod_treelize``, \
+#: which means return type will be auto configured to
+#: the current class.
 AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 

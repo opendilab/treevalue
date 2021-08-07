@@ -302,6 +302,9 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
     return func_treelize(return_type=return_type, **kwargs)(builder)(*arguments)
 
 
+#: Means no template is given to the rise function, \
+#: and the decorated function will automatically \
+#: try to match the format patterns as template.
 NO_RISE_TEMPLATE = SingletonMark("no_rise_template")
 
 
