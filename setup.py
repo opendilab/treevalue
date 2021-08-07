@@ -62,4 +62,9 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
+    entry_points={
+        'console_scripts': [
+            'treevalue=treevalue.entry.cli:treevalue_cli'
+        ]
+    },
 )
