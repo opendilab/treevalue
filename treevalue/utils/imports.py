@@ -1,6 +1,9 @@
 import builtins
+import fnmatch
 import importlib
-from typing import Optional, Callable, Mapping, Any, Tuple
+from itertools import islice
+from queue import Queue
+from typing import Optional, Callable, Mapping, Any, Tuple, Iterator
 
 from .func import dynamic_call
 
@@ -56,7 +59,7 @@ def import_all(module_name: Optional[str] = None,
             in _import_module(module_name).__dict__.items() if predicate(key, value)}
 
 
-def quick_import_object(full_name: str) -> Tuple[Any, str, str, Tuple[str, ...]]:
+def quick_import_object(full_name: str) -> Tuple[Any, str, str]:
     """
     Overview:
         Quickly dynamically import an object with a single name.
@@ -65,28 +68,63 @@ def quick_import_object(full_name: str) -> Tuple[Any, str, str, Tuple[str, ...]]
         - full_name (:obj:`str`): Full name of the object, attribute is supported as well.
 
     Returns:
-        - obj (:obj:`Tuple[Any, str, str, Tuple[str, ...]]`): Imported object.
+        - obj (:obj:`Tuple[Any, str, str]`): Imported object.
 
     Example::
-        >>> quick_import_object('zip')                     # <class 'zip'>, '', 'zip', ()
-        >>> quick_import_object('numpy.ndarray')           # <class 'numpy.ndarray'>, 'numpy', 'ndarray', ()
-        >>> quick_import_object('numpy.ndarray.__name__')  # 'ndarray', 'numpy', 'ndarray', ('__name__',)
+        >>> quick_import_object('zip')                     # <class 'zip'>, '', 'zip'
+        >>> quick_import_object('numpy.ndarray')           # <class 'numpy.ndarray'>, 'numpy', 'ndarray'
+        >>> quick_import_object('numpy.ndarray.__name__')  # 'ndarray', 'numpy', 'ndarray.__name__'
     """
-    segments = full_name.split('.')
+    _iter = islice(iter_import_objects(full_name), 1)
+    try:
+        # noinspection PyTupleAssignmentBalance
+        _obj, _module, _name = next(_iter)
+        return _obj, _module, _name
+    except (StopIteration, StopAsyncIteration):
+        raise ImportError(f'Cannot import object {repr(full_name)}.')
+
+
+def iter_import_objects(full_pattern: str) -> Iterator[Tuple[Any, str, str]]:
+    """
+    Overview:
+        Quickly dynamically import all objects with full name pattern.
+
+    Arguments:
+        - full_pattern (:obj:`str`): Full pattern of the object, attribute is supported as well.
+
+    Returns:
+        - iter (:obj:`Iterator[Tuple[Any, str, str]]`): Iterator for all the imported objects.
+    """
+    segments = full_pattern.split('.')
     length = len(segments)
     _errs = []
     for i in reversed(range(length)):
         module_name = '.'.join(segments[:i])
-        obj_name = segments[i]
-        attrs = tuple(segments[i + 1:])
+        attrs = tuple(segments[i:])
+        attrs_count = len(attrs)
 
         try:
-            obj = import_object(obj_name, module_name)
-            for _attr in attrs:
-                obj = getattr(obj, _attr)
-        except (AttributeError, ModuleNotFoundError, ImportError) as err:
-            _errs.append(err)
-        else:
-            return obj, module_name, obj_name, attrs
+            module = importlib.import_module(module_name or 'builtins')
+        except (ModuleNotFoundError, ImportError):
+            continue
 
-    raise _errs[0]
+        queue = Queue()
+        queue.put((module, 0, ()))
+        exist = False
+
+        while not queue.empty():
+            root, pos, ats = queue.get()
+
+            if pos >= attrs_count:
+                yield root, module_name, '.'.join(ats)
+            elif hasattr(root, attrs[pos]):
+                queue.put((getattr(root, attrs[pos]), pos + 1, ats + (attrs[pos],)))
+                exist = True
+            elif hasattr(root, '__dict__'):
+                for key, value in sorted(root.__dict__.items()):
+                    if fnmatch.fnmatch(key, attrs[pos]):
+                        queue.put((value, pos + 1, ats + (key,)))
+                        exist = True
+
+        if exist:
+            break

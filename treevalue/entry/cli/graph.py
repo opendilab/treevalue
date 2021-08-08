@@ -1,5 +1,5 @@
 import codecs
-import fnmatch
+import glob
 import os
 import pickle
 import shutil
@@ -8,96 +8,61 @@ import warnings
 from functools import partial
 from itertools import chain
 from string import Template
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Iterator
 
 import click
 import dill
 from graphviz import Digraph
 
 from .base import CONTEXT_SETTINGS
-from .utils import _multiple_validator, _EXPECTED_TREE_ERRORS, _click_pending
+from .utils import _multiple_validator, _click_pending
 from ...tree import TreeValue, load, graphics
-from ...utils import dynamic_call, post_process, quick_import_object, import_all
-
-
-def _title_check(result):
-    _tree, _title = result
-    if not _title:
-        raise ValueError(f'Title expected non-empty value but {repr(_title)} found.')
-
-    return _tree, _title
+from ...utils import dynamic_call, quick_import_object, iter_import_objects
 
 
 @dynamic_call
-@post_process(_title_check)
-def _import_tree_from_package(obj_full_name, title=None):
-    _object, _, _name, _attrs = quick_import_object(obj_full_name)
-    title = title or '.'.join([_name, *_attrs])
-    if isinstance(_object, TreeValue):
-        return _object, title
-    else:
-        raise TypeError(f'TreeValue object expected, but {repr(_object)} found')
+def _import_tree_from_package(obj_pattern, title=None) -> Iterator[Tuple[TreeValue, str]]:
+    _title_template = Template(title or '$name')
+    for _object, _module, _name in iter_import_objects(obj_pattern):
+        _title = _title_template.safe_substitute(dict(module=_module, name=_name))
+        if isinstance(_object, TreeValue):
+            yield _object, _title
 
 
 @dynamic_call
-@post_process(_title_check)
-def _import_tree_from_binary(binary_file_name, title=''):
-    if not title:
-        raise ValueError(f'Binary-based tree \'s title not provided for {repr(binary_file_name)}.')
+def _import_tree_from_binary(filename_pattern, title='') -> Iterator[Tuple[TreeValue, str]]:
+    _title_template = Template(title or '$bodyname')
+    for filename in glob.glob(filename_pattern):
+        if not os.path.exists(filename) or not os.path.isfile(filename) or not os.access(filename, os.R_OK):
+            continue
 
-    if not os.path.exists(binary_file_name):
-        raise FileNotFoundError(f'File {repr(binary_file_name)} not found.')
-    elif not os.path.isfile(binary_file_name):
-        raise IsADirectoryError(f'File {repr(binary_file_name)} is not a file.')
-    elif not os.access(binary_file_name, os.R_OK):
-        raise PermissionError(f'File {repr(binary_file_name)} is not readable.')
-    else:
-        with open(binary_file_name, 'rb') as file:
+        filename = os.path.abspath(filename)
+        _name_body, _name_ext = os.path.splitext(os.path.basename(filename))
+        _name_ext = _name_ext[1:] if _name_ext.startswith('.') else _name_ext
+        with open(filename, 'rb') as file:
             try:
-                return load(file), title
-            except (pickle.UnpicklingError, dill.UnpicklingError):
-                raise TypeError(f'File {repr(binary_file_name)} is not a binary-based tree file.')
+                yield load(file), _title_template.safe_substitute(dict(
+                    fullname=filename,
+                    dirname=os.path.dirname(filename),
+                    basename=os.path.basename(filename),
+                    extname=_name_ext,
+                    bodyname=_name_body,
+                ))
+            except (pickle.UnpicklingError, dill.UnpicklingError, EOFError, IOError):
+                continue
 
 
 @_multiple_validator
-def validate_trees(value: str) -> Tuple[TreeValue, str]:
+def validate_trees(value: str) -> Iterator[Tuple[TreeValue, str]]:
     _items = [item.strip() for item in value.split(':', maxsplit=3)]
-    try:
-        _tree, _title = _import_tree_from_binary(*_items)
-    except _EXPECTED_TREE_ERRORS:
-        _tree, _title = _import_tree_from_package(*_items)
-
-    return _tree, _title
-
-
-_DEFAULT_TEMPLATE_STR = '$name'
-
-
-@_multiple_validator
-def validate_tree_scripts(value: str) -> List[Tuple[TreeValue, str]]:
-    _items = value.split(':', maxsplit=3)
-    if len(_items) == 1:
-        _name_template = _DEFAULT_TEMPLATE_STR
-        _included_items = lambda k, v: True
-    elif len(_items) == 2:
-        _name_template = _items[1]
-        _included_items = lambda k, v: True
-    else:
-        _name_template = _items[1]
-        _matchers = [partial(fnmatch.fnmatch, pat=item) for item in _items[2].split(',')]
-        _included_items = lambda k, v: any([m(k) for m in _matchers])
-
-    items = import_all(_items[0], predicate=lambda k, v: isinstance(v, TreeValue) and _included_items(k, v))
-    template = Template(_name_template or _DEFAULT_TEMPLATE_STR)
-
-    return [(v, template.safe_substitute(dict(name=k))) for k, v in items.items()]
+    return chain(_import_tree_from_binary(*_items), _import_tree_from_package(*_items))
 
 
 @_multiple_validator
 def validate_cfg(value: str) -> Tuple[str, str]:
     _items = value.split('=', maxsplit=2)
     if len(_items) < 2:
-        raise click.BadParameter(f'Configuation should be KEY=VALUE, but {repr(value)} found.')
+        raise click.BadParameter(f'Configuration should be KEY=VALUE, but {repr(value)} found.')
 
     key, value = _items
     return key, value
@@ -105,7 +70,7 @@ def validate_cfg(value: str) -> Tuple[str, str]:
 
 @_multiple_validator
 def validate_duplicate_types(value: str):
-    _it, _, _name, _attrs = quick_import_object(value)
+    _it, _module, _name = quick_import_object(value)
     if not isinstance(_it, type):
         raise TypeError(f'Python type expected but {repr(type(_it).__name__)} found.')
     else:
@@ -146,14 +111,12 @@ def _graph_cli(cli: click.Group):
                  context_settings=CONTEXT_SETTINGS)
     @click.option('-t', '--tree', 'trees', type=click.UNPROCESSED, callback=validate_trees,
                   multiple=True, help='Trees to be imported, such as \'-t my_tree.t1\'.')
-    @click.option('-s', '--tree-script', 'ts', type=click.UNPROCESSED, callback=validate_tree_scripts,
-                  multiple=True, help='Tree scripts to be imported.')
     @click.option('-c', '--config', 'configs', type=click.UNPROCESSED, callback=validate_cfg,
                   multiple=True, help='External configuration when generating graph. '
                                       'Like \'-c bgcolor=#ffffff00\', will be displayed as '
                                       'graph [bgcolor=#ffffff00] in source code. ')
-    @click.option('-T', '--title', type=str, default='<untitled>',
-                  help='Title of the graph.', show_default=True)
+    @click.option('-T', '--title', type=str, default=None,
+                  help='Title of the graph.')
     @click.option('-o', '--output', 'outputs', type=click.types.Path(dir_okay=False),
                   multiple=True, help='Output file path, multiple output is supported.')
     @click.option('-O', '--stdout', 'print_to_stdout', is_flag=True, default=False,
@@ -166,11 +129,12 @@ def _graph_cli(cli: click.Group):
                                       '\'-d set\'.')
     @click.option('-D', '--duplicate_all', 'duplicate_all', is_flag=True, default=False,
                   help='Duplicate all the nodes of values with same memory id.', show_default=True)
-    def _graph(trees, ts, configs: List[Tuple[str, str]], title: Optional[str],
+    def _graph(trees: List[Iterator[Tuple[TreeValue, str]]],
+               configs: List[Tuple[str, str]], title: Optional[str],
                outputs: List[str], fmt: Optional[str], print_to_stdout: bool,
                dups: List[type], duplicate_all: bool):
         _tree_mapping, _names, _name_set = {}, [], set()
-        for v, k in chain(*ts, trees):
+        for v, k in chain(*trees):
             if k not in _name_set:
                 _name_set.add(k)
                 _names.append(k)
@@ -178,6 +142,7 @@ def _graph_cli(cli: click.Group):
 
         trees = [(_tree_mapping[k], k) for k in _names]
         configs = {key: value for key, value in configs}
+        title = title or f'Graph with {len(trees)} tree(s) - {", ".join(tuple([k for _, k in trees]))}.'
 
         g = graphics(
             *trees,
