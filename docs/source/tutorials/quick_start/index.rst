@@ -21,4 +21,16 @@ A simple tree value structure is created successfully with the structure below.
 .. image:: create_a_tree.gv.svg
     :align: center
 
+Save the code above to ``demo.py``, and then input \
+this shell command in your terminal.
+
+.. literalinclude:: display_this_tree.demo.sh
+    :language: shell
+    :linenos:
+
+A graph named ``demo.dat.svg`` will be generated, like this.
+
+.. image:: demo.dat.svg
+    :align: center
+
 Now you are successfully started.

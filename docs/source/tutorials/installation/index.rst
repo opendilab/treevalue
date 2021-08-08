@@ -15,20 +15,8 @@ You can also install with the newest version through GitHub:
 
     pip install -U git+https://github.com/opendilab/treevalue.git@main
 
-After installation, open your python console and type
-
-.. literalinclude:: install_check.demo.py
-    :language: python
-    :linenos:
-
-If the output is like below and no error occurs, you have successfully installed Treevalue.
-
-.. literalinclude:: install_check.demo.py.txt
-    :language: text
-    :linenos:
-
-In newest version of treevalue, cli is supported to do some \
-data processing. Here is the version and help display.
+After installation, open your shell console and use \
+the cli like the script below.
 
 .. literalinclude:: cli_demo.demo.sh
     :language: shell
@@ -37,5 +25,8 @@ data processing. Here is the version and help display.
 .. literalinclude:: cli_demo.demo.sh.txt
     :language: text
     :linenos:
+
+In newest version of treevalue, cli is supported to do some \
+data processing. Here is the version and help display.
 
 Treevalue is still under development, you can also check out the documents in stable version through `https://opendilab.github.io/treevalue/ <https://opendilab.github.io/treevalue/>`_.

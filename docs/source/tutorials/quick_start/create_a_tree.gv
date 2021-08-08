@@ -1,15 +1,32 @@
 digraph D {
-    label = "Created new tree 't'"
     graph [bgcolor = "#ffffff00"];
-    root [label = "t"];
-    n1 [label = "1"];
-    n2 [label = "2"];
-    n3 [label = "t.x"];
-    n4 [label = "3"];
-    n5 [label = "4"];
-    root -> n1 [label = "a"];
-    root -> n2 [label = "b"];
-    root -> n3 [label = "x"];
-    n3 -> n4 [label = "c"];
-    n3 -> n5 [label = "d"];
+    subgraph cluster_t1 {
+    label = "Created new tree 't1'"
+    t1 [label = "t1"];
+    t1_n1 [label = "1"];
+    t1_n2 [label = "2"];
+    t1_n3 [label = "t1.x"];
+    t1_n4 [label = "3"];
+    t1_n5 [label = "[1, 2]"];
+    t1 -> t1_n1 [label = "a"];
+    t1 -> t1_n2 [label = "b"];
+    t1 -> t1_n3 [label = "x"];
+    t1_n3 -> t1_n4 [label = "c"];
+    t1_n3 -> t1_n5 [label = "d"];
+    }
+
+    subgraph cluster_t2 {
+    label = "Created new tree 't2'"
+    t2 [label = "t2"];
+    t2_n1 [label = "11"];
+    t2_n2 [label = "2"];
+    t2_n3 [label = "t2.x"];
+    t2_n4 [label = "33"];
+    t2_n5 [label = "[1, 2]"];
+    t2 -> t2_n1 [label = "a"];
+    t2 -> t2_n2 [label = "b"];
+    t2 -> t2_n3 [label = "x"];
+    t2_n3 -> t2_n4 [label = "c"];
+    t2_n3 -> t2_n5 [label = "d"];
+    }
 }

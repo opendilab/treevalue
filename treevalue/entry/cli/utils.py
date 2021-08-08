@@ -1,13 +1,13 @@
 from contextlib import contextmanager
 from functools import wraps
-from typing import Callable, Union
+from typing import Callable, Union, Tuple
 
 import click
 
 from ...utils import dynamic_call
 
 
-def _wrap_validator(func):
+def _validator(func):
     func = dynamic_call(func)
 
     @wraps(func)
@@ -18,9 +18,8 @@ def _wrap_validator(func):
 
 
 def _multiple_validator(func):
-    func = _wrap_validator(func)
+    func = _validator(func)
 
-    @_exception_validation
     @wraps(func)
     def _new_func(ctx, param, value):
         return [func(ctx, param, item) for item in value]
@@ -36,22 +35,24 @@ _EXPECTED_TREE_ERRORS = (
 _EXCEPTION_WRAPPED = '__exception_wrapped__'
 
 
-def _exception_validation(func):
-    if getattr(func, _EXCEPTION_WRAPPED, False):
-        return func
+def _err_validator(types: Union[type, Tuple[type]]):
+    def _decorator(func):
+        func = _validator(func)
 
-    @wraps(func)
-    def _new_func(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except click.BadParameter as err:
-            raise err
-        except _EXPECTED_TREE_ERRORS as err:
-            _first_message = [item for item in err.args if isinstance(item, str)][0]
-            raise click.BadParameter(_first_message)
+        @wraps(func)
+        def _new_func(ctx, param, value):
+            try:
+                return func(ctx, param, value)
+            except click.BadParameter as err:
+                raise err
+            except types as err:
+                _messages = [item for item in err.args if isinstance(item, str)]
+                _final_message = _messages[0] if _messages else str(_messages)
+                raise click.BadParameter(_final_message)
 
-    setattr(_new_func, _EXCEPTION_WRAPPED, True)
-    return _new_func
+        return _new_func
+
+    return _decorator
 
 
 def _build_cli(base_cli, *wrappers):
