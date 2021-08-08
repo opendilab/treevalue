@@ -40,3 +40,11 @@ def print_version(ctx: Context, param: Option, value: bool) -> None:
 CONTEXT_SETTINGS = dict(
     help_option_names=['-h', '--help']
 )
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
+@click.option('-v', '--version', is_flag=True,
+              callback=print_version, expose_value=False, is_eager=True,
+              help="Show package's version information.")
+def _base_treevalue_cli():
+    pass

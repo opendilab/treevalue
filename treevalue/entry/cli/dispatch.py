@@ -1,11 +1,5 @@
-import click
+from .base import _base_treevalue_cli
+from .graph import _graph_cli
+from .utils import _build_cli
 
-from .base import CONTEXT_SETTINGS, print_version
-
-
-@click.command(context_settings=CONTEXT_SETTINGS)
-@click.option('-v', '--version', is_flag=True,
-              callback=print_version, expose_value=False, is_eager=True,
-              help="Show package's version information.")
-def treevalue_cli():
-    pass
+treevalue_cli = _build_cli(_base_treevalue_cli, _graph_cli)
