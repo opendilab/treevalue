@@ -1,5 +1,5 @@
 import codecs
-import importlib
+import fnmatch
 import os
 import pickle
 import shutil
@@ -17,7 +17,7 @@ from graphviz import Digraph
 from .base import CONTEXT_SETTINGS
 from .utils import _multiple_validator, _EXPECTED_TREE_ERRORS, _click_pending
 from ...tree import TreeValue, load, graphics
-from ...utils import dynamic_call, post_process
+from ...utils import dynamic_call, post_process, quick_import_object, import_all
 
 
 def _title_check(result):
@@ -30,13 +30,9 @@ def _title_check(result):
 
 @dynamic_call
 @post_process(_title_check)
-def _import_tree_from_package(package_name, name, title=None):
-    if not name:
-        raise ValueError(f'Tree\'s name not provided for {repr(package_name)}.')
-
-    title = title or name
-    package = importlib.import_module(package_name)
-    _object = getattr(package, name)
+def _import_tree_from_package(obj_full_name, title=None):
+    _object, _, _name, _attrs = quick_import_object(obj_full_name)
+    title = title or '.'.join([_name, *_attrs])
     if isinstance(_object, TreeValue):
         return _object, title
     else:
@@ -67,15 +63,14 @@ def _import_tree_from_binary(binary_file_name, title=''):
 def validate_trees(value: str) -> Tuple[TreeValue, str]:
     _items = [item.strip() for item in value.split(':', maxsplit=3)]
     try:
-        _tree, _title = _import_tree_from_package(*_items)
-    except _EXPECTED_TREE_ERRORS:
         _tree, _title = _import_tree_from_binary(*_items)
+    except _EXPECTED_TREE_ERRORS:
+        _tree, _title = _import_tree_from_package(*_items)
 
     return _tree, _title
 
 
 _DEFAULT_TEMPLATE_STR = '$name'
-_DEFAULT_INCLUDED_ITEMS = lambda x: {key: value for key, value in x.__dict__.items() if isinstance(value, TreeValue)}
 
 
 @_multiple_validator
@@ -83,17 +78,16 @@ def validate_tree_scripts(value: str) -> List[Tuple[TreeValue, str]]:
     _items = value.split(':', maxsplit=3)
     if len(_items) == 1:
         _name_template = _DEFAULT_TEMPLATE_STR
-        _included_items = _DEFAULT_INCLUDED_ITEMS
+        _included_items = lambda k, v: True
     elif len(_items) == 2:
         _name_template = _items[1]
-        _included_items = _DEFAULT_INCLUDED_ITEMS
+        _included_items = lambda k, v: True
     else:
         _name_template = _items[1]
-        included_names = {item.strip() for item in _items[2].split(',')}
-        _included_items = lambda x: {k: v for k, v in _DEFAULT_INCLUDED_ITEMS(x).items() if k in included_names}
+        _matchers = [partial(fnmatch.fnmatch, pat=item) for item in _items[2].split(',')]
+        _included_items = lambda k, v: any([m(k) for m in _matchers])
 
-    package = importlib.import_module(_items[0])
-    items = _included_items(package)
+    items = import_all(_items[0], predicate=lambda k, v: isinstance(v, TreeValue) and _included_items(k, v))
     template = Template(_name_template or _DEFAULT_TEMPLATE_STR)
 
     return [(v, template.safe_substitute(dict(name=k))) for k, v in items.items()]
@@ -111,18 +105,11 @@ def validate_cfg(value: str) -> Tuple[str, str]:
 
 @_multiple_validator
 def validate_duplicate_types(value: str):
-    _items = [item[::-1] for item in value[::-1].split('.', maxsplit=2)][::-1]
-    if len(_items) == 2:
-        _package_name, _obj_name = _items
-    else:
-        _package_name, _obj_name = None, value
-
-    package = importlib.import_module(_package_name or 'builtins')
-    _it = getattr(package, _obj_name)
+    _it, _, _name, _attrs = quick_import_object(value)
     if not isinstance(_it, type):
         raise TypeError(f'Python type expected but {repr(type(_it).__name__)} found.')
-
-    return _it
+    else:
+        return _it
 
 
 def _save_source_code(g: Digraph, path: str):
@@ -158,7 +145,7 @@ def _graph_cli(cli: click.Group):
     @cli.command('graph', help='Generate graph by trees and graphviz elements.',
                  context_settings=CONTEXT_SETTINGS)
     @click.option('-t', '--tree', 'trees', type=click.UNPROCESSED, callback=validate_trees,
-                  multiple=True, help='Trees to be imported.')
+                  multiple=True, help='Trees to be imported, such as \'-t my_tree.t1\'.')
     @click.option('-s', '--tree-script', 'ts', type=click.UNPROCESSED, callback=validate_tree_scripts,
                   multiple=True, help='Tree scripts to be imported.')
     @click.option('-c', '--config', 'configs', type=click.UNPROCESSED, callback=validate_cfg,

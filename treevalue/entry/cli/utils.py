@@ -19,7 +19,7 @@ def _multiple_validator(func):
 
 
 _EXPECTED_TREE_ERRORS = (
-    ValueError, TypeError, ImportError, AttributeError,
+    ValueError, TypeError, ImportError, AttributeError, ModuleNotFoundError,
     FileNotFoundError, IsADirectoryError, PermissionError, FileExistsError,
 )
 

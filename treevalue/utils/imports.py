@@ -1,6 +1,6 @@
 import builtins
 import importlib
-from typing import Optional, Callable, Mapping, Any
+from typing import Optional, Callable, Mapping, Any, Tuple
 
 from .func import dynamic_call
 
@@ -56,7 +56,7 @@ def import_all(module_name: Optional[str] = None,
             in _import_module(module_name).__dict__.items() if predicate(key, value)}
 
 
-def quick_import_object(full_name: str):
+def quick_import_object(full_name: str) -> Tuple[Any, str, str, Tuple[str, ...]]:
     """
     Overview:
         Quickly dynamically import an object with a single name.
@@ -65,28 +65,28 @@ def quick_import_object(full_name: str):
         - full_name (:obj:`str`): Full name of the object, attribute is supported as well.
 
     Returns:
-        - obj: Imported object.
+        - obj (:obj:`Tuple[Any, str, str, Tuple[str, ...]]`): Imported object.
 
     Example::
-        >>> quick_import_object('zip')                     # <class 'zip'>
-        >>> quick_import_object('numpy.ndarray')           # <class 'numpy.ndarray'>
-        >>> quick_import_object('numpy.ndarray.__name__')  # 'ndarray', attribute is also supported.
+        >>> quick_import_object('zip')                     # <class 'zip'>, '', 'zip', ()
+        >>> quick_import_object('numpy.ndarray')           # <class 'numpy.ndarray'>, 'numpy', 'ndarray', ()
+        >>> quick_import_object('numpy.ndarray.__name__')  # 'ndarray', 'numpy', 'ndarray', ('__name__',)
     """
     segments = full_name.split('.')
     length = len(segments)
     _errs = []
     for i in reversed(range(length)):
-        import_path = '.'.join(segments[:i])
-        root_obj_name = segments[i]
-        sub_attrs = segments[i + 1:]
+        module_name = '.'.join(segments[:i])
+        obj_name = segments[i]
+        attrs = tuple(segments[i + 1:])
 
         try:
-            obj = import_object(root_obj_name, import_path)
-            for _attr in sub_attrs:
+            obj = import_object(obj_name, module_name)
+            for _attr in attrs:
                 obj = getattr(obj, _attr)
         except (AttributeError, ModuleNotFoundError, ImportError) as err:
             _errs.append(err)
         else:
-            return obj
+            return obj, module_name, obj_name, attrs
 
     raise _errs[0]

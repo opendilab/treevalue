@@ -15,9 +15,9 @@ class TestUtilsImports:
         assert import_object('zip') == zip
 
     def test_quick_import_object(self):
-        assert quick_import_object('test.utils.test_imports.OBJ') == 1
-        assert quick_import_object('zip') == zip
-        assert quick_import_object('zip.__dict__') == zip.__dict__
+        assert quick_import_object('test.utils.test_imports.OBJ') == (1, 'test.utils.test_imports', 'OBJ', ())
+        assert quick_import_object('zip') == (zip, '', 'zip', ())
+        assert quick_import_object('zip.__dict__') == (zip.__dict__, '', 'zip', ('__dict__',))
 
         with pytest.raises(AttributeError):
             quick_import_object('p233')
