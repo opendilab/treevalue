@@ -1,7 +1,7 @@
 import pytest
 from easydict import EasyDict
 
-from treevalue.utils import import_object, quick_import_object, import_all, iter_import_objects
+from treevalue.utils import import_object, quick_import_object, iter_import_objects
 
 OBJ = 1
 P_1 = 2
@@ -44,13 +44,3 @@ class TestUtilsImports:
             (P_2, 'test.utils.test_imports', 'QQ3.P_2'),
             (P_3, 'test.utils.test_imports', 'QQ3.P_3'),
         ]
-
-    def test_import_all(self):
-        assert import_all('test.utils.test_imports',
-                          predicate=lambda k, v: k.startswith('P_')) == {
-                   'P_1': P_1, 'P_2': P_2, 'P_3': P_3,
-               }
-        assert {k: v for k, v in import_all('test.utils.test_imports').items() if
-                k in {'P_1', 'P_2', 'P_3', 'OBJ'}} == {
-                   'P_1': P_1, 'P_2': P_2, 'P_3': P_3, 'OBJ': 1,
-               }

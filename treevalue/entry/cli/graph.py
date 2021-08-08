@@ -23,10 +23,9 @@ from ...utils import dynamic_call, quick_import_object, iter_import_objects
 @dynamic_call
 def _import_tree_from_package(obj_pattern, title=None) -> Iterator[Tuple[TreeValue, str]]:
     _title_template = Template(title or '$name')
-    for _object, _module, _name in iter_import_objects(obj_pattern):
+    for _object, _module, _name in iter_import_objects(obj_pattern, lambda o: isinstance(o, TreeValue)):
         _title = _title_template.safe_substitute(dict(module=_module, name=_name))
-        if isinstance(_object, TreeValue):
-            yield _object, _title
+        yield _object, _title
 
 
 @dynamic_call
@@ -64,11 +63,8 @@ def validate_graph(value: str):
     if value is None:
         return value
 
-    _graph, _module, _name = quick_import_object(value)
-    if not isinstance(_graph, (Graph, Digraph)):
-        raise TypeError(f'Graphviz dot expected but {repr(type(_graph).__name__)} found.')
-    else:
-        return _graph
+    _graph, _, _ = quick_import_object(value, lambda g: isinstance(g, (Graph, Digraph)))
+    return _graph
 
 
 @_multiple_validator
@@ -83,11 +79,8 @@ def validate_cfg(value: str) -> Tuple[str, str]:
 
 @_multiple_validator
 def validate_duplicate_types(value: str):
-    _it, _module, _name = quick_import_object(value)
-    if not isinstance(_it, type):
-        raise TypeError(f'Python type expected but {repr(type(_it).__name__)} found.')
-    else:
-        return _it
+    _it, _, _ = quick_import_object(value, lambda t: isinstance(t, type))
+    return _it
 
 
 def _save_source_code(g: Digraph, path: str):
@@ -125,23 +118,23 @@ def _graph_cli(cli: click.Group):
     @click.option('-t', '--tree', 'trees', type=click.UNPROCESSED, callback=validate_trees,
                   multiple=True, help='Trees to be imported, such as \'-t my_tree.t1\'.')
     @click.option('-g', '--graph', type=click.UNPROCESSED, callback=validate_graph,
-                  help='Graph to be exported, -t options will be ignored.')
+                  help='Graph to be exported, such as \'-g my_script.graph1\', '
+                       '-t options will be ignored.')
     @click.option('-c', '--config', 'configs', type=click.UNPROCESSED, callback=validate_cfg,
                   multiple=True, help='External configuration when generating graph. '
                                       'Like \'-c bgcolor=#ffffff00\', will be displayed as '
                                       'graph [bgcolor=#ffffff00] in source code. ')
     @click.option('-T', '--title', type=str, default=None,
-                  help='Title of the graph.')
+                  help='Title of the graph, will be automatically generated when not given.')
     @click.option('-o', '--output', 'outputs', type=click.types.Path(dir_okay=False),
                   multiple=True, help='Output file path, multiple output is supported.')
     @click.option('-O', '--stdout', 'print_to_stdout', is_flag=True, default=False,
-                  help='Directly print graphviz source code to stdout.', show_default=True)
+                  help='Print graphviz source code to stdout, -o option will be ignored.', show_default=True)
     @click.option('-F', '--format', 'fmt', type=str, required=False,
                   help='Format of output file.')
     @click.option('-d', '--duplicate', 'dups', type=click.UNPROCESSED, callback=validate_duplicate_types,
                   multiple=True, help='The types need to be duplicated, '
-                                      'such as \'-d numpy.ndarray\', \'-d torch.Tensor\' and '
-                                      '\'-d set\'.')
+                                      'such as \'-d numpy.ndarray\', \'-d torch.Tensor\' and \'-d set\'.')
     @click.option('-D', '--duplicate_all', 'duplicate_all', is_flag=True, default=False,
                   help='Duplicate all the nodes of values with same memory id.', show_default=True)
     def _graph(trees: List[Iterator[Tuple[TreeValue, str]]], graph: Union[Graph, Digraph, None],

@@ -7,12 +7,6 @@ import\_object
 .. autofunction:: treevalue.utils.imports.import_object
 
 
-import\_all
--------------------
-
-.. autofunction:: treevalue.utils.imports.import_all
-
-
 quick\_import\_object
 ----------------------------
 

@@ -3,7 +3,7 @@ import fnmatch
 import importlib
 from itertools import islice
 from queue import Queue
-from typing import Optional, Callable, Mapping, Any, Tuple, Iterator
+from typing import Optional, Callable, Any, Tuple, Iterator
 
 from .func import dynamic_call
 
@@ -35,37 +35,14 @@ def import_object(obj_name: str, module_name: Optional[str] = None):
     return getattr(_import_module(module_name), obj_name)
 
 
-def import_all(module_name: Optional[str] = None,
-               predicate: Optional[Callable] = None) -> Mapping[str, Any]:
-    """
-    Overview:
-        Import all the objects in module.
-
-    Arguments:
-        - module_name (:obj:`Optional[str]`): Name of the module, \
-            default is ``None`` which means the ``builtins`` module.
-        - predicate (:obj:`Optional[Callable]`): Object predicate function, \
-            default is ``None`` which means all the items is accepted.
-
-    Returns:
-        - objects (:obj:`Mapping[str, Any]`): Imported objects and their names.
-
-    Examples:
-        >>> import_all()                                              # all the objects in ``builtins``
-        >>> import_all(predicate=lambda k, v: k in {'zip', 'print'})  # {'print': <built-in function print>, 'zip': <class 'zip'>}
-    """
-    predicate = dynamic_call(predicate or (lambda: True))
-    return {key: value for key, value
-            in _import_module(module_name).__dict__.items() if predicate(key, value)}
-
-
-def quick_import_object(full_name: str) -> Tuple[Any, str, str]:
+def quick_import_object(full_name: str, predicate: Optional[Callable] = None) -> Tuple[Any, str, str]:
     """
     Overview:
         Quickly dynamically import an object with a single name.
 
     Arguments:
         - full_name (:obj:`str`): Full name of the object, attribute is supported as well.
+        - predicate (:obj:`Callable`): Predicate function, default is ``None`` means no limitation.
 
     Returns:
         - obj (:obj:`Tuple[Any, str, str]`): Imported object.
@@ -75,7 +52,8 @@ def quick_import_object(full_name: str) -> Tuple[Any, str, str]:
         >>> quick_import_object('numpy.ndarray')           # <class 'numpy.ndarray'>, 'numpy', 'ndarray'
         >>> quick_import_object('numpy.ndarray.__name__')  # 'ndarray', 'numpy', 'ndarray.__name__'
     """
-    _iter = islice(iter_import_objects(full_name), 1)
+    _iter = islice(iter_import_objects(full_name, predicate), 1)
+
     try:
         # noinspection PyTupleAssignmentBalance
         _obj, _module, _name = next(_iter)
@@ -84,17 +62,21 @@ def quick_import_object(full_name: str) -> Tuple[Any, str, str]:
         raise ImportError(f'Cannot import object {repr(full_name)}.')
 
 
-def iter_import_objects(full_pattern: str) -> Iterator[Tuple[Any, str, str]]:
+def iter_import_objects(full_pattern: str, predicate: Optional[Callable] = None) \
+        -> Iterator[Tuple[Any, str, str]]:
     """
     Overview:
         Quickly dynamically import all objects with full name pattern.
 
     Arguments:
         - full_pattern (:obj:`str`): Full pattern of the object, attribute is supported as well.
+        - predicate (:obj:`Callable`): Predicate function, default is ``None`` means no limitation.
 
     Returns:
         - iter (:obj:`Iterator[Tuple[Any, str, str]]`): Iterator for all the imported objects.
     """
+    predicate = dynamic_call(predicate or (lambda: True))
+
     segments = full_pattern.split('.')
     length = len(segments)
     _errs = []
@@ -116,7 +98,9 @@ def iter_import_objects(full_pattern: str) -> Iterator[Tuple[Any, str, str]]:
             root, pos, ats = queue.get()
 
             if pos >= attrs_count:
-                yield root, module_name, '.'.join(ats)
+                obj_name = '.'.join(ats)
+                if predicate(root, module_name, obj_name):
+                    yield root, module_name, obj_name
             elif hasattr(root, attrs[pos]):
                 queue.put((getattr(root, attrs[pos]), pos + 1, ats + (attrs[pos],)))
                 exist = True
