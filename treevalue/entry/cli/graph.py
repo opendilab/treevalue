@@ -4,6 +4,7 @@ import os
 import pickle
 import shutil
 import tempfile
+import warnings
 from functools import partial
 from itertools import chain
 from string import Template
@@ -14,7 +15,7 @@ import dill
 from graphviz import Digraph
 
 from .base import CONTEXT_SETTINGS
-from .utils import _multiple_validator, _EXPECTED_TREE_ERRORS
+from .utils import _multiple_validator, _EXPECTED_TREE_ERRORS, _click_pending
 from ...tree import TreeValue, load, graphics
 from ...utils import dynamic_call, post_process
 
@@ -139,13 +140,16 @@ def _save_image(g: Digraph, path: str, fmt: str):
 _IMAGE_FMTS = {'svg', 'png'}
 
 
-def _save_graph(g: Digraph, path: str, fmt: Optional[str] = None):
-    path = os.path.abspath(path)
+def _save_graph_fmt_infer(path: str, fmt: Optional[str] = None):
     if not fmt:
         _basename, _extname = os.path.splitext(path)
         if _extname:
             fmt = _extname[1:]
+    return fmt if fmt else None
 
+
+def _save_graph(g: Digraph, path: str, fmt: str):
+    path = os.path.abspath(path)
     _saver = partial(_save_image, fmt=fmt) if fmt in _IMAGE_FMTS else _save_source_code
     return _saver(g, path)
 
@@ -195,8 +199,14 @@ def _graph_cli(cli: click.Group):
         )
 
         if print_to_stdout:
+            if outputs:
+                warnings.warn(RuntimeWarning('The output destinations in -o options '
+                                             'will be ignored due to the enablement of -O option.'))
             click.echo(g.source)
-        for output in outputs:
-            _save_graph(g, output, fmt)
+        else:
+            for output in outputs:
+                _fmt = _save_graph_fmt_infer(output, fmt)
+                with _click_pending(f'Exporting graph to {repr(output)} as format {repr(_fmt)} ... '):
+                    _save_graph(g, output, _fmt)
 
     return cli

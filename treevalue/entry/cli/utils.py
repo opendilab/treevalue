@@ -1,4 +1,6 @@
+from contextlib import contextmanager
 from functools import wraps
+from typing import Callable, Union
 
 import click
 
@@ -47,3 +49,28 @@ def _build_cli(base_cli, *wrappers):
     for wrapper in wrappers:
         _cli = wrapper(_cli or base_cli)
     return _cli
+
+
+@contextmanager
+def _click_pending(text: str, ok: Union[Callable, str] = 'OK', error: Union[Callable, str] = 'ERROR'):
+    if not hasattr(ok, '__call__'):
+        _okay_text = str(ok)
+        ok = lambda: _okay_text
+    ok = dynamic_call(ok)
+
+    if not hasattr(error, '__call__'):
+        _error_text = str(error)
+        error = lambda: _error_text
+    error = dynamic_call(error)
+
+    click.echo(text, nl=False)
+
+    try:
+        yield
+    except BaseException as err:
+        click.secho(click.style(error(err), fg='red'), nl=False)
+        raise err
+    else:
+        click.secho(click.style(ok(), fg='green'), nl=False)
+    finally:
+        click.echo('.', nl=True)
