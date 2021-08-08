@@ -8,14 +8,14 @@ import warnings
 from functools import partial
 from itertools import chain
 from string import Template
-from typing import Tuple, List, Optional, Iterator
+from typing import Tuple, List, Optional, Iterator, Union
 
 import click
 import dill
-from graphviz import Digraph
+from graphviz import Digraph, Graph
 
 from .base import CONTEXT_SETTINGS
-from .utils import _multiple_validator, _click_pending
+from .utils import _multiple_validator, _click_pending, _exception_validation, _wrap_validator
 from ...tree import TreeValue, load, graphics
 from ...utils import dynamic_call, quick_import_object, iter_import_objects
 
@@ -56,6 +56,19 @@ def _import_tree_from_binary(filename_pattern, title='') -> Iterator[Tuple[TreeV
 def validate_trees(value: str) -> Iterator[Tuple[TreeValue, str]]:
     _items = [item.strip() for item in value.split(':', maxsplit=3)]
     return chain(_import_tree_from_binary(*_items), _import_tree_from_package(*_items))
+
+
+@_exception_validation
+@_wrap_validator
+def validate_graph(value: str):
+    if value is None:
+        return value
+
+    _graph, _module, _name = quick_import_object(value)
+    if not isinstance(_graph, (Graph, Digraph)):
+        raise TypeError(f'Graphviz dot expected but {repr(type(_graph).__name__)} found.')
+    else:
+        return _graph
 
 
 @_multiple_validator
@@ -111,6 +124,8 @@ def _graph_cli(cli: click.Group):
                  context_settings=CONTEXT_SETTINGS)
     @click.option('-t', '--tree', 'trees', type=click.UNPROCESSED, callback=validate_trees,
                   multiple=True, help='Trees to be imported, such as \'-t my_tree.t1\'.')
+    @click.option('-g', '--graph', type=click.UNPROCESSED, callback=validate_graph,
+                  help='Graph to be exported, -t options will be ignored.')
     @click.option('-c', '--config', 'configs', type=click.UNPROCESSED, callback=validate_cfg,
                   multiple=True, help='External configuration when generating graph. '
                                       'Like \'-c bgcolor=#ffffff00\', will be displayed as '
@@ -129,26 +144,32 @@ def _graph_cli(cli: click.Group):
                                       '\'-d set\'.')
     @click.option('-D', '--duplicate_all', 'duplicate_all', is_flag=True, default=False,
                   help='Duplicate all the nodes of values with same memory id.', show_default=True)
-    def _graph(trees: List[Iterator[Tuple[TreeValue, str]]],
+    def _graph(trees: List[Iterator[Tuple[TreeValue, str]]], graph: Union[Graph, Digraph, None],
                configs: List[Tuple[str, str]], title: Optional[str],
                outputs: List[str], fmt: Optional[str], print_to_stdout: bool,
                dups: List[type], duplicate_all: bool):
-        _tree_mapping, _names, _name_set = {}, [], set()
-        for v, k in chain(*trees):
-            if k not in _name_set:
-                _name_set.add(k)
-                _names.append(k)
-            _tree_mapping[k] = v
+        if graph:
+            if trees or configs or title or dups or duplicate_all:
+                warnings.warn(RuntimeWarning('The imported trees and related options will be '
+                                             'ignored due to the enablement of -g option.'))
+            g = graph
+        else:
+            _tree_mapping, _names, _name_set = {}, [], set()
+            for v, k in chain(*trees):
+                if k not in _name_set:
+                    _name_set.add(k)
+                    _names.append(k)
+                _tree_mapping[k] = v
 
-        trees = [(_tree_mapping[k], k) for k in _names]
-        configs = {key: value for key, value in configs}
-        title = title or f'Graph with {len(trees)} tree(s) - {", ".join(tuple([k for _, k in trees]))}.'
+            trees = [(_tree_mapping[k], k) for k in _names]
+            configs = {key: value for key, value in configs}
+            title = title or f'Graph with {len(trees)} tree(s) - {", ".join(tuple([k for _, k in trees]))}.'
 
-        g = graphics(
-            *trees,
-            dup_value=True if duplicate_all else tuple(dups),
-            title=title, cfg=configs,
-        )
+            g = graphics(
+                *trees,
+                dup_value=True if duplicate_all else tuple(dups),
+                title=title, cfg=configs,
+            )
 
         if print_to_stdout:
             if outputs:

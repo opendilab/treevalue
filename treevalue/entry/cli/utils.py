@@ -7,13 +7,23 @@ import click
 from ...utils import dynamic_call
 
 
-def _multiple_validator(func):
+def _wrap_validator(func):
     func = dynamic_call(func)
+
+    @wraps(func)
+    def _new_func(ctx, param, value):
+        return func(ctx=ctx, param=param, value=value)
+
+    return _new_func
+
+
+def _multiple_validator(func):
+    func = _wrap_validator(func)
 
     @_exception_validation
     @wraps(func)
     def _new_func(ctx, param, value):
-        return [func(ctx=ctx, param=param, value=item) for item in value]
+        return [func(ctx, param, item) for item in value]
 
     return _new_func
 
