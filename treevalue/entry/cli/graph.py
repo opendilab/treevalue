@@ -40,15 +40,17 @@ def _import_tree_from_binary(filename_pattern, title='') -> Iterator[Tuple[TreeV
         _name_ext = _name_ext[1:] if _name_ext.startswith('.') else _name_ext
         with open(filename, 'rb') as file:
             try:
-                yield load(file), _title_template.safe_substitute(dict(
+                _tree = load(file)
+            except (pickle.UnpicklingError, dill.UnpicklingError, EOFError, IOError):
+                continue
+            else:
+                yield _tree, _title_template.safe_substitute(dict(
                     fullname=filename,
                     dirname=os.path.dirname(filename),
                     basename=os.path.basename(filename),
                     extname=_name_ext,
                     bodyname=_name_body,
                 ))
-            except (pickle.UnpicklingError, dill.UnpicklingError, EOFError, IOError):
-                continue
 
 
 @_err_validator((ImportError,))

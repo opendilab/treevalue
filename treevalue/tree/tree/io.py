@@ -74,7 +74,11 @@ def load(file, type_: Type[_TreeType] = TreeValue, decompress: Optional[Callable
     Returns:
         - tree (:obj:`_TreeType`): Tree value object.
     """
-    _compressed_data, _decompress_func_data = pickle.load(file)
+    try:
+        _compressed_data, _decompress_func_data = pickle.load(file)
+    except ValueError:
+        raise pickle.UnpicklingError('Invalid TreeValue binary data.')
+
     decompress_func = dill.loads(zlib.decompress(_decompress_func_data))
     if decompress_func == _NEED_DECOMPRESSION:
         if decompress:

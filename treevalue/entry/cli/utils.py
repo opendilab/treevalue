@@ -1,3 +1,6 @@
+import io
+import sys
+import traceback
 from contextlib import contextmanager
 from functools import wraps
 from typing import Callable, Union, Tuple
@@ -80,8 +83,15 @@ def _click_pending(text: str, ok: Union[Callable, str] = 'OK', error: Union[Call
         yield
     except BaseException as err:
         click.secho(click.style(error(err), fg='red'), nl=False)
+        click.secho(_print_exception(err), file=sys.stderr)
         raise err
     else:
         click.secho(click.style(ok(), fg='green'), nl=False)
     finally:
         click.echo('.', nl=True)
+
+
+def _print_exception(err: BaseException) -> str:
+    with io.StringIO() as fs:
+        traceback.print_exception(type(err), err, err.__backtrace__, file=fs)
+        return fs.getvalue()
