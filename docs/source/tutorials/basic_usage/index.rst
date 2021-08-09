@@ -19,11 +19,6 @@ The result should be
     :language: text
     :linenos:
 
-A simple tree value structure is created successfully with the structure below.
-
-.. image:: ../quick_start/create_a_tree.gv.svg
-    :align: center
-
 
 Edit the tree
 ------------------

@@ -16,12 +16,8 @@ The result should be
     :language: text
     :linenos:
 
-A simple tree value structure is created successfully with the structure below.
-
-.. image:: create_a_tree.gv.svg
-    :align: center
-
-Save the code above to ``demo.py``, and then input \
+Three simple treevalue structures are created. \
+Then save the code above to ``demo.py``, and then input \
 this shell command in your terminal.
 
 .. literalinclude:: display_this_tree.demo.sh
