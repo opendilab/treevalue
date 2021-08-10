@@ -147,6 +147,7 @@ class TestEntryCliGraph:
             assert os.path.exists('test_graph.svg')
             assert 10000 <= os.path.getsize('test_graph.svg') <= 10430
 
+        _p = os.path.abspath(os.curdir)
         with runner.isolated_filesystem():
             result = runner.invoke(
                 treevalue_cli,
@@ -157,6 +158,8 @@ class TestEntryCliGraph:
 
             assert result.exit_code == 0
             assert os.path.exists('test_graph.svg')
+            import shutil
+            shutil.copy('test_graph.svg', os.path.join(_p, 'test_graph.svg'))
             assert 10550 <= os.path.getsize('test_graph.svg') <= 10650
 
     def test_graph(self):

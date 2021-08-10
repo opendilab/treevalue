@@ -80,7 +80,7 @@ def iter_import_objects(full_pattern: str, predicate: Optional[Callable] = None)
     segments = full_pattern.split('.')
     length = len(segments)
     _errs = []
-    for i in reversed(range(length)):
+    for i in reversed(range(length + 1)):
         module_name = '.'.join(segments[:i])
         attrs = tuple(segments[i:])
         attrs_count = len(attrs)

@@ -56,7 +56,7 @@ def err_validator(types: Union[type, Tuple[type]]):
     return _decorator
 
 
-def _build_cli(base_cli, *wrappers):
+def _cli_builder(base_cli, *wrappers):
     _cli = None
     for wrapper in wrappers:
         _cli = wrapper(_cli or base_cli)

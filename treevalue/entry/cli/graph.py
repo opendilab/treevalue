@@ -1,64 +1,29 @@
 import codecs
-import glob
 import os
-import pickle
 import shutil
 import tempfile
 import warnings
+from collections import OrderedDict
 from functools import partial
 from itertools import chain
-from string import Template
 from typing import Tuple, List, Optional, Iterator, Union
 
 import click
-import dill
 from graphviz import Digraph, Graph
 
 from .base import CONTEXT_SETTINGS
+from .io import _import_trees_from_binary, _import_trees_from_package
 from .utils import multiple_validator, _click_pending, err_validator, validator
-from ...tree import TreeValue, load, graphics
-from ...utils import dynamic_call, quick_import_object, iter_import_objects
-
-
-@dynamic_call
-def _import_tree_from_package(obj_pattern, title=None) -> Iterator[Tuple[TreeValue, str]]:
-    _title_template = Template(title or '$name')
-    for _object, _module, _name in iter_import_objects(obj_pattern, lambda o: isinstance(o, TreeValue)):
-        _title = _title_template.safe_substitute(dict(module=_module, name=_name))
-        yield _object, _title
-
-
-@dynamic_call
-def _import_tree_from_binary(filename_pattern, title='') -> Iterator[Tuple[TreeValue, str]]:
-    _title_template = Template(title or '$bodyname')
-    for filename in glob.glob(filename_pattern):
-        if not os.path.exists(filename) or not os.path.isfile(filename) or not os.access(filename, os.R_OK):
-            continue
-
-        filename = os.path.abspath(filename)
-        _name_body, _name_ext = os.path.splitext(os.path.basename(filename))
-        _name_ext = _name_ext[1:] if _name_ext.startswith('.') else _name_ext
-        with open(filename, 'rb') as file:
-            try:
-                _tree = load(file)
-            except (pickle.UnpicklingError, dill.UnpicklingError, EOFError, IOError):
-                continue
-            else:
-                yield _tree, _title_template.safe_substitute(dict(
-                    fullname=filename,
-                    dirname=os.path.dirname(filename),
-                    basename=os.path.basename(filename),
-                    extname=_name_ext,
-                    bodyname=_name_body,
-                ))
+from ...tree import TreeValue, graphics
+from ...utils import quick_import_object
 
 
 @err_validator((ImportError,))
 @multiple_validator
 @validator
 def validate_trees(value: str) -> Iterator[Tuple[TreeValue, str]]:
-    _items = [item.strip() for item in value.split(':', maxsplit=3)]
-    return chain(_import_tree_from_binary(*_items), _import_tree_from_package(*_items))
+    _items = [item.strip() for item in value.split(':', maxsplit=2)]
+    return chain(_import_trees_from_binary(*_items), _import_trees_from_package(*_items))
 
 
 @err_validator((ImportError,))
@@ -154,14 +119,7 @@ def _graph_cli(cli: click.Group):
                                              'ignored due to the enablement of -g option.'))
             g = graph
         else:
-            _tree_mapping, _names, _name_set = {}, [], set()
-            for v, k in chain(*trees):
-                if k not in _name_set:
-                    _name_set.add(k)
-                    _names.append(k)
-                _tree_mapping[k] = v
-
-            trees = [(_tree_mapping[k], k) for k in _names]
+            trees = [(v, k) for k, v in OrderedDict([(k, v) for v, k in chain(*trees)]).items()]
             configs = {key: value for key, value in configs}
             title = title or f'Graph with {len(trees)} tree(s) - {", ".join(tuple([k for _, k in trees]))}.'
 
