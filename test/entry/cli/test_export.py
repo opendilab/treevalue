@@ -46,7 +46,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 150 < os.path.getsize('t1.btv') < 220
             assert os.path.exists('t2.btv')
-            assert 240 < os.path.getsize('t2.btv') < 280
+            assert 200 < os.path.getsize('t2.btv') < 280
             assert os.path.exists('t3.btv')
             assert 210 < os.path.getsize('t3.btv') < 250
 
@@ -63,7 +63,7 @@ class TestEntryCliExport:
             assert result.exit_code == 0
             assert not os.path.exists('t1.btv')
             assert os.path.exists('t2.btv')
-            assert 240 < os.path.getsize('t2.btv') < 280
+            assert 200 < os.path.getsize('t2.btv') < 280
             assert os.path.exists('t3.btv')
             assert 210 < os.path.getsize('t3.btv') < 250
 
@@ -82,7 +82,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 2120 < os.path.getsize('t1.btv') < 2160
             assert os.path.exists('t2.btv')
-            assert 2180 < os.path.getsize('t2.btv') < 2220
+            assert 2120 < os.path.getsize('t2.btv') < 2220
             assert os.path.exists('t3.btv')
             assert 4120 < os.path.getsize('t3.btv') < 4160
 
@@ -102,7 +102,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 2120 < os.path.getsize('t1.btv') < 2160
             assert os.path.exists('t2.btv')
-            assert 2180 < os.path.getsize('t2.btv') < 2220
+            assert 2120 < os.path.getsize('t2.btv') < 2220
             assert os.path.exists('t3.btv')
             assert 4120 < os.path.getsize('t3.btv') < 4160
 
@@ -123,7 +123,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 150 < os.path.getsize('t1.btv') < 220
             assert os.path.exists('t2.btv')
-            assert 200 < os.path.getsize('t2.btv') < 240
+            assert 160 < os.path.getsize('t2.btv') < 240
             assert os.path.exists('t3.btv')
             assert 160 < os.path.getsize('t3.btv') < 200
 
@@ -144,7 +144,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 260 < os.path.getsize('t1.btv') < 300
             assert os.path.exists('t2.btv')
-            assert 330 < os.path.getsize('t2.btv') < 370
+            assert 280 < os.path.getsize('t2.btv') < 370
             assert os.path.exists('t3.btv')
             assert 280 < os.path.getsize('t3.btv') < 320
 
@@ -169,7 +169,7 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('subpath/t1.btv')
-            assert 240 < os.path.getsize('subpath/t1.btv') < 280
+            assert 200 < os.path.getsize('subpath/t1.btv') < 280
             assert os.path.exists('subpath/t2.btv')
             assert 210 < os.path.getsize('subpath/t2.btv') < 250
             assert not os.path.exists('subpath/t3.btv')
@@ -192,7 +192,7 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('subpath/t1.btv')
-            assert 240 < os.path.getsize('subpath/t1.btv') < 280
+            assert 200 < os.path.getsize('subpath/t1.btv') < 280
             assert os.path.exists('subpath/t2.btv')
             assert 210 < os.path.getsize('subpath/t2.btv') < 250
             assert not os.path.exists('subpath/t3.btv')
@@ -213,7 +213,7 @@ class TestEntryCliExport:
             assert result.exit_code == 0
             assert not os.path.exists('subpath/t1.btv')
             assert os.path.exists('subpath/t2.btv')
-            assert 240 < os.path.getsize('subpath/t2.btv') < 280
+            assert 200 < os.path.getsize('subpath/t2.btv') < 280
             assert os.path.exists('subpath/t3.btv')
             assert 210 < os.path.getsize('subpath/t3.btv') < 250
 
@@ -233,7 +233,7 @@ class TestEntryCliExport:
             assert not os.path.exists('t1.btv')
             assert not os.path.exists('t2.btv')
             assert os.path.exists('ppp.btv')
-            assert 240 < os.path.getsize('ppp.btv') < 280
+            assert 200 < os.path.getsize('ppp.btv') < 280
             assert os.path.exists('t3.btv')
             assert 210 < os.path.getsize('t3.btv') < 250
 
