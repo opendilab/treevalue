@@ -37,7 +37,7 @@ def dump(t: _TreeType, file, compress=None):
             tuple of functions or module (``compress`` and ``decompress`` required).
     """
     compress_func, decompress_func = _extract_compress_and_decompress(compress)
-    dump_data = (compress_func(pickle.dumps(get_data_property(t).actual())),
+    dump_data = (compress_func(dill.dumps(get_data_property(t).actual())),
                  zlib.compress(dill.dumps(decompress_func)))
     pickle.dump(dump_data, file)
 
@@ -95,7 +95,7 @@ def load(file, type_: Type[_TreeType] = TreeValue, decompress: Optional[Callable
                           "because decompression function has already been provided.")
         decompress_func = decompress_func
 
-    return type_(pickle.loads(decompress_func(_compressed_data)))
+    return type_(dill.loads(decompress_func(_compressed_data)))
 
 
 def loads(data: Union[bytes, bytearray], type_: Optional[Type[_TreeType]] = TreeValue,

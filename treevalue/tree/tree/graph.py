@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Type, Callable, Union, Optional, Tuple
 
-from graphviz import Digraph
+from graphviz import Digraph, nohtml
 
 from .tree import TreeValue, get_data_property
 from ...utils import post_process, build_graph, dynamic_call, \
@@ -184,7 +184,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         node_id_gen=_node_tag,
         graph_title=title or "<untitled>",
         graph_cfg=cfg or {},
-        repr_gen=repr_gen or (lambda x: repr(x)),
+        repr_gen=repr_gen or (lambda x: nohtml(repr(x))),
         iter_gen=lambda n: iter(n) if isinstance(n, TreeValue) else None,
         node_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, is_root, root: {
             'fillcolor': _shape_color(root[2]),
