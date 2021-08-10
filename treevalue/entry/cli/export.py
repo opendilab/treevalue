@@ -22,14 +22,18 @@ def validate_trees(value: str):
     return _import_trees_from_package(*_items, default_template='$name.btv')
 
 
+_DEFAULT_COMPRESS_VALUE = 'zlib'
+
+
 @err_validator((ImportError,))
 @validator
-def validate_compress(value: str):
-    _tuple = tuple([quick_import_object(item)[0] for item in value.split(':', maxsplit=2)])
+def validate_compress(value: Optional[str] = None):
+    _tuple = tuple([quick_import_object(item)[0]
+                    for item in (value or _DEFAULT_COMPRESS_VALUE).split(':', maxsplit=2)])
     if len(_tuple) == 2:
-        return _tuple
+        return _tuple, value
     else:
-        return _tuple[0]
+        return _tuple[0], value
 
 
 def _export_cli(cli: click.Group):
@@ -42,15 +46,20 @@ def _export_cli(cli: click.Group):
     @click.option('-d', '--directory', 'directory',
                   type=click.types.Path(exists=True, file_okay=False, writable=True, resolve_path=True),
                   default=None, help='Directory to save the exported trees.')
-    @click.option('-c', '--compress', 'compress', type=click.UNPROCESSED, callback=validate_compress, default='zlib',
-                  help='Compress algorithm, can be a single lib name or a tuple.', show_default=True)
+    @click.option('-c', '--compress', 'compress', type=click.UNPROCESSED, callback=validate_compress,
+                  default=None, help='Compress algorithm, can be a single lib name or a tuple, default use \'zlib\'.')
     @click.option('-r', '--raw', 'no_compress', is_flag=True, default=False,
                   help='Disable all the compression, just export the raw data.', show_default=True)
     def _export(trees: List[Iterator[Tuple[TreeValue, str]]],
                 outputs: List[str], directory: Optional[str],
-                compress: Union[Tuple[Any, Any], Any], no_compress: bool):
+                compress: Tuple[Union[Tuple[Any, Any], Any], Optional[str]], no_compress: bool):
         trees = [(v, k) for k, v in OrderedDict([(k, v) for v, k in chain(*trees)]).items()]
         directory = os.path.abspath(directory or '.')
+
+        compress, _compress_value = compress
+        if _compress_value and no_compress:
+            warnings.warn(RuntimeWarning('Compression is disabled due to -r option, '
+                                         'compression assigned in -c option will be ignored.'))
         compress = None if no_compress else compress
 
         if 0 < len(outputs) < len(trees):
