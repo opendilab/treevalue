@@ -15,7 +15,7 @@ import dill
 from graphviz import Digraph, Graph
 
 from .base import CONTEXT_SETTINGS
-from .utils import _multiple_validator, _click_pending, _err_validator, _validator
+from .utils import multiple_validator, _click_pending, err_validator, validator
 from ...tree import TreeValue, load, graphics
 from ...utils import dynamic_call, quick_import_object, iter_import_objects
 
@@ -53,16 +53,16 @@ def _import_tree_from_binary(filename_pattern, title='') -> Iterator[Tuple[TreeV
                 ))
 
 
-@_err_validator((ImportError,))
-@_multiple_validator
-@_validator
+@err_validator((ImportError,))
+@multiple_validator
+@validator
 def validate_trees(value: str) -> Iterator[Tuple[TreeValue, str]]:
     _items = [item.strip() for item in value.split(':', maxsplit=3)]
     return chain(_import_tree_from_binary(*_items), _import_tree_from_package(*_items))
 
 
-@_err_validator((ImportError,))
-@_validator
+@err_validator((ImportError,))
+@validator
 def validate_graph(value: str):
     if value is None:
         return value
@@ -71,8 +71,8 @@ def validate_graph(value: str):
     return _graph
 
 
-@_multiple_validator
-@_validator
+@multiple_validator
+@validator
 def validate_cfg(value: str) -> Tuple[str, str]:
     _items = value.split('=', maxsplit=2)
     if len(_items) < 2:
@@ -82,9 +82,9 @@ def validate_cfg(value: str) -> Tuple[str, str]:
     return key, value
 
 
-@_err_validator((ImportError,))
-@_multiple_validator
-@_validator
+@err_validator((ImportError,))
+@multiple_validator
+@validator
 def validate_duplicate_types(value: str):
     _it, _, _ = quick_import_object(value, lambda t: isinstance(t, type))
     return _it

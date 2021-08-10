@@ -7,6 +7,7 @@ treevalue.utils
     clazz
     color
     enum
+    exception
     final
     func
     imports

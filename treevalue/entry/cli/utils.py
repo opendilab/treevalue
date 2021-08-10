@@ -1,16 +1,14 @@
-import io
 import sys
-import traceback
 from contextlib import contextmanager
 from functools import wraps
 from typing import Callable, Union, Tuple
 
 import click
 
-from ...utils import dynamic_call
+from ...utils import dynamic_call, str_traceback
 
 
-def _validator(func):
+def validator(func):
     func = dynamic_call(func)
 
     @wraps(func)
@@ -20,8 +18,8 @@ def _validator(func):
     return _new_func
 
 
-def _multiple_validator(func):
-    func = _validator(func)
+def multiple_validator(func):
+    func = validator(func)
 
     @wraps(func)
     def _new_func(ctx, param, value):
@@ -38,9 +36,9 @@ _EXPECTED_TREE_ERRORS = (
 _EXCEPTION_WRAPPED = '__exception_wrapped__'
 
 
-def _err_validator(types: Union[type, Tuple[type]]):
+def err_validator(types: Union[type, Tuple[type]]):
     def _decorator(func):
-        func = _validator(func)
+        func = validator(func)
 
         @wraps(func)
         def _new_func(ctx, param, value):
@@ -83,15 +81,9 @@ def _click_pending(text: str, ok: Union[Callable, str] = 'OK', error: Union[Call
         yield
     except BaseException as err:
         click.secho(click.style(error(err), fg='red'), nl=False)
-        click.secho(_print_exception(err), file=sys.stderr)
+        click.secho(str_traceback(err), file=sys.stderr)
         raise err
     else:
         click.secho(click.style(ok(), fg='green'), nl=False)
     finally:
         click.echo('.', nl=True)
-
-
-def _print_exception(err: BaseException) -> str:
-    with io.StringIO() as fs:
-        traceback.print_exception(type(err), err, err.__backtrace__, file=fs)
-        return fs.getvalue()
