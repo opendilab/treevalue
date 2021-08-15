@@ -4,9 +4,11 @@ from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable,
 
 from graphviz import Digraph
 
-from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
+from ..func import method_treelize, MISSING_NOT_ALLOW, TreeMode, func_treelize
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, \
     NO_RISE_TEMPLATE, graphics
+from ..tree import rise as rise_func
+from ..tree import subside as subside_func
 from ..tree.tree import get_data_property
 from ...utils import dynamic_call, raising
 
@@ -284,7 +286,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> # FastTreeValue 1 will be FastTreeValue({'x': [1, 2], 'y': [5, 6]})
                 >>> # FastTreeValue 2 will be FastTreeValue({'x': [2, 3], 'y': [7, 8]})
             """
-            return rise(self, dict_, list_, tuple_, template)
+            return rise_func(self, dict_, list_, tuple_, template)
 
         @_decorate_method
         def graph(self, root: Optional[str] = None, title: Optional[str] = None,
@@ -323,6 +325,47 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 (self, root), title=title, cfg=cfg, dup_value=dup_value,
                 repr_gen=repr_gen, node_cfg_gen=node_cfg_gen, edge_cfg_gen=edge_cfg_gen,
             )
+
+        @classmethod
+        @_decorate_method
+        def func(cls, mode: Union[str, TreeMode] = 'strict', inherit: bool = True,
+                 missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                 subside: Union[Mapping, bool, None] = None,
+                 rise: Union[Mapping, bool, None] = None):
+            """
+            Overview:
+                Wrap a common function to tree-supported function based on this type.
+
+            Arguments:
+                - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping \
+                    (string or TreeMode both okay), default is `strict`.
+                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+                - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+                    default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+                - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+                    and subside configuration, default is `None` which means do not use subside. \
+                    When subside is `True`, it will use all the default arguments in `subside` function.
+                - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+                    and rise configuration, default is `None` which means do not use rise. \
+                    When rise is `True`, it will use all the default arguments in `rise` function. \
+                    (Not recommend to use auto mode when your return structure is not so strict.)
+
+            Returns:
+                - decorator (:obj:`Callable`): Wrapper for tree-supported function.
+
+            Example:
+                >>> from treevalue import FastTreeValue
+                >>>
+                >>> @FastTreeValue.func()
+                >>> def ssum(a, b):
+                >>>     return a + b  # the a and b will be integers, not TreeValue
+                >>>
+                >>> t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
+                >>> ssum(1, 2)    # 3
+                >>> ssum(t1, t2)  # FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
+            """
+            return func_treelize(mode, cls, inherit, missing, subside, rise)
 
         @classmethod
         @_decorate_method
@@ -392,8 +435,8 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> #    'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
                 >>> #}), all structures above the tree values are subsided to the bottom of the tree.
             """
-            return subside(value, dict_, list_, tuple_,
-                           return_type=return_type or cls, **kwargs)
+            return subside_func(value, dict_, list_, tuple_,
+                                return_type=return_type or cls, **kwargs)
 
         @classmethod
         @_decorate_method

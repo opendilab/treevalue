@@ -541,4 +541,14 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             )
             assert 4700 <= len(graph_6.source) <= 4760
 
+        def test_func(self):
+            t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            t2 = tree_value_clazz({'a': 11, 'b': 20, 'x': {'c': 33, 'd': 48}})
+
+            @tree_value_clazz.func()
+            def ssum(x, y):
+                return x + y
+
+            assert ssum(t1, t2) == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
+
     return _TestClass

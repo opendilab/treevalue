@@ -45,7 +45,7 @@ def _any_getattr(value):
     return _AnyClass()
 
 
-_ClassType = TypeVar("_ClassType", bound=TreeValue)
+TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
 
 #: Default value of the ``missing`` arguments of ``func_treelize``, ``method_treelize`` \
 #: and ``classmethod_treelize``, which means missing is not allowed \
@@ -54,7 +54,7 @@ MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
 def func_treelize(mode: Union[str, TreeMode] = 'strict',
-                  return_type: Optional[Type[_ClassType]] = TreeValue, inherit: bool = True,
+                  return_type: Optional[Type[TreeClassType_]] = TreeValue, inherit: bool = True,
                   missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                   subside: Union[Mapping, bool, None] = None,
                   rise: Union[Mapping, bool, None] = None):
@@ -64,7 +64,7 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
 
     Arguments:
         - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
-        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
@@ -127,7 +127,7 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
             ))
 
     def _decorator(func):
-        def _recursion(*args, **kwargs) -> Optional[_ClassType]:
+        def _recursion(*args, **kwargs) -> Optional[TreeClassType_]:
             if all([not isinstance(item, TreeValue) for item in args]) \
                     and all([not isinstance(value, TreeValue) for value in kwargs.values()]):
                 return func(*args, **kwargs)
@@ -180,7 +180,7 @@ def _tree_check(clazz, allow_none=False):
         ))
 
 
-def _class_config(return_type: Optional[Type[_ClassType]] = None,
+def _class_config(return_type: Optional[Type[TreeClassType_]] = None,
                   allow_none_return_type: bool = True,
                   clazz_must_be_tree_value: bool = True):
     _tree_check(return_type, allow_none=allow_none_return_type)
@@ -199,13 +199,13 @@ def _class_config(return_type: Optional[Type[_ClassType]] = None,
     return _decorator
 
 
-def tree_class(return_type: Optional[Type[_ClassType]] = None):
+def tree_class(return_type: Optional[Type[TreeClassType_]] = None):
     """
     Overview:
         Wrap tree configs for ``TreeValue`` class.
 
     Arguments:
-        - return_type (:obj:`Optional[Type[_ClassType]]`): Default return type of current class, \
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Default return type of current class, \
             default is ``None`` which means use the class itself.
 
     Returns:
@@ -232,7 +232,7 @@ def _auto_detect_type(clazz: type):
 
 
 def method_treelize(mode: Union[str, TreeMode] = 'strict',
-                    return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
+                    return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
                     missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                     subside: Union[Mapping, bool, None] = None,
                     rise: Union[Mapping, bool, None] = None, self_copy: bool = False):
@@ -247,7 +247,7 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
 
     Arguments:
         - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
-        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
@@ -295,13 +295,13 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
     return _decorator
 
 
-def utils_class(return_type: Type[_ClassType]):
+def utils_class(return_type: Type[TreeClassType_]):
     """
     Overview:
         Wrap tree configs for utils class.
 
     Arguments:
-        - return_type (:obj:`Optional[Type[_ClassType]]`): Default return type of current class.
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Default return type of current class.
 
     Returns:
         - decorator (:obj:`Callable`): A class decorator.
@@ -327,7 +327,7 @@ def utils_class(return_type: Type[_ClassType]):
 
 
 def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
-                         return_type: Optional[Type[_ClassType]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
+                         return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
                          missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                          subside: Union[Mapping, bool, None] = None,
                          rise: Union[Mapping, bool, None] = None):
@@ -341,7 +341,7 @@ def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
 
     Arguments:
         - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
-        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
