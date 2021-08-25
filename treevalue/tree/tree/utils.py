@@ -396,14 +396,25 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
                     partial(lambda k, g, x: g(x[k]), key, getter)
                     for key in keyset for getter in getter_lists[key]], _new_func
 
-        elif (list_ and issubclass(base_class, list)) \
-                or (tuple_ and issubclass(base_class, tuple)):
+        elif (list_ and issubclass(base_class, list)) or \
+                (tuple_ and issubclass(base_class, tuple)):
+            if issubclass(base_class, list):
+                if tpl is not NO_RISE_TEMPLATE:
+                    if len(tpl) > 1:
+                        raise ValueError("Length of list template should be no more than 1, "
+                                         f"but {len(tpl)} found.")
+                    _inner_tpl = tpl[0] if len(tpl) > 0 else None
+                else:
+                    _inner_tpl = NO_RISE_TEMPLATE
+                _inner_tpl_getter = lambda index: _inner_tpl
+            else:
+                _inner_tpl_getter = lambda index: (NO_RISE_TEMPLATE if tpl is NO_RISE_TEMPLATE else tpl[index])
+
             lengths = [len(item) for item in args]
             if len(set(lengths)) == 1:
                 length = list(lengths)[0]
                 results = [_get_common_structure_getter(
-                    *[item[i] for item in args],
-                    tpl=NO_RISE_TEMPLATE if tpl is NO_RISE_TEMPLATE else tpl[i]
+                    *[item[i] for item in args], tpl=_inner_tpl_getter(i)
                 ) for i in range(length)]
                 getter_lists = [getters for _, getters, _ in results]
 
@@ -434,7 +445,7 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     meta_value_count, meta_value_getters, value_builder = _get_common_structure_getter(*value_list, tpl=template)
     assert meta_value_count == len(meta_value_getters)
 
-    return value_builder(*[tree_builder(*[getter_(item_) for item_ in value_list]) for getter_ in meta_value_getters])
+    return value_builder(*map(lambda getter_: tree_builder(*map(getter_, value_list)), meta_value_getters))
 
 
 def reduce_(tree: _TreeValue, func):
