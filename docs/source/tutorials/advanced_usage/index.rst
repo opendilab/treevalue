@@ -914,6 +914,83 @@ For further informaon of function ``typetrans``, \
 take a look at :ref:`apidoc_tree_tree_typetrans`.
 
 
+IO Utilities
+-----------------------
+
+Simple Serialize and Deserialize
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this version, ``pickle.dumps`` and ``pickle.loads`` operations \
+are supported, just like the code below.
+
+.. literalinclude:: pickle_demo_1.demo.py
+    :language: python
+
+The output is
+
+.. literalinclude:: pickle_demo_1.demo.py.txt
+    :language: text
+
+
+Advanced Dump and Load
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this project, we implemented our ``load`` and ``dump`` \
+function which can be used like this
+
+.. literalinclude:: dump_demo_1.demo.py
+    :language: python
+
+The output should be
+
+.. literalinclude:: dump_demo_1.demo.py.txt
+    :language: text
+
+.. note::
+    In this ``load`` (``loads`` function is the same), \
+    you must assign a ``TreeValue`` class by the ``type_`` \
+    argument because the dumped data will not \
+    save the type of trees. When the type is not assigned, the \
+    default class will be simply ``TreeValue``.
+
+
+Also, ``dumps`` function and ``loads`` function are provided \
+to deal with binary data.
+
+.. literalinclude:: dump_demo_2.demo.py
+    :language: python
+
+The output should be
+
+.. literalinclude:: dump_demo_2.demo.py.txt
+    :language: text
+
+.. note::
+
+    The main differences between our ``dump`` / ``load`` and \
+    ``pickle`` 's ``dump`` / ``load`` are:
+
+    * Ours are based on \
+      `dill <https://github.com/uqfoundation/dill>`_ project, \
+      it can serialize and deserialize more types than \
+      native ``pickle``, such as functions and classes.
+    * Compression and decompression can be defined when dumping, \
+      and when the compressed binary data is going to be loaded, \
+      decompression function is not necessary, the decompression \
+      can be carried on with the function defined in dumping \
+      process.
+
+    Here is an example:
+
+    .. literalinclude:: dump_compression_demo.demo.py
+        :language: python
+
+    The output should be
+
+    .. literalinclude:: dump_compression_demo.demo.py.txt
+        :language: text
+
+
 Object Oriented Usage
 ----------------------------
 

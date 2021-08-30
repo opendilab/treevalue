@@ -299,6 +299,14 @@ class TreeValue:
 
         Arguments:
             - tree (:obj:`Tree`): Deserialize tree.
+
+        Examples:
+            >>> import pickle
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+            >>> bin_ = pickle.dumps(t)  # dump it to binary
+            >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
         setattr(self, _DATA_PROPERTY, tree)
 
@@ -306,5 +314,13 @@ class TreeValue:
         """
         Overview:
             Serialize operation, can support `pickle.dumps`.
+
+        Examples:
+            >>> import pickle
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+            >>> bin_ = pickle.dumps(t)  # dump it to binary
+            >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
         return getattr(self, _DATA_PROPERTY).actual()
