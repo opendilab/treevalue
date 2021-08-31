@@ -63,6 +63,10 @@ The result should be
     └── 'd' --> 4
 ```
 
+And `t` is structure should be like this
+
+![t_graph](https://opendilab.github.io/treevalue/main/_images/simple_demo.dat.svg)
+
 For more quick start explanation and further usage, take a look at:
 
 * [Quick Start](https://opendilab.github.io/treevalue/main/tutorials/quick_start/index.html)
