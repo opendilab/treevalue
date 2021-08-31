@@ -1093,7 +1093,10 @@ code.
     :language: python
     :linenos:
 
-The generated code and graph should be like below
+The generated code and graph should be like below ( \
+name of the image file should be ``graphics.dat.gv.svg``, \
+name of the graphviz source code file should be \
+``graphics.dat.gv`` ).
 
 .. literalinclude:: ../../api_doc/tree/graphics.dat.gv
     :language: text
