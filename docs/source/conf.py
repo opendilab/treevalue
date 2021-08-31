@@ -28,6 +28,7 @@ from packaging import version as version_
 # Get current location
 _DOC_PATH = os.path.dirname(os.path.abspath(__file__))
 _PROJ_PATH = os.path.abspath(os.path.join(_DOC_PATH, '..', '..'))
+_LIBS_PATH = os.path.join(_DOC_PATH, '_libs')
 _SHIMS_PATH = os.path.join(_DOC_PATH, '_shims')
 os.chdir(_PROJ_PATH)
 
@@ -41,8 +42,8 @@ for modname in modnames:
 if not os.environ.get("NO_CONTENTS_BUILD"):
     _env = dict(os.environ)
     _env.update(dict(
-        PYTHONPATH=_PROJ_PATH,
-        PATH=_SHIMS_PATH + ':' + os.environ.get('PATH', ''),
+        PYTHONPATH=':'.join([_PROJ_PATH, _LIBS_PATH]),
+        PATH=':'.join([_SHIMS_PATH, os.environ.get('PATH', '')]),
     ))
 
     pip_cmd = (where.first('pip'), 'install', '-r', os.path.join(_PROJ_PATH, 'requirements.txt'))
