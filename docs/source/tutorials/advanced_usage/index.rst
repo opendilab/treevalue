@@ -1032,6 +1032,24 @@ The result should be like below.
     :language: text
     :linenos:
 
+.. note::
+
+    Actually, self-calculation method can be defined like the \
+    code below
+
+    .. literalinclude:: diy_class_self_demo.demo.py
+        :language: python
+
+    The result should be
+
+    .. literalinclude:: diy_class_self_demo.demo.py.txt
+        :language: text
+
+    We can see that the calculation result will replace the \
+    ``self`` object, without changes of the address. Just \
+    enable the ``self_copy`` option is okay.
+
+
 For further information of function ``method_treelize`` \
 and ``classmethod_treelize``, just take a look at:
 
