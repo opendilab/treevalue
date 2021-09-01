@@ -1057,6 +1057,78 @@ and ``classmethod_treelize``, just take a look at:
 * :ref:`apidoc_tree_func_classmethodtreelize`
 
 
+More Flexible Ways to DIY Class
+---------------------------------
+
+When you implement ``TreeValue`` class like the section above \
+(take a look at here :ref:`tutorials_advancedusage_diy`), \
+you have to define your own methods and operators one by one, \
+because in class ``TreeValue``, only the minimum necessary \
+methods and operators are provided. But when you use \
+``FastTreeValue`` class, operators like ``+`` and methods like \
+``map`` can be used directly. Let's see how ``FastTreeValue`` \
+is defined in source code:
+
+.. literalinclude:: diy_class_x_tv.demo.py.txt
+    :language: python
+    :linenos:
+
+The definition is quite simple, just inherit from the \
+return value of function ``general_tree_value``, and most of \
+the operators and methods can be used.
+
+Like the ``FastTreeValue`` class, we can define our ``TreeValue`` \
+class like the code below:
+
+.. literalinclude:: diy_class_x_demo_1.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+
+In some cases, you can update the behaviours of some \
+operator or methods, like the code below
+
+.. literalinclude:: diy_class_x_demo_2.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_2.demo.py.txt
+    :language: text
+    :linenos:
+
+More than this, you can do the following things \
+in your DIY ``TreeValue`` class based on \
+function ``general_tree_value``:
+
+- change treelize arguments (like the example code above)
+- disable some operators and methods
+- change behaviour of some operators and methods
+
+Here is another complex demo code
+
+.. literalinclude:: diy_class_x_demo_3.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_3.demo.py.txt
+    :language: text
+    :linenos:
+
+For more details about ``general_tree_value``, \
+take a look at :ref:`apidoc_tree_general_generaltreevalue` \
+and its source code to find out all the implemented \
+operators and methods.
+
 
 DIY TreeValue Utility Class
 -------------------------------
