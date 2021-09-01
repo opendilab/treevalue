@@ -343,5 +343,71 @@ source code file ``shared_nodes.dat.gv``.
 Reuse the Value Nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+In some cases, the values in the trees' nodes is the same object \
+(using the same memory id). So it's better to put them together \
+in the dumped graph.
+
+For example, in the python code file ``share_demo.py``
+
+.. literalinclude:: share_demo.py
+    :language: python
+    :linenos:
+
+You can run the following command
+
+.. literalinclude:: graph_demo_8.demo.sh
+    :language: shell
+    :linenos:
+
+The dumped graph ``no_shared_values.dat.svg`` should be like \
+this, all the value nodes are separated in the default \
+options.
+
+.. image:: no_shared_values.dat.svg
+    :align: center
+
+We can solve this problem by adding ``-D`` option in the command, \
+which means duplicate all the value nodes.
+
+.. literalinclude:: graph_demo_9.demo.sh
+    :language: shell
+    :linenos:
+
+In the dumped graph ``shared_all_values.dat.svg``, all the value \
+nodes with the same id are put together.
+
+.. image:: shared_all_values.dat.svg
+    :align: center
+
+.. note::
+    When ``-D`` is used, all the values in leaf node with the \
+    same id will share exactly one leaf node in the dumped \
+    graph.
+
+    But actually in python, most of the basic data \
+    types are immutable, which means all the ``1`` in python \
+    code are actually the same object, for their ids are \
+    the same. So in the image ``shared_all_values.dat.svg``, \
+    even the leaf node ``1`` are shared.
+
+    This phenomenon may reduce the intuitiveness of the \
+    image in many cases. Please notice this when you are \
+    deciding to use ``-D`` option.
+
+Because of the problem mentioned in the note above, in most of \
+the cases, it's a better idea to use ``-d`` option to assign \
+which types should be duplicated and which should not. Like the \
+example below.
+
+.. literalinclude:: graph_demo_10.demo.sh
+    :language: shell
+    :linenos:
+
+The dumped graph ``shared_values.dat.svg`` should be like this, \
+the ``1`` is not duplicated any more, but ``list`` \
+and ``np.ndarray`` will be duplicated.
+
+.. image:: shared_values.dat.svg
+    :align: center
 
 
