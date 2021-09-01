@@ -154,11 +154,15 @@ take a look at:
 * `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.
 
 
+.. _apidoc_tree_tree_dump:
+
 dump
 -------------
 
 .. autofunction:: treevalue.tree.tree.io.dump
 
+
+.. _apidoc_tree_tree_dumps:
 
 dumps
 -------------
@@ -166,11 +170,15 @@ dumps
 .. autofunction:: treevalue.tree.tree.io.dumps
 
 
+.. _apidoc_tree_tree_load:
+
 load
 -------------
 
 .. autofunction:: treevalue.tree.tree.io.load
 
+
+.. _apidoc_tree_tree_loads:
 
 loads
 -------------
