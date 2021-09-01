@@ -1,4 +1,4 @@
-Cli Usage
+CLI Usage
 ======================
 
 From treevalue version ``0.1.0``, simple CLI (Command \
@@ -218,5 +218,130 @@ binary trees can be imported and then drawn to graphs.
     * API Documentation of :ref:`apidoc_tree_tree_load`.
     * API Documentation of :ref:`apidoc_tree_tree_loads`.
     * API Documentation of :ref:`apidoc_tree_tree_graphics`.
+
+Draw One Graph For One Tree
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before drawing the first graph, we prepare the ``tree_demo.py`` \
+mentioned in :ref:`cli_usage_export`.
+
+.. literalinclude:: tree_demo.py
+    :language: python
+    :linenos:
+
+We can draw the graph of ``t1`` with the following command
+
+.. literalinclude:: graph_demo_1.demo.sh
+    :language: shell
+    :linenos:
+
+The dumped graph ``only_t1.dat.svg`` should be like this
+
+.. image:: only_t1.dat.svg
+    :align: center
+
+
+Draw One Graph For Multiple Trees
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Actually we can put several trees into one graph, just like \
+the following command
+
+.. literalinclude:: graph_demo_2.demo.sh
+    :language: shell
+    :linenos:
+
+The dumped graph ``t1_t2_t3.dat.svg`` should contains 3 trees, \
+like this
+
+.. image:: t1_t2_t3.dat.svg
+    :align: center
+
+Sometime, the trees will share some common nodes (with the same \
+``Tree`` object id), this relation will also be displayed in \
+graph. In another python script ``node_share_demo.py``
+
+.. literalinclude:: node_share_demo.py
+    :language: python
+    :linenos:
+
+The dumped graph ``shared_nodes.dat.svg`` should be like
+
+.. image:: shared_nodes.dat.svg
+    :align: center
+
+The arrow from ``nt3`` named ``first`` is pointed to ``nt1``, \
+the arrow named ``another`` is pointed to ``nt1.x``, and so on.
+
+
+Graph with Configurations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometime we need to assign the title of the dumped graph, \
+or you may think that the white background look prominent in \
+the grey page background. So you can dump the graph like this
+
+.. literalinclude:: graph_demo_4.demo.sh
+    :language: shell
+    :linenos:
+
+The dumped graph ``shared_nodes_with_cfg.dat.svg`` should be \
+like this
+
+.. image:: shared_nodes_with_cfg.dat.svg
+    :align: center
+
+We can see the title and the background color is changed \
+because of the ``-T`` and ``-c`` command. The transparent \
+background looks better than the ``shared_nodes.dat.svg`` \
+in the grey page background.
+
+
+Graph of Different Formats
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you do not need svg format, you can dump it to png format \
+like this
+
+.. literalinclude:: graph_demo_5.demo.sh
+    :language: python
+    :linenos:
+
+The dumped graph ``shared_nodes.dat.png`` should be like this, \
+its format is ``png``.
+
+.. image:: shared_nodes.dat.png
+    :align: center
+
+Besides, if the graphviz code (``gv`` format) is just all \
+what you need, you can dump the ``gv`` source code with the \
+following command line.
+
+.. literalinclude:: graph_demo_6.demo.sh
+    :language: python
+    :linenos:
+
+The dumped source code ``shared_nodes.dat.gv`` should be like \
+this
+
+.. literalinclude:: shared_nodes.dat.gv
+    :language: graphviz
+    :linenos:
+
+Or if you need to put it to the ``stdout``, you can do like this
+
+.. literalinclude:: graph_demo_7.demo.sh
+    :language: python
+    :linenos:
+
+The output in ``stdout`` should almost the same like the \
+source code file ``shared_nodes.dat.gv``.
+
+.. note::
+    When ``-O`` option is used, the ``-o`` will be ignored.
+
+Reuse the Value Nodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 
