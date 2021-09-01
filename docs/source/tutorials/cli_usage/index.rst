@@ -56,8 +56,9 @@ First, let's see what is in ``treevalue export`` sub command.
     :linenos:
 
 In this sub command, we can export a tree value object to \
-binary file with ``dump`` / ``dumps`` function define in \
-module ``treevalue.tree.io``.
+binary file with :ref:`apidoc_tree_tree_dump`, \
+:ref:`apidoc_tree_tree_dumps` function define in \
+module :doc:`../../api_doc/tree/tree`.
 
 .. note::
 
@@ -203,4 +204,19 @@ First, let's see what is in ``treevalue graph`` sub command.
 .. literalinclude:: graph_help_demo.demo.sh.txt
     :language: text
     :linenos:
+
+In this sub command, we can draw a tree value object to \
+a graph formatted ``png``, ``svg`` or just ``gv`` code \
+with :ref:`apidoc_tree_tree_graphics` function define in \
+module :doc:`../../api_doc/tree/tree`. Also, the dumped \
+binary trees can be imported and then drawn to graphs.
+
+.. note::
+
+    For further information, take a look at:
+
+    * API Documentation of :ref:`apidoc_tree_tree_load`.
+    * API Documentation of :ref:`apidoc_tree_tree_loads`.
+    * API Documentation of :ref:`apidoc_tree_tree_graphics`.
+
 
