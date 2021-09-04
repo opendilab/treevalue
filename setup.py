@@ -36,6 +36,7 @@ setup(
     packages=find_packages(
         include=(_package_name, "%s.*" % _package_name)
     ),
+    description=meta['__DESCRIPTION__'],
     long_description=readme,
     long_description_content_type='text/markdown',
     author=meta['__AUTHOR__'],
@@ -55,11 +56,15 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
+    entry_points={
+        'console_scripts': [
+            'treevalue=treevalue.entry.cli:treevalue_cli'
+        ]
+    },
 )

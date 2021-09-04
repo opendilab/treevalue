@@ -7,7 +7,7 @@ TreeValue
 ---------------
 
 .. autoclass:: treevalue.tree.tree.tree.TreeValue
-    :members: __init__, __getattr__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__
+    :members: __init__, __getattr__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__
 
 
 .. _apidoc_tree_tree_jsonify:
@@ -101,8 +101,87 @@ reduce\_
 NO_RISE_TEMPLATE
 --------------------
 
-.. data:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
+.. autodata:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
+    :annotation:
 
-    Means no template is given to the rise function, \
-    and the decorated function will automatically try \
-    to match the format patterns as template.
+
+.. _apidoc_tree_tree_graphics:
+
+graphics
+----------------
+
+.. autofunction:: treevalue.tree.tree.graph.graphics
+
+Here is an example of ``graphics`` function. The source code is
+
+.. literalinclude:: graphics.demo.py
+    :language: python
+    :linenos:
+
+The generated graphviz source code should be
+
+.. literalinclude:: graphics.dat.gv
+    :language: text
+    :linenos:
+
+The graph should be
+
+.. image:: graphics.dat.gv.svg
+    :align: center
+
+Also, ``graphics`` function can support value duplication. For if \
+the value nodes are using the same object, they will be displayed \
+in the same node of the generated graph, such as the source code
+below
+
+.. literalinclude:: graphics_dup_value.demo.py
+    :language: python
+    :linenos:
+
+The graph of the case with ``dup_value`` should be
+
+.. image:: graphics_dup_value.dat.gv.svg
+    :align: center
+
+The return value's type of function ``graphics`` is \
+class ``graphviz.dot.Digraph``, from the opensource \
+library ``graphviz``, for further information of \
+this project and ``graphviz.dot.Digraph``'s usage, \
+take a look at:
+
+* `Official site of Graphviz <https://graphviz.org/>`_.
+* `User Guide of Graphviz <https://graphviz.readthedocs.io/en/stable/manual.html#formats>`_.
+* `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.
+
+
+.. _apidoc_tree_tree_dump:
+
+dump
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.dump
+
+
+.. _apidoc_tree_tree_dumps:
+
+dumps
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.dumps
+
+
+.. _apidoc_tree_tree_load:
+
+load
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.load
+
+
+.. _apidoc_tree_tree_loads:
+
+loads
+-------------
+
+.. autofunction:: treevalue.tree.tree.io.loads
+

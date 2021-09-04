@@ -914,6 +914,83 @@ For further informaon of function ``typetrans``, \
 take a look at :ref:`apidoc_tree_tree_typetrans`.
 
 
+IO Utilities
+-----------------------
+
+Simple Serialize and Deserialize
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this version, ``pickle.dumps`` and ``pickle.loads`` operations \
+are supported, just like the code below.
+
+.. literalinclude:: pickle_demo_1.demo.py
+    :language: python
+
+The output is
+
+.. literalinclude:: pickle_demo_1.demo.py.txt
+    :language: text
+
+
+Advanced Dump and Load
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this project, we implemented our ``load`` and ``dump`` \
+function which can be used like this
+
+.. literalinclude:: dump_demo_1.demo.py
+    :language: python
+
+The output should be
+
+.. literalinclude:: dump_demo_1.demo.py.txt
+    :language: text
+
+.. note::
+    In this ``load`` (``loads`` function is the same), \
+    you must assign a ``TreeValue`` class by the ``type_`` \
+    argument because the dumped data will not \
+    save the type of trees. When the type is not assigned, the \
+    default class will be simply ``TreeValue``.
+
+
+Also, ``dumps`` function and ``loads`` function are provided \
+to deal with binary data.
+
+.. literalinclude:: dump_demo_2.demo.py
+    :language: python
+
+The output should be
+
+.. literalinclude:: dump_demo_2.demo.py.txt
+    :language: text
+
+.. note::
+
+    The main differences between our ``dump`` / ``load`` and \
+    ``pickle`` 's ``dump`` / ``load`` are:
+
+    * Ours are based on \
+      `dill <https://github.com/uqfoundation/dill>`_ project, \
+      it can serialize and deserialize more types than \
+      native ``pickle``, such as functions and classes.
+    * Compression and decompression can be defined when dumping, \
+      and when the compressed binary data is going to be loaded, \
+      decompression function is not necessary, the decompression \
+      can be carried on with the function defined in dumping \
+      process.
+
+    Here is an example:
+
+    .. literalinclude:: dump_compression_demo.demo.py
+        :language: python
+
+    The output should be
+
+    .. literalinclude:: dump_compression_demo.demo.py.txt
+        :language: text
+
+
 Object Oriented Usage
 ----------------------------
 
@@ -955,12 +1032,102 @@ The result should be like below.
     :language: text
     :linenos:
 
+.. note::
+
+    Actually, self-calculation method can be defined like the \
+    code below
+
+    .. literalinclude:: diy_class_self_demo.demo.py
+        :language: python
+
+    The result should be
+
+    .. literalinclude:: diy_class_self_demo.demo.py.txt
+        :language: text
+
+    We can see that the calculation result will replace the \
+    ``self`` object, without changes of the address. Just \
+    enable the ``self_copy`` option is okay.
+
+
 For further information of function ``method_treelize`` \
 and ``classmethod_treelize``, just take a look at:
 
 * :ref:`apidoc_tree_func_methodtreelize`
 * :ref:`apidoc_tree_func_classmethodtreelize`
 
+
+More Flexible Ways to DIY Class
+---------------------------------
+
+When you implement ``TreeValue`` class like the section above \
+(take a look at here :ref:`tutorials_advancedusage_diy`), \
+you have to define your own methods and operators one by one, \
+because in class ``TreeValue``, only the minimum necessary \
+methods and operators are provided. But when you use \
+``FastTreeValue`` class, operators like ``+`` and methods like \
+``map`` can be used directly. Let's see how ``FastTreeValue`` \
+is defined in source code:
+
+.. literalinclude:: diy_class_x_tv.demo.py.txt
+    :language: python
+    :linenos:
+
+The definition is quite simple, just inherit from the \
+return value of function ``general_tree_value``, and most of \
+the operators and methods can be used.
+
+Like the ``FastTreeValue`` class, we can define our ``TreeValue`` \
+class like the code below:
+
+.. literalinclude:: diy_class_x_demo_1.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_1.demo.py.txt
+    :language: text
+    :linenos:
+
+
+In some cases, you can update the behaviours of some \
+operator or methods, like the code below
+
+.. literalinclude:: diy_class_x_demo_2.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_2.demo.py.txt
+    :language: text
+    :linenos:
+
+More than this, you can do the following things \
+in your DIY ``TreeValue`` class based on \
+function ``general_tree_value``:
+
+- change treelize arguments (like the example code above)
+- disable some operators and methods
+- change behaviour of some operators and methods
+
+Here is another complex demo code
+
+.. literalinclude:: diy_class_x_demo_3.demo.py
+    :language: python
+    :linenos:
+
+The output should be
+
+.. literalinclude:: diy_class_x_demo_3.demo.py.txt
+    :language: text
+    :linenos:
+
+For more details about ``general_tree_value``, \
+take a look at :ref:`apidoc_tree_general_generaltreevalue` \
+and its source code to find out all the implemented \
+operators and methods.
 
 
 DIY TreeValue Utility Class
@@ -986,3 +1153,43 @@ and ``classmethod_treelize``, just take a look at:
 * :ref:`apidoc_tree_func_utilsclass`
 * :ref:`apidoc_tree_func_classmethodtreelize`
 
+
+Draw Graph For TreeValue
+-----------------------------
+
+You can easily draw a graph of the ``TreeValue`` objects \
+with function ``graphics``. Like the following example \
+code.
+
+.. literalinclude:: ../../api_doc/tree/graphics.demo.py
+    :language: python
+    :linenos:
+
+The generated code and graph should be like below ( \
+name of the image file should be ``graphics.dat.gv.svg``, \
+name of the graphviz source code file should be \
+``graphics.dat.gv`` ).
+
+.. literalinclude:: ../../api_doc/tree/graphics.dat.gv
+    :language: text
+    :linenos:
+
+.. image:: ../../api_doc/tree/graphics.dat.gv.svg
+    :align: center
+
+.. note::
+
+    The return value's type of function ``graphics`` is \
+    class ``graphviz.dot.Digraph``, from the opensource \
+    library ``graphviz``, for further information of \
+    this project and ``graphviz.dot.Digraph``'s usage, \
+    take a look at:
+
+    * `Official site of Graphviz <https://graphviz.org/>`_.
+    * `User Guide of Graphviz <https://graphviz.readthedocs.io/en/stable/manual.html#formats>`_.
+    * `API Reference of Graphviz <https://graphviz.readthedocs.io/en/stable/api.html>`_.
+
+For further information of function ``graphics``, \
+just take a look at
+
+* :ref:`apidoc_tree_tree_graphics`.

@@ -19,11 +19,6 @@ The result should be
     :language: text
     :linenos:
 
-A simple tree value structure is created successfully with the structure below.
-
-.. image:: ../quick_start/create_a_tree.gv.svg
-    :align: center
-
 
 Edit the tree
 ------------------
@@ -99,6 +94,23 @@ The structures of the trees involved in ``__add__`` calculation is like below.
 
 Actually, More common operators are supported in treevalue.
 
+.. note::
+
+    In newer versions of treevalue, self operations \
+    are supported like the code below.
+
+    .. literalinclude:: calculation_self.demo.py
+        :language: python
+
+    The output should be
+
+    .. literalinclude:: calculation_self.demo.py.txt
+        :language: text
+
+    We can see that when ``t1 + t2`` is called, \
+    a new tree with the sums will be created \
+    without ``t1``'s change, but when ``t1 += t2`` is called, \
+    the values in ``t1`` will be replaced to the sums.
 
 .. _tutorials_basicusage_func:
 

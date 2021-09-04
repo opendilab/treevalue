@@ -1,3 +1,4 @@
+import re
 from copy import deepcopy
 from functools import wraps
 from typing import Dict, Any, Union, List, Callable
@@ -63,6 +64,16 @@ def _unraw(value):
         return value
 
 
+_KEY_PATTERN = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]{0,65534}$')
+
+
+def _check_key(key):
+    if not isinstance(key, str) or not _KEY_PATTERN.fullmatch(key):
+        raise KeyError("Tree's key should be an ascii string matching regex of {regexp}, "
+                       "but {key} found.".format(regexp=repr(_KEY_PATTERN.pattern), key=repr(key)))
+    return key
+
+
 def _to_tree_decorator(init_func):
     @wraps(init_func)
     def _new_init_func(data):
@@ -70,7 +81,7 @@ def _to_tree_decorator(init_func):
             _new_init_func(_tree_dump(data))
         elif isinstance(data, dict):
             init_func({
-                str(key): Tree(value) if isinstance(value, dict) else _unraw(value)
+                _check_key(key): Tree(value) if isinstance(value, dict) else _unraw(value)
                 for key, value in data.items()
             })
         else:
@@ -138,6 +149,7 @@ class Tree(BaseTree):
         return self.__dict[key]
 
     def __setitem__(self, key, value):
+        key = _check_key(key)
         if isinstance(value, dict):
             value = Tree(value)
         self.__dict[key] = _unraw(value)
@@ -153,6 +165,23 @@ class Tree(BaseTree):
     def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
         return self.__class__(_tree_dump(self, copy_value))
 
+    def copy_from(self, other: 'BaseTree'):
+        other = other.actual()
+        all_keys = sorted(set(other.keys()) | set(self.keys()))
+        for key in all_keys:
+            if key not in other.keys():
+                del self[key]
+            else:
+                if isinstance(other[key], BaseTree):
+                    if key in self.keys() and isinstance(self[key], BaseTree):
+                        self[key].actual().copy_from(other[key].actual())
+                    else:
+                        self[key] = other[key].clone()
+                else:
+                    self[key] = other[key]
+
+        return self
+
     def items(self):
         return self.__dict.items()
 
@@ -162,5 +191,12 @@ class Tree(BaseTree):
     def values(self):
         return self.__dict.values()
 
-    def actual(self):
+    def actual(self) -> 'Tree':
         return self
+
+    def __getstate__(self):
+        return {key: value.actual() if isinstance(value, BaseTree) else value
+                for key, value in self.__dict.items()}
+
+    def __setstate__(self, state):
+        self.__dict = state

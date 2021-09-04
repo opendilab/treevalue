@@ -1,22 +1,29 @@
 from functools import lru_cache
-from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable
+from functools import wraps, partial
+from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
 
-from ..func import method_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, subside, rise, \
-    NO_RISE_TEMPLATE
+from graphviz import Digraph
+
+from ..func import method_treelize, MISSING_NOT_ALLOW, TreeMode, func_treelize
+from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, \
+    NO_RISE_TEMPLATE, graphics
+from ..tree import rise as rise_func
+from ..tree import subside as subside_func
+from ..tree.tree import get_data_property
+from ...utils import dynamic_call, raising
 
 _BASE_GENERATION_CONFIG = {}
 
 
 def general_tree_value(base: Optional[Mapping[str, Any]] = None,
-                       methods: Optional[Mapping[str, Optional[Mapping[str, Any]]]] = None):
+                       methods: Optional[Mapping[str, Any]] = None):
     """
     Overview:
         Get general tree value class.
 
     Arguments:
         - base (:obj:`Optional[Mapping[str, Any]]`): Base configuration of `func_treelize`.
-        - methods (:obj:`Optional[Mapping[str, Optional[Mapping[str, Any]]]]`): Method configurations of `func_treelize`.
+        - methods (:obj:`Optional[Mapping[str, Any]]`): Method configurations of `func_treelize`.
 
     Returns:
         - clazz (:obj:`Type[TreeValue]`): General tree value class.
@@ -24,15 +31,34 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
     base = base or {}
     methods = methods or {}
 
-    @lru_cache()
-    def _decorator_config(name):
-        _config = _BASE_GENERATION_CONFIG.copy()
-        _config.update(base)
-        _config.update(methods.get(name, None) or {})
-        return _config
+    def _dynamic_suffix_dec(func, f):
+        return wraps(func)(dynamic_call(f))
 
-    def _decorate(func):
-        return method_treelize(**_decorator_config(func.__name__))(func)
+    @lru_cache()
+    def _get_decorator(name, treelize: bool, ext_cfg: Optional[tuple] = None):
+        _item = methods.get(name, None)
+
+        if treelize and isinstance(_item or {}, dict):
+            _config = _BASE_GENERATION_CONFIG.copy()
+            _config.update(base)
+            _config.update(_item or {})
+            _config.update(dict(ext_cfg or ()))
+            return lambda func: method_treelize(**_config)(func)
+        elif isinstance(_item, BaseException) or (isinstance(_item, type) and issubclass(_item, BaseException)):
+            return lambda func: _dynamic_suffix_dec(func, raising(_item))
+        elif hasattr(_item, '__call__'):
+            return lambda func: _dynamic_suffix_dec(func, _item)
+        elif name in methods.keys():
+            return lambda func: _dynamic_suffix_dec(func, lambda: methods[name])
+        else:
+            return lambda func: func
+
+    def _decorate(func, treelize: bool, ext_cfg: Optional[dict] = None):
+        return _get_decorator(func.__name__, treelize, tuple(sorted((ext_cfg or {}).items())))(func)
+
+    _decorate_treelize = partial(_decorate, treelize=True)
+    _decorate_method = partial(_decorate, treelize=False)
+    _decorate_and_replace = partial(_decorate, treelize=True, ext_cfg=dict(self_copy=True))
 
     _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
@@ -69,6 +95,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return getattr(self, key)
 
+        @_decorate_method
         def json(self):
             """
             Overview:
@@ -83,6 +110,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return jsonify(self)
 
+        @_decorate_method
         def view(self, path: List[str]):
             """
             Overview:
@@ -100,6 +128,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return view(self, path)
 
+        @_decorate_method
         def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
             """
             Overview:
@@ -117,6 +146,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return clone(self, copy_value)
 
+        @_decorate_method
         def type(self, clazz: Type[_TreeValue]) -> _TreeValue:
             """
             Overview:
@@ -136,6 +166,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return typetrans(self, clazz)
 
+        @_decorate_method
         def map(self, mapper):
             """
             Overview:
@@ -155,6 +186,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return mapping(self, mapper)
 
+        @_decorate_method
         def mask(self, mask_: TreeValue, remove_empty: bool = True):
             """
             Overview:
@@ -174,6 +206,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return mask(self, mask_, remove_empty)
 
+        @_decorate_method
         def filter(self, func, remove_empty: bool = True):
             """
             Overview:
@@ -195,6 +228,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return filter_(self, func, remove_empty)
 
+        @_decorate_method
         def reduce(self, func):
             """
             Overview
@@ -215,6 +249,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return reduce_(self, func)
 
+        @_decorate_method
         def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,
                  template=NO_RISE_TEMPLATE):
             """
@@ -251,9 +286,89 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> # FastTreeValue 1 will be FastTreeValue({'x': [1, 2], 'y': [5, 6]})
                 >>> # FastTreeValue 2 will be FastTreeValue({'x': [2, 3], 'y': [7, 8]})
             """
-            return rise(self, dict_, list_, tuple_)
+            return rise_func(self, dict_, list_, tuple_, template)
+
+        @_decorate_method
+        def graph(self, root: Optional[str] = None, title: Optional[str] = None,
+                  cfg: Optional[dict] = None,
+                  dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
+                  repr_gen: Optional[Callable] = None,
+                  node_cfg_gen: Optional[Callable] = None,
+                  edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+            """
+            Overview:
+                Draw graph of this tree value.
+
+            Args:
+                - root (:obj:`Optional[str]`): Root name of the graph, default is ``None``, \
+                    this name will be automatically generated.
+                - title (:obj:`Optional[str]`): Title of the graph, default is ``None``, \
+                    this title will be automatically generated from ``root`` argument.
+                - cfg (:obj:`Optional[dict]`): Configuration of the graph.
+                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \
+                    set `True` to make value with same id use the same node in graph, \
+                    you can also define your own node id algorithm by this argument. \
+                    Default is `False` which means do not use value duplicator.
+                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \
+                    default is `None` which means using `repr` function.
+                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \
+                    default is `None` which means no configuration.
+                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \
+                    default is `None` which means no configuration.
+
+            Returns:
+                - graph (:obj:`Digraph`): Generated graph of tree values.
+            """
+            root = root or ('<%s #%x>' % (type(self).__name__, id(get_data_property(self).actual())))
+            title = title or ('Graph of tree %s.' % (root,))
+            return graphics(
+                (self, root), title=title, cfg=cfg, dup_value=dup_value,
+                repr_gen=repr_gen, node_cfg_gen=node_cfg_gen, edge_cfg_gen=edge_cfg_gen,
+            )
 
         @classmethod
+        @_decorate_method
+        def func(cls, mode: Union[str, TreeMode] = 'strict', inherit: bool = True,
+                 missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                 subside: Union[Mapping, bool, None] = None,
+                 rise: Union[Mapping, bool, None] = None):
+            """
+            Overview:
+                Wrap a common function to tree-supported function based on this type.
+
+            Arguments:
+                - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping \
+                    (string or TreeMode both okay), default is `strict`.
+                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+                - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+                    default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+                - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+                    and subside configuration, default is `None` which means do not use subside. \
+                    When subside is `True`, it will use all the default arguments in `subside` function.
+                - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+                    and rise configuration, default is `None` which means do not use rise. \
+                    When rise is `True`, it will use all the default arguments in `rise` function. \
+                    (Not recommend to use auto mode when your return structure is not so strict.)
+
+            Returns:
+                - decorator (:obj:`Callable`): Wrapper for tree-supported function.
+
+            Example:
+                >>> from treevalue import FastTreeValue
+                >>>
+                >>> @FastTreeValue.func()
+                >>> def ssum(a, b):
+                >>>     return a + b  # the a and b will be integers, not TreeValue
+                >>>
+                >>> t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
+                >>> ssum(1, 2)    # 3
+                >>> ssum(t1, t2)  # FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
+            """
+            return func_treelize(mode, cls, inherit, missing, subside, rise)
+
+        @classmethod
+        @_decorate_method
         def union(cls, *trees, return_type=None, **kwargs):
             """
             Overview:
@@ -278,6 +393,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return union(*trees, return_type=return_type or cls, **kwargs)
 
         @classmethod
+        @_decorate_method
         def subside(cls, value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
                     return_type: Optional[Type[_TreeValue]] = None, **kwargs):
             """
@@ -319,10 +435,45 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> #    'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
                 >>> #}), all structures above the tree values are subsided to the bottom of the tree.
             """
-            return subside(value, dict_, list_, tuple_,
-                           return_type=return_type or cls, **kwargs)
+            return subside_func(value, dict_, list_, tuple_,
+                                return_type=return_type or cls, **kwargs)
 
-        @_decorate
+        @classmethod
+        @_decorate_method
+        def graphics(cls, *trees, title: Optional[str] = None, cfg: Optional[dict] = None,
+                     dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
+                     repr_gen: Optional[Callable] = None,
+                     node_cfg_gen: Optional[Callable] = None,
+                     edge_cfg_gen: Optional[Callable] = None) -> Digraph:
+            """
+            Overview:
+                Draw graph by tree values.
+                Multiple tree values is supported.
+
+            Args:
+                - trees: Given tree values, tuples of `Tuple[TreeValue, str]` or tree values are both accepted.
+                - title (:obj:`Optional[str]`): Title of the graph.
+                - cfg (:obj:`Optional[dict]`): Configuration of the graph.
+                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \
+                    set `True` to make value with same id use the same node in graph, \
+                    you can also define your own node id algorithm by this argument. \
+                    Default is `False` which means do not use value duplicator.
+                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \
+                    default is `None` which means using `repr` function.
+                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \
+                    default is `None` which means no configuration.
+                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \
+                    default is `None` which means no configuration.
+
+            Returns:
+                - graph (:obj:`Digraph`): Generated graph of tree values.
+            """
+            return graphics(
+                *trees, title=title, cfg=cfg, dup_value=dup_value,
+                repr_gen=repr_gen, node_cfg_gen=node_cfg_gen, edge_cfg_gen=edge_cfg_gen,
+            )
+
+        @_decorate_treelize
         def __add__(self, other):
             """
             Overview:
@@ -335,7 +486,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self + other
 
-        @_decorate
+        @_decorate_treelize
         def __radd__(self, other):
             """
             Overview:
@@ -347,7 +498,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other + self
 
-        @_decorate
+        @_decorate_and_replace
+        def __iadd__(self, other):
+            """
+            Overview:
+                Self version of `__add__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 += t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 33, 'd': 44}})
+            """
+            return self + other
+
+        @_decorate_treelize
         def __sub__(self, other):
             """
             Overview:
@@ -360,7 +526,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self - other
 
-        @_decorate
+        @_decorate_treelize
         def __rsub__(self, other):
             """
             Overview:
@@ -372,7 +538,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other - self
 
-        @_decorate
+        @_decorate_and_replace
+        def __isub__(self, other):
+            """
+            Overview:
+                Self version of `__sub__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 -= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': -10, 'b': -20, 'x': {'c': -27, 'd': -36}})
+            """
+            return self - other
+
+        @_decorate_treelize
         def __mul__(self, other):
             """
             Overview:
@@ -385,7 +566,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self * other
 
-        @_decorate
+        @_decorate_treelize
         def __rmul__(self, other):
             """
             Overview:
@@ -397,7 +578,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other * self
 
-        @_decorate
+        @_decorate_and_replace
+        def __imul__(self, other):
+            """
+            Overview:
+                Self version of `__mul__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 11, 'b': 22, 'x': {'c': 30, 'd': 40}})
+                >>> t1 *= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 11, 'b': 44, 'x': {'c': 90, 'd': 160}})
+            """
+            return self * other
+
+        @_decorate_treelize
         def __matmul__(self, other):
             """
             Overview:
@@ -405,7 +601,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self @ other
 
-        @_decorate
+        @_decorate_treelize
         def __rmatmul__(self, other):
             """
             Overview:
@@ -413,7 +609,16 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other @ self
 
-        @_decorate
+        @_decorate_and_replace
+        def __imatmul__(self, other):
+            """
+            Overview:
+                Self version of `__matmul__`.
+                Original id of self will be kept.
+            """
+            return self @ other
+
+        @_decorate_treelize
         def __truediv__(self, other):
             """
             Overview:
@@ -426,7 +631,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self / other
 
-        @_decorate
+        @_decorate_treelize
         def __rtruediv__(self, other):
             """
             Overview:
@@ -438,7 +643,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other / self
 
-        @_decorate
+        @_decorate_and_replace
+        def __itruediv__(self, other):
+            """
+            Overview:
+                Self version of `__truediv__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t1 /= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 0.1, 'b': 0.08, 'x': {'c': 0.1, 'd': 0.1}})
+            """
+            return self / other
+
+        @_decorate_treelize
         def __floordiv__(self, other):
             """
             Overview:
@@ -451,7 +671,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self // other
 
-        @_decorate
+        @_decorate_treelize
         def __rfloordiv__(self, other):
             """
             Overview:
@@ -463,7 +683,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other // self
 
-        @_decorate
+        @_decorate_and_replace
+        def __ifloordiv__(self, other):
+            """
+            Overview:
+                Self version of `__floordiv__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t2 //= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 10, 'b': 12, 'x': {'c': 10, 'd': 10}})
+            """
+            return self // other
+
+        @_decorate_treelize
         def __mod__(self, other):
             """
             Overview:
@@ -476,7 +711,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self % other
 
-        @_decorate
+        @_decorate_treelize
         def __rmod__(self, other):
             """
             Overview:
@@ -488,7 +723,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other % self
 
-        @_decorate
+        @_decorate_and_replace
+        def __imod__(self, other):
+            """
+            Overview:
+                Self version of `__mod__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 10, 'b': 25, 'x': {'c': 30, 'd': 40}})
+                >>> t2 %= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 0, 'b': 1, 'x': {'c': 0, 'd': 0}})
+            """
+            return self % other
+
+        @_decorate_treelize
         def __pow__(self, power):
             """
             Overview:
@@ -501,7 +751,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ** power
 
-        @_decorate
+        @_decorate_treelize
         def __rpow__(self, other):
             """
             Overview:
@@ -513,7 +763,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other ** self
 
-        @_decorate
+        @_decorate_and_replace
+        def __ipow__(self, other):
+            """
+            Overview:
+                Self version of `__pow__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 **= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 1, 'b': 8, 'x': {'c': 81, 'd': 1024}})
+            """
+            return self ** other
+
+        @_decorate_treelize
         def __and__(self, other):
             """
             Overview:
@@ -526,7 +791,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self & other
 
-        @_decorate
+        @_decorate_treelize
         def __rand__(self, other):
             """
             Overview:
@@ -538,7 +803,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other & self
 
-        @_decorate
+        @_decorate_and_replace
+        def __iand__(self, other):
+            """
+            Overview:
+                Self version of `__and__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 &= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 0, 'b': 2, 'x': {'c': 0, 'd': 4}})
+            """
+            return self & other
+
+        @_decorate_treelize
         def __or__(self, other):
             """
             Overview:
@@ -551,7 +831,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self | other
 
-        @_decorate
+        @_decorate_treelize
         def __ror__(self, other):
             """
             Overview:
@@ -563,7 +843,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other | self
 
-        @_decorate
+        @_decorate_and_replace
+        def __ior__(self, other):
+            """
+            Overview:
+                Self version of `__or__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 |= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 3, 'b': 3, 'x': {'c': 7, 'd': 5}})
+            """
+            return self | other
+
+        @_decorate_treelize
         def __xor__(self, other):
             """
             Overview:
@@ -576,7 +871,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self ^ other
 
-        @_decorate
+        @_decorate_treelize
         def __rxor__(self, other):
             """
             Overview:
@@ -588,7 +883,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other ^ self
 
-        @_decorate
+        @_decorate_and_replace
+        def __ixor__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 ^= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 3, 'b': 1, 'x': {'c': 7, 'd': 1}})
+            """
+            return self ^ other
+
+        @_decorate_treelize
         def __lshift__(self, other):
             """
             Overview:
@@ -601,7 +911,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self << other
 
-        @_decorate
+        @_decorate_treelize
         def __rlshift__(self, other):
             """
             Overview:
@@ -613,7 +923,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other << self
 
-        @_decorate
+        @_decorate_and_replace
+        def __ilshift__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+                >>> t1 <<= t2
+                >>> t1 # t1's id will not change, FastTreeValue({'a': 4, 'b': 16, 'x': {'c': 48, 'd': 128}})
+            """
+            return self << other
+
+        @_decorate_treelize
         def __rshift__(self, other):
             """
             Overview:
@@ -626,7 +951,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self >> other
 
-        @_decorate
+        @_decorate_treelize
         def __rrshift__(self, other):
             """
             Overview:
@@ -638,7 +963,22 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return other >> self
 
-        @_decorate
+        @_decorate_and_replace
+        def __irshift__(self, other):
+            """
+            Overview:
+                Self version of `__xor__`.
+                Original id of self will be kept.
+
+            Example:
+                >>> t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+                >>> t2 = FastTreeValue({'a': 20, 'b': 30, 'x': {'c': 40, 'd': 50}})
+                >>> t2 >>= t1
+                >>> t2 # t2's id will not change, FastTreeValue({'a': 10, 'b': 7, 'x': {'c': 5, 'd': 3}})
+            """
+            return self >> other
+
+        @_decorate_treelize
         def __pos__(self):
             """
             Overview:
@@ -650,7 +990,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return +self
 
-        @_decorate
+        @_decorate_treelize
         def __neg__(self):
             """
             Overview:
@@ -662,7 +1002,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return -self
 
-        @_decorate
+        @_decorate_treelize
         def __invert__(self):
             """
             Overview:
@@ -674,7 +1014,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return ~self
 
-        @_decorate
+        @_decorate_treelize
         def __getitem__(self, item):
             """
             Overview:
@@ -688,7 +1028,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return self[item]
 
-        @_decorate
+        @_decorate_treelize
         def __setitem__(self, key, value):
             """
             Overview:
@@ -702,7 +1042,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             self[key] = value
 
-        @_decorate
+        @_decorate_treelize
         def __delitem__(self, key):
             """
             Overview:
@@ -714,7 +1054,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             del self[key]
 
-        @_decorate
+        @_decorate_treelize
         def __call__(self, *args, **kwargs):
             """
             Overview:

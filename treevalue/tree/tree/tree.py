@@ -237,9 +237,8 @@ class TreeValue:
         """
         return str(build_tree(
             self,
-            represent=lambda x: repr(x),
-            iterate=lambda x: iter(x),
-            recurse=lambda x: isinstance(x, TreeValue),
+            repr_gen=lambda x: repr(x),
+            iter_gen=lambda x: iter(x) if isinstance(x, TreeValue) else None,
         ))
 
     def __hash__(self):
@@ -292,3 +291,36 @@ class TreeValue:
                 just raise an exception here.
         """
         raise KeyError("Attribute {key} not found.".format(key=repr(key)))
+
+    def __setstate__(self, tree: Tree):
+        """
+        Overview:
+            Deserialize operation, can support `pickle.loads`.
+
+        Arguments:
+            - tree (:obj:`Tree`): Deserialize tree.
+
+        Examples:
+            >>> import pickle
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+            >>> bin_ = pickle.dumps(t)  # dump it to binary
+            >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+        """
+        setattr(self, _DATA_PROPERTY, tree)
+
+    def __getstate__(self):
+        """
+        Overview:
+            Serialize operation, can support `pickle.dumps`.
+
+        Examples:
+            >>> import pickle
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+            >>> bin_ = pickle.dumps(t)  # dump it to binary
+            >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+        """
+        return getattr(self, _DATA_PROPERTY).actual()

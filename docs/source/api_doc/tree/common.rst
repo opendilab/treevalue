@@ -7,7 +7,7 @@ BaseTree
 -----------
 
 .. autoclass:: treevalue.tree.common.base.BaseTree
-    :members: __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__
+    :members: __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
 
 
 .. _apidoc_tree_common_tree:
@@ -16,7 +16,7 @@ Tree
 ---------
 
 .. autoclass:: treevalue.tree.common.tree.Tree
-    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__
+    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
 
 
 .. _apidoc_tree_common_raw:
@@ -33,5 +33,5 @@ TreeView
 -------------
 
 .. autoclass:: treevalue.tree.common.view.TreeView
-    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__
+    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
 

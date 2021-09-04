@@ -37,6 +37,20 @@ class TestTreeCommonTree:
         assert h[t1] == 2
         assert h[Tree(t1.json())] == 2
 
+    def test_copy_from(self):
+        t1 = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        t2 = Tree({'a': 11, 'b': 24, 'x': {'b': 12, 'e': {'dfkj': 892374}}})
+        original_id = id(t1.actual())
+        original_id_x = id(t1['x'].actual())
+
+        t1.copy_from(t2)
+        assert t1 == t2
+        assert t1 is not t2
+        assert id(t1.actual()) == original_id
+        assert id(t1['x'].actual()) == original_id_x
+        assert t1['x']['e'] == t2['x']['e']
+        assert t1['x']['e'] is not t2['x']['e']
+
     def test_tree_items(self):
         t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         assert t['a'] == 1
@@ -122,6 +136,20 @@ class TestTreeCommonTree:
         assert t['b'] == {'a': 3, 'b': 4}
         assert t['x']['c'] == {'a': 5, 'b': 6}
         assert t['x']['d'] == {'a': 7, 'b': 8}
+
+    def test_invalid_key(self):
+        with pytest.raises(KeyError):
+            _ = Tree({'a': 123, '\uffff': 321})
+
+        t = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
+        with pytest.raises(KeyError):
+            t['\uffff'] = 233
+        with pytest.raises(KeyError):
+            t['a' * 0x1ffff] = 233
+        with pytest.raises(KeyError):
+            t[''] = 233
+        with pytest.raises(KeyError):
+            t['0'] = 233
 
     def test_deep_clone(self):
         t = Tree({

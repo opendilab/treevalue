@@ -18,6 +18,7 @@ structure processing when the calculation is tree-based.
     tutorials/main_idea/index
     tutorials/basic_usage/index
     tutorials/advanced_usage/index
+    tutorials/cli_usage/index
 
 
 .. toctree::

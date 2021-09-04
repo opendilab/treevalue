@@ -1,0 +1,1 @@
+treevalue graph -t 'tree_demo.t1' -o 'only_t1.dat.svg'

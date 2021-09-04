@@ -2,7 +2,11 @@ import pytest
 from easydict import EasyDict
 
 from treevalue.tree import FastTreeValue, TreeValue
-from treevalue.utils import init_magic, common_direct_base, common_bases
+from treevalue.utils import init_magic, common_direct_base, common_bases, get_class_full_name
+
+
+class _TestClass:
+    pass
 
 
 @pytest.mark.unittest
@@ -88,3 +92,7 @@ class TestUtilsClazz:
 
         assert common_direct_base(T3, T4) == T1
         assert common_direct_base(T4, T5) == object
+
+    def test_get_class_full_name(self):
+        assert get_class_full_name(str) == 'str'
+        assert get_class_full_name(_TestClass) == 'test.utils.test_clazz._TestClass'

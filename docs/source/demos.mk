@@ -23,10 +23,12 @@ SHELL_RESULTS  := $(addsuffix .sh.txt, $(basename ${SHELL_DEMOS} ${SHELL_DEMOXS}
 
 %.demo.sh.txt: %.demo.sh
 	cd "$(shell dirname $(shell readlink -f $<))" && \
+		PYTHONPATH="$(shell dirname $(shell readlink -f $<)):${PYTHONPATH}" \
 		$(SHELL) "$(shell readlink -f $<)" > "$(shell readlink -f $@)"
 
 %.demox.sh.txt: %.demox.sh
 	cd "$(shell dirname $(shell readlink -f $<))" && \
+		PYTHONPATH="$(shell dirname $(shell readlink -f $<)):${PYTHONPATH}" \
 		$(SHELL) "$(shell readlink -f $<)" 1> "$(shell readlink -f $@)" \
 		2> "$(shell readlink -f $(addsuffix .err, $(basename $@)))"; \
 		echo $$? > "$(shell readlink -f $(addsuffix .exitcode, $(basename $@)))"

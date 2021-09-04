@@ -1,9 +1,34 @@
+import pickle
 import re
 
 import pytest
 
 from treevalue.tree.tree import TreeValue
 from treevalue.tree.tree.tree import get_data_property
+
+
+class _Container:
+    def __init__(self, value):
+        self.__value = value
+
+    @property
+    def value(self):
+        return self.__value
+
+    def __repr__(self):
+        return '<{cls} {id} value: {value}>'.format(
+            cls=self.__class__.__name__, id=hex(id(self)), value=repr(self.__value))
+
+    def __eq__(self, other):
+        if other is self:
+            return True
+        elif type(other) == _Container:
+            return other.__value == self.value
+        else:
+            return False
+
+    def __hash__(self):
+        return hash((self.__value,))
 
 
 @pytest.mark.unittest
@@ -131,3 +156,19 @@ class TestTreeTreeTree:
         assert d[tv1] == 1
         assert d[TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})] == 1
         assert d[TreeValue({'x': 2, 'y': 3})] == 2
+
+    def test_serialize_support(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        bt1 = pickle.dumps(tv1)
+        assert pickle.loads(bt1) == tv1
+
+        tv2 = TreeValue({
+            'a': _Container(1),
+            'b': _Container(2),
+            'x': {
+                'c': _Container(3),
+                'd': _Container(4),
+            }
+        })
+        bt2 = pickle.dumps(tv2)
+        assert pickle.loads(bt2) == tv2

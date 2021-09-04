@@ -136,6 +136,23 @@ class BaseTree(metaclass=ABCMeta):
         raise NotImplementedError  # pragma: no cover
 
     @abstractmethod
+    def copy_from(self, other: 'BaseTree'):
+        """
+        Overview:
+            Copy data from another tree.
+
+        Arguments:
+            - other (:obj:`BaseTree`): Another target tree.
+
+        Returns:
+            - self (:obj:`BaseTree`): Self object
+
+        Example:
+            >>> # todo, complete this demo
+        """
+        raise NotImplementedError  # pragma: no cover
+
+    @abstractmethod
     def items(self):
         """
         Overview:
@@ -267,9 +284,4 @@ class BaseTree(metaclass=ABCMeta):
             >>> │   └── 'd' --> 4
             >>> └── 'z' --> [1, 2]
         """
-        return str(build_tree(
-            self,
-            represent=lambda value: repr(value),
-            iterate=lambda value: value.items(),
-            recurse=lambda value: isinstance(value, BaseTree),
-        ))
+        return str(build_tree(self, repr_gen=lambda value: repr(value)))
