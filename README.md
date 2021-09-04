@@ -20,7 +20,7 @@
 [![Contributors](https://img.shields.io/github/contributors/opendilab/treevalue)](https://github.com/opendilab/treevalue/graphs/contributors)
 [![GitHub license](https://img.shields.io/github/license/opendilab/treevalue)](https://github.com/opendilab/treevalue/blob/master/LICENSE)
 
-`TreeValue` is a generalized tree-based data structure mainly developed by [HansBug](https://github.com/HansBug).
+`TreeValue` is a generalized tree-based data structure mainly developed by [OpenDILab Contributors](https://github.com/opendilab).
 
 Almost all the operation can be supported in form of trees in a convenient way to simplify the structure processing when the calculation is tree-based.
 
@@ -48,24 +48,34 @@ You can easily create a tree value object based on `FastTreeValue`.
 from treevalue import FastTreeValue
 
 if __name__ == '__main__':
-    t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+    t = FastTreeValue({
+        'a': 1,
+        'b': 2.3,
+        'x': {
+            'c': 'str',
+            'd': [1, 2, None],
+            'e': b'bytes',
+        }
+    })
     print(t)
+
 ```
 
 The result should be
 
 ```text
-<FastTreeValue 0x7fbbe2979f90 keys: ['a', 'b', 'x']>
+<FastTreeValue 0x7f6c7df00160 keys: ['a', 'b', 'x']>
 ├── 'a' --> 1
-├── 'b' --> 2
-└── 'x' --> <FastTreeValue 0x7fbbe2979a10 keys: ['c', 'd']>
-    ├── 'c' --> 3
-    └── 'd' --> 4
+├── 'b' --> 2.3
+└── 'x' --> <FastTreeValue 0x7f6c81150860 keys: ['c', 'd', 'e']>
+    ├── 'c' --> 'str'
+    ├── 'd' --> [1, 2, None]
+    └── 'e' --> b'bytes'
 ```
 
 And `t` is structure should be like this
 
-![t_graph](https://opendilab.github.io/treevalue/main/_images/simple_demo.dat.svg)
+![](https://opendilab.github.io/treevalue/main/_images/simple_demo.dat.svg)
 
 For more quick start explanation and further usage, take a look at:
 
@@ -73,9 +83,11 @@ For more quick start explanation and further usage, take a look at:
 * [Basic Usage](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html)
 * [Advanced Usage](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html)
 
-## Contributin
+## Contribution
 
 We appreciate all contributions to improve treevalue, both logic and system designs. Please refer to CONTRIBUTING.md for more guides.
+
+And users can join our [slack communication channel](https://join.slack.com/t/opendilab/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ), or contact the core developer [HansBug](https://github.com/HansBug) for more detailed discussion.
 
 ## License
 
