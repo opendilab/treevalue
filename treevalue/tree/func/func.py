@@ -106,19 +106,19 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
                                            allow_missing, missing_func,
                                            subside, rise)
 
+    def _get_from_key(key, item):
+        if key in item:
+            return item.__getattr__(key)
+        elif allow_missing:
+            return missing_func()
+        else:
+            raise KeyError("Missing is off, key {key} not found in {item}.".format(
+                key=repr(key), item=repr(item),
+            ))
+
     def _value_wrap(item, index):
         if isinstance(item, TreeValue):
-            def _get_from_key(key):
-                if key in item:
-                    return item.__getattr__(key)
-                elif allow_missing:
-                    return missing_func()
-                else:
-                    raise KeyError("Missing is off, key {key} not found in {item}.".format(
-                        key=repr(key), item=repr(item),
-                    ))
-
-            return _get_from_key
+            return partial(_get_from_key, item=item)
         elif inherit:
             return _any_getattr(item).__getattr__
         else:
