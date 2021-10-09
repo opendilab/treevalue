@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from itertools import chain
 
 from ..tree.tree import get_data_property, TreeValue
@@ -13,7 +12,6 @@ class _BaseProcessor(metaclass=SingletonMeta):
             if isinstance(value, TreeValue)
         ]
 
-    @abstractmethod
     def get_key_set(self, *args, **kwargs):
         raise NotImplementedError  # pragma: no cover
 

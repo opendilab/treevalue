@@ -1,16 +1,14 @@
-from abc import ABCMeta, abstractmethod
 from typing import List, Union, Callable, Any
 
 from treevalue.utils import build_tree
 
 
-class BaseTree(metaclass=ABCMeta):
+class BaseTree:
     """
     Overview:
         Base abstract structure of a tree data class.
     """
 
-    @abstractmethod
     def __getitem__(self, key):
         """
         Overview:
@@ -31,7 +29,6 @@ class BaseTree(metaclass=ABCMeta):
 
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def __setitem__(self, key, value):
         """
         Overview:
@@ -50,7 +47,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def __delitem__(self, key):
         """
         Overview:
@@ -85,7 +81,6 @@ class BaseTree(metaclass=ABCMeta):
             for key, value in self.items()
         }
 
-    @abstractmethod
     def view(self, path: List[str]):
         """
         Overview:
@@ -112,7 +107,6 @@ class BaseTree(metaclass=ABCMeta):
 
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
         """
         Overview:
@@ -135,7 +129,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def copy_from(self, other: 'BaseTree'):
         """
         Overview:
@@ -152,7 +145,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def items(self):
         """
         Overview:
@@ -174,7 +166,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def keys(self):
         """
         Overview:
@@ -196,7 +187,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def values(self):
         """
         Overview:
@@ -218,7 +208,6 @@ class BaseTree(metaclass=ABCMeta):
         """
         raise NotImplementedError  # pragma: no cover
 
-    @abstractmethod
     def actual(self):
         """
         Overview:
