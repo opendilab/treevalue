@@ -9,6 +9,7 @@ class TreeView(BaseTree):
     Overview:
         Tree view data model, based on `BaseTree`.
     """
+    __slots__ = ('__tree', '__path')
 
     def __init__(self, tree: Tree, path: List[str]):
         """

@@ -1,6 +1,7 @@
 from enum import IntEnum, unique
 from functools import wraps, partial
-from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
+from itertools import chain
+from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any, Tuple
 
 import enum_tools
 
@@ -90,6 +91,7 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
         >>> ssum(t1, t2)  # TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
     """
     mode = TreeMode.loads(mode)
+    processor = _MODE_PROCESSORS[mode]
     if missing is MISSING_NOT_ALLOW:
         allow_missing = False
         missing_func = None
@@ -102,9 +104,8 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
     if rise is not None and not isinstance(rise, dict):
         rise = {} if rise else None
 
-    _MODE_PROCESSORS[mode].check_arguments(mode, return_type, inherit,
-                                           allow_missing, missing_func,
-                                           subside, rise)
+    processor.check_arguments(mode, return_type, inherit,
+                              allow_missing, missing_func, subside, rise)
 
     def _get_from_key(key, item):
         if key in item:
@@ -127,21 +128,28 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
             ))
 
     def _decorator(func):
-        def _recursion(*args, **kwargs) -> Optional[TreeClassType_]:
-            if all([not isinstance(item, TreeValue) for item in args]) \
-                    and all([not isinstance(value, TreeValue) for value in kwargs.values()]):
-                return func(*args, **kwargs)
+        _get_key_set = processor.get_key_set
 
-            pargs = [_value_wrap(item, index) for index, item in enumerate(args)]
-            pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
+        def _recursion(*args, **kwargs) -> Tuple[TreeClassType_, bool]:
+            is_const = True
+            for v in chain(args, kwargs.values()):
+                if isinstance(v, TreeValue):
+                    is_const = False
+                    break
 
-            _data = {
-                key: raw(_recursion(
-                    *(item(key) for item in pargs),
-                    **{key_: value(key) for key_, value in pkwargs.items()}
-                )) for key in sorted(_MODE_PROCESSORS[mode].get_key_set(*args, **kwargs))
-            }
-            return return_type(_data) if return_type is not None else None
+            if is_const:
+                return func(*args, **kwargs), True
+            else:
+                pargs = [_value_wrap(item, index) for index, item in enumerate(args)]
+                pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
+
+                _data = {
+                    key: raw(_recursion(
+                        *(item(key) for item in pargs),
+                        **{key_: value(key) for key_, value in pkwargs.items()}
+                    )[0]) for key in _get_key_set(*args, **kwargs)
+                }
+                return TreeValue(_data), False
 
         @wraps(func)
         def _new_func(*args, **kwargs):
@@ -149,11 +157,16 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
                 args = [subside_func(item, **subside) for item in args]
                 kwargs = {key: subside_func(value, **subside) for key, value in kwargs.items()}
 
-            _result = _recursion(*args, **kwargs)
-            if rise is not None:
-                _result = rise_func(_result, **rise)
+            _result, _is_const = _recursion(*args, **kwargs)
+            if return_type is not None:
+                if not _is_const:
+                    _result = return_type(_result)
+                if rise is not None:
+                    _result = rise_func(_result, **rise)
 
-            return _result
+                return _result
+            else:
+                return None
 
         return _new_func
 

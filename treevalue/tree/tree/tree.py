@@ -48,6 +48,7 @@ class TreeValue:
         please use `FastTreeValue` in `treevalue.tree.general`. \
         The `TreeValue` class is a light-weight framework just for DIY.
     """
+    __slots__ = (_DATA_PROPERTY,)
 
     def __init__(self, data: Union[BaseTree, 'TreeValue', dict]):
         """

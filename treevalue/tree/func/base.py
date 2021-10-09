@@ -1,10 +1,9 @@
 from itertools import chain
 
 from ..tree.tree import get_data_property, TreeValue
-from ...utils import SingletonMeta
 
 
-class _BaseProcessor(metaclass=SingletonMeta):
+class _BaseProcessor:
     def _get_key_entries(*args, **kwargs):
         return [
             (index, tuple(sorted(get_data_property(value).keys())))

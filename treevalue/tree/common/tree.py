@@ -122,6 +122,7 @@ class Tree(BaseTree):
     Overview:
         Tree node data model, based on `BaseTree`.
     """
+    __slots__ = ('__dict',)
 
     def __init__(self, data: Union[Dict[str, Union['Tree', Any]], 'Tree']):
         """
