@@ -38,12 +38,12 @@ _MODE_PROCESSORS = {
 }
 
 
-def _any_getattr(value):
-    class _AnyClass:
-        def __getattr__(self, item):
-            return value
+def _get_any_value(item, value):
+    return value
 
-    return _AnyClass()
+
+def _any_getattr(value):
+    return partial(_get_any_value, value=value)
 
 
 TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
@@ -121,7 +121,7 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
         if isinstance(item, TreeValue):
             return partial(_get_from_key, item=item)
         elif inherit:
-            return _any_getattr(item).__getattr__
+            return _any_getattr(item)
         else:
             raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
                 type=repr(type(item).__name__), index=repr(index),
