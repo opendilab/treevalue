@@ -211,6 +211,54 @@ def union(*trees: TreeValue, return_type=None, **kwargs):
     return subside(tuple(trees), return_type=return_type, **kwargs)
 
 
+def _subside_dict_new_func(*args, results, tv):
+    position = 0
+    returns = {}
+    for key, (cnt, _, func) in results:
+        returns[key] = func(*args[position:position + cnt])
+        position += cnt
+
+    return tv(returns)
+
+
+def _subside_list_new_func(*args, results, tv):
+    position = 0
+    returns = []
+    for cnt, _, func in results:
+        returns.append(func(*args[position: position + cnt]))
+        position += cnt
+
+    return tv(returns)
+
+
+def _subside_build_func(v, dict_: bool, list_: bool, tuple_: bool) -> Tuple[int, iter, Callable]:
+    tv = type(v)
+    if dict_ and isinstance(v, dict):
+        results = sorted([(key, _subside_build_func(value_, dict_, list_, tuple_))
+                          for key, value_ in v.items()])
+
+        return sum([cnt for _, (cnt, _, _) in results]), \
+               chain(*[it for _, (_, it, _) in results]), \
+               partial(_subside_dict_new_func, results=results, tv=tv)
+    elif (list_ and isinstance(v, list)) or (tuple_ and isinstance(v, tuple)):
+        results = [_subside_build_func(item, dict_, list_, tuple_) for item in v]
+
+        return sum([cnt for cnt, _, _ in results]), \
+               chain(*[it for _, it, _ in results]), \
+               partial(_subside_list_new_func, results=results, tv=tv)
+
+    else:
+        return 1, (v,).__iter__(), lambda x: x
+
+
+def _subside_get_default_type(args):
+    types = {type(item) for item in args if isinstance(item, TreeValue)}
+    try:
+        return common_direct_base(*list(types))
+    except TypeError:
+        return None
+
+
 def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
             return_type: Optional[Type[_TreeValue]] = None, **kwargs) -> _TreeValue:
     """
@@ -252,50 +300,9 @@ def subside(value, dict_: bool = True, list_: bool = True, tuple_: bool = True,
         >>> #    'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
         >>> #}), all structures above the tree values are subsided to the bottom of the tree.
     """
-
-    def _build_func(v) -> Tuple[int, iter, Callable]:
-        if dict_ and isinstance(v, dict):
-            results = sorted([(key, _build_func(value_)) for key, value_ in v.items()])
-
-            def _new_func(*args):
-                position = 0
-                returns = {}
-                for key, (cnt, _, func) in results:
-                    returns[key] = func(*args[position:position + cnt])
-                    position += cnt
-
-                return type(v)(returns)
-
-            return sum([cnt for _, (cnt, _, _) in results]), chain(
-                *[it for _, (_, it, _) in results]), _new_func
-        elif (list_ and isinstance(v, list)) or (tuple_ and isinstance(v, tuple)):
-            results = [_build_func(item) for item in v]
-
-            def _new_func(*args):
-                position = 0
-                returns = []
-                for cnt, _, func in results:
-                    returns.append(func(*args[position: position + cnt]))
-                    position += cnt
-
-                return type(v)(returns)
-
-            return sum([cnt for cnt, _, _ in results]), chain(
-                *[it for _, it, _ in results]), _new_func
-
-        else:
-            return 1, (v,).__iter__(), lambda x: x
-
-    def _get_default_type(args):
-        types = {type(item) for item in args if isinstance(item, TreeValue)}
-        try:
-            return common_direct_base(*list(types))
-        except TypeError:
-            return None
-
-    count, iter_, builder = _build_func(value)
+    count, iter_, builder = _subside_build_func(value, dict_, list_, tuple_)
     arguments = list(iter_)
-    return_type = return_type or _get_default_type(arguments) or TreeValue
+    return_type = return_type or _subside_get_default_type(arguments) or TreeValue
     assert count == len(arguments)
 
     from ..func import func_treelize
@@ -346,6 +353,8 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
         >>> # TreeValue 2 will be TreeValue({'x': [2, 3], 'y': [7, 8]})
     """
 
+    tv = type(tree)
+
     def _get_tree_builder(t: _TreeValue):
         if isinstance(t, TreeValue):
             results = sorted([(key, _get_tree_builder(value)) for key, value in t])
@@ -357,7 +366,7 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
                     returns[key] = func_(*args[position:position + cnt])
                     position += cnt
 
-                return tree.__class__(returns)
+                return tv(returns)
 
             return sum([cnt for _, (cnt, _, _) in results]), chain(
                 *[iter_ for _, (_, iter_, _) in results]), _new_func
@@ -448,6 +457,17 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     return value_builder(*map(lambda getter_: tree_builder(*map(getter_, value_list)), meta_value_getters))
 
 
+def _reduce_recursion(t: _TreeValue, tv: Type[TreeValue], func):
+    if isinstance(t, tv):
+        _result = func(**{key: _reduce_recursion(value, tv, func) for key, value in t})
+        if isinstance(_result, TreeValue):
+            return typetrans(_result, tv)
+        else:
+            return _result
+    else:
+        return t
+
+
 def reduce_(tree: _TreeValue, func):
     """
     Overview
@@ -468,14 +488,4 @@ def reduce_(tree: _TreeValue, func):
         >>> reduce_(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
     """
 
-    def _recursion(t: _TreeValue):
-        if isinstance(t, tree.__class__):
-            _result = func(**{key: _recursion(value) for key, value in t})
-            if isinstance(_result, TreeValue):
-                return typetrans(_result, tree.__class__)
-            else:
-                return _result
-        else:
-            return t
-
-    return _recursion(tree)
+    return _reduce_recursion(tree, tree.__class__, func)
