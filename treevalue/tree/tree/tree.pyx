@@ -1,56 +1,42 @@
-from functools import wraps
-from typing import Union, Any, Mapping
+# distutils:language=c++
+# cython:language_level=3
 
-from ..common import TreeStorage, create_storage
-from ...utils import init_magic, build_tree
+import cython
 
-_DATA_PROPERTY = '_property__data'
-_PRESERVED_PROPERTIES = {
-    _DATA_PROPERTY,
-}
+from ..common.storage cimport TreeStorage, create_storage
+from ...utils import build_tree
 
+cpdef TreeStorage get_data_property(t):
+    return t._detach()
 
-def get_data_property(t: 'TreeValue') -> TreeStorage:
-    return getattr(t, _DATA_PROPERTY)
+cdef inline TreeStorage _dict_unpack(dict d):
+    cdef str k
+    cdef object v
+    cdef dict result = {}
 
-
-def _dict_unpack(t: Union['TreeValue', Mapping[str, Any]]) -> Union[TreeStorage, Any]:
-    if isinstance(t, TreeStorage):
-        return t
-    elif isinstance(t, TreeValue):
-        return get_data_property(t)
-    elif isinstance(t, dict):
-        return create_storage({str(key): _dict_unpack(value) for key, value in t.items()})
-    else:
-        return t
-
-
-def _init_decorate(init_func):
-    @wraps(init_func)
-    def _new_init_func(data):
-        if isinstance(data, (TreeValue, dict)):
-            _new_init_func(_dict_unpack(data))
-        elif isinstance(data, TreeStorage):
-            init_func(data)
+    for k, v in d.items():
+        if isinstance(v, dict):
+            result[k] = _dict_unpack(v)
+        elif isinstance(v, TreeValue):
+            result[k] = v._detach()
+        elif isinstance(v, TreeStorage):
+            result[k] = v
         else:
-            raise TypeError(
-                "Unknown initialization type for tree value - {type}.".format(type=repr(type(data).__name__)))
+            result[k] = v
 
-    return _new_init_func
+    return create_storage(result)
 
-
-@init_magic(_init_decorate)
-class TreeValue:
-    """
+cdef class TreeValue:
+    r"""
     Overview:
         Base framework of tree value. \
         And if the fast functions and operators are what you need, \
         please use `FastTreeValue` in `treevalue.tree.general`. \
         The `TreeValue` class is a light-weight framework just for DIY.
     """
-    __slots__ = (_DATA_PROPERTY,)
 
-    def __init__(self, data: Union[TreeStorage, 'TreeValue', dict]):
+    @cython.binding(True)
+    def __cinit__(self, object data):
         """
         Overview:
             Constructor of `TreeValue`.
@@ -68,13 +54,55 @@ class TreeValue:
             >>> #              +--> c (3)
             >>> #              +--> d (4)
         """
-        setattr(self, _DATA_PROPERTY, data)
+        if isinstance(data, TreeStorage):
+            self._st = data
+        elif isinstance(data, TreeValue):
+            self._st = data._detach()
+        elif isinstance(data, dict):
+            self._st = _dict_unpack(data)
+        else:
+            raise TypeError(
+                "Unknown initialization type for tree value - {type}.".format(
+                    type=repr(type(data).__name__)))
+        self._type = type(self)
 
-    @classmethod
-    def __raw_value_to_value(cls, value):
-        return cls(value) if isinstance(value, TreeStorage) else value
+    def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
+        return ({},), {}
 
-    def __getattr__(self, key):
+    cpdef TreeStorage _detach(self):
+        return self._st
+
+    cdef object _unraw(self, object obj):
+        if isinstance(obj, TreeStorage):
+            return self._type(obj)
+        else:
+            return obj
+
+    cdef object _raw(self, object obj):
+        if isinstance(obj, TreeValue):
+            return obj._detach()
+        else:
+            return obj
+
+    @cython.binding(True)
+    cpdef _attr_extern(self, str key):
+        r"""
+        Overview:
+            External protected function for support the unfounded attributes. \
+            Default is raise a `KeyError`.
+
+        Arguments:
+            - key (:obj:`str`): Attribute name.
+
+        Returns:
+            - return (:obj:): Anything you like, \
+                and if it is not able to validly return anything, \
+                just raise an exception here.
+        """
+        raise AttributeError("Attribute {key} not found.".format(key=repr(key)))
+
+    @cython.binding(True)
+    def __getattr__(self, str item):
         """
         Overview:
             Get item from this tree value.
@@ -91,14 +119,13 @@ class TreeValue:
             >>> t.b    # 2
             >>> t.x.c  # 3
         """
-        _tree = get_data_property(self)
-        if key in _tree.keys():
-            value = get_data_property(self).get(key)
-            return self.__raw_value_to_value(value)
-        else:
-            return self._attr_extern(key)
+        try:
+            return self._unraw(self._st.get(item))
+        except KeyError:
+            return self._attr_extern(item)
 
-    def __setattr__(self, key, value):
+    @cython.binding(True)
+    def __setattr__(self, str key, object value):
         """
         Overview:
             Set sub node to this tree value.
@@ -112,14 +139,10 @@ class TreeValue:
             >>> t.a = 3                 # t will be TreeValue({'a': 3, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> t.b = {'x': 1, 'y': 2}  # t will be TreeValue({'a': 3, 'b': {'x': 1, 'y': 2}, 'x': {'c': 3, 'd': 4}})
         """
-        if key in _PRESERVED_PROPERTIES:
-            object.__setattr__(self, key, value)
-        else:
-            if isinstance(value, TreeValue):
-                value = get_data_property(value)
-            return get_data_property(self).set(key, value)
+        self._st.set(key, self._raw(value))
 
-    def __delattr__(self, key):
+    @cython.binding(True)
+    def __delattr__(self, str item):
         """
         Overview:
             Delete attribute from tree value.
@@ -132,12 +155,13 @@ class TreeValue:
             >>> del t.a    # t will be TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> del t.x.c  # t will be TreeValue({'b': 2, 'x': {'d': 4}})
         """
-        if key not in _PRESERVED_PROPERTIES:
-            return get_data_property(self).del_(key)
-        else:
-            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(key)))
+        try:
+            self._st.del_(item)
+        except KeyError:
+            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(item)))
 
-    def __contains__(self, key) -> bool:
+    @cython.binding(True)
+    def __contains__(self, str item):
         """
         Overview:
             Check if attribute is in this tree value.
@@ -154,8 +178,9 @@ class TreeValue:
             >>> 'b' in t  # True
             >>> 'c' in t  # False
         """
-        return key in get_data_property(self).keys()
+        return self._st.contains(item)
 
+    @cython.binding(True)
     def __iter__(self):
         """
         Overview:
@@ -175,9 +200,12 @@ class TreeValue:
             >>> b 2
             >>> x 3
         """
-        for key, value in get_data_property(self).items():
-            yield key, self.__raw_value_to_value(value)
+        cdef str k
+        cdef object v
+        for k, v in self._st.items():
+            yield k, self._unraw(v)
 
+    @cython.binding(True)
     def __len__(self):
         """
         Overview:
@@ -191,9 +219,10 @@ class TreeValue:
             >>> len(t)    # 3
             >>> len(t.x)  # 2
         """
-        return get_data_property(self).size()
+        return self._st.size()
 
-    def __bool__(self) -> bool:
+    @cython.binding(True)
+    def __bool__(self):
         """
         Overview:
             Check if the tree value is not empty.
@@ -207,9 +236,14 @@ class TreeValue:
             >>> not not t.x  # True
             >>> not not t.e  # False
         """
-        return not get_data_property(self).empty()
+        return not self._st.empty()
 
-    def _repr(self):
+    @cython.binding(True)
+    cpdef str _repr(self):
+        return f'<{self.__class__.__name__} {hex(id(self._st))}>'
+
+    @cython.binding(True)
+    def __repr__(self):
         """
         Overview:
             Get representation format of tree value.
@@ -221,23 +255,13 @@ class TreeValue:
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> repr(t)  # <TreeValue 0xffffffff keys: ['a', 'b', 'x']>, the is may be different
         """
-        _tree = get_data_property(self)
-        return f'<{self.__class__.__name__} {hex(id(_tree))}>'
-
-    def __repr__(self):
-        """
-        Overview:
-            Get the structure of the tree.
-
-        Returns:
-            - str (:obj:`str`): Returned string.
-        """
         return str(build_tree(
             self,
             repr_gen=lambda x: x._repr() if isinstance(x, TreeValue) else repr(x),
             iter_gen=lambda x: iter(x) if isinstance(x, TreeValue) else None,
         ))
 
+    @cython.binding(True)
     def __hash__(self):
         """
         Overview:
@@ -246,9 +270,10 @@ class TreeValue:
         Returns:
             - hash (:obj:`int`): Hash code of current object.
         """
-        return hash(get_data_property(self))
+        return hash(self._st)
 
-    def __eq__(self, other):
+    @cython.binding(True)
+    def __eq__(self, object other):
         """
         Overview:
             Check the equality of two tree values.
@@ -268,28 +293,13 @@ class TreeValue:
         """
         if self is other:
             return True
-        elif type(other) == self.__class__:
-            return get_data_property(self) == get_data_property(other)
+        elif type(other) == self._type:
+            return self._st == other._detach()
         else:
             return False
 
-    def _attr_extern(self, key):
-        """
-        Overview:
-            External protected function for support the unfounded attributes. \
-            Default is raise a `KeyError`.
-
-        Arguments:
-            - key (:obj:`str`): Attribute name.
-
-        Returns:
-            - return (:obj:): Anything you like, \
-                and if it is not able to validly return anything, \
-                just raise an exception here.
-        """
-        raise KeyError("Attribute {key} not found.".format(key=repr(key)))
-
-    def __setstate__(self, tree: TreeStorage):
+    @cython.binding(True)
+    def __setstate__(self, TreeStorage state):
         """
         Overview:
             Deserialize operation, can support `pickle.loads`.
@@ -305,8 +315,9 @@ class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        setattr(self, _DATA_PROPERTY, tree)
+        self._st = state
 
+    @cython.binding(True)
     def __getstate__(self):
         """
         Overview:
@@ -320,4 +331,4 @@ class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        return getattr(self, _DATA_PROPERTY)
+        return self._st

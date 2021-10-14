@@ -172,7 +172,7 @@ cdef class TreeStorage:
     def items(self):
         return self.map.items()
 
-def create_storage(dict value):
+cpdef object create_storage(dict value):
     cdef dict _map = {}
     cdef str k
     cdef object v

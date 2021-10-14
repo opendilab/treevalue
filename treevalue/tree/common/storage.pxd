@@ -26,3 +26,5 @@ cdef class TreeStorage:
     cpdef public void copy_from(self, TreeStorage ts)
     cpdef public void deepcopy_from(self, TreeStorage ts)
     cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func)
+
+cpdef public object create_storage(dict value)

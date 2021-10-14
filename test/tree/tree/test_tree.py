@@ -84,7 +84,7 @@ class TestTreeTreeTree:
         assert 'b' not in tv3.b
         assert 'b' not in tv3.c
 
-        with pytest.raises(KeyError):
+        with pytest.raises(AttributeError):
             _ = tv1.dd
 
         tv1.a = TreeValue({'a1': 1, 'a2': 2})
