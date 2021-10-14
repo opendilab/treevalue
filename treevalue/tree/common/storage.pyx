@@ -130,8 +130,8 @@ cdef class TreeStorage:
         cdef dict other_map = other.detach()
         cdef list other_keys = sorted(other.detach().keys())
 
+        cdef str key
         if self_keys == other_keys:
-            cdef str key
             for key in self_keys:
                 if not (self.map[key] == other_map[key]):
                     return False
@@ -146,7 +146,7 @@ cdef class TreeStorage:
         return self.map.values()
 
     def items(self):
-        return self.map.values()
+        return self.map.items()
 
 def create_storage(dict value):
     cdef dict _map = {}
