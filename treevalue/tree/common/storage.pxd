@@ -7,7 +7,7 @@ ctypedef unsigned int uint
 cdef void _key_validate(const char*key) except *
 
 cdef class TreeStorage:
-    cdef dict map
+    cdef readonly dict map
 
     cpdef public void set(self, str key, object value) except *
     cpdef public object get(self, str key)
@@ -18,6 +18,7 @@ cdef class TreeStorage:
     cpdef public dict dump(self)
     cpdef public dict deepdump(self)
     cpdef public dict deepdumpx(self, copy_func)
+    cpdef public dict jsondumpx(self, copy_func, object need_raw)
     cpdef public TreeStorage copy(self)
     cpdef public TreeStorage deepcopy(self)
     cpdef public TreeStorage deepcopyx(self, copy_func)

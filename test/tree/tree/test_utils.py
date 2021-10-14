@@ -17,6 +17,12 @@ class TestTreeTreeUtils:
         }
         assert jsonify(tv1.c) == {'x': 2, 'y': 3}
 
+        tv2 = TreeValue({'a': 1, 'b': 2, 'c': raw({'x': 2, 'y': 3})})
+        assert jsonify(tv2) == {
+            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
+        }
+        assert tv2.c == {'x': 2, 'y': 3}
+
     def test_clone(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2 = clone(tv1)

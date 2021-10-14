@@ -10,6 +10,10 @@ from ...utils import dynamic_call, common_direct_base, SingletonMark
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
 
 
+def _keep_object(obj):
+    return obj
+
+
 def jsonify(tree: _TreeValue):
     """
     Overview:
@@ -24,11 +28,7 @@ def jsonify(tree: _TreeValue):
     Example:
         >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
     """
-    return get_data_property(tree).dump()
-
-
-def _keep_object(obj):
-    return obj
+    return get_data_property(tree).jsondumpx(_keep_object, False)
 
 
 def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:

@@ -2,8 +2,7 @@ import pickle
 
 import pytest
 
-from treevalue.tree.common import raw, unraw
-from treevalue.tree.common.base import _RawWrapper
+from treevalue.tree.common import raw, unraw, RawWrapper
 
 
 @pytest.mark.unittest
@@ -14,8 +13,8 @@ class TestTreeBase:
 
         h = {'a': 1, 'b': 2}
         r = raw(h)
-        assert isinstance(r, _RawWrapper)
-        assert r.value is h
+        assert isinstance(r, RawWrapper)
+        assert r.value() is h
 
     def test_unraw(self):
         assert unraw(1) == 1
@@ -33,5 +32,5 @@ class TestTreeBase:
         bt = pickle.dumps(r)
         nt = pickle.loads(bt)
 
-        assert isinstance(nt, _RawWrapper)
-        assert nt.value == h
+        assert isinstance(nt, RawWrapper)
+        assert nt.value() == h

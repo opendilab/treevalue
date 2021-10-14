@@ -62,14 +62,20 @@ cdef class TreeStorage:
         return self.deepdumpx(deepcopy)
 
     cpdef public dict deepdumpx(self, copy_func):
+        return self.jsondumpx(copy_func, True)
+
+    cpdef public dict jsondumpx(self, copy_func, object need_raw):
         cdef dict result = {}
         cdef str k
-        cdef object v
+        cdef object v, obj
         for k, v in self.map.items():
             if isinstance(v, TreeStorage):
-                result[k] = v.deepdumpx(copy_func)
+                result[k] = v.jsondumpx(copy_func, need_raw)
             else:
-                result[k] = raw(copy_func(v))
+                obj = copy_func(v)
+                if need_raw:
+                    obj = raw(obj)
+                result[k] = obj
 
         return result
 

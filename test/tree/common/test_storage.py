@@ -107,7 +107,7 @@ class TestTreeStorage:
         _dumped = t.dump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
-        assert _dumped['c'].value is h1
+        assert _dumped['c'].value() is h1
         assert _dumped['d']['x'] == 3
         assert _dumped['d']['y'] == 4
 
@@ -119,7 +119,7 @@ class TestTreeStorage:
         _dumped = t.deepdump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
-        assert _dumped['c'].value == h1
+        assert _dumped['c'].value() == h1
         assert _dumped['c'] is not h1
         assert _dumped['d']['x'] == 3
         assert _dumped['d']['y'] == 4
@@ -132,7 +132,7 @@ class TestTreeStorage:
         _dumped = t.deepdumpx(lambda x: -x if isinstance(x, int) else {'holy': 'shit'})
         assert _dumped['a'] == -1
         assert _dumped['b'] == -2
-        assert _dumped['c'].value == {'holy': 'shit'}
+        assert _dumped['c'].value() == {'holy': 'shit'}
         assert _dumped['d']['x'] == -3
         assert _dumped['d']['y'] == -4
 
