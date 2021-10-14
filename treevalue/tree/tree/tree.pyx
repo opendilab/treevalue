@@ -16,8 +16,6 @@ cdef inline TreeStorage _dict_unpack(dict d):
             result[k] = _dict_unpack(v)
         elif isinstance(v, TreeValue):
             result[k] = v._detach()
-        elif isinstance(v, TreeStorage):
-            result[k] = v
         else:
             result[k] = v
 
@@ -61,6 +59,7 @@ cdef class TreeValue:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
                     type=repr(type(data).__name__)))
+
         self._type = type(self)
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
@@ -69,13 +68,13 @@ cdef class TreeValue:
     cpdef TreeStorage _detach(self):
         return self._st
 
-    cdef object _unraw(self, object obj):
+    cdef inline object _unraw(self, object obj):
         if isinstance(obj, TreeStorage):
             return self._type(obj)
         else:
             return obj
 
-    cdef object _raw(self, object obj):
+    cdef inline object _raw(self, object obj):
         if isinstance(obj, TreeValue):
             return obj._detach()
         else:
