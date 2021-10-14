@@ -36,7 +36,7 @@ cdef class TreeValue:
     """
 
     @cython.binding(True)
-    def __cinit__(self, object data):
+    def __init__(self, object data):
         """
         Overview:
             Constructor of `TreeValue`.
@@ -316,6 +316,7 @@ cdef class TreeValue:
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
         self._st = state
+        self._type = type(self)
 
     @cython.binding(True)
     def __getstate__(self):
