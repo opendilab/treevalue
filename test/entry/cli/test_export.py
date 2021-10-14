@@ -144,7 +144,7 @@ class TestEntryCliExport:
             assert os.path.exists('t1.btv')
             assert 260 < os.path.getsize('t1.btv') < 310
             assert os.path.exists('t2.btv')
-            assert 280 < os.path.getsize('t2.btv') < 390
+            assert 280 < os.path.getsize('t2.btv') < 400
             assert os.path.exists('t3.btv')
             assert 280 < os.path.getsize('t3.btv') < 350
 
