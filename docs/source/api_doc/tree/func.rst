@@ -9,28 +9,12 @@ func_treelize
 .. autofunction:: treevalue.tree.func.func_treelize
 
 
-.. _apidoc_tree_func_treeclass:
-
-tree_class
-----------------------
-
-.. autofunction:: treevalue.tree.func.tree_class
-
-
 .. _apidoc_tree_func_methodtreelize:
 
 method_treelize
 --------------------
 
 .. autofunction:: treevalue.tree.func.method_treelize
-
-
-.. _apidoc_tree_func_utilsclass:
-
-utils_class
-----------------------
-
-.. autofunction:: treevalue.tree.func.utils_class
 
 
 .. _apidoc_tree_func_classmethodtreelize:

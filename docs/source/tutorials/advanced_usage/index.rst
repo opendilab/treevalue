@@ -1090,30 +1090,6 @@ and its source code to find out all the implemented \
 operators and methods.
 
 
-DIY TreeValue Utility Class
--------------------------------
-
-You can define a pure utility class in with function \
-``utils_class`` and ``classmethod_treelize``. Like the \
-following example code.
-
-.. literalinclude:: utils_demo.demo.py
-    :language: python
-    :linenos:
-
-The result should be like below.
-
-.. literalinclude:: utils_demo.demo.py.txt
-    :language: text
-    :linenos:
-
-For further information of function ``utils_class`` \
-and ``classmethod_treelize``, just take a look at:
-
-* :ref:`apidoc_tree_func_utilsclass`
-* :ref:`apidoc_tree_func_classmethodtreelize`
-
-
 Draw Graph For TreeValue
 -----------------------------
 
