@@ -4,6 +4,7 @@ from codecs import open
 from distutils.core import setup
 
 from setuptools import find_packages
+from Cython.Build import cythonize  # this line should be after 'from setuptools import find_packages'
 
 _package_name = "treevalue"
 
@@ -29,6 +30,18 @@ group_requirements = {
 with open('README.md', 'r', 'utf-8') as f:
     readme = f.read()
 
+
+def find_pyx(path='.'):
+    pyx_files = []
+    for root, dirs, filenames in os.walk(path):
+        for fname in filenames:
+            if fname.endswith('.pyx'):
+                pyx_files.append(os.path.join(root, fname))
+    return pyx_files
+
+
+_LINETRACE = not not os.environ.get('LINETRACE', None)
+
 setup(
     # information
     name=meta['__TITLE__'],
@@ -47,6 +60,13 @@ setup(
 
     # environment
     python_requires=">=3.6",
+    ext_modules=cythonize(
+        find_pyx(),
+        language_level=3,
+        compiler_directives=dict(
+            linetrace=_LINETRACE,
+        )
+    ),
     install_requires=requirements,
     tests_require=group_requirements['test'],
     extras_require=group_requirements,

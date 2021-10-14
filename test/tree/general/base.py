@@ -55,26 +55,26 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             t2 = tree_value_clazz({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
             assert (2 + t1 + t2) == tree_value_clazz({'a': 14, 'b': 26, 'x': {'c': 38, 'd': 11}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t3 = t1 + t2
             t1 += t2
             assert t1 == t3
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_sub(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             t2 = tree_value_clazz({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
             assert (2 - t1 - t2) == tree_value_clazz({'a': -10, 'b': -22, 'x': {'c': -34, 'd': -7}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t3 = t1 - t2
             t1 -= t2
             assert t1 == t3
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_mul(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -90,13 +90,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t1 * t3) == tree_value_clazz({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 20.8}})
             assert (t3 * t1) == tree_value_clazz({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 20.8}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 * t2
             t1 *= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_matmul(self):
             t1 = tree_value_clazz({
@@ -150,13 +150,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 }
             })
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 @ t2
             t1 @= t2
             assert npeq(t1, t4)
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_floordiv(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -164,13 +164,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t2 / t1) == tree_value_clazz({'a': 11.0, 'b': 11.0, 'x': {'c': 11.0, 'd': 1.25}})
             assert (6 / t1) == tree_value_clazz({'a': 6.0, 'b': 3.0, 'x': {'c': 2.0, 'd': 1.5}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 / t2
             t1 /= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_truediv(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -178,13 +178,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t2 // t1) == tree_value_clazz({'a': 11, 'b': 11, 'x': {'c': 11, 'd': 1}})
             assert (6 // t1) == tree_value_clazz({'a': 6, 'b': 3, 'x': {'c': 2, 'd': 1}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 // t2
             t1 //= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_mod(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -192,26 +192,26 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t2 % t1) == tree_value_clazz({'a': 0, 'b': 0, 'x': {'c': 0, 'd': 1}})
             assert (6 % t1) == tree_value_clazz({'a': 0, 'b': 0, 'x': {'c': 0, 'd': 2}})
 
-            original_id = id(get_data_property(t2).actual())
-            original_id_x = id(get_data_property(t2.x).actual())
+            original_id = id(get_data_property(t2))
+            original_id_x = id(get_data_property(t2.x))
             t4 = t2 % t1
             t2 %= t1
             assert t2 == t4
-            assert id(get_data_property(t2).actual()) == original_id
-            assert id(get_data_property(t2.x).actual()) == original_id_x
+            assert id(get_data_property(t2)) == original_id
+            assert id(get_data_property(t2.x)) == original_id_x
 
         def test_numeric_power(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             assert (t1 ** t1) == tree_value_clazz({'a': 1, 'b': 4, 'x': {'c': 27, 'd': 256}})
             assert (2 ** t1) == tree_value_clazz({'a': 2, 'b': 4, 'x': {'c': 8, 'd': 16}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 ** t1
             t1 **= t1
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_and(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -219,13 +219,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t1 & t2) == tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 1, 'd': 4}})
             assert (7 & t2) == tree_value_clazz({'a': 3, 'b': 6, 'x': {'c': 1, 'd': 5}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 & t2
             t1 &= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_or(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -233,13 +233,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t1 | t2) == tree_value_clazz({'a': 11, 'b': 22, 'x': {'c': 35, 'd': 5}})
             assert (7 | t2) == tree_value_clazz({'a': 15, 'b': 23, 'x': {'c': 39, 'd': 7}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 | t2
             t1 |= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_xor(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -247,13 +247,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t1 ^ t2) == tree_value_clazz({'a': 10, 'b': 20, 'x': {'c': 34, 'd': 1}})
             assert (7 ^ t2) == tree_value_clazz({'a': 12, 'b': 17, 'x': {'c': 38, 'd': 2}})
 
-            original_id = id(get_data_property(t1).actual())
-            original_id_x = id(get_data_property(t1.x).actual())
+            original_id = id(get_data_property(t1))
+            original_id_x = id(get_data_property(t1.x))
             t4 = t1 ^ t2
             t1 ^= t2
             assert t1 == t4
-            assert id(get_data_property(t1).actual()) == original_id
-            assert id(get_data_property(t1.x).actual()) == original_id_x
+            assert id(get_data_property(t1)) == original_id
+            assert id(get_data_property(t1.x)) == original_id_x
 
         def test_numeric_lshift(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -261,13 +261,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t2 << t1) == tree_value_clazz({'a': 22, 'b': 88, 'x': {'c': 264, 'd': 80}})
             assert (3 << t1) == tree_value_clazz({'a': 6, 'b': 12, 'x': {'c': 24, 'd': 48}})
 
-            original_id = id(get_data_property(t2).actual())
-            original_id_x = id(get_data_property(t2.x).actual())
+            original_id = id(get_data_property(t2))
+            original_id_x = id(get_data_property(t2.x))
             t4 = t2 << t1
             t2 <<= t1
             assert t2 == t4
-            assert id(get_data_property(t2).actual()) == original_id
-            assert id(get_data_property(t2.x).actual()) == original_id_x
+            assert id(get_data_property(t2)) == original_id
+            assert id(get_data_property(t2.x)) == original_id_x
 
         def test_numeric_rshift(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -275,13 +275,13 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert (t2 >> t1) == tree_value_clazz({'a': 5, 'b': 5, 'x': {'c': 4, 'd': 0}})
             assert (32 >> t1) == tree_value_clazz({'a': 16, 'b': 8, 'x': {'c': 4, 'd': 2}})
 
-            original_id = id(get_data_property(t2).actual())
-            original_id_x = id(get_data_property(t2.x).actual())
+            original_id = id(get_data_property(t2))
+            original_id_x = id(get_data_property(t2.x))
             t4 = t2 >> t1
             t2 >>= t1
             assert t2 == t4
-            assert id(get_data_property(t2).actual()) == original_id
-            assert id(get_data_property(t2.x).actual()) == original_id_x
+            assert id(get_data_property(t2)) == original_id
+            assert id(get_data_property(t2.x)) == original_id_x
 
         def test_numeric_pos(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})

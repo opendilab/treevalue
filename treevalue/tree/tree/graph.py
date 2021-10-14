@@ -97,7 +97,7 @@ def _dict_call_merge(d1, d2):
 
 @dynamic_call
 def _node_id(current):
-    return 'node_%x' % (id(get_data_property(current).actual()))
+    return 'node_%x' % (id(get_data_property(current)))
 
 
 @dynamic_call

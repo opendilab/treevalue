@@ -57,13 +57,13 @@ class TestTreeCommonView:
         tv1 = t.view(['x'])
         t2 = Tree({'bf': 233, 'c': 'sdklfgjl', 'f': {'t': 2, 'p': 3, 'tp': 3}})
 
-        original_id_x = id(t['x'].actual())
-        original_id_x_f = id(t['x']['f'].actual())
+        original_id_x = id(t['x'])
+        original_id_x_f = id(t['x']['f'])
 
         tv1.copy_from(t2)
         assert tv1 == t2
-        assert id(tv1.actual()) == original_id_x
-        assert id(tv1['f'].actual()) == original_id_x_f
+        assert id(tv1) == original_id_x
+        assert id(tv1['f']) == original_id_x_f
 
     def test_deep_clone(self):
         tx = Tree({

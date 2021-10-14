@@ -319,7 +319,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             Returns:
                 - graph (:obj:`Digraph`): Generated graph of tree values.
             """
-            root = root or ('<%s #%x>' % (type(self).__name__, id(get_data_property(self).actual())))
+            root = root or ('<%s #%x>' % (type(self).__name__, id(get_data_property(self))))
             title = title or ('Graph of tree %s.' % (root,))
             return graphics(
                 (self, root), title=title, cfg=cfg, dup_value=dup_value,

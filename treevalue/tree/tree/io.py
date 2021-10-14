@@ -37,7 +37,7 @@ def dump(t: _TreeType, file, compress=None):
             tuple of functions or module (``compress`` and ``decompress`` required).
     """
     compress_func, decompress_func = _extract_compress_and_decompress(compress)
-    dump_data = (compress_func(dill.dumps(get_data_property(t).actual())),
+    dump_data = (compress_func(dill.dumps(get_data_property(t))),
                  zlib.compress(dill.dumps(decompress_func)))
     pickle.dump(dump_data, file)
 

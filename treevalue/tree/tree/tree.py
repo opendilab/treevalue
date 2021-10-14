@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Union, Any, Mapping
 
-from ..common import BaseTree, Tree
+from ..common import TreeStorage, create_storage
 from ...utils import init_magic, build_tree
 
 _DATA_PROPERTY = '_property__data'
@@ -10,17 +10,17 @@ _PRESERVED_PROPERTIES = {
 }
 
 
-def get_data_property(t: 'TreeValue') -> BaseTree:
+def get_data_property(t: 'TreeValue') -> TreeStorage:
     return getattr(t, _DATA_PROPERTY)
 
 
-def _dict_unpack(t: Union['TreeValue', Mapping[str, Any]]) -> Union[BaseTree, Any]:
-    if isinstance(t, BaseTree):
+def _dict_unpack(t: Union['TreeValue', Mapping[str, Any]]) -> Union[TreeStorage, Any]:
+    if isinstance(t, TreeStorage):
         return t
     elif isinstance(t, TreeValue):
         return get_data_property(t)
     elif isinstance(t, dict):
-        return Tree({str(key): _dict_unpack(value) for key, value in t.items()})
+        return create_storage({str(key): _dict_unpack(value) for key, value in t.items()})
     else:
         return t
 
@@ -30,7 +30,7 @@ def _init_decorate(init_func):
     def _new_init_func(data):
         if isinstance(data, (TreeValue, dict)):
             _new_init_func(_dict_unpack(data))
-        elif isinstance(data, BaseTree):
+        elif isinstance(data, TreeStorage):
             init_func(data)
         else:
             raise TypeError(
@@ -50,14 +50,14 @@ class TreeValue:
     """
     __slots__ = (_DATA_PROPERTY,)
 
-    def __init__(self, data: Union[BaseTree, 'TreeValue', dict]):
+    def __init__(self, data: Union[TreeStorage, 'TreeValue', dict]):
         """
         Overview:
             Constructor of `TreeValue`.
 
         Arguments:
-            - data: (:obj:`Union[BaseTree, 'TreeValue', dict]`): Original data to init a tree value, \
-                can be a `BaseTree`, `TreeValue` or dict.
+            - data: (:obj:`Union[TreeStorage, 'TreeValue', dict]`): Original data to init a tree value, \
+                can be a `TreeStorage`, `TreeValue` or dict.
 
         Example:
             >>> TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -72,7 +72,7 @@ class TreeValue:
 
     @classmethod
     def __raw_value_to_value(cls, value):
-        return cls(value) if isinstance(value, BaseTree) else value
+        return cls(value) if isinstance(value, TreeStorage) else value
 
     def __getattr__(self, key):
         """
@@ -93,7 +93,7 @@ class TreeValue:
         """
         _tree = get_data_property(self)
         if key in _tree.keys():
-            value = get_data_property(self).__getitem__(key)
+            value = get_data_property(self).get(key)
             return self.__raw_value_to_value(value)
         else:
             return self._attr_extern(key)
@@ -117,7 +117,7 @@ class TreeValue:
         else:
             if isinstance(value, TreeValue):
                 value = get_data_property(value)
-            return get_data_property(self).__setitem__(key, value)
+            return get_data_property(self).set(key, value)
 
     def __delattr__(self, key):
         """
@@ -132,10 +132,10 @@ class TreeValue:
             >>> del t.a    # t will be TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> del t.x.c  # t will be TreeValue({'b': 2, 'x': {'d': 4}})
         """
-        if key in _PRESERVED_PROPERTIES:
-            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(key)))
+        if key not in _PRESERVED_PROPERTIES:
+            return get_data_property(self).del_(key)
         else:
-            return get_data_property(self).__delitem__(key)
+            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(key)))
 
     def __contains__(self, key) -> bool:
         """
@@ -191,7 +191,7 @@ class TreeValue:
             >>> len(t)    # 3
             >>> len(t.x)  # 2
         """
-        return len(get_data_property(self))
+        return get_data_property(self).size()
 
     def __bool__(self) -> bool:
         """
@@ -222,11 +222,8 @@ class TreeValue:
             >>> repr(t)  # <TreeValue 0xffffffff keys: ['a', 'b', 'x']>, the is may be different
         """
         _tree = get_data_property(self)
-        return "<{cls} {id} keys: {keys}>".format(
-            cls=self.__class__.__name__,
-            id=hex(id(_tree.actual())),
-            keys=repr(sorted(_tree.keys()))
-        )
+        return _tree
+        # return "<{cls} {id} keys: {keys}?
 
     def __str__(self):
         """
@@ -293,7 +290,7 @@ class TreeValue:
         """
         raise KeyError("Attribute {key} not found.".format(key=repr(key)))
 
-    def __setstate__(self, tree: Tree):
+    def __setstate__(self, tree: TreeStorage):
         """
         Overview:
             Deserialize operation, can support `pickle.loads`.
@@ -324,4 +321,4 @@ class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        return getattr(self, _DATA_PROPERTY).actual()
+        return getattr(self, _DATA_PROPERTY)

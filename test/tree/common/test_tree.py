@@ -40,14 +40,14 @@ class TestTreeCommonTree:
     def test_copy_from(self):
         t1 = Tree({'a': 1, 'x': {'b': 1, 'c': 2}})
         t2 = Tree({'a': 11, 'b': 24, 'x': {'b': 12, 'e': {'dfkj': 892374}}})
-        original_id = id(t1.actual())
-        original_id_x = id(t1['x'].actual())
+        original_id = id(t1)
+        original_id_x = id(t1['x'])
 
         t1.copy_from(t2)
         assert t1 == t2
         assert t1 is not t2
-        assert id(t1.actual()) == original_id
-        assert id(t1['x'].actual()) == original_id_x
+        assert id(t1) == original_id
+        assert id(t1['x']) == original_id_x
         assert t1['x']['e'] == t2['x']['e']
         assert t1['x']['e'] is not t2['x']['e']
 
