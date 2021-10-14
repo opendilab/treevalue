@@ -32,7 +32,7 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('t1.btv')
-            assert 150 < os.path.getsize('t1.btv') < 220
+            assert 150 < os.path.getsize('t1.btv') < 230
 
             with open('t1.btv', 'rb') as file:
                 assert load(file, type_=FastTreeValue) == t1
@@ -44,7 +44,7 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('t1.btv')
-            assert 150 < os.path.getsize('t1.btv') < 220
+            assert 150 < os.path.getsize('t1.btv') < 230
             assert os.path.exists('t2.btv')
             assert 200 < os.path.getsize('t2.btv') < 280
             assert os.path.exists('t3.btv')
@@ -125,7 +125,7 @@ class TestEntryCliExport:
             assert os.path.exists('t2.btv')
             assert 160 < os.path.getsize('t2.btv') < 240
             assert os.path.exists('t3.btv')
-            assert 160 < os.path.getsize('t3.btv') < 200
+            assert 160 < os.path.getsize('t3.btv') < 210
 
             with open('t1.btv', 'rb') as file:
                 assert load(file, type_=FastTreeValue) == t1
@@ -142,7 +142,7 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('t1.btv')
-            assert 260 < os.path.getsize('t1.btv') < 300
+            assert 260 < os.path.getsize('t1.btv') < 310
             assert os.path.exists('t2.btv')
             assert 280 < os.path.getsize('t2.btv') < 370
             assert os.path.exists('t3.btv')

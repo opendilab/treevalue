@@ -42,12 +42,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             t3 = tree_value_clazz({'a': 14, 'b': 26, 'x': {'c': 38, 'd': 11}})
             assert t3.json() == {'a': 14, 'b': 26, 'x': {'c': 38, 'd': 11}}
 
-            t4 = t3.view(['x'])
             t5 = t3.x.clone()
-            assert t4 == tree_value_clazz({'c': 38, 'd': 11})
-            assert t5 == tree_value_clazz({'c': 38, 'd': 11})
-            t3.x.c = 100
-            assert t4 == tree_value_clazz({'c': 100, 'd': 11})
             assert t5 == tree_value_clazz({'c': 38, 'd': 11})
 
         def test_numeric_add(self):
