@@ -36,7 +36,7 @@ class TestTreeTreeIo:
 
         _dumped_data = dumps(t, compress=zlib)
         t1 = loads(_dumped_data, type_=FastTreeValue)
-        assert 210 < len(dumps(t, compress=zlib)) < 230
+        assert 210 < len(dumps(t, compress=zlib)) < 240
         assert isinstance(t1, FastTreeValue)
         assert t1 == t
 
@@ -55,7 +55,7 @@ class TestTreeTreeIo:
 
         _dumped_data = dumps(t, compress=(zlib.compress, zlib.decompress))
         t1 = loads(_dumped_data, type_=FastTreeValue)
-        assert 210 < len(_dumped_data) < 230
+        assert 210 < len(_dumped_data) < 240
         assert isinstance(t1, FastTreeValue)
         assert t1 == t
 
@@ -69,7 +69,7 @@ class TestTreeTreeIo:
 
         _dumped_data = dumps(t, compress=zlib.compress)
         t1 = loads(_dumped_data, decompress=zlib.decompress, type_=FastTreeValue)
-        assert 130 < len(_dumped_data) < 150
+        assert 130 < len(_dumped_data) < 170
         assert isinstance(t1, FastTreeValue)
         assert t1 == t
 
