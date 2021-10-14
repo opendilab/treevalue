@@ -1,6 +1,7 @@
+import copy
 from functools import partial
 from itertools import chain
-from typing import TypeVar, List, Type, Tuple, Union, Any, Optional, Callable
+from typing import TypeVar, Type, Tuple, Union, Any, Optional, Callable
 
 from .tree import TreeValue, get_data_property
 from ..common import raw
@@ -23,25 +24,11 @@ def jsonify(tree: _TreeValue):
     Example:
         >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
     """
-    return get_data_property(tree).json()
+    return get_data_property(tree).dump()
 
 
-def view(tree: _TreeValue, path: List[str]) -> _TreeValue:
-    """
-    Overview:
-        Create a `TreeValue` object which is a view of given tree.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object.
-        - path (:obj:`List[str]`): Path of the view.
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Viewed tree value object.
-
-    Example:
-        >>> view(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}), ['x'])  # TreeValue({'c': 3, 'd': 4})
-    """
-    return tree.__class__(get_data_property(tree).view(path))
+def _keep_object(obj):
+    return obj
 
 
 def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:
@@ -62,7 +49,9 @@ def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None)
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
-    return tree.__class__(get_data_property(tree).clone(copy_value))
+    if not callable(copy_value):
+        copy_value = copy.deepcopy if copy_value else _keep_object
+    return tree.__class__(get_data_property(tree).deepcopyx(copy_value))
 
 
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:

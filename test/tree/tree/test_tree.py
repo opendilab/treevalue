@@ -87,7 +87,7 @@ class TestTreeTreeTree:
         with pytest.raises(KeyError):
             _ = tv1.dd
 
-        tv1.a = {'a1': 1, 'a2': 2}
+        tv1.a = TreeValue({'a1': 1, 'a2': 2})
         assert tv1.a.a1 == 1
         assert tv2.a.a1 == 1
         assert tv3.a.a.a1 == 1
@@ -103,8 +103,8 @@ class TestTreeTreeTree:
     def test_tree_value_repr(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
 
-        assert re.fullmatch(r"<TreeValue 0x[0-9a-f]+ keys: \['a', 'b', 'c']>", repr(tv1))
-        assert re.fullmatch(r"<TreeValue 0x[0-9a-f]+ keys: \['x', 'y']>", repr(tv1.c))
+        assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv1))
+        assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv1.c))
 
     def test_tree_value_str(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})

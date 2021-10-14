@@ -207,9 +207,9 @@ class TreeValue:
             >>> not not t.x  # True
             >>> not not t.e  # False
         """
-        return not not get_data_property(self)
+        return not get_data_property(self).empty()
 
-    def __repr__(self):
+    def _repr(self):
         """
         Overview:
             Get representation format of tree value.
@@ -222,10 +222,9 @@ class TreeValue:
             >>> repr(t)  # <TreeValue 0xffffffff keys: ['a', 'b', 'x']>, the is may be different
         """
         _tree = get_data_property(self)
-        return _tree
-        # return "<{cls} {id} keys: {keys}?
+        return f'<{self.__class__.__name__} {hex(id(_tree))}>'
 
-    def __str__(self):
+    def __repr__(self):
         """
         Overview:
             Get the structure of the tree.
@@ -235,7 +234,7 @@ class TreeValue:
         """
         return str(build_tree(
             self,
-            repr_gen=lambda x: repr(x),
+            repr_gen=lambda x: x._repr() if isinstance(x, TreeValue) else repr(x),
             iter_gen=lambda x: iter(x) if isinstance(x, TreeValue) else None,
         ))
 

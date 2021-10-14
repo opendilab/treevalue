@@ -125,19 +125,37 @@ cdef class TreeStorage:
         cdef str clsname = self.__class__.__name__
         return f'<{clsname} at {hex(id(self))}, keys: {repr(keys)}>'
 
-    def __eq__(self, TreeStorage other):
+    def __eq__(self, other):
+        if self is other:
+            return True
+        if type(self) != type(other):
+            return False
+
         cdef list self_keys = sorted(self.map.keys())
         cdef dict other_map = other.detach()
         cdef list other_keys = sorted(other.detach().keys())
 
         cdef str key
+        cdef object self_v
+        cdef object other_v
         if self_keys == other_keys:
             for key in self_keys:
-                if not (self.map[key] == other_map[key]):
+                self_v = self.map[key]
+                other_v = other_map[key]
+                if self_v != other_v:
                     return False
             return True
         else:
             return False
+
+    def __hash__(self):
+        cdef str k
+        cdef object v
+        cdef list _items = []
+        for k, v in sorted(self.map.items(), key=lambda x: x[0]):
+            _items.append((k, v))
+
+        return hash(tuple(_items))
 
     def keys(self):
         return self.map.keys()

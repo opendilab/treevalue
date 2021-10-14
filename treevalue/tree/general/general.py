@@ -1,11 +1,11 @@
 from functools import lru_cache
 from functools import wraps, partial
-from typing import List, Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
+from typing import Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
 
 from graphviz import Digraph
 
 from ..func import method_treelize, MISSING_NOT_ALLOW, TreeMode, func_treelize
-from ..tree import TreeValue, jsonify, view, clone, typetrans, mapping, mask, filter_, reduce_, union, \
+from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, \
     NO_RISE_TEMPLATE, graphics
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
@@ -109,24 +109,6 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t.json()  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
             """
             return jsonify(self)
-
-        @_decorate_method
-        def view(self, path: List[str]):
-            """
-            Overview:
-                Create a `TreeValue` object which is a view of the current tree.
-
-            Arguments:
-                - path (:obj:`List[str]`): Path of the view.
-
-            Returns:
-                - tree (:obj:`_TreeValue`): Viewed tree value object.
-
-            Example:
-                >>> t = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-                >>> t.view(['x'])  # FastTreeValue({'c': 3, 'd': 4}), it is a view not the real node
-            """
-            return view(self, path)
 
         @_decorate_method
         def clone(self, copy_value: Union[None, bool, Callable, Any] = None):
