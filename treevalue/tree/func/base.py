@@ -14,10 +14,10 @@ class _BaseProcessor:
 
     def check_arguments(self, mode, return_type, inherit, allow_missing, missing_func, subside, rise):
         if return_type is not None:
-            if not isinstance(return_type, type):
+            if not isinstance(return_type, type) and not callable(return_type):
                 raise TypeError("Return type should be a type or none, but {type} found.".format(
                     type=repr(type(return_type).__name__)))
-            elif not issubclass(return_type, TreeValue):
+            if isinstance(return_type, type) and not issubclass(return_type, TreeValue):
                 raise TypeError("Tree value should be subclass of TreeValue, but {type} found.".format(
                     type=repr(return_type.__name__)
                 ))

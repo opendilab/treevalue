@@ -10,7 +10,7 @@ from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..common import raw
-from ..tree.tree import TreeValue
+from ..tree import TreeValue
 from ..tree.utils import rise as rise_func
 from ..tree.utils import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
@@ -55,7 +55,8 @@ MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 
 def func_treelize(mode: Union[str, TreeMode] = 'strict',
-                  return_type: Optional[Type[TreeClassType_]] = TreeValue, inherit: bool = True,
+                  return_type: Union[None, Type[TreeClassType_], Callable] = TreeValue,
+                  inherit: bool = True,
                   missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                   subside: Union[Mapping, bool, None] = None,
                   rise: Union[Mapping, bool, None] = None):
@@ -159,8 +160,13 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
 
             _result, _is_const = _recursion(*args, **kwargs)
             if return_type is not None:
+                if isinstance(return_type, type) and issubclass(return_type, TreeValue):
+                    rt = return_type
+                else:
+                    rt = return_type(args[0])
+
                 if not _is_const:
-                    _result = return_type(_result)
+                    _result = rt(_result)
                 if rise is not None:
                     _result = rise_func(_result, **rise)
 
@@ -173,75 +179,11 @@ def func_treelize(mode: Union[str, TreeMode] = 'strict',
     return _decorator
 
 
-_CONFIGS_TAG = '__configs__'
-
-
-def _tree_check(clazz, allow_none=False):
-    if clazz is None:
-        if not allow_none:
-            raise TypeError("Tree value class is not allowed to be none, but None found.")
-        else:
-            return
-
-    if not isinstance(clazz, type):
-        raise TypeError("Tree value class should be a type, but {type} found.".format(
-            type=repr(type(clazz).__name__)
-        ))
-    elif not issubclass(clazz, TreeValue):
-        raise TypeError("Tree value class should be subclass of TreeValue, but {type} found.".format(
-            type=repr(clazz.__name__)
-        ))
-
-
-def _class_config(return_type: Optional[Type[TreeClassType_]] = None,
-                  allow_none_return_type: bool = True,
-                  clazz_must_be_tree_value: bool = True):
-    _tree_check(return_type, allow_none=allow_none_return_type)
-
-    def _decorator(clazz: type) -> type:
-        if clazz_must_be_tree_value:
-            _tree_check(clazz, allow_none=False)
-
-        config = _get_configs(clazz)
-        config.update(dict(
-            return_type=return_type,
-        ))
-        setattr(clazz, _CONFIGS_TAG, config)
-        return clazz
-
-    return _decorator
-
-
-def tree_class(return_type: Optional[Type[TreeClassType_]] = None):
-    """
-    Overview:
-        Wrap tree configs for ``TreeValue`` class.
-
-    Arguments:
-        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Default return type of current class, \
-            default is ``None`` which means use the class itself.
-
-    Returns:
-        - decorator (:obj:`Callable`): A class decorator.
-    """
-    return _class_config(
-        return_type, True, True,
-    )
-
-
-def _get_configs(clazz: type):
-    return dict(getattr(clazz, _CONFIGS_TAG, None) or {})
-
-
 #: Default value of the ``return_type`` arguments \
 #: of ``method_treelize`` and ``classmethod_treelize``, \
 #: which means return type will be auto configured to
 #: the current class.
 AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
-
-
-def _auto_detect_type(clazz: type):
-    return _get_configs(clazz).get('return_type', None) or clazz
 
 
 def method_treelize(mode: Union[str, TreeMode] = 'strict',
@@ -292,11 +234,18 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
     """
 
     def _decorator(method):
+        if return_type is AUTO_DETECT_RETURN_TYPE:
+            def _get_self_class(self):
+                return self.__class__
+        else:
+            def _get_self_class(self):
+                return return_type
+
+        _treelized = func_treelize(mode, _get_self_class, inherit, missing, subside, rise)(method)
+
         @wraps(method)
         def _new_method(self, *args, **kwargs):
-            rt = _auto_detect_type(self.__class__) if return_type is AUTO_DETECT_RETURN_TYPE else return_type
-            _result = func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
-
+            _result = _treelized(self, *args, **kwargs)
             if self_copy:
                 self._detach().copy_from(_result._detach())
                 return self
@@ -306,37 +255,6 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
         return _new_method
 
     return _decorator
-
-
-def utils_class(return_type: Type[TreeClassType_]):
-    """
-    Overview:
-        Wrap tree configs for utils class.
-
-    Arguments:
-        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Default return type of current class.
-
-    Returns:
-        - decorator (:obj:`Callable`): A class decorator.
-
-    Examples:
-        >>> class MyTreeValue(TreeValue):
-        >>>     pass
-        >>>
-        >>> @utils_class(return_type=MyTreeValue)
-        >>> class MyTreeUtils:
-        >>>     @classmethod
-        >>>     @classmethod_treelize()
-        >>>     def add(cls, a, b):
-        >>>         return a + b
-        >>>
-        >>> t1 = TreeValue({'a': 1, 'b': 2})
-        >>> t2 = TreeValue({'a': 3, 'b': 4})
-        >>> MyTreeUtils.add(t1, t2)  # MyTreeValue({'a': 4, 'b': 6})
-    """
-    return _class_config(
-        return_type, False, False,
-    )
 
 
 def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
@@ -383,12 +301,11 @@ def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
         >>> )  # TreeValue({'a': (TestUtils, 12), 'b': (TestUtils, 25)})
     """
 
-    def _decorator(method):
-        @wraps(method)
-        def _new_method(cls, *args, **kwargs):
-            rt = _auto_detect_type(cls) if return_type is AUTO_DETECT_RETURN_TYPE else return_type
-            return func_treelize(mode, rt, inherit, missing, subside, rise)(partial(method, cls))(*args, **kwargs)
+    if return_type is AUTO_DETECT_RETURN_TYPE:
+        def _get_cls_class(cls):
+            return cls
+    else:
+        def _get_cls_class(cls):
+            return return_type
 
-        return _new_method
-
-    return _decorator
+    return func_treelize(mode, _get_cls_class, inherit, missing, subside, rise)
