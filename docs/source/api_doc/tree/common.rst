@@ -1,22 +1,15 @@
 treevalue.tree.common
 ======================
 
-.. _apidoc_tree_common_basetree:
+.. py:currentmodule:: treevalue.tree.common
 
-BaseTree
+.. _apidoc_tree_common_treestorage:
+
+TreeStorage
 -----------
 
-.. autoclass:: treevalue.tree.common.base.BaseTree
-    :members: __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
-
-
-.. _apidoc_tree_common_tree:
-
-Tree
----------
-
-.. autoclass:: treevalue.tree.common.tree.Tree
-    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
+.. autoclass:: TreeStorage
+    :members: get, set, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach
 
 
 .. _apidoc_tree_common_raw:
@@ -24,14 +17,22 @@ Tree
 raw
 ----------
 
-.. autofunction:: treevalue.tree.common.tree.raw
+.. autofunction:: raw
 
 
-.. _apidoc_tree_common_treeview:
+.. _apidoc_tree_common_unraw:
 
-TreeView
--------------
+unraw
+----------
 
-.. autoclass:: treevalue.tree.common.view.TreeView
-    :members: __init__, __getitem__, __setitem__, __delitem__, json, view, clone, items, keys, values, actual, __len__, __hash__, __eq__, __repr__, __bool__, __str__, copy_from
+.. autofunction:: unraw
+
+
+.. _apidoc_tree_common_rawwrapper:
+
+RawWrapper
+---------------
+
+.. autoclass:: RawWrapper
+    :members: __init__, value
 

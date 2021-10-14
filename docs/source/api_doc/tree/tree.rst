@@ -18,14 +18,6 @@ jsonify
 .. autofunction:: treevalue.tree.tree.utils.jsonify
 
 
-.. _apidoc_tree_tree_view:
-
-view
-----------
-
-.. autofunction:: treevalue.tree.tree.utils.view
-
-
 .. _apidoc_tree_tree_clone:
 
 clone

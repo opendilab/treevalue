@@ -792,46 +792,6 @@ The result should be
 For further informaon of function ``jsonify``, \
 take a look at :ref:`apidoc_tree_tree_jsonify`.
 
-View
-~~~~~~~~~~~~~
-
-Another magic function named ``view`` is also provided, \
-to process logic viewing cases.
-
-.. literalinclude:: view_demo.demo.py
-    :language: python
-    :linenos:
-
-The result will be like below, ``t_x_y`` and ``vt_x_y``'s \
-value is different after the replacement of the sub tree \
-named ``t.x``, for ``vt_x_y``'s value's equality to the \
-current ``t.x.y``.
-
-.. literalinclude:: view_demo.demo.py.txt
-    :language: text
-    :linenos:
-
-.. note::
-
-    Attention that the ``view`` operation is different \
-    from sub node getting operation. In viewed tree, \
-    it is based on a logic link based on the tree be viewed, \
-    and the actual operations are performed in the actual \
-    tree node. The main difference between ``view`` and \
-    getting sub node is that the view tree will be \
-    affected by the replacement of sub nodes in viewed tree.
-
-    Like the code example above, in the view tree ``vt_x_y``, \
-    before do tree operations, the viewed tree will \
-    be approached from root tree ``t`` by keys of ``x`` and \
-    ``y``, so after the replacement of the whole subtree \
-    ``t.x``, ``vt_x_y`` is still the latest value of ``t.x.y``, \
-    while ``t_x_y`` is still the old sub tree of tree ``t``, \
-    before replacement.
-
-
-For further informaon of function ``view``, \
-take a look at :ref:`apidoc_tree_tree_view`.
 
 Clone
 ~~~~~~~~~~~~~~~~

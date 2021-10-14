@@ -60,7 +60,7 @@ so they are compatible with each other. The class \
 ``Tree`` and ``TreeView`` form the data layer of \
 ``TreeValue``.
 
-* :ref:`API documentation of BaseTree<apidoc_tree_common_basetree>`.
+* :ref:`API documentation of BaseTree<apidoc_tree_common_treestorage>`.
 * :ref:`API documentation of Tree<apidoc_tree_common_tree>`.
 * :ref:`API documentation of TreeView<apidoc_tree_common_treeview>`.
 
