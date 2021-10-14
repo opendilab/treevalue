@@ -3,8 +3,6 @@
 
 from ..common.storage cimport TreeStorage
 
-cpdef TreeStorage get_data_property(t)
-
 cdef class TreeValue:
     cdef TreeStorage _st
     cdef type _type

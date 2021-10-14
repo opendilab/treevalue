@@ -3,7 +3,7 @@ from functools import partial
 from itertools import chain
 from typing import TypeVar, Type, Tuple, Union, Any, Optional, Callable
 
-from .tree import TreeValue, get_data_property
+from .tree import TreeValue
 from ..common import raw
 from ...utils import dynamic_call, common_direct_base, SingletonMark
 
@@ -28,7 +28,7 @@ def jsonify(tree: _TreeValue):
     Example:
         >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
     """
-    return get_data_property(tree).jsondumpx(_keep_object, False)
+    return tree._detach().jsondumpx(_keep_object, False)
 
 
 def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:
@@ -51,7 +51,7 @@ def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None)
     """
     if not callable(copy_value):
         copy_value = copy.deepcopy if copy_value else _keep_object
-    return tree.__class__(get_data_property(tree).deepcopyx(copy_value))
+    return tree.__class__(tree._detach().deepcopyx(copy_value))
 
 
 def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
@@ -77,7 +77,7 @@ def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
             type=repr(return_type.__name__)
         ))
 
-    return return_type(get_data_property(tree))
+    return return_type(tree._detach())
 
 
 def _build_path_tree(tree: _TreeValue) -> _TreeValue:

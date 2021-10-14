@@ -3,7 +3,7 @@ from typing import Type, Callable, Union, Optional, Tuple
 
 from graphviz import Digraph, nohtml
 
-from .tree import TreeValue, get_data_property
+from .tree import TreeValue
 from ...utils import post_process, build_graph, dynamic_call, \
     freduce, Color
 from ...utils.tree import SUFFIXED_TAG
@@ -97,7 +97,7 @@ def _dict_call_merge(d1, d2):
 
 @dynamic_call
 def _node_id(current):
-    return 'node_%x' % (id(get_data_property(current)))
+    return 'node_%x' % (id(current._detach()))
 
 
 @dynamic_call

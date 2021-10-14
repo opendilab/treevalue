@@ -6,9 +6,6 @@ import cython
 from ..common.storage cimport TreeStorage, create_storage
 from ...utils import build_tree
 
-cpdef TreeStorage get_data_property(t):
-    return t._detach()
-
 cdef inline TreeStorage _dict_unpack(dict d):
     cdef str k
     cdef object v

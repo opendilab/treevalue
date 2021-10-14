@@ -10,7 +10,7 @@ from .left import _LeftProcessor
 from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..common import raw
-from ..tree.tree import TreeValue, get_data_property
+from ..tree.tree import TreeValue
 from ..tree.utils import rise as rise_func
 from ..tree.utils import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
@@ -298,7 +298,7 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
             _result = func_treelize(mode, rt, inherit, missing, subside, rise)(method)(self, *args, **kwargs)
 
             if self_copy:
-                get_data_property(self).copy_from(get_data_property(_result))
+                self._detach().copy_from(_result._detach())
                 return self
             else:
                 return _result

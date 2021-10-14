@@ -4,7 +4,6 @@ import re
 import pytest
 
 from treevalue.tree.tree import TreeValue
-from treevalue.tree.tree.tree import get_data_property
 
 
 class _Container:
@@ -59,7 +58,7 @@ class TestTreeTreeTree:
         assert isinstance(tv4.x.b, MyTreeValue)
         assert isinstance(tv4.x.c, MyTreeValue)
 
-        tv5 = MyTreeValue({'a': tv1.c, 'x': {'b': get_data_property(tv1), 'c': tv2.c}})
+        tv5 = MyTreeValue({'a': tv1.c, 'x': {'b': tv1._detach(), 'c': tv2.c}})
         assert isinstance(tv5.a, MyTreeValue)
         assert isinstance(tv5.x, MyTreeValue)
         assert isinstance(tv5.x.b, MyTreeValue)

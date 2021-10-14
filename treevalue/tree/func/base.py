@@ -1,13 +1,13 @@
 from itertools import chain
 
-from ..tree.tree import get_data_property, TreeValue
+from ..tree import TreeValue
 
 
 class _BaseProcessor:
     def _get_key_entries(*args, **kwargs):
         for index, value in chain(enumerate(args), kwargs.items()):
             if isinstance(value, TreeValue):
-                yield index, tuple(sorted(get_data_property(value).keys()))
+                yield index, tuple(sorted(value._detach().keys()))
 
     def get_key_set(self, *args, **kwargs):
         raise NotImplementedError  # pragma: no cover

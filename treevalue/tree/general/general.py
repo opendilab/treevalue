@@ -9,7 +9,6 @@ from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_,
     NO_RISE_TEMPLATE, graphics
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
-from ..tree.tree import get_data_property
 from ...utils import dynamic_call, raising
 
 _BASE_GENERATION_CONFIG = {}
@@ -301,7 +300,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             Returns:
                 - graph (:obj:`Digraph`): Generated graph of tree values.
             """
-            root = root or ('<%s #%x>' % (type(self).__name__, id(get_data_property(self))))
+            root = root or ('<%s #%x>' % (type(self).__name__, id(self._detach())))
             title = title or ('Graph of tree %s.' % (root,))
             return graphics(
                 (self, root), title=title, cfg=cfg, dup_value=dup_value,
