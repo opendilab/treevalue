@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import TreeValue, mapping, raw
+from treevalue.tree import TreeValue, mapping, raw, mask, filter_
 
 
 # noinspection DuplicatedCode
@@ -26,3 +26,29 @@ class TestTreeTreeFunctional:
             }
         })
         assert tv6 == TreeValue({'a': 1.0, 'b': 2.0, 'c': {'x': 2.0, 'y': 3.0}})
+
+    def test_mask(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        m1 = TreeValue({'a': True, 'b': False, 'x': False})
+        m2 = TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}})
+
+        assert mask(t, m1) == MyTreeValue({'a': 1})
+        assert mask(t, m2) == MyTreeValue({'a': 1, 'x': {'c': 3}})
+
+        t2 = MyTreeValue({'a': 1, 'b': 2, 'x': 5})
+        assert mask(t2, m1) == MyTreeValue({'a': 1})
+        with pytest.raises(TypeError):
+            assert mask(t2, m2)
+
+    def test_filter(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+
+        assert filter_(t, lambda x: x < 3) == MyTreeValue({'a': 1, 'b': 2})
+        assert filter_(t, lambda x: x < 3, remove_empty=False) == MyTreeValue({'a': 1, 'b': 2, 'x': {}})
+        assert filter_(t, lambda x: x % 2 == 1) == MyTreeValue({'a': 1, 'x': {'c': 3}})

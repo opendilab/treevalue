@@ -3,24 +3,13 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import TreeValue, mapping, filter_, mask, union, reduce_, raw, \
+from treevalue.tree import TreeValue, mapping, union, reduce_, raw, \
     subside, rise
 
 
 # noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeTreeUtils:
-    def test_mask(self):
-        class MyTreeValue(TreeValue):
-            pass
-
-        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        m1 = TreeValue({'a': True, 'b': False, 'x': False})
-        m2 = TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}})
-
-        assert mask(t, m1) == MyTreeValue({'a': 1})
-        assert mask(t, m2) == MyTreeValue({'a': 1, 'x': {'c': 3}})
-
     def test_union(self):
         t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         tx = mapping(t, lambda v: v % 2 == 1)
@@ -32,16 +21,6 @@ class TestTreeTreeUtils:
         t1 = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         assert union(t, t1) == TreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(t1, t) == MyTreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
-
-    def test_filter(self):
-        class MyTreeValue(TreeValue):
-            pass
-
-        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-
-        assert filter_(t, lambda x: x < 3) == MyTreeValue({'a': 1, 'b': 2})
-        assert filter_(t, lambda x: x < 3, remove_empty=False) == MyTreeValue({'a': 1, 'b': 2, 'x': {}})
-        assert filter_(t, lambda x: x % 2 == 1) == MyTreeValue({'a': 1, 'x': {'c': 3}})
 
     def test_subside(self):
         class MyTreeValue(TreeValue):

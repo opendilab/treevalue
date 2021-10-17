@@ -130,7 +130,8 @@ cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
                 _d_res[k] = curres
         else:
             if isinstance(mv, TreeStorage):
-                raise TypeError(f'Common object expected but {repr(mv)} found.')
+                raise TypeError(f'Common object expected but {repr(mv)} found on mask, '
+                                f'positioned at {repr(curpath)}.')
             elif mv:
                 _d_res[k] = v
 
