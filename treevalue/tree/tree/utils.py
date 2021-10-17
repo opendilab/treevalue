@@ -1,6 +1,6 @@
 from functools import partial
 from itertools import chain
-from typing import TypeVar, Type, Tuple, Union, Any, Optional, Callable
+from typing import TypeVar, Type, Tuple, Optional, Callable
 
 from .functional import mapping
 from .service import clone, typetrans
@@ -9,42 +9,6 @@ from ..common import raw
 from ...utils import common_direct_base, SingletonMark
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
-
-
-def _filter_by_masked_tree(masked_tree: _TreeValue, remove_empty: bool) -> _TreeValue:
-    def _recursion(t: Union[_TreeValue, Any]) -> Tuple[bool, _TreeValue]:
-        if isinstance(t, masked_tree.__class__):
-            dict_result = {key: _recursion(value) for key, value in t}
-            dict_result = {key: value for key, (flag, value) in dict_result.items() if flag}
-            result = masked_tree.__class__(dict_result)
-
-            return not not result if remove_empty else True, result
-        else:
-            return t
-
-    _, _result = _recursion(masked_tree)
-    return _result
-
-
-def mask(tree: _TreeValue, mask_: Union[TreeValue, bool], remove_empty: bool = True) -> _TreeValue:
-    """
-    Overview:
-        Filter the element in the tree with a mask
-
-    Arguments:
-        - `tree` (:obj:`_TreeValue`): Tree value object
-        - `mask_` (:obj:`TreeValue`): Tree value mask object
-        - `remove_empty` (:obj:`bool`): Remove empty tree node automatically, default is `True`.
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Filtered tree value object.
-
-    Example:
-        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': False}))                    # TreeValue({'a': 1})
-        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}}))  # TreeValue({'a': 1, 'x': {'c': 3}})
-    """
-    return _filter_by_masked_tree(union(mask_, tree, return_type=tree.__class__), remove_empty)
 
 
 def union(*trees: TreeValue, return_type=None, **kwargs):

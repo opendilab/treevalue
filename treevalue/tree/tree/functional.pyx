@@ -106,3 +106,54 @@ cpdef TreeValue filter_(TreeValue t, object func, bool remove_empty=True):
         >>> filter_(t, lambda x, p: p[0] in {'b', 'x'})  # TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
     """
     return type(t)(_c_filter_(t._detach(), _ValuePathFuncWrapper(func), (), remove_empty))
+
+cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
+    cdef bool _b_tree_mask = isinstance(sm, TreeStorage)
+    cdef dict _d_st = st.detach()
+    cdef dict _d_sm = sm.detach() if isinstance(sm, TreeStorage) else None
+    cdef dict _d_res = {}
+
+    cdef str k
+    cdef object v, mv
+    cdef tuple curpath
+    cdef object curres
+    for k, v in _d_st.items():
+        curpath = path + (k,)
+        if _b_tree_mask:
+            mv = _d_sm[k]
+        else:
+            mv = sm
+
+        if isinstance(v, TreeStorage):
+            curres = _c_mask(v, mv, curpath, remove_empty)
+            if not remove_empty or not curres.empty():
+                _d_res[k] = curres
+        else:
+            if isinstance(mv, TreeStorage):
+                raise TypeError(f'Common object expected but {repr(mv)} found.')
+            elif mv:
+                _d_res[k] = v
+
+    return TreeStorage(_d_res)
+
+@cython.binding(True)
+cpdef TreeValue mask(TreeValue tree, object mask_, bool remove_empty=True):
+    """
+    Overview:
+        Filter the element in the tree with a mask
+
+    Arguments:
+        - `tree` (:obj:`_TreeValue`): Tree value object
+        - `mask_` (:obj:`TreeValue`): Tree value mask object
+        - `remove_empty` (:obj:`bool`): Remove empty tree node automatically, default is `True`.
+
+    Returns:
+        - tree (:obj:`_TreeValue`): Filtered tree value object.
+
+    Example:
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': False}))                    # TreeValue({'a': 1})
+        >>> mask(t, TreeValue({'a': True, 'b': False, 'x': {'c': True, 'd': False}}))  # TreeValue({'a': 1, 'x': {'c': 3}})
+    """
+    cdef object _raw_mask = mask_._detach() if isinstance(mask_, TreeValue) else mask_
+    return type(tree)(_c_mask(tree._detach(), _raw_mask, (), remove_empty))
