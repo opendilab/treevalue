@@ -44,7 +44,7 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
     return TreeStorage(_d_res)
 
 @cython.binding(True)
-cpdef TreeValue mapping(TreeValue t, object func):
+cpdef TreeValue mapping(TreeValue tree, object func):
     """
     Overview:
         Do mapping on every value in this tree.
@@ -62,7 +62,7 @@ cpdef TreeValue mapping(TreeValue t, object func):
         >>> mapping(t, lambda: 1)        # TreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
         >>> mapping(t, lambda x, p: p)   # TreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
     """
-    return type(t)(_c_mapping(t._detach(), _ValuePathFuncWrapper(func), ()))
+    return type(tree)(_c_mapping(tree._detach(), _ValuePathFuncWrapper(func), ()))
 
 cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove_empty):
     cdef dict _d_st = st.detach()
@@ -85,7 +85,7 @@ cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove
     return TreeStorage(_d_res)
 
 @cython.binding(True)
-cpdef TreeValue filter_(TreeValue t, object func, bool remove_empty=True):
+cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty=True):
     """
     Overview:
         Filter the element in the tree with a predict function.
@@ -105,7 +105,7 @@ cpdef TreeValue filter_(TreeValue t, object func, bool remove_empty=True):
         >>> filter_(t, lambda x: x % 2 == 1)             # TreeValue({'a': 1, 'x': {'c': 3}})
         >>> filter_(t, lambda x, p: p[0] in {'b', 'x'})  # TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
     """
-    return type(t)(_c_filter_(t._detach(), _ValuePathFuncWrapper(func), (), remove_empty))
+    return type(tree)(_c_filter_(tree._detach(), _ValuePathFuncWrapper(func), (), remove_empty))
 
 cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
     cdef bool _b_tree_mask = isinstance(sm, TreeStorage)
