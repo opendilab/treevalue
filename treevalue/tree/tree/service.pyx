@@ -51,11 +51,10 @@ cpdef TreeValue clone(TreeValue t, object copy_value=None):
     if not callable(copy_value):
         copy_value = copy.deepcopy if copy_value else _keep_object
 
-    cdef type tt = type(t)
-    return tt(t._detach().deepcopyx(copy_value))
+    return type(t)(t._detach().deepcopyx(copy_value))
 
 @cython.binding(True)
-cpdef TreeValue typetrans(TreeValue t, type return_type):
+cpdef TreeValue typetrans(TreeValue t, object return_type):
     """
     Overview:
         Transform tree value object to another tree value type. \

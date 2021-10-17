@@ -8,4 +8,4 @@ from .tree cimport TreeValue
 cdef object _keep_object(object obj)
 cpdef object jsonify(TreeValue val)
 cpdef TreeValue clone(TreeValue t, object copy_value= *)
-cpdef TreeValue typetrans(TreeValue t, type return_type)
+cpdef TreeValue typetrans(TreeValue t, object return_type)
