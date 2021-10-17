@@ -1,117 +1,14 @@
-import copy
 from functools import partial
 from itertools import chain
 from typing import TypeVar, Type, Tuple, Union, Any, Optional, Callable
 
+from .functional import mapping
+from .service import clone, typetrans
 from .tree import TreeValue
 from ..common import raw
-from ...utils import dynamic_call, common_direct_base, SingletonMark
+from ...utils import common_direct_base, SingletonMark
 
 _TreeValue = TypeVar("_TreeValue", bound=TreeValue)
-
-
-def _keep_object(obj):
-    return obj
-
-
-def jsonify(tree: _TreeValue):
-    """
-    Overview:
-        Dump `TreeValue` object to json data.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object.
-
-    Returns:
-        - json (:obj:`dict`): Dumped json data.
-
-    Example:
-        >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
-    """
-    return tree._detach().jsondumpx(_keep_object, False)
-
-
-def clone(tree: _TreeValue, copy_value: Union[None, bool, Callable, Any] = None) -> _TreeValue:
-    """
-    Overview:
-        Create a fully clone of the given tree.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object
-        - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \
-            default is `None` which means do not deep copy the values. \
-            If deep copy is required, just set it to `True`.
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Cloned tree value object.
-
-    Example:
-        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
-    """
-    if not callable(copy_value):
-        copy_value = copy.deepcopy if copy_value else _keep_object
-    return tree.__class__(tree._detach().deepcopyx(copy_value))
-
-
-def typetrans(tree: TreeValue, return_type: Type[_TreeValue]) -> _TreeValue:
-    """
-    Overview:
-        Transform tree value object to another tree value type. \
-        Attention that in this function, no copy will be made, \
-        the original tree value and the transformed tree value are using the same space area.
-
-    Arguments:
-        - tree (:obj:`TreeValue`): Tree value object
-        - return_type (:obj:`Type[_TreeValue]`): Target tree value type
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Transformed tree value object.
-
-    Example:
-        >>> t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> typetrans(t, TreeValue)  # TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-    """
-    if not issubclass(return_type, TreeValue):
-        raise TypeError("Tree value should be subclass of TreeValue, but {type} found.".format(
-            type=repr(return_type.__name__)
-        ))
-
-    return return_type(tree._detach())
-
-
-def _build_path_tree(tree: _TreeValue) -> _TreeValue:
-    def _recursion(path, t: _TreeValue):
-        if isinstance(t, tree.__class__):
-            return tree.__class__({key: _recursion(path + [key], value) for key, value in t})
-        else:
-            return tuple(path)
-
-    return _recursion([], tree)
-
-
-def mapping(tree: _TreeValue, func: Callable) -> _TreeValue:
-    """
-    Overview:
-        Do mapping on every value in this tree.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:`Callable`): Function for mapping
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Mapped tree value object.
-
-    Example:
-        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> mapping(t, lambda x: x + 2)  # TreeValue({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
-        >>> mapping(t, lambda: 1)        # TreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
-        >>> mapping(t, lambda x, p: p)   # TreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
-    """
-
-    from ..func import func_treelize
-    return func_treelize(return_type=tree.__class__)(lambda args: dynamic_call(func)(*args))(
-        union(tree, _build_path_tree(tree)))
 
 
 def _filter_by_masked_tree(masked_tree: _TreeValue, remove_empty: bool) -> _TreeValue:

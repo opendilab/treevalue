@@ -3,105 +3,13 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import jsonify, TreeValue, clone, typetrans, mapping, filter_, mask, union, reduce_, raw, \
+from treevalue.tree import TreeValue, mapping, filter_, mask, union, reduce_, raw, \
     subside, rise
 
 
 # noinspection DuplicatedCode
 @pytest.mark.unittest
 class TestTreeTreeUtils:
-    def test_jsonify(self):
-        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        assert jsonify(tv1) == {
-            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
-        }
-        assert jsonify(tv1.c) == {'x': 2, 'y': 3}
-
-        tv2 = TreeValue({'a': 1, 'b': 2, 'c': raw({'x': 2, 'y': 3})})
-        assert jsonify(tv2) == {
-            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
-        }
-        assert tv2.c == {'x': 2, 'y': 3}
-
-    def test_clone(self):
-        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        tv2 = clone(tv1)
-
-        assert jsonify(tv1) == {
-            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
-        }
-        assert jsonify(tv2) == {
-            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
-        }
-
-        tv1.a = 3
-        tv1.b = 4
-        tv1.c = TreeValue({'a': 7, 'b': 4})
-        assert jsonify(tv1) == {
-            'a': 3, 'b': 4, 'c': {'a': 7, 'b': 4}
-        }
-        assert jsonify(tv2) == {
-            'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
-        }
-
-        tv3 = TreeValue({
-            'a': raw({'a': 1, 'b': 2}),
-            'b': raw({'a': 3, 'b': 4}),
-            'x': {
-                'c': raw({'a': 5, 'b': 6}),
-                'd': raw({'a': 7, 'b': 8}),
-            }
-        })
-
-        tv4 = clone(tv3)
-        assert tv4 == tv3
-        assert tv4.a is tv3.a
-        assert tv4.b is tv3.b
-        assert tv4.x.c is tv3.x.c
-        assert tv4.x.d is tv3.x.d
-
-        tv5 = clone(tv3, copy_value=True)
-        assert tv5 == tv3
-        assert tv5.a is not tv3.a
-        assert tv5.b is not tv3.b
-        assert tv5.x.c is not tv3.x.c
-        assert tv5.x.d is not tv3.x.d
-
-    def test_typetrans(self):
-        class MyTreeValue(TreeValue):
-            pass
-
-        class NonTreeValue:
-            pass
-
-        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        tv2 = typetrans(tv1, MyTreeValue)
-
-        assert tv2 == MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        assert tv2 != tv1
-
-        with pytest.raises(TypeError):
-            typetrans(tv1, NonTreeValue)
-
-    def test_mapping(self):
-        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        tv2 = mapping(tv1, lambda x: x + 2)
-        tv3 = mapping(tv1, lambda: 1)
-        tv4 = mapping(tv1, lambda x, p: (x, p))
-        tv5 = mapping(tv1, lambda x, p: {'a': x ** (len(p) + 1), 'b': len(p) ** x})
-
-        assert tv2 == TreeValue({'a': 3, 'b': 4, 'c': {'x': 4, 'y': 5}})
-        assert tv3 == TreeValue({'a': 1, 'b': 1, 'c': {'x': 1, 'y': 1}})
-        assert tv4 == TreeValue({'a': (1, ('a',)), 'b': (2, ('b',)), 'c': {'x': (2, ('c', 'x')), 'y': (3, ('c', 'y'))}})
-        assert tv5 == TreeValue({
-            'a': raw({'a': 1, 'b': 1}),
-            'b': raw({'a': 4, 'b': 1}),
-            'c': {
-                'x': raw({'a': 8, 'b': 4}),
-                'y': raw({'a': 27, 'b': 8})
-            }
-        })
-
     def test_mask(self):
         class MyTreeValue(TreeValue):
             pass
