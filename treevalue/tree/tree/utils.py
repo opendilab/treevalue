@@ -3,7 +3,7 @@ from itertools import chain
 from typing import TypeVar, Type, Tuple, Optional, Callable
 
 from .functional import mapping
-from .service import clone, typetrans
+from .service import clone
 from .tree import TreeValue
 from ..common import raw
 from ...utils import common_direct_base, SingletonMark
@@ -292,37 +292,3 @@ def rise(tree: _TreeValue, dict_: bool = True, list_: bool = True, tuple_: bool 
     assert meta_value_count == len(meta_value_getters)
 
     return value_builder(*map(lambda getter_: tree_builder(*map(getter_, value_list)), meta_value_getters))
-
-
-def _reduce_recursion(t: _TreeValue, tv: Type[TreeValue], func):
-    if isinstance(t, tv):
-        _result = func(**{key: _reduce_recursion(value, tv, func) for key, value in t})
-        if isinstance(_result, TreeValue):
-            return typetrans(_result, tv)
-        else:
-            return _result
-    else:
-        return t
-
-
-def reduce_(tree: _TreeValue, func):
-    """
-    Overview
-        Reduce the tree to value.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:): Function for reducing
-
-    Returns:
-        - result (:obj:): Reduce result
-
-    Examples:
-        >>> from functools import reduce
-        >>>
-        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> reduce_(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
-        >>> reduce_(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
-    """
-
-    return _reduce_recursion(tree, tree.__class__, func)

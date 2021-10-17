@@ -158,3 +158,48 @@ cpdef TreeValue mask(TreeValue tree, object mask_, bool remove_empty=True):
     """
     cdef object _raw_mask = mask_._detach() if isinstance(mask_, TreeValue) else mask_
     return type(tree)(_c_mask(tree._detach(), _raw_mask, (), remove_empty))
+
+cdef object _c_reduce(TreeStorage st, object func, tuple path, object return_type):
+    cdef dict _d_st = st.detach()
+    cdef dict _d_kwargs = {}
+
+    cdef str k
+    cdef object v
+    cdef tuple curpath
+    cdef object curst
+    for k, v in _d_st.items():
+        curpath = path + (k,)
+        if isinstance(v, TreeStorage):
+            curst = _c_reduce(v, func, curpath, return_type)
+            if isinstance(curst, (TreeValue, TreeStorage)):
+                curst = return_type(curst)
+            _d_kwargs[k] = curst
+        else:
+            _d_kwargs[k] = v
+
+    cdef object res = func(**_d_kwargs)
+    if isinstance(res, (TreeStorage, TreeValue)):
+        res = return_type(res)
+    return res
+
+@cython.binding(True)
+cpdef object reduce_(TreeValue tree, object func):
+    """
+    Overview
+        Reduce the tree to value.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - func (:obj:): Function for reducing
+
+    Returns:
+        - result (:obj:): Reduce result
+
+    Examples:
+        >>> from functools import reduce
+        >>>
+        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> reduce_(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)
+        >>> reduce_(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)
+    """
+    return _c_reduce(tree._detach(), func, (), type(tree))
