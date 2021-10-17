@@ -6,7 +6,9 @@
 from .tree cimport TreeValue
 from ..common.storage cimport TreeStorage
 
-cdef object _single_value_process(object o)
+cdef class _MappingFunc:
+    cdef readonly object func
+    cdef int index
+
 cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path)
-cdef TreeStorage _st_mapping(TreeStorage st, object func)
 cpdef TreeValue mapping(TreeValue t, object func)

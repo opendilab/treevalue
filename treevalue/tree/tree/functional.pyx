@@ -4,14 +4,27 @@
 # mapping, filter_, mask, reduce_
 
 import cython
-from hbutils.reflection import dynamic_call, sigsupply
 
 from .tree cimport TreeValue
 from ..common.storage cimport TreeStorage
 
-@cython.binding(True)
-cdef object _single_value_process(object o):
-    pass
+cdef class _MappingFunc:
+    def __cinit__(self, func):
+        self.func = func
+        self.index = 2
+
+    def __call__(self, object v, tuple path):
+        while True:
+            if self.index == 0:
+                return self.func()
+
+            try:
+                if self.index == 1:
+                    return self.func(v)
+                else:
+                    return self.func(v, path)
+            except TypeError:
+                self.index -= 1
 
 cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
     cdef dict _d_st = st.detach()
@@ -29,10 +42,7 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
 
     return TreeStorage(_d_res)
 
-cdef TreeStorage _st_mapping(TreeStorage st, object func):
-    cdef object _func = dynamic_call(sigsupply(func, _single_value_process))
-    return _c_mapping(st, _func, ())
-
+@cython.binding(True)
 cpdef TreeValue mapping(TreeValue t, object func):
     """
     Overview:
@@ -53,4 +63,4 @@ cpdef TreeValue mapping(TreeValue t, object func):
     """
     cdef TreeStorage _st = t._detach()
     cdef type tt = type(t)
-    return tt(_st_mapping(_st, func))
+    return tt(_c_mapping(_st, _MappingFunc(func), ()))
