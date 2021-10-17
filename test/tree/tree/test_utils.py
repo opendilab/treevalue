@@ -1,9 +1,6 @@
-from functools import reduce
-from operator import __mul__
-
 import pytest
 
-from treevalue.tree import TreeValue, mapping, union, reduce_, raw, \
+from treevalue.tree import TreeValue, mapping, union, raw, \
     subside, rise
 
 
@@ -189,17 +186,3 @@ class TestTreeTreeUtils:
         ]
         with pytest.raises(ValueError):
             rise(t5, template=[None, None])
-
-    def test_reduce(self):
-        class MyTreeValue(TreeValue):
-            pass
-
-        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        assert reduce_(t, lambda **kwargs: sum(kwargs.values())) == 10
-        assert reduce_(t, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
-
-        assert reduce_(t, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
-               == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
-
-        t.x = reduce_(t.x, lambda **kwargs: sum(kwargs.values()))
-        assert t == MyTreeValue({'a': 1, 'b': 2, 'x': 7})

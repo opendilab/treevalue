@@ -1,6 +1,9 @@
+from functools import reduce
+from operator import __mul__
+
 import pytest
 
-from treevalue.tree import TreeValue, mapping, raw, mask, filter_
+from treevalue.tree import TreeValue, mapping, raw, mask, filter_, reduce_
 
 
 # noinspection DuplicatedCode
@@ -52,3 +55,17 @@ class TestTreeTreeFunctional:
         assert filter_(t, lambda x: x < 3) == MyTreeValue({'a': 1, 'b': 2})
         assert filter_(t, lambda x: x < 3, remove_empty=False) == MyTreeValue({'a': 1, 'b': 2, 'x': {}})
         assert filter_(t, lambda x: x % 2 == 1) == MyTreeValue({'a': 1, 'x': {'c': 3}})
+
+    def test_reduce(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        assert reduce_(t, lambda **kwargs: sum(kwargs.values())) == 10
+        assert reduce_(t, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
+
+        assert reduce_(t, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
+               == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
+
+        t.x = reduce_(t.x, lambda **kwargs: sum(kwargs.values()))
+        assert t == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
