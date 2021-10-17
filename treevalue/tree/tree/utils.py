@@ -47,29 +47,6 @@ def mask(tree: _TreeValue, mask_: Union[TreeValue, bool], remove_empty: bool = T
     return _filter_by_masked_tree(union(mask_, tree, return_type=tree.__class__), remove_empty)
 
 
-def filter_(tree: _TreeValue, func: Callable, remove_empty: bool = True) -> _TreeValue:
-    """
-    Overview:
-        Filter the element in the tree with a predict function.
-
-    Arguments:
-        - tree (:obj:`_TreeValue`): Tree value object
-        - func (:obj:`Callable`): Function for filtering
-        - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
-
-    Returns:
-        - tree (:obj:`_TreeValue`): Filtered tree value object.
-
-    Example:
-        >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> filter_(t, lambda x: x < 3)                  # TreeValue({'a': 1, 'b': 2})
-        >>> filter_(t, lambda x: x < 3, False)           # TreeValue({'a': 1, 'b': 2, 'x': {}})
-        >>> filter_(t, lambda x: x % 2 == 1)             # TreeValue({'a': 1, 'x': {'c': 3}})
-        >>> filter_(t, lambda x, p: p[0] in {'b', 'x'})  # TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
-    """
-    return mask(tree, mapping(tree, func), remove_empty)
-
-
 def union(*trees: TreeValue, return_type=None, **kwargs):
     """
     Overview:
