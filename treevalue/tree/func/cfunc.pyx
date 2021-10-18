@@ -42,7 +42,7 @@ cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
     cdef list _l_args
     cdef dict _d_kwargs
     cdef int i
-    for k in tuple(_c_keyset(mode, args, kwargs)):
+    for k in _c_keyset(mode, args, kwargs):
         _l_args = []
         for i, (av, at) in enumerate(ck_args):
             if at:
@@ -88,6 +88,7 @@ cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
 
     return TreeStorage(_d_res)
 
+# runtime function
 def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object __w_return_type,
                          bool __w_inherit, bool __w_allow_missing, object __w_missing_func, **kwargs):
     cdef tuple _a_args = tuple((item._detach() if isinstance(item, TreeValue) else item) for item in args)
@@ -103,18 +104,13 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
     else:
         return None
 
-cpdef object _d_func_treelize(object func, _e_tree_mode mode, object return_type, bool inherit,
-                       bool allow_missing, object missing_func):
-    return partial(_w_func_treelize_run, __w_func=func, __w_mode=mode, __w_return_type=return_type,
-                   __w_inherit=inherit, __w_allow_missing=allow_missing, __w_missing_func=missing_func)
-
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 cdef _c_common_value(object item):
     return item
 
-cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
-                    bool inherit=True, object missing=MISSING_NOT_ALLOW):
+# build-time function
+cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing):
     cdef _e_tree_mode _v_mode = _c_load_mode(mode)
     cdef bool allow_missing
     cdef object missing_func
@@ -123,8 +119,12 @@ cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
         missing_func = None
     else:
         allow_missing = True
-        missing_func = missing if callable(missing) else partial(_c_common_value, item=missing)
+        missing_func = missing if callable(missing) else partial(_c_common_value, missing)
 
     _c_check(_v_mode, return_type, inherit, allow_missing, missing_func)
-    return partial(_d_func_treelize, mode=_v_mode, return_type=return_type, inherit=inherit,
-                   allow_missing=allow_missing, missing_func=missing_func)
+    return partial(_w_func_treelize_run, __w_func=func, __w_mode=_v_mode, __w_return_type=return_type,
+                   __w_inherit=inherit, __w_allow_missing=allow_missing, __w_missing_func=missing_func)
+
+cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
+                           bool inherit=True, object missing=MISSING_NOT_ALLOW):
+    return partial(_d_func_treelize, mode=mode, return_type=return_type, inherit=inherit, missing=missing)
