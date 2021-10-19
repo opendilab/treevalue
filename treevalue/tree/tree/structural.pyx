@@ -11,70 +11,37 @@ from libcpp cimport bool
 from .tree cimport TreeValue
 from ..func.cfunc cimport _c_func_treelize_run
 from ..func.modes cimport _c_load_mode
-from ...utils import common_direct_base
 
-cdef class _SubsideValue:
-    cpdef int size(self):
-        return 1
+cdef object _c_subside_process(tuple value, object it):
+    cdef type type_
+    cdef list items
+    type_, items = value
 
-    def __call__(self, object v):
+    cdef dict _d_res
+    cdef list _l_res
+    cdef str k
+    cdef object v
+    if issubclass(type_, (list, tuple)):
+        _l_res = []
+        for v in items:
+            _l_res.append(_c_subside_process(v, it))
+        return type_(_l_res)
+    elif issubclass(type_, dict):
+        _d_res = {}
+        for k, v in items:
+            _d_res[k] = _c_subside_process(v, it)
+        return type_(_d_res)
+    else:
+        v = next(it)
         return v
 
-cdef class _SubsideDict:
-    def __cinit__(self, list mapping, type type_):
-        self.count = 0
-        self.items = []
-        self.type_ = type_
-
-        cdef str k
-        cdef object v
-        cdef int next_count
-        for k, v in mapping:
-            next_count = self.count + v.size()
-            self.items.append((k, v, self.count, next_count))
-            self.count = next_count
-
-    cpdef int size(self):
-        return self.count
+cdef class _SubsideCall:
+    def __cinit__(self, object run):
+        self.run = run
 
     def __call__(self, *args):
-        cdef dict _d_res = {}
-
-        cdef str k
-        cdef object v
-        cdef int _i_head, _i_tail
-        for k, v, _i_head, _i_tail in self.items:
-            _d_res[k] = v(*args[_i_head:_i_tail])
-
-        return self.type_(_d_res)
-
-cdef class _SubsideArray:
-    def __cinit__(self, object lst, type type_):
-        self.count = 0
-        self.items = []
-        self.type_ = type_
-
-        cdef object v
-        cdef int next_count
-        for v in lst:
-            next_count = self.count + v.size()
-            self.items.append((v, self.count, next_count))
-            self.count = next_count
-
-    cpdef int size(self):
-        return self.count
-
-    def __call__(self, *args):
-        cdef list _l_res = []
-
-        cdef object v
-        cdef int _i_head, _i_tail
-        for v, _i_head, _i_tail in self.items:
-            _l_res.append(v(*args[_i_head:_i_tail]))
-
-        return self.type_(_l_res)
-
-_S_SUBSIDE_VALUE = _SubsideValue()
+        cdef object it = iter(args)
+        return _c_subside_process(self.run, it)
 
 cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
     cdef str k
@@ -91,7 +58,7 @@ cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
             _l_items.append(_s_items)
             _l_types.append(_s_types)
 
-        return _SubsideDict(_l_subside, type(value)), chain(*_l_items), chain(*_l_types)
+        return (type(value), _l_subside), chain(*_l_items), chain(*_l_types)
 
     elif (isinstance(value, list) and list_) or \
             (isinstance(value, tuple) and tuple_):
@@ -101,13 +68,13 @@ cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
             _l_items.append(_s_items)
             _l_types.append(_s_types)
 
-        return _SubsideArray(_l_subside, type(value)), chain(*_l_items), chain(*_l_types)
+        return (type(value), _l_subside), chain(*_l_items), chain(*_l_types)
 
     else:
         if isinstance(value, TreeValue):
-            return _S_SUBSIDE_VALUE, (value._detach(),), (type(value),)
+            return (object, None), (value._detach(),), (type(value),)
         else:
-            return _S_SUBSIDE_VALUE, (value,), ()
+            return (object, None), (value,), ()
 
 STRICT = _c_load_mode('STRICT')
 
@@ -119,7 +86,8 @@ cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool i
     builder, _i_args, _i_types = _c_subside_build(value, dict_, list_, tuple_)
     cdef tuple args = tuple(_i_args)
 
-    return _c_func_treelize_run(builder, args, {}, STRICT, inherit, False, _c_subside_missing), _i_types
+    return _c_func_treelize_run(_SubsideCall(builder), args, {},
+                                STRICT, inherit, False, _c_subside_missing), _i_types
 
 cdef object _c_subside_keep_type(object t):
     return t
@@ -171,7 +139,10 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
     if return_type is None:
         types = set(_i_types)
         if types:
-            type_ = common_direct_base(*types)
+            if len(types) == 1:
+                type_ = next(iter(types))
+            else:
+                type_ = TreeValue
         else:
             type_ = _c_subside_keep_type
     else:

@@ -5,24 +5,10 @@
 
 from libcpp cimport bool
 
-# subside - common value
-cdef class _SubsideValue:
-    cpdef int size(self)
+cdef class _SubsideCall:
+    cdef object run
 
-# subside - dict
-cdef class _SubsideDict:
-    cdef int count
-    cdef list items
-    cdef type type_
-    cpdef int size(self)
-
-# subside - list, tuple
-cdef class _SubsideArray:
-    cdef int count
-    cdef list items
-    cdef type type_
-    cpdef int size(self)
-
+cdef object _c_subside_process(tuple value, object it)
 cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_)
 cdef void _c_subside_missing()
 cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit)

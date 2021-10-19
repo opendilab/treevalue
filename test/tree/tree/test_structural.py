@@ -2,10 +2,6 @@ import pytest
 
 from treevalue.tree import TreeValue, mapping, union, raw, \
     subside
-import pytest
-
-from treevalue.tree import TreeValue, mapping, union, raw, \
-    subside
 
 
 # noinspection DuplicatedCode
@@ -70,25 +66,13 @@ class TestTreeTreeStructural:
             'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
         })
 
-        class MyTreeValue1(MyTreeValue):
-            pass
-
-        class MyTreeValue2(MyTreeValue):
-            pass
-
-        class MyTreeValue3(MyTreeValue):
-            pass
-
-        class MyTreeValue4(MyTreeValue):
-            pass
-
         original3 = {
-            'a': MyTreeValue1({'a': 1, 'b': 2}),
+            'a': MyTreeValue({'a': 1, 'b': 2}),
             'x': {
-                'c': MyTreeValue2({'a': 3, 'b': 4}),
+                'c': MyTreeValue({'a': 3, 'b': 4}),
                 'd': [
-                    MyTreeValue3({'a': 5, 'b': 6}),
-                    MyTreeValue4({'a': 7, 'b': 8}),
+                    MyTreeValue({'a': 5, 'b': 6}),
+                    MyTreeValue({'a': 7, 'b': 8}),
                 ]
             },
             'k': '233'
