@@ -9,6 +9,7 @@ import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
+from ..common.storage cimport TreeStorage
 from ..func.cfunc cimport _c_func_treelize_run
 from ..func.modes cimport _c_load_mode
 
@@ -136,17 +137,16 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
 
     cdef object type_
     cdef set types
-    if return_type is None:
-        types = set(_i_types)
-        if types:
-            if len(types) == 1:
-                type_ = next(iter(types))
-            else:
-                type_ = TreeValue
-        else:
-            type_ = _c_subside_keep_type
-    else:
+    if not isinstance(result, TreeStorage):
+        type_ = _c_subside_keep_type
+    elif return_type:
         type_ = return_type
+    else:
+        types = set(_i_types)
+        if len(types) == 1:
+            type_ = next(iter(types))
+        else:
+            type_ = TreeValue
 
     return type_(result)
 
@@ -176,13 +176,12 @@ def union(*trees, object return_type=None, bool inherit=True):
     result, _i_types = _c_subside(tuple(trees), True, True, True, inherit)
 
     cdef object type_
-    cdef list types = list(_i_types)
-    if return_type is None:
-        if types:
-            type_ = types[0]
-        else:
-            type_ = _c_subside_keep_type
-    else:
+    cdef list types
+    if not isinstance(result, TreeStorage):
+        type_ = _c_subside_keep_type
+    elif return_type:
         type_ = return_type
+    else:
+        type_ = next(iter(_i_types))
 
     return type_(result)

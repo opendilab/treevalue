@@ -19,8 +19,12 @@ class TestTreeTreeStructural:
         assert union(t, t1) == TreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(t1, t) == MyTreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(1, 2) == (1, 2)
+        assert union(1, 2, return_type=TreeValue) == (1, 2)
 
     def test_subside(self):
+        assert subside({'a': (1, 2), 'b': [3, 4]}) == {'a': (1, 2), 'b': [3, 4]}
+        assert subside({'a': (1, 2), 'b': [3, 4]}, return_type=TreeValue) == {'a': (1, 2), 'b': [3, 4]}
+
         class MyTreeValue(TreeValue):
             pass
 
