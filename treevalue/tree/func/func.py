@@ -11,8 +11,8 @@ from .outer import _OuterProcessor
 from .strict import _StrictProcessor
 from ..common import raw
 from ..tree import TreeValue
-from ..tree.utils import rise as rise_func
-from ..tree.utils import subside as subside_func
+from ..tree import rise as rise_func
+from ..tree import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
 
 

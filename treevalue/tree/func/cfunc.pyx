@@ -11,8 +11,7 @@ from ..tree.tree cimport TreeValue
 from ...utils import SingletonMark
 
 cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
-                                 _e_tree_mode mode, object return_type, bool inherit,
-                                 bool allow_missing, object missing_func):
+                                 _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):
     cdef list ck_args = []
     cdef list ck_kwargs = []
     cdef bool has_tree = False
@@ -84,7 +83,7 @@ cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
                     ))
 
         _d_res[k] = _c_func_treelize_run(func, tuple(_l_args), _d_kwargs,
-                                         mode, return_type, inherit, allow_missing, missing_func)
+                                         mode, inherit, allow_missing, missing_func)
 
     return TreeStorage(_d_res)
 
@@ -93,7 +92,7 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
                          bool __w_inherit, bool __w_allow_missing, object __w_missing_func, **kwargs):
     cdef tuple _a_args = tuple((item._detach() if isinstance(item, TreeValue) else item) for item in args)
     cdef dict _a_kwargs = {k: (v._detach() if isinstance(v, TreeValue) else v) for k, v in kwargs.items()}
-    cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode, __w_return_type,
+    cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode,
                                                __w_inherit, __w_allow_missing, __w_missing_func)
 
     if __w_return_type is not None:
