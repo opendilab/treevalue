@@ -33,8 +33,7 @@ cdef object _c_subside_process(tuple value, object it):
             _d_res[k] = _c_subside_process(v, it)
         return type_(_d_res)
     else:
-        v = next(it)
-        return v
+        return next(it)
 
 cdef class _SubsideCall:
     def __cinit__(self, object run):
@@ -185,3 +184,37 @@ def union(*trees, object return_type=None, bool inherit=True):
         type_ = next(iter(_i_types))
 
     return type_(result)
+
+cdef object _c_rise_tree_builder(tuple p, object it):
+    cdef type type_
+    cdef object item
+    type_, item = p
+
+    cdef str k
+    cdef object v
+    cdef dict _d_res
+    if type_ is TreeStorage:
+        _d_res = {}
+        for k, v in item:
+            _d_res[k] = _c_rise_tree_builder(v, it)
+        return TreeStorage(_d_res)
+    else:
+        return next(it)
+
+cdef tuple _c_rise_tree_process(object t):
+    cdef str k
+    cdef object v
+    cdef list _l_items, _l_values
+    cdef object _i_item, _i_value
+    cdef dict detached
+    if isinstance(t, TreeStorage):
+        detached = t.detach()
+        _l_items = []
+        _l_values = []
+        for k, v in detached.items():
+            _i_item, _i_value = _c_rise_tree_process(v)
+            _l_items.append((k, _i_item))
+            _l_values.append(_i_value)
+        return (TreeStorage, _l_items), chain(*_l_values)
+    else:
+        return (object, None), (t,)

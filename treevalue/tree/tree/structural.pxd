@@ -15,3 +15,6 @@ cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool i
 cdef object _c_subside_keep_type(object t)
 cpdef object subside(object value, bool dict_= *, bool list_= *, bool tuple_= *,
                      object return_type= *, bool inherit= *)
+
+cdef object _c_rise_tree_builder(tuple p, object it)
+cdef tuple _c_rise_tree_process(object t)
