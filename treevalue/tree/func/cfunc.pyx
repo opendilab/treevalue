@@ -3,10 +3,12 @@
 
 from functools import partial
 
+import cython
 from libcpp cimport bool
 
 from .modes cimport _e_tree_mode, _c_keyset, _c_load_mode, _c_check
 from ..common.storage cimport TreeStorage
+from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
 from ...utils import SingletonMark
 
@@ -87,19 +89,40 @@ cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
 
     return TreeStorage(_d_res)
 
+def _w_subside_func(object value, bool dict_=True, bool list_=True, bool tuple_=True, bool inherit=True):
+    return _c_subside(value, dict_, list_, tuple_, inherit)[0]
+
+def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True, object template=None):
+    return _c_rise(tree, dict_, list_, tuple_, template)
+
 # runtime function
 def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object __w_return_type,
-                         bool __w_inherit, bool __w_allow_missing, object __w_missing_func, **kwargs):
+                         bool __w_inherit, bool __w_allow_missing, object __w_missing_func,
+                         object __w_subside, object __w_rise, **kwargs):
     cdef tuple _a_args = tuple((item._detach() if isinstance(item, TreeValue) else item) for item in args)
     cdef dict _a_kwargs = {k: (v._detach() if isinstance(v, TreeValue) else v) for k, v in kwargs.items()}
+
+    if __w_subside is not None:
+        _a_args = tuple(_w_subside_func(item, **__w_subside) for item in _a_args)
+        _a_kwargs = {key: _w_subside_func(value, **__w_subside) for key, value in _a_kwargs.items()}
+
     cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode,
                                                __w_inherit, __w_allow_missing, __w_missing_func)
 
+    cdef object _o_res
     if __w_return_type is not None:
-        if isinstance(__w_return_type, type) and issubclass(__w_return_type, TreeValue):
-            return __w_return_type(_st_res)
+        if isinstance(_st_res, TreeStorage):
+            if isinstance(__w_return_type, type) and issubclass(__w_return_type, TreeValue):
+                _o_res = __w_return_type(_st_res)
+            else:
+                _o_res = __w_return_type(args[0])(_st_res)
         else:
-            return __w_return_type(args[0])(_st_res)
+            _o_res = _st_res
+
+        if __w_rise is not None:
+            _o_res = _w_rise_func(_o_res, **__w_rise)
+
+        return _o_res
     else:
         return None
 
@@ -109,7 +132,8 @@ cdef _c_common_value(object item):
     return item
 
 # build-time function
-cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing):
+cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing,
+                              object subside, object rise):
     cdef _e_tree_mode _v_mode = _c_load_mode(mode)
     cdef bool allow_missing
     cdef object missing_func
@@ -120,10 +144,55 @@ cpdef object _d_func_treelize(object func, object mode, object return_type, bool
         allow_missing = True
         missing_func = missing if callable(missing) else partial(_c_common_value, missing)
 
+    cdef object _v_subside, _v_rise
+    if subside is not None and not isinstance(subside, dict):
+        _v_subside = {} if subside else None
+    else:
+        _v_subside = subside
+    if rise is not None and not isinstance(rise, dict):
+        _v_rise = {} if rise else None
+    else:
+        _v_rise = rise
+
     _c_check(_v_mode, return_type, inherit, allow_missing, missing_func)
     return partial(_w_func_treelize_run, __w_func=func, __w_mode=_v_mode, __w_return_type=return_type,
-                   __w_inherit=inherit, __w_allow_missing=allow_missing, __w_missing_func=missing_func)
+                   __w_inherit=inherit, __w_allow_missing=allow_missing, __w_missing_func=missing_func,
+                   __w_subside=_v_subside, __w_rise=_v_rise)
 
+@cython.binding(True)
 cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
-                           bool inherit=True, object missing=MISSING_NOT_ALLOW):
-    return partial(_d_func_treelize, mode=mode, return_type=return_type, inherit=inherit, missing=missing)
+                           bool inherit=True, object missing=MISSING_NOT_ALLOW,
+                           object subside=None, object rise=None):
+    """
+    Overview:
+        Wrap a common function to tree-supported function.
+
+    Arguments:
+        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+            and subside configuration, default is `None` which means do not use subside. \
+            When subside is `True`, it will use all the default arguments in `subside` function.
+        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+            and rise configuration, default is `None` which means do not use rise. \
+            When rise is `True`, it will use all the default arguments in `rise` function. \
+            (Not recommend to use auto mode when your return structure is not so strict.)
+
+    Returns:
+        - decorator (:obj:`Callable`): Wrapper for tree-supported function.
+
+    Example:
+        >>> @func_treelize()
+        >>> def ssum(a, b):
+        >>>     return a + b  # the a and b will be integers, not TreeValue
+        >>>
+        >>> t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
+        >>> ssum(1, 2)    # 3
+        >>> ssum(t1, t2)  # TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
+    """
+    return partial(_d_func_treelize, mode=mode, return_type=return_type,
+                   inherit=inherit, missing=missing, subside=subside, rise=rise)

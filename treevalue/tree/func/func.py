@@ -1,19 +1,14 @@
 from enum import IntEnum, unique
-from functools import wraps, partial
-from itertools import chain
-from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any, Tuple
+from functools import wraps
+from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
 import enum_tools
 
-from .inner import _InnerProcessor
-from .left import _LeftProcessor
-from .outer import _OuterProcessor
-from .strict import _StrictProcessor
-from ..common import raw
+from .cfunc import func_treelize
 from ..tree import TreeValue
-from ..tree import rise as rise_func
-from ..tree import subside as subside_func
 from ...utils import int_enum_loads, SingletonMark
+
+TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
 
 
 @enum_tools.documentation.document_enum
@@ -30,154 +25,7 @@ class TreeMode(IntEnum):
     OUTER = 4  # doc: Outer mode, the keys of the result is relied on the union of the trees' key set.
 
 
-_MODE_PROCESSORS = {
-    TreeMode.STRICT: _StrictProcessor(),
-    TreeMode.LEFT: _LeftProcessor(),
-    TreeMode.INNER: _InnerProcessor(),
-    TreeMode.OUTER: _OuterProcessor(),
-}
-
-
-def _get_any_value(item, value):
-    return value
-
-
-def _any_getattr(value):
-    return partial(_get_any_value, value=value)
-
-
-TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
-
-#: Default value of the ``missing`` arguments of ``func_treelize``, ``method_treelize`` \
-#: and ``classmethod_treelize``, which means missing is not allowed \
-#: (raise ``KeyError`` when missing is detected).
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
-
-
-def func_treelize(mode: Union[str, TreeMode] = 'strict',
-                  return_type: Union[None, Type[TreeClassType_], Callable] = TreeValue,
-                  inherit: bool = True,
-                  missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
-                  subside: Union[Mapping, bool, None] = None,
-                  rise: Union[Mapping, bool, None] = None):
-    """
-    Overview:
-        Wrap a common function to tree-supported function.
-
-    Arguments:
-        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
-        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
-        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
-            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
-        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
-            and subside configuration, default is `None` which means do not use subside. \
-            When subside is `True`, it will use all the default arguments in `subside` function.
-        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
-            and rise configuration, default is `None` which means do not use rise. \
-            When rise is `True`, it will use all the default arguments in `rise` function. \
-            (Not recommend to use auto mode when your return structure is not so strict.)
-
-    Returns:
-        - decorator (:obj:`Callable`): Wrapper for tree-supported function.
-
-    Example:
-        >>> @func_treelize()
-        >>> def ssum(a, b):
-        >>>     return a + b  # the a and b will be integers, not TreeValue
-        >>>
-        >>> t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        >>> t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
-        >>> ssum(1, 2)    # 3
-        >>> ssum(t1, t2)  # TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
-    """
-    mode = TreeMode.loads(mode)
-    processor = _MODE_PROCESSORS[mode]
-    if missing is MISSING_NOT_ALLOW:
-        allow_missing = False
-        missing_func = None
-    else:
-        allow_missing = True
-        missing_func = missing if hasattr(missing, '__call__') else (lambda: missing)
-
-    if subside is not None and not isinstance(subside, dict):
-        subside = {} if subside else None
-    if rise is not None and not isinstance(rise, dict):
-        rise = {} if rise else None
-
-    processor.check_arguments(mode, return_type, inherit,
-                              allow_missing, missing_func, subside, rise)
-
-    def _get_from_key(key, item):
-        if key in item:
-            return item.__getattr__(key)
-        elif allow_missing:
-            return missing_func()
-        else:
-            raise KeyError("Missing is off, key {key} not found in {item}.".format(
-                key=repr(key), item=repr(item),
-            ))
-
-    def _value_wrap(item, index):
-        if isinstance(item, TreeValue):
-            return partial(_get_from_key, item=item)
-        elif inherit:
-            return _any_getattr(item)
-        else:
-            raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
-                type=repr(type(item).__name__), index=repr(index),
-            ))
-
-    def _decorator(func):
-        _get_key_set = processor.get_key_set
-
-        def _recursion(*args, **kwargs) -> Tuple[TreeClassType_, bool]:
-            is_const = True
-            for v in chain(args, kwargs.values()):
-                if isinstance(v, TreeValue):
-                    is_const = False
-                    break
-
-            if is_const:
-                return func(*args, **kwargs), True
-            else:
-                pargs = [_value_wrap(item, index) for index, item in enumerate(args)]
-                pkwargs = {key: _value_wrap(value, key) for key, value in kwargs.items()}
-
-                _data = {
-                    key: raw(_recursion(
-                        *(item(key) for item in pargs),
-                        **{key_: value(key) for key_, value in pkwargs.items()}
-                    )[0]) for key in _get_key_set(*args, **kwargs)
-                }
-                return TreeValue(_data), False
-
-        @wraps(func)
-        def _new_func(*args, **kwargs):
-            if subside is not None:
-                args = [subside_func(item, **subside) for item in args]
-                kwargs = {key: subside_func(value, **subside) for key, value in kwargs.items()}
-
-            _result, _is_const = _recursion(*args, **kwargs)
-            if return_type is not None:
-                if isinstance(return_type, type) and issubclass(return_type, TreeValue):
-                    rt = return_type
-                else:
-                    rt = return_type(args[0])
-
-                if not _is_const:
-                    _result = rt(_result)
-                if rise is not None:
-                    _result = rise_func(_result, **rise)
-
-                return _result
-            else:
-                return None
-
-        return _new_func
-
-    return _decorator
-
 
 #: Default value of the ``return_type`` arguments \
 #: of ``method_treelize`` and ``classmethod_treelize``, \
