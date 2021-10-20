@@ -1,11 +1,60 @@
 from functools import wraps
 from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
-from .cfunc import func_treelize, MISSING_NOT_ALLOW
+from .cfunc import MISSING_NOT_ALLOW
+from .cfunc import func_treelize as _c_func_treelize
 from ..tree import TreeValue
 from ...utils import SingletonMark
 
 TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
+
+
+def func_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = TreeValue,
+                  inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                  subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None):
+    """
+    Overview:
+        Wrap a common function to tree-supported function.
+
+    Arguments:
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
+        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
+        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
+            and subside configuration, default is `None` which means do not use subside. \
+            When subside is `True`, it will use all the default arguments in `subside` function.
+        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function's return value or not, \
+            and rise configuration, default is `None` which means do not use rise. \
+            When rise is `True`, it will use all the default arguments in `rise` function. \
+            (Not recommend to use auto mode when your return structure is not so strict.)
+
+    Returns:
+        - decorator (:obj:`Callable`): Wrapper for tree-supported function.
+
+    Example:
+        >>> @func_treelize()
+        >>> def ssum(a, b):
+        >>>     return a + b  # the a and b will be integers, not TreeValue
+        >>>
+        >>> t1 = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        >>> t2 = TreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
+        >>> ssum(1, 2)    # 3
+        >>> ssum(t1, t2)  # TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
+    """
+
+    def _decorator(func):
+        _treelized = _c_func_treelize(mode, return_type, inherit, missing, subside, rise)(func)
+
+        @wraps(func)
+        def _new_func(*args, **kwargs):
+            return _treelized(*args, **kwargs)
+
+        return _new_func
+
+    return _decorator
+
 
 #: Default value of the ``return_type`` arguments \
 #: of ``method_treelize`` and ``classmethod_treelize``, \
