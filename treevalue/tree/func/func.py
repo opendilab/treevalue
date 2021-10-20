@@ -108,16 +108,15 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
         >>> t1.append(2)   # MyTreeValue({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
         >>> t1.append(t2)  # MyTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
     """
+    if return_type is AUTO_DETECT_RETURN_TYPE:
+        def _get_self_class(self):
+            return self.__class__
+    else:
+        def _get_self_class(self):
+            return return_type
 
     def _decorator(method):
-        if return_type is AUTO_DETECT_RETURN_TYPE:
-            def _get_self_class(self):
-                return self.__class__
-        else:
-            def _get_self_class(self):
-                return return_type
-
-        _treelized = func_treelize(mode, _get_self_class, inherit, missing, subside, rise)(method)
+        _treelized = _c_func_treelize(mode, _get_self_class, inherit, missing, subside, rise)(method)
 
         @wraps(method)
         def _new_method(self, *args, **kwargs):
