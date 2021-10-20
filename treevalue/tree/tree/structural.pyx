@@ -78,7 +78,7 @@ cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
 
 STRICT = _c_load_mode('STRICT')
 
-cdef void _c_subside_missing():
+cdef inline void _c_subside_missing():
     pass
 
 cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit):
@@ -89,7 +89,7 @@ cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool i
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
                                 STRICT, inherit, False, _c_subside_missing), _i_types
 
-cdef object _c_subside_keep_type(object t):
+cdef inline object _c_subside_keep_type(object t):
     return t
 
 @cython.binding(True)
@@ -218,3 +218,223 @@ cdef tuple _c_rise_tree_process(object t):
         return (TreeStorage, _l_items), chain(*_l_values)
     else:
         return (object, None), (t,)
+
+cdef object _c_rise_struct_builder(tuple p, object it):
+    cdef type type_
+    cdef object item
+    type_, item = p
+
+    cdef str k
+    cdef object v
+    cdef dict _d_res
+    cdef list _l_res
+    if issubclass(type_, dict):
+        _d_res = {}
+        for k, v in item:
+            _d_res[k] = _c_rise_struct_builder(v, it)
+
+        return type_(_d_res)
+    elif issubclass(type_, (list, tuple)):
+        _l_res = []
+        for v in item:
+            _l_res.append(_c_rise_struct_builder(v, it))
+
+        return type_(_l_res)
+    else:
+        return next(it)
+
+cdef tuple _c_rise_struct_process(list objs, object template):
+    cdef type _t_type
+    cdef str k
+    cdef object v, item
+    cdef set keys
+    cdef int length
+    cdef int _l_obj_0, _l_temp
+    cdef object _a_template
+    cdef bool failed
+
+    if isinstance(template, (dict, type)):
+        _a_template = template
+    elif isinstance(template, (tuple, list)):
+        if template and template[-1] is Ellipsis:
+            _l_temp = len(template)
+            if _l_temp < 2:
+                raise TypeError(f"Ellipsis in list or tuple template should be after another "
+                                f"valid template object, but length is {repr(_l_temp)}.")
+
+            _l_obj_0 = len(objs[0])
+            if _l_obj_0 < _l_temp - 2:
+                raise ValueError(f"At least {repr(_l_temp - 2)} value expected due to template "
+                                f"{repr(template)}, but length is {repr(_l_obj_0)}.")
+
+            _a_template = type(template)(chain(template[:-2], (template[-2],) * (_l_obj_0 - _l_temp + 2)))
+        else:
+            _a_template = template
+    elif template is None:
+        if not objs:
+            _a_template = object
+        else:
+            _t_type = type(objs[0])
+            if issubclass(_t_type, dict):
+                keys = set(objs[0].keys())
+                failed = False
+                for item in objs:
+                    if not isinstance(item, _t_type) or set(item.keys()) != keys:
+                        failed = True
+                        break
+
+                if failed:
+                    _a_template = object
+                else:
+                    _a_template = _t_type({k: None for k in keys})
+
+            elif issubclass(_t_type, (list, tuple)):
+                length = len(objs[0])
+                failed = False
+                for item in objs:
+                    if not isinstance(item, _t_type) or len(item) != length:
+                        failed = True
+                        break
+
+                if failed:
+                    _a_template = object
+                else:
+                    _a_template = _t_type(None for _ in range(length))
+
+            else:
+                _a_template = object
+    else:
+        raise TypeError(f"Template object should be a dict, list, tuple, type or None, "
+                        f"but {repr(template)} found.")
+
+    cdef int i, j
+    cdef list _r_items, _o_objs
+    cdef object _i_item, _i_iter
+    cdef list _r_iters = []
+    if isinstance(_a_template, type):
+        _t_type = _a_template
+    else:
+        _t_type = type(_a_template)
+
+    if issubclass(_t_type, dict):  # dict
+        keys = set(_a_template.keys())
+        for item in objs:
+            if not isinstance(item, _t_type):
+                raise ValueError(f'Type {repr(_t_type)} expected due to template {repr(_a_template)}, '
+                                 f'but {repr(item)} found.')
+
+            if set(item.keys()) != keys:
+                raise ValueError(f'Keys {repr(tuple(sorted(keys)))} expected due to template {repr(_a_template)}, '
+                                 f'but {repr(tuple(sorted(item.keys())))} found.')
+
+        _r_items = []
+        _r_iters = [[] for _ in range(len(objs))]
+        for k, v in _a_template.items():
+            _o_objs = []
+            for item in objs:
+                _o_objs.append(item[k])
+            _i_item, _i_iter = _c_rise_struct_process(_o_objs, v)
+            _r_items.append((k, _i_item))
+            for j, item in enumerate(_i_iter):
+                _r_iters[j].append(item)
+
+        return (_t_type, _r_items), [chain(*it) for it in _r_iters]
+    elif issubclass(_t_type, (list, tuple)):  # list, tuple
+        length = len(_a_template)
+        for item in objs:
+            if not isinstance(item, _t_type):
+                raise ValueError(f'Type {repr(_t_type)} expected due to template {repr(_a_template)}, '
+                                 f'but {repr(item)} found.')
+
+            if len(item) != length:
+                raise ValueError(f'Length {repr(length)} expected due to template {repr(_a_template)}, '
+                                 f'but {repr(len(item))} found.')
+
+        _r_items = []
+        _r_iters = [[] for _ in range(len(objs))]
+        for i, v in enumerate(_a_template):
+            _o_objs = []
+            for item in objs:
+                _o_objs.append(item[i])
+            _i_item, _i_iter = _c_rise_struct_process(_o_objs, v)
+            _r_items.append(_i_item)
+            for j, item in enumerate(_i_iter):
+                _r_iters[j].append(item)
+
+        return (_t_type, _r_items), [chain(*it) for it in _r_iters]
+    else:  # object
+        for item in objs:
+            if not isinstance(item, _t_type):
+                raise ValueError(f'Type {repr(_t_type)} expected due to template {repr(_a_template)}, '
+                                 f'but {repr(item)} found.')
+
+        _r_iters = []
+        for item in objs:
+            _r_iters.append((item,))
+
+        return (object, None), _r_iters
+
+cdef inline object _c_rise_keep_type(object t):
+    return t
+
+cdef object _c_rise(object tree, bool dict_, bool list_, bool tuple_, object template_):
+    cdef object type_
+    cdef object tt, iv
+    if isinstance(tree, TreeValue):
+        type_ = type(tree)
+        tt, iv = _c_rise_tree_process(tree._detach())
+    else:
+        type_ = _c_rise_keep_type
+        tt, iv = _c_rise_tree_process(tree)
+
+    cdef list values = list(iv)
+    cdef object ts, iis
+    ts, iis = _c_rise_struct_process(values, template_)
+
+    cdef list evals = [list(item) for item in iis]
+
+    cdef list bvs = []
+    cdef int elen = len(evals[0]) if evals else 1
+    for i in range(elen):
+        bvs.append(type_(_c_rise_tree_builder(tt, iter([item[i] for item in evals]))))
+
+    return _c_rise_struct_builder(ts, iter(bvs))
+
+@cython.binding(True)
+def rise(object tree, bool dict_=True, bool list_=True, bool tuple_=True, object template=None):
+    """
+    Overview:
+        Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.
+
+    Arguments:
+        - tree (:obj:`_TreeValue`): Tree value object
+        - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.
+        - `list_` (:obj:`bool`): Enable list rise, default is `True`.
+        - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.
+        - template (:obj:): Rising template, default is `NO_RISE_TEMPLATE`, which means auto detect.
+
+    Returns:
+        - risen (:obj:): Risen value.
+
+    Example:
+        >>> t = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        >>> dt = rise(t)
+        >>> # dt will be {'a': <TreeValue 1>, 'b': [<TreeValue 2>, <TreeValue 3>]}
+        >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6, 7]})
+        >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 7})
+        >>> # TreeValue 3 will be TreeValue({'x': 3, 'y': 8})
+        >>>
+        >>> t2 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8]})})
+        >>> dt2 = rise(t2)
+        >>> # dt2 will be {'a': [<TreeValue 1>, <TreeValue 2>], 'b': [<TreeValue 3>, <TreeValue 4>]}
+        >>> # TreeValue 1 will be TreeValue({'x': 1, 'y': 5})
+        >>> # TreeValue 2 will be TreeValue({'x': 2, 'y': 6})
+        >>> # TreeValue 3 will be TreeValue({'x': 2, 'y': 7})
+        >>> # TreeValue 4 will be TreeValue({'x': 3, 'y': 8})
+        >>>
+        >>> dt3 = rise(t2, template={'a': None, 'b': None})
+        >>> # dt3 will be {'a': <TreeValue 1>, 'b': <TreeValue 2>}
+        >>> # TreeValue 1 will be TreeValue({'x': [1, 2], 'y': [5, 6]})
+        >>> # TreeValue 2 will be TreeValue({'x': [2, 3], 'y': [7, 8]})
+    """
+    return _c_rise(tree, dict_, list_, tuple_, template)

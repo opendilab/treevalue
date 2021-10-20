@@ -18,3 +18,7 @@ cpdef object subside(object value, bool dict_= *, bool list_= *, bool tuple_= *,
 
 cdef object _c_rise_tree_builder(tuple p, object it)
 cdef tuple _c_rise_tree_process(object t)
+cdef object _c_rise_struct_builder(tuple p, object it)
+cdef tuple _c_rise_struct_process(list objs, object template)
+cdef object _c_rise_keep_type(object t)
+cdef object _c_rise(object tree, bool dict_, bool list_, bool tuple_, object template_)

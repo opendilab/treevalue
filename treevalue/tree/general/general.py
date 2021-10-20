@@ -5,8 +5,7 @@ from typing import Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
 from graphviz import Digraph
 
 from ..func import method_treelize, MISSING_NOT_ALLOW, TreeMode, func_treelize
-from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, \
-    NO_RISE_TEMPLATE, graphics
+from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, graphics
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
 from ...utils import dynamic_call, raising
@@ -231,8 +230,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return reduce_(self, func)
 
         @_decorate_method
-        def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True,
-                 template=NO_RISE_TEMPLATE):
+        def rise(self, dict_: bool = True, list_: bool = True, tuple_: bool = True, template=None):
             """
             Overview:
                 Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.
@@ -241,7 +239,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.
                 - `list_` (:obj:`bool`): Enable list rise, default is `True`.
                 - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.
-                - template (:obj:): Rising template, default is `NO_RISE_TEMPLATE`, which means auto detect.
+                - template (:obj:): Rising template, default is `None`, which means auto detect.
 
             Returns:
                 - risen (:obj:): Risen value.

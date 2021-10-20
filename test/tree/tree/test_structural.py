@@ -1,7 +1,6 @@
 import pytest
 
-from treevalue.tree import TreeValue, mapping, union, raw, \
-    subside
+from treevalue.tree import TreeValue, mapping, union, raw, subside, rise
 
 
 # noinspection DuplicatedCode
@@ -88,3 +87,119 @@ class TestTreeTreeStructural:
 
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
+    def test_rise(self):
+        t1 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        assert rise(t1) == {
+            'a': TreeValue({'x': [1, 2], 'y': [5, 6, 7]}),
+            'b': [
+                TreeValue({'x': 2, 'y': 7}),
+                TreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+        assert rise(TreeValue({})) == TreeValue({})
+        assert rise(TreeValue({'a': 1, 'b': 2})) == TreeValue({'a': 1, 'b': 2})
+
+        class MyTreeValue(TreeValue):
+            pass
+
+        t2 = MyTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        assert rise(t2) == {
+            'a': MyTreeValue({'x': [1, 2], 'y': [5, 6, 7]}),
+            'b': [
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+
+        t3 = MyTreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8]})})
+        assert rise(t3) == {
+            'a': [
+                MyTreeValue({'x': 1, 'y': 5}),
+                MyTreeValue({'x': 2, 'y': 6}),
+            ],
+            'b': [
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+
+        t4 = MyTreeValue({'x': raw({'a': (1, 2), 'b': (2, 3)}), 'y': raw({'a': (5, 6), 'b': (7, 8)})})
+        assert rise(t4) == {
+            'a': (
+                MyTreeValue({'x': 1, 'y': 5}),
+                MyTreeValue({'x': 2, 'y': 6}),
+            ),
+            'b': (
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            )
+        }
+        assert rise(t4, template={'a': (None, None), 'b': (None, None)}) == {
+            'a': (
+                MyTreeValue({'x': 1, 'y': 5}),
+                MyTreeValue({'x': 2, 'y': 6}),
+            ),
+            'b': (
+                MyTreeValue({'x': 2, 'y': 7}),
+                MyTreeValue({'x': 3, 'y': 8}),
+            )
+        }
+        assert rise(t4, template={'a': object, 'b': object}) == {
+            'a': MyTreeValue({'x': (1, 2), 'y': (5, 6)}),
+            'b': MyTreeValue({'x': (2, 3), 'y': (7, 8)}),
+        }
+        with pytest.raises(ValueError):
+            rise(t4, template={'a': [], 'b': object})
+
+        t5 = TreeValue({
+            'x': raw([{'a': 1, 'b': 2}, {'a': 2, 'b': 3}, {'a': 3, 'b': 5}]),
+            'y': raw([{'a': 21, 'b': 32}, {'a': -2, 'b': 23}, {'a': 53, 'b': 25}]),
+        })
+        assert rise(t5) == [
+            {'a': TreeValue({'x': 1, 'y': 21}), 'b': TreeValue({'x': 2, 'y': 32})},
+            {'a': TreeValue({'x': 2, 'y': -2}), 'b': TreeValue({'x': 3, 'y': 23})},
+            {'a': TreeValue({'x': 3, 'y': 53}), 'b': TreeValue({'x': 5, 'y': 25})},
+        ]
+        assert rise(t5, template=[{'a': object, 'b': object}, ...]) == [
+            {'a': TreeValue({'x': 1, 'y': 21}), 'b': TreeValue({'x': 2, 'y': 32})},
+            {'a': TreeValue({'x': 2, 'y': -2}), 'b': TreeValue({'x': 3, 'y': 23})},
+            {'a': TreeValue({'x': 3, 'y': 53}), 'b': TreeValue({'x': 5, 'y': 25})},
+        ]
+        assert rise(t5, template=[object, ...]) == [
+            TreeValue({'x': raw({'a': 1, 'b': 2}), 'y': raw({'a': 21, 'b': 32})}),
+            TreeValue({'x': raw({'a': 2, 'b': 3}), 'y': raw({'a': -2, 'b': 23})}),
+            TreeValue({'x': raw({'a': 3, 'b': 5}), 'y': raw({'a': 53, 'b': 25})}),
+        ]
+        with pytest.raises(ValueError):
+            rise(t5, template=[None, None])
+        with pytest.raises(ValueError):
+            rise(t5, template=[str, ...])
+
+        t6 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6], 'b': [7, 8], 'c': [9, 10]})})
+        assert rise(t6) == t6
+
+        t7 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': [[5, 6], [7, 8], [9, 10]]})
+        with pytest.raises(ValueError):
+            rise(t7, template=[object, ...])
+
+        t8 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': {'a': 1}, 'b': {'b': 2}})})
+        assert rise(t8) == {
+            'a': TreeValue({'x': [1, 2], 'y': raw({'a': 1})}),
+            'b': TreeValue({'x': [2, 3], 'y': raw({'b': 2})}),
+        }
+        with pytest.raises(ValueError):
+            rise(t8, template={'a': {'b': object}, 'b': None})
+
+        t9 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': {'a': 1}, 'c': {'b': 2}})})
+        with pytest.raises(ValueError):
+            rise(t9, template={'a': object, 'b': object})
+
+        with pytest.raises(TypeError):
+            rise(t5, template=[...])
+        with pytest.raises(TypeError):
+            rise(t5, template=[233, ...])
+        with pytest.raises(ValueError):
+            rise(t5, template=[object, object, object, object, object, ...])
+
+        assert rise(1) == 1
