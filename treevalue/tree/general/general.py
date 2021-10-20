@@ -4,7 +4,7 @@ from typing import Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
 
 from graphviz import Digraph
 
-from ..func import method_treelize, MISSING_NOT_ALLOW, TreeMode, func_treelize
+from ..func import method_treelize, MISSING_NOT_ALLOW, func_treelize
 from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, graphics
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
@@ -307,7 +307,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
         @classmethod
         @_decorate_method
-        def func(cls, mode: Union[str, TreeMode] = 'strict', inherit: bool = True,
+        def func(cls, mode: str = 'strict', inherit: bool = True,
                  missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
                  subside: Union[Mapping, bool, None] = None,
                  rise: Union[Mapping, bool, None] = None):
@@ -316,8 +316,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 Wrap a common function to tree-supported function based on this type.
 
             Arguments:
-                - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping \
-                    (string or TreeMode both okay), default is `strict`.
+                - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
                 - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
                 - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
                     default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
@@ -355,7 +354,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
 
             Arguments:
                 - trees (:obj:`_TreeValue`): Tree value objects.
-                - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+                - mode (:obj:): Mode of the wrapping, default is `strict`.
                 - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
                 - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
                 - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
@@ -384,7 +383,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 - `dict_` (:obj:`bool`): Enable dict subside, default is `True`.
                 - `list_` (:obj:`bool`): Enable list subside, default is `True`.
                 - `tuple_` (:obj:`bool`): Enable list subside, default is `True`.
-                - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+                - mode (:obj:): Mode of the wrapping, default is `strict`.
                 - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \
                     will be auto detected when there is exactly one tree value type in this original value, \
                     otherwise the default will be `TreeValue`.

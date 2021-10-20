@@ -1,31 +1,11 @@
-from enum import IntEnum, unique
 from functools import wraps
 from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
-import enum_tools
-
-from .cfunc import func_treelize
+from .cfunc import func_treelize, MISSING_NOT_ALLOW
 from ..tree import TreeValue
-from ...utils import int_enum_loads, SingletonMark
+from ...utils import SingletonMark
 
 TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
-
-
-@enum_tools.documentation.document_enum
-@int_enum_loads(name_preprocess=str.upper)
-@unique
-class TreeMode(IntEnum):
-    """
-    Overview:
-        Four mode of the tree calculation
-    """
-    STRICT = 1  # doc: Strict mode, which means the keys should be one to one in every trees.
-    LEFT = 2  # doc: Left mode, the keys of the result is relied on the left value.
-    INNER = 3  # doc: Inner mode, the keys of the result is relied on the intersection of the trees' key set.
-    OUTER = 4  # doc: Outer mode, the keys of the result is relied on the union of the trees' key set.
-
-
-MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 #: Default value of the ``return_type`` arguments \
 #: of ``method_treelize`` and ``classmethod_treelize``, \
@@ -34,11 +14,10 @@ MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 
-def method_treelize(mode: Union[str, TreeMode] = 'strict',
-                    return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
-                    missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
-                    subside: Union[Mapping, bool, None] = None,
-                    rise: Union[Mapping, bool, None] = None, self_copy: bool = False):
+def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE,
+                    inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                    subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None,
+                    self_copy: bool = False):
     """
     Overview:
         Wrap a common instance method to tree-supported method.
@@ -49,7 +28,7 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
             but the single element of the tree instead.
 
     Arguments:
-        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
@@ -105,11 +84,9 @@ def method_treelize(mode: Union[str, TreeMode] = 'strict',
     return _decorator
 
 
-def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
-                         return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE, inherit: bool = True,
-                         missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
-                         subside: Union[Mapping, bool, None] = None,
-                         rise: Union[Mapping, bool, None] = None):
+def classmethod_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE,
+                         inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                         subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None):
     """
     Overview:
         Wrap a common class method to tree-supported method.
@@ -119,7 +96,7 @@ def classmethod_treelize(mode: Union[str, TreeMode] = 'strict',
         - When decorated instance method is called, the `cls` argument will still be the calling class.
 
     Arguments:
-        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.

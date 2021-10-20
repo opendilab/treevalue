@@ -157,11 +157,8 @@ def union(*trees, object return_type=None, bool inherit=True):
 
     Arguments:
         - trees (:obj:`_TreeValue`): Tree value objects.
-        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
-        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \
-            means raise `KeyError` when missing detected.
 
     Returns:
         - result (:obj:`TreeValue`): Unionised tree value.

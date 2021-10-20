@@ -168,7 +168,7 @@ cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
         Wrap a common function to tree-supported function.
 
     Arguments:
-        - mode (:obj:`Union[str, TreeMode]`): Mode of the wrapping (string or TreeMode both okay), default is `strict`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
