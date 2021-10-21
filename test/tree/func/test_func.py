@@ -48,6 +48,59 @@ class TestTreeFuncFunc:
         assert tr5 == _MyTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}})
         assert tr6 == _MyTreeValue({'a': 11, 'b': 44, 'x': {'c': 99, 'd': 176}})
 
+        @func_treelize()
+        def ssum5(a, b, c):
+            return a + b * c
+
+        t3 = TreeValue({'a': 31, 'b': 12, 'x': {'c': 43, 'd': 24}})
+        assert ssum5(1, c=3, b=5) == 16
+        assert ssum5(t2, c=t1, b=t3) == TreeValue({
+            'a': 42,
+            'b': 46,
+            'x': {
+                'c': 162,
+                'd': 140,
+            }
+        })
+        assert ssum5(t2, c=2, b=t3) == TreeValue({
+            'a': 73,
+            'b': 46,
+            'x': {
+                'c': 119,
+                'd': 92,
+            }
+        })
+
+        @func_treelize('outer', missing=lambda: 1)
+        def ssum6(a, b, c):
+            return a + b * c
+
+        t4 = TreeValue({'a': 31, 'b': 12, 'x': {'c': 43}})
+        with pytest.raises(KeyError):
+            ssum5(t2, c=2, b=t4)
+        assert ssum6(t2, c=2, b=t4) == TreeValue({
+            'a': 73,
+            'b': 46,
+            'x': {
+                'c': 119,
+                'd': 46,
+            }
+        })
+
+        @func_treelize('left')
+        def ssum7(a, b, c):
+            return a + b * c
+
+        with pytest.raises(KeyError):
+            ssum7(t2, c=2, b=t4)
+
+        @func_treelize(inherit=False)
+        def ssum8(a, b, c):
+            return a + b * c
+
+        with pytest.raises(TypeError):
+            ssum8(t2, c=2, b=t1)
+
     def test_tree_value_type_none(self):
         @func_treelize(return_type=None)
         def ssum(*args):
@@ -108,11 +161,16 @@ class TestTreeFuncFunc:
             def __call__(self, *args, **kwargs):
                 return self(*args, **kwargs)
 
+            @method_treelize(return_type=TreeValue)
+            def damn_it(self, x):
+                return self + x
+
         t1 = TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         t2 = TreeNumber({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
         assert (t1 + t2 + 1) == TreeNumber({'a': 13, 'b': 25, 'x': {'c': 37, 'd': 10}})
         assert (t1 - t2) == TreeNumber({'a': -10, 'b': -20, 'x': {'c': -30, 'd': -1}})
         assert (1 - t2) == TreeNumber({'a': -10, 'b': -21, 'x': {'c': -32, 'd': -4}})
+        assert t1.damn_it(2) == TreeValue({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
 
         class P:
             def __init__(self, value):
@@ -128,6 +186,12 @@ class TestTreeFuncFunc:
         ttt = TreeNumber({"a": P(1), "b": P(2), "x": {"c": P(3), "d": P(4)}})
         assert ttt.value == TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         assert ttt.vv() == TreeNumber({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
+
+        with pytest.warns(UserWarning):
+            class MyTreeValue(TreeValue):
+                @method_treelize(self_copy=True, rise=True)
+                def __iadd__(self, other):
+                    return self + other
 
     def test_classmethod_treelize(self):
         class TestUtils:
@@ -145,3 +209,11 @@ class TestTreeFuncFunc:
         assert TestUtils.add(TreeValue({'a': 1, 'b': 2}), 2) == TreeValue({'a': (TestUtils, 3), 'b': (TestUtils, 4)})
         assert TestUtils.add2(TreeValue({'a': 1, 'b': 2}), TreeValue({'a': 12, 'b': 22})) == TreeValue(
             {'a': (TestUtils, 13), 'b': (TestUtils, 24)})
+
+        class MyTreeValue(TreeValue):
+            @classmethod
+            @classmethod_treelize()
+            def plus(cls, x, y):
+                return x + y
+
+        assert MyTreeValue.plus(TreeValue({'a': 1, 'b': 2}), 2) == MyTreeValue({'a': 3, 'b': 4})

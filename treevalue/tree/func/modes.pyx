@@ -22,9 +22,9 @@ cdef _e_tree_mode _c_load_mode(object mode) except *:
         elif upper_mode == 'LEFT':
             return LEFT
         else:
-            raise ValueError(f"Unknown mode - {repr(mode)}.")
+            raise ValueError(f"Unknown mode - {repr(mode)}.")  # pragma: no cover
     else:
-        raise TypeError(f"Unknown type of mode - {repr(type(mode))}.")
+        raise TypeError(f"Unknown type of mode - {repr(type(mode))}.")  # pragma: no cover
 
 cdef void _c_base_check(_e_tree_mode mode, object return_type,
                         bool inherit, bool allow_missing, object missing_func) except *:
@@ -123,7 +123,7 @@ cdef set _c_left_keyset(tuple args, dict kwargs):
             _d_v = v.detach()
             return set(_d_v.keys())
 
-    return None
+    return set()  # pragma: no cover
 
 cdef void _c_left_check(_e_tree_mode mode, object return_type,
                         bool inherit, bool allow_missing, object missing_func) except *:

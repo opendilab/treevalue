@@ -1,3 +1,4 @@
+import warnings
 from functools import wraps
 from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
@@ -114,6 +115,11 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
     else:
         def _get_self_class(self):
             return return_type
+
+    if self_copy and rise is not None:
+        warnings.warn(UserWarning(f'The rise configuration {repr(rise)} will be ignored '
+                                  f'due to the enable of the self_copy option.'), stacklevel=2)
+        rise = None
 
     def _decorator(method):
         _treelized = _c_func_treelize(mode, _get_self_class, inherit, missing, subside, rise)(method)
