@@ -23,22 +23,15 @@ rectangle "Logic Layer" as logiclayer {
 }
 
 rectangle "Data Layer" as datalayer {
-    rectangle "BaseTree" as basetree <<$data>><<behavior>> #Application
-    rectangle "Tree\n(Primitive tree)" as tree <<$data>><<behavior>> #Application
-    rectangle "TreeView\n(Logic tree)" as treeview <<$data>><<behavior>> #Application
+    rectangle "TreeStorage" as tree_storage <<$data>><<behavior>> #Application
 
-    tree -up-> treevalue: "TreeValue can \nbe based on Tree."
-    treeview -up-> treevalue: "TreeValue can \nbe based on TreeView."
-
-    basetree *- tree : "BaseTree is parent \nclass of Tree."
-    basetree *- treeview : "BaseTree is parent \nclass of TreeView."
-    tree -> treeview : "TreeView is a \nlogic view of Tree."
+    tree_storage -up-> treevalue: "TreeValue can \nbe based on Tree."
 }
 
 rectangle "Primitive Python" as python {
     rectangle "Python Dict" as dict <<$primitive>> #Application
     rectangle "Python Operators" as operators <<$primitive>> #Application
-    python -up-> tree : "Tree is based on \nprimitive python dict."
+    python -up-> tree_storage : "Tree is based on \nprimitive python dict."
 }
 
 

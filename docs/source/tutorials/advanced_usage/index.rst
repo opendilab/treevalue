@@ -36,10 +36,13 @@ In the arguments listed above, 3 of them are key arguments:
 The mode argument is the most important argument in function ``func_treelize``. \
 For it depends the basic logic of the graph calculation.
 
-The type of ``mode`` argument is ``TreeMode``, which documentation is like this.
+There are 4 kinds of the modes, listed below:
 
-.. autoenum:: treevalue.tree.func.TreeMode
-    :noindex:
+* ``strict`` mode, which is most usually used, means all the values on the tree should be mapped one by one.
+* ``inner`` mode, means only the keys which is commonly owned by all the trees will be processed.
+* ``outer`` mode, means all the keys involved in any of the trees will be processed.
+* ``left`` mode, means only the keys involved in the leftest tree will be processed.
+
 
 In this part, all of the 4 modes will be introduced \
 with details and samples one by one.

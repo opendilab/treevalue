@@ -41,8 +41,7 @@ is updated, ``t2`` will be changed together.
     :linenos:
 
 For contributor, you can get the tree instance inside of \
-a ``TreeValue`` instance, by using ``get_property_data`` \
-function, like the following code.
+a ``TreeValue`` instance, by using ``_detach()`` method, like the following code.
 
 .. literalinclude:: get_tree_demo.demo.py
     :language: python
@@ -52,17 +51,8 @@ function, like the following code.
     :language: text
     :linenos:
 
-Not only the native ``Tree`` class is provided, \
-``TreeView`` class is also provided for processing the \
-tree view cases. They have the same methods and interface \
-(actually they are both inherited from ``BaseTree`` class), \
-so they are compatible with each other. The class \
-``Tree`` and ``TreeView`` form the data layer of \
-``TreeValue``.
+For further information, take a look at :ref:`API documentation of BaseTree<apidoc_tree_common_treestorage>`.
 
-* :ref:`API documentation of BaseTree<apidoc_tree_common_treestorage>`.
-* :ref:`API documentation of Tree<apidoc_tree_common_tree>`.
-* :ref:`API documentation of TreeView<apidoc_tree_common_treeview>`.
 
 TreeValue
 ---------------

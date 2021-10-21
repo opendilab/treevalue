@@ -1,12 +1,14 @@
 treevalue.tree.tree
 ======================
 
+.. py:currentmodule:: treevalue.tree.tree
+
 .. _apidoc_tree_tree_treevalue:
 
 TreeValue
 ---------------
 
-.. autoclass:: treevalue.tree.tree.tree.TreeValue
+.. autoclass:: TreeValue
     :members: __init__, __getattr__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__
 
 
@@ -15,7 +17,7 @@ TreeValue
 jsonify
 --------------
 
-.. autofunction:: treevalue.tree.tree.utils.jsonify
+.. autofunction:: jsonify
 
 
 .. _apidoc_tree_tree_clone:
@@ -23,7 +25,7 @@ jsonify
 clone
 -----------
 
-.. autofunction:: treevalue.tree.tree.utils.clone
+.. autofunction:: clone
 
 
 .. _apidoc_tree_tree_typetrans:
@@ -31,7 +33,7 @@ clone
 typetrans
 ------------------
 
-.. autofunction:: treevalue.tree.tree.utils.typetrans
+.. autofunction:: typetrans
 
 
 .. _apidoc_tree_tree_mapping:
@@ -39,7 +41,7 @@ typetrans
 mapping
 --------------
 
-.. autofunction:: treevalue.tree.tree.utils.mapping
+.. autofunction:: mapping
 
 
 .. _apidoc_tree_tree_mask:
@@ -47,7 +49,7 @@ mapping
 mask
 -------------------
 
-.. autofunction:: treevalue.tree.tree.utils.mask
+.. autofunction:: mask
 
 
 .. _apidoc_tree_tree_filter:
@@ -55,7 +57,7 @@ mask
 filter\_
 ----------------------
 
-.. autofunction:: treevalue.tree.tree.utils.filter_
+.. autofunction:: filter_
 
 
 .. _apidoc_tree_tree_union:
@@ -63,7 +65,7 @@ filter\_
 union
 -----------
 
-.. autofunction:: treevalue.tree.tree.utils.union
+.. autofunction:: union
 
 
 .. _apidoc_tree_tree_subside:
@@ -71,7 +73,7 @@ union
 subside
 -----------
 
-.. autofunction:: treevalue.tree.tree.utils.subside
+.. autofunction:: subside
 
 
 .. _apidoc_tree_tree_rise:
@@ -79,7 +81,7 @@ subside
 rise
 ------------
 
-.. autofunction:: treevalue.tree.tree.utils.rise
+.. autofunction:: rise
 
 
 .. _apidoc_tree_tree_reduce:
@@ -87,14 +89,7 @@ rise
 reduce\_
 ----------------
 
-.. autofunction:: treevalue.tree.tree.utils.reduce_
-
-
-NO_RISE_TEMPLATE
---------------------
-
-.. autodata:: treevalue.tree.tree.utils.NO_RISE_TEMPLATE
-    :annotation:
+.. autofunction:: reduce_
 
 
 .. _apidoc_tree_tree_graphics:
@@ -102,7 +97,7 @@ NO_RISE_TEMPLATE
 graphics
 ----------------
 
-.. autofunction:: treevalue.tree.tree.graph.graphics
+.. autofunction:: graphics
 
 Here is an example of ``graphics`` function. The source code is
 
@@ -151,7 +146,7 @@ take a look at:
 dump
 -------------
 
-.. autofunction:: treevalue.tree.tree.io.dump
+.. autofunction:: dump
 
 
 .. _apidoc_tree_tree_dumps:
@@ -159,7 +154,7 @@ dump
 dumps
 -------------
 
-.. autofunction:: treevalue.tree.tree.io.dumps
+.. autofunction:: dumps
 
 
 .. _apidoc_tree_tree_load:
@@ -167,7 +162,7 @@ dumps
 load
 -------------
 
-.. autofunction:: treevalue.tree.tree.io.load
+.. autofunction:: load
 
 
 .. _apidoc_tree_tree_loads:
@@ -175,5 +170,5 @@ load
 loads
 -------------
 
-.. autofunction:: treevalue.tree.tree.io.loads
+.. autofunction:: loads
 

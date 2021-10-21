@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # only the top-leveled dict will be extracted,
     # neither tuple, list nor low-leveled dict will not be extracted
     # because they are not defined in `template` argument
-    st2 = rise(tx, template={'first': [None], 'second': (None, None)})
+    st2 = rise(tx, template={'first': [object, ...], 'second': (object, ...)})
     print('st2:', st2)
 
     print("st2['first'][0]:")
