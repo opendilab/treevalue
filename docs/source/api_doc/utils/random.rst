@@ -1,12 +1,6 @@
 treevalue.utils.random
 ============================
 
-seed_random
-------------------
-
-.. autofunction:: treevalue.utils.random.seed_random
-
-
 random_hex
 -------------------
 

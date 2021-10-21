@@ -2,10 +2,11 @@ import warnings
 from functools import wraps
 from typing import Type, TypeVar, Optional, Mapping, Union, Callable, Any
 
+from hbutils.design import SingletonMark
+
 from .cfunc import MISSING_NOT_ALLOW
 from .cfunc import func_treelize as _c_func_treelize
 from ..tree import TreeValue
-from ...utils import SingletonMark
 
 TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
 

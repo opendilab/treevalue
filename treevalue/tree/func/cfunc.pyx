@@ -4,13 +4,13 @@
 from functools import partial
 
 import cython
+from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .modes cimport _e_tree_mode, _c_keyset, _c_load_mode, _c_check
 from ..common.storage cimport TreeStorage
 from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
-from ...utils import SingletonMark
 
 cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
                                  _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):

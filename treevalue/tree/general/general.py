@@ -3,12 +3,12 @@ from functools import wraps, partial
 from typing import Mapping, Optional, Any, Type, TypeVar, Union, Callable, Tuple
 
 from graphviz import Digraph
+from hbutils.reflection import dynamic_call, raising
 
 from ..func import method_treelize, MISSING_NOT_ALLOW, func_treelize
 from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, graphics
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
-from ...utils import dynamic_call, raising
 
 _BASE_GENERATION_CONFIG = {}
 

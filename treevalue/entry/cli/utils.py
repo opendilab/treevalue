@@ -4,8 +4,7 @@ from functools import wraps
 from typing import Callable, Union, Tuple
 
 import click
-
-from ...utils import dynamic_call, str_traceback
+from hbutils.reflection import dynamic_call, str_traceback
 
 
 def validator(func):

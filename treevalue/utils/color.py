@@ -3,7 +3,7 @@ import math
 import re
 from typing import Optional, Union, Tuple
 
-from .func import post_process, raising, freduce, dynamic_call, warning_
+from hbutils.reflection import post_process, raising, freduce, dynamic_call, warning_
 
 
 def _round_mapper(min_: float, max_: float):

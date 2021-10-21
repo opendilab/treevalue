@@ -10,12 +10,12 @@ from typing import Tuple, List, Optional, Iterator, Union
 
 import click
 from graphviz import Digraph, Graph
+from hbutils.reflection import quick_import_object
 
 from .base import CONTEXT_SETTINGS
 from .io import _import_trees_from_binary, _import_trees_from_package
 from .utils import multiple_validator, _click_pending, err_validator, validator
 from ...tree import TreeValue, graphics
-from ...utils import quick_import_object
 
 
 @err_validator((ImportError,))

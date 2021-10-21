@@ -5,9 +5,9 @@ from string import Template
 from typing import Tuple, Iterator
 
 import dill
+from hbutils.reflection import dynamic_call, iter_import_objects
 
 from ...tree import TreeValue, load
-from ...utils import dynamic_call, iter_import_objects
 
 
 @dynamic_call

@@ -4,9 +4,9 @@ from queue import Queue
 from typing import Optional, Mapping, Any, Callable
 
 from graphviz import Digraph
+from hbutils.reflection import dynamic_call, post_process
 from treelib import Tree as LibTree
 
-from .func import dynamic_call, post_process
 from .random import random_hex_with_timestamp
 
 _ROOT_ID = '_root'
