@@ -4,8 +4,18 @@
 import cython
 
 cdef class RawWrapper:
+    """
+    Wrapper class of the raw value.
+    """
     @cython.binding(True)
     def __cinit__(self, object v):
+        """
+        Overview:
+            C-leveled constructor of :class:`RawWrapper`.
+
+        Arguments:
+            - v (:obj:`object`): Value to be wrapped.
+        """
         self.val = v
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
@@ -13,6 +23,13 @@ cdef class RawWrapper:
 
     @cython.binding(True)
     cpdef object value(self):
+        """
+        Overview:
+            Get wrapped original value.
+
+        Returns:
+            - obj: Original value.
+        """
         return self.val
 
     def __getstate__(self):
@@ -40,8 +57,18 @@ cpdef public object raw(object obj):
         return obj
 
 @cython.binding(True)
-cpdef public object unraw(object obj):
-    if isinstance(obj, RawWrapper):
-        return obj.value()
+cpdef public object unraw(object wrapped):
+    """
+    Overview:
+        Try unwrap the given ``wrapped`` to original object.
+
+    Arguments:
+        - wrapped (:obj:`object`): Wrapped object.
+
+    Returns:
+        - obj (:obj:`object`): The original object.
+    """
+    if isinstance(wrapped, RawWrapper):
+        return wrapped.value()
     else:
-        return obj
+        return wrapped

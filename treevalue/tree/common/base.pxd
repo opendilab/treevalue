@@ -7,4 +7,4 @@ cdef class RawWrapper:
     cpdef object value(self)
 
 cpdef public object raw(object obj)
-cpdef public object unraw(object obj)
+cpdef public object unraw(object wrapped)

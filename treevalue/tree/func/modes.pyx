@@ -9,22 +9,20 @@ from libcpp cimport bool
 from ..common.storage cimport TreeStorage
 from ..tree.tree cimport TreeValue
 
-cdef _e_tree_mode _c_load_mode(object mode) except *:
-    cdef upper_mode
-    if isinstance(mode, str):
-        upper_mode = mode.upper()
-        if upper_mode == 'STRICT':
-            return STRICT
-        elif upper_mode == 'INNER':
-            return INNER
-        elif upper_mode == 'OUTER':
-            return OUTER
-        elif upper_mode == 'LEFT':
-            return LEFT
-        else:
-            raise ValueError(f"Unknown mode - {repr(mode)}.")  # pragma: no cover
+cdef _e_tree_mode _c_load_mode(str mode) except *:
+    cdef upper_mode = mode.upper()
+
+    upper_mode = mode.upper()
+    if upper_mode == 'STRICT':
+        return STRICT
+    elif upper_mode == 'INNER':
+        return INNER
+    elif upper_mode == 'OUTER':
+        return OUTER
+    elif upper_mode == 'LEFT':
+        return LEFT
     else:
-        raise TypeError(f"Unknown type of mode - {repr(type(mode))}.")  # pragma: no cover
+        raise ValueError(f"Unknown mode - {repr(mode)}.")  # pragma: no cover
 
 cdef void _c_base_check(_e_tree_mode mode, object return_type,
                         bool inherit, bool allow_missing, object missing_func) except *:

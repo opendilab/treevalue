@@ -9,7 +9,7 @@ ctypedef enum _e_tree_mode:
     OUTER
     LEFT
 
-cdef _e_tree_mode _c_load_mode(object mode) except *
+cdef _e_tree_mode _c_load_mode(str mode) except *
 cdef void _c_base_check(_e_tree_mode mode, object return_type,
                         bool inherit, bool allow_missing, object missing_func) except *
 

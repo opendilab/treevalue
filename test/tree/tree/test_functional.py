@@ -60,12 +60,17 @@ class TestTreeTreeFunctional:
         class MyTreeValue(TreeValue):
             pass
 
-        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-        assert reduce_(t, lambda **kwargs: sum(kwargs.values())) == 10
-        assert reduce_(t, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
+        t1 = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        assert reduce_(t1, lambda **kwargs: sum(kwargs.values())) == 10
+        assert reduce_(t1, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 24
 
-        assert reduce_(t, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
+        assert reduce_(t1, lambda **kwargs: sum(kwargs.values()) if 'c' in kwargs.keys() else TreeValue(kwargs)) \
                == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
 
-        t.x = reduce_(t.x, lambda **kwargs: sum(kwargs.values()))
-        assert t == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
+        t1.x = reduce_(t1.x, lambda **kwargs: sum(kwargs.values()))
+        assert t1 == MyTreeValue({'a': 1, 'b': 2, 'x': 7})
+
+        t2 = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        assert reduce_(t2, lambda **kwargs: TreeValue(
+            {k + k: (v ** 2 if not isinstance(v, TreeValue) else v) for k, v in kwargs.items()})) == MyTreeValue(
+            {'aa': 1, 'bb': 4, 'xx': {'cc': 9, 'dd': 16}})
