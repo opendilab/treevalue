@@ -12,7 +12,7 @@ from ..common.storage cimport TreeStorage
 from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
 
-cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
+cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                                  _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):
     cdef list ck_args = []
     cdef list ck_kwargs = []
@@ -84,7 +84,7 @@ cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
                         type=repr(type(av).__name__), index=repr(ak),
                     ))
 
-        _d_res[k] = _c_func_treelize_run(func, tuple(_l_args), _d_kwargs,
+        _d_res[k] = _c_func_treelize_run(func, _l_args, _d_kwargs,
                                          mode, inherit, allow_missing, missing_func)
 
     return TreeStorage(_d_res)
@@ -99,11 +99,11 @@ def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True
 def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object __w_return_type,
                          bool __w_inherit, bool __w_allow_missing, object __w_missing_func,
                          object __w_subside, object __w_rise, **kwargs):
-    cdef tuple _a_args = tuple((item._detach() if isinstance(item, TreeValue) else item) for item in args)
+    cdef list _a_args = [(item._detach() if isinstance(item, TreeValue) else item) for item in args]
     cdef dict _a_kwargs = {k: (v._detach() if isinstance(v, TreeValue) else v) for k, v in kwargs.items()}
 
     if __w_subside is not None:
-        _a_args = tuple(_w_subside_func(item, **__w_subside) for item in _a_args)
+        _a_args = [_w_subside_func(item, **__w_subside) for item in _a_args]
         _a_kwargs = {key: _w_subside_func(value, **__w_subside) for key, value in _a_kwargs.items()}
 
     cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode,

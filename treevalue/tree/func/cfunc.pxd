@@ -5,7 +5,7 @@ from libcpp cimport bool
 
 from .modes cimport _e_tree_mode
 
-cdef object _c_func_treelize_run(object func, tuple args, dict kwargs,
+cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                                  _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func)
 
 cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing,

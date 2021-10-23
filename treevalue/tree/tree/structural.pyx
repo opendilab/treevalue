@@ -84,7 +84,7 @@ cdef inline void _c_subside_missing():
 cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit):
     cdef object builder, _i_args, _i_types
     builder, _i_args, _i_types = _c_subside_build(value, dict_, list_, tuple_)
-    cdef tuple args = tuple(_i_args)
+    cdef list args = list(_i_args)
 
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
                                 STRICT, inherit, False, _c_subside_missing), _i_types
