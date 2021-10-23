@@ -1,16 +1,14 @@
 treevalue.utils.tree
 ==========================
 
-build_tree
------------------
+.. py:currentmodule:: treevalue.utils.tree
 
-.. autofunction:: treevalue.utils.tree.build_tree
-
+.. automodule:: treevalue.utils.tree
 
 build_graph
 -------------------
 
-.. autofunction:: treevalue.utils.tree.build_graph
+.. autofunction:: build_graph
 
 Here is an example of ``build_graph`` function. The source code is
 

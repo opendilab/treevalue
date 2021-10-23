@@ -5,5 +5,6 @@ treevalue.utils
     :maxdepth: 3
 
     color
+    formattree
     random
     tree

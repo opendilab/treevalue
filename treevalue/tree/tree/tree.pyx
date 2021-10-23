@@ -1,10 +1,13 @@
 # distutils:language=c++
 # cython:language_level=3
 
+import os
+from operator import itemgetter
+
 import cython
 
 from ..common.storage cimport TreeStorage, create_storage
-from ...utils import build_tree
+from ...utils import format_tree
 
 cdef inline TreeStorage _dict_unpack(dict d):
     cdef str k
@@ -235,10 +238,6 @@ cdef class TreeValue:
         return not self._st.empty()
 
     @cython.binding(True)
-    cpdef str _repr(self):
-        return f'<{self.__class__.__name__} {hex(id(self._st))}>'
-
-    @cython.binding(True)
     def __repr__(self):
         """
         Overview:
@@ -249,13 +248,18 @@ cdef class TreeValue:
 
         Example:
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> repr(t)  # <TreeValue 0xffffffff keys: ['a', 'b', 'x']>, the is may be different
+            >>> repr(t)
+            <TreeValue 0x7f22681c69a0>
+            ├── a --> 1
+            ├── b --> 2
+            └── x --> <TreeValue 0x7f226629bc70>
+                ├── c --> 3
+                └── d --> 4
         """
-        return str(build_tree(
-            self,
-            repr_gen=lambda x: x._repr() if isinstance(x, TreeValue) else repr(x),
-            iter_gen=lambda x: iter(x) if isinstance(x, TreeValue) else None,
-        ))
+        return format_tree(
+            _build_tree(self._detach(), self._type, '', {}, ()),
+            itemgetter(0), itemgetter(1),
+        )
 
     @cython.binding(True)
     def __hash__(self):
@@ -329,3 +333,39 @@ cdef class TreeValue:
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
         return self._st
+
+cdef str _prefix_fix(object text, object prefix):
+    cdef list lines = []
+    cdef int i
+    cdef str line
+    cdef str white = ' ' * len(prefix)
+    for i, line in enumerate(text.splitlines()):
+        lines.append((prefix if i == 0 else white) + line)
+
+    return os.linesep.join(lines)
+
+cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, tuple path):
+    cdef object nid = id(st)
+    cdef str self_repr = f'<{type_.__name__} {hex(nid)}>'
+    cdef list children = []
+
+    cdef str k, _t_prefix
+    cdef object v
+    cdef dict data
+    cdef tuple curpath
+    if nid in id_pool:
+        self_repr = os.linesep.join([
+            self_repr, f'(The same address as {".".join(("<root>", *id_pool[nid]))})'])
+    else:
+        id_pool[nid] = path
+        data = st.detach()
+        for k, v in sorted(data.items()):
+            curpath = path + (k,)
+            _t_prefix = f'{k} --> '
+            if isinstance(v, TreeStorage):
+                children.append(_build_tree(v, type_, _t_prefix, id_pool, curpath))
+            else:
+                children.append((_prefix_fix(repr(v), _t_prefix), []))
+
+    self_repr = _prefix_fix(self_repr, prefix)
+    return self_repr, children

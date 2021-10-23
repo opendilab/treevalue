@@ -5,73 +5,8 @@ from typing import Optional, Mapping, Any, Callable
 
 from graphviz import Digraph
 from hbutils.reflection import dynamic_call, post_process
-from treelib import Tree as LibTree
 
 from .random import random_hex_with_timestamp
-
-_ROOT_ID = '_root'
-_NODE_ID_TEMP = '_node_{id}'
-
-
-def build_tree(root_node, repr_gen=None, iter_gen=None) -> LibTree:
-    """
-    Overview:
-        Build a treelib object by an object.
-
-    Arguments:
-        - root_node (:obj:`Any`): Root object.
-        - repr_gen (:obj:`Optional[Callable]`): Represent function, default is primitive `repr`.
-        - iter_gen (:obj:`Optional[Callable]`): Iterate function, \
-            default is `lambda x: x.items() if hasattr(x, 'items') else None`.
-
-    Returns:
-        - tree (:obj:`treelib.Tree`): Built tree.
-
-    Example:
-         >>> t = build_tree(
-         >>>     {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'z': [1, 2], 'v': {'1': '2'}},
-         >>>     repr_gen=lambda x: '<node>' if isinstance(x, dict) else repr(x),
-         >>> )
-         >>> print(t)
-
-         The output should be
-
-         >>> <node>
-         >>> ├── 'a' --> 1
-         >>> ├── 'b' --> 2
-         >>> ├── 'v' --> <node>
-         >>> │   └── '1' --> '2'
-         >>> ├── 'x' --> <node>
-         >>> │   ├── 'c' --> 3
-         >>> │   └── 'd' --> 4
-         >>> └── 'z' --> [1, 2]
-    """
-    repr_gen = repr_gen or repr
-    iter_gen = iter_gen or (lambda x: x.items() if hasattr(x, 'items') else None)
-
-    _tree = LibTree()
-    _tree.create_node(repr_gen(root_node), _ROOT_ID)
-    _index, _queue = 0, Queue()
-    _queue.put((_ROOT_ID, root_node))
-
-    while not _queue.empty():
-        _parent_id, _parent_tree = _queue.get()
-
-        for key, value in iter_gen(_parent_tree):
-            _index += 1
-            _current_id = _NODE_ID_TEMP.format(id=_index)
-            _tree.create_node(
-                "{key} --> {value}".format(key=repr(key), value=repr_gen(value)),
-                _current_id,
-                _parent_id
-            )
-            if iter_gen(value):
-                _queue.put((_current_id, value))
-
-    return _tree
-
-
-_NAME_PATTERN = re.compile('^[a-zA-Z_][a-zA-Z0-9_]*$')
 
 
 def _title_flatten(title):
