@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import jsonify, TreeValue, clone, typetrans, raw
+from treevalue.tree import jsonify, TreeValue, clone, typetrans, raw, walk
 
 
 # noinspection DuplicatedCode
@@ -78,3 +78,24 @@ class TestTreeTreeService:
 
         with pytest.raises(TypeError):
             typetrans(tv1, NonTreeValue)
+
+    def test_walk(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        tv1 = MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+
+        assert dict(walk(tv1)) == {
+            ('a',): 1,
+            ('b',): 2,
+            ('c', 'x',): 2,
+            ('c', 'y',): 3,
+        }
+        assert dict(walk(tv1, include_nodes=True)) == {
+            (): MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}}),
+            ('a',): 1,
+            ('b',): 2,
+            ('c',): MyTreeValue({'x': 2, 'y': 3}),
+            ('c', 'x',): 2,
+            ('c', 'y',): 3,
+        }

@@ -1,13 +1,15 @@
 # distutils:language=c++
 # cython:language_level=3
 
-# jsonify, clone, typetrans
+# jsonify, clone, typetrans, walk
 
 import copy
 
 import cython
+from libcpp cimport bool
 
 from .tree cimport TreeValue
+from ..common.storage cimport TreeStorage
 
 cdef object _keep_object(object obj):
     return obj
@@ -78,3 +80,37 @@ cpdef TreeValue typetrans(TreeValue t, object return_type):
         raise TypeError("Tree value should be subclass of TreeValue, but {type} found.".format(
             type=repr(return_type.__name__)
         ))
+
+def _p_walk(TreeStorage tree, object type_, tuple path, bool include_nodes):
+    if include_nodes:
+        yield path, type_(tree)
+
+    cdef dict data = tree.detach()
+    cdef str k
+    cdef object v
+    cdef tuple curpath
+    for k, v in data.items():
+        curpath = path + (k,)
+        if isinstance(v, TreeStorage):
+            yield from _p_walk(v, type_, curpath, include_nodes)
+        else:
+            yield curpath, v
+
+@cython.binding(True)
+cpdef walk(TreeValue tree, bool include_nodes=False):
+    r"""
+    Overview:
+        Walk the values and nodes in the tree.
+        The order of walk is not promised, if you need the ordered walking result, \
+        just use function ``sorted`` at the outer side of :func:`walk`.
+
+    Arguments:
+        - tree: Tree value object to be walked.
+        - include_nodes (:obj:`bool`): Not only the value nodes will be walked,
+            but the tree nodes as well.
+
+    Returns:
+        - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \
+            path of the node, the 2nd one is the value.
+    """
+    return _p_walk(tree._detach(), type(tree), (), include_nodes)

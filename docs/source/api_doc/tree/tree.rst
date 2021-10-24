@@ -36,6 +36,14 @@ typetrans
 .. autofunction:: typetrans
 
 
+.. _apidoc_tree_tree_walk:
+
+walk
+-------------------
+
+.. autofunction:: walk
+
+
 .. _apidoc_tree_tree_mapping:
 
 mapping
