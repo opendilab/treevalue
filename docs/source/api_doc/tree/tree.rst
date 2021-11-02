@@ -44,6 +44,22 @@ walk
 .. autofunction:: walk
 
 
+.. _apidoc_tree_tree_flatten:
+
+flatten
+-------------------
+
+.. autofunction:: flatten
+
+
+.. _apidoc_tree_tree_unflatten:
+
+unflatten
+-------------------
+
+.. autofunction:: unflatten
+
+
 .. _apidoc_tree_tree_mapping:
 
 mapping
