@@ -12,6 +12,8 @@ from ..common.storage cimport TreeStorage
 from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
 
+_VALUE_IS_MISSING = SingletonMark('value_is_missing')
+
 cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                                  _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):
     cdef list ck_args = []
@@ -33,8 +35,24 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
         else:
             ck_kwargs.append((k, v, False))
 
+    cdef list _a_args
+    cdef dict _a_kwargs
     if not has_tree:
-        return func(*args, **kwargs)
+        _a_args = []
+        for v in args:
+            if v is not _VALUE_IS_MISSING:
+                _a_args.append(v)
+            else:
+                _a_args.append(missing_func())
+
+        _a_kwargs = {}
+        for k, v in kwargs.items():
+            if v is not _VALUE_IS_MISSING:
+                _a_kwargs[k] = v
+            else:
+                _a_kwargs[k] = missing_func()
+
+        return func(*_a_args, **_a_kwargs)
 
     cdef dict _d_res = {}
     cdef str ak
@@ -51,7 +69,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                     _l_args.append(av[k])
                 except KeyError:
                     if allow_missing:
-                        _l_args.append(missing_func())
+                        _l_args.append(_VALUE_IS_MISSING)
                     else:
                         raise KeyError("Missing is off, key {key} not found in {item}.".format(
                             key=repr(k), item=repr(av),
@@ -71,7 +89,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                     _d_kwargs[ak] = av[k]
                 except KeyError:
                     if allow_missing:
-                        _d_kwargs[ak] = missing_func()
+                        _d_kwargs[ak] = _VALUE_IS_MISSING
                     else:
                         raise KeyError("Missing is off, key {key} not found in {item}.".format(
                             key=repr(k), item=repr(av),

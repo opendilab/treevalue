@@ -217,3 +217,43 @@ class TestTreeFuncFunc:
                 return x + y
 
         assert MyTreeValue.plus(TreeValue({'a': 1, 'b': 2}), 2) == MyTreeValue({'a': 3, 'b': 4})
+
+    def test_missing(self):
+        @func_treelize(mode='outer', missing=lambda: [])
+        def append(arr: list, *args):
+            for item in args:
+                if item:
+                    arr.append(item)
+            return arr
+
+        t0 = TreeValue({})
+        t1 = TreeValue({'a': 2, 'b': 7, 'x': {'c': 4, 'd': 9}})
+        t2 = TreeValue({'a': 4, 'b': 48, 'x': {'c': -11, 'd': 54}})
+        t3 = TreeValue({'a': 9, 'b': -12, 'x': {'c': 3, 'd': 4}})
+
+        assert append(t0, t1, t2, t3) == TreeValue({
+            'a': [2, 4, 9],
+            'b': [7, 48, -12],
+            'x': {
+                'c': [4, -11, 3],
+                'd': [9, 54, 4],
+            }
+        })
+
+        t0 = TreeValue({})
+        t1 = TreeValue({'a': 2, 'x': {'c': 4, 'd': 9}})
+        t2 = TreeValue({'a': 4, 'b': 48, 'x': {'d': 54}})
+        t3 = TreeValue({'b': -12, 'x': 7, 'y': {'e': 3, 'f': 4}})
+
+        assert append(t0, t1, t2, t3) == TreeValue({
+            'a': [2, 4],
+            'b': [48, -12],
+            'x': {
+                'c': [4, 7],
+                'd': [9, 54, 7],
+            },
+            'y': {
+                'e': [3],
+                'f': [4],
+            },
+        })
