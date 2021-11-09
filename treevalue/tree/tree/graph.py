@@ -2,10 +2,11 @@ from functools import lru_cache
 from typing import Type, Callable, Union, Optional, Tuple
 
 from graphviz import Digraph, nohtml
+from hbutils.color import Color
 from hbutils.reflection import post_process, dynamic_call, freduce
 
 from .tree import TreeValue
-from ...utils import build_graph, Color
+from ...utils import build_graph
 from ...utils.tree import SUFFIXED_TAG
 
 
