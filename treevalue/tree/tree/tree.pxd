@@ -4,8 +4,8 @@
 from ..common.storage cimport TreeStorage
 
 cdef class TreeValue:
-    cdef TreeStorage _st
-    cdef type _type
+    cdef readonly TreeStorage _st
+    cdef readonly type _type
 
     cpdef TreeStorage _detach(self)
     cdef object _unraw(self, object obj)
