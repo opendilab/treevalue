@@ -5,9 +5,12 @@ import os
 from operator import itemgetter
 
 import cython
+from hbutils.design import SingletonMark
 
 from ..common.storage cimport TreeStorage, create_storage
 from ...utils import format_tree
+
+_GET_NO_DEFAULT = SingletonMark('get_no_default')
 
 cdef inline TreeStorage _dict_unpack(dict d):
     cdef str k
@@ -82,6 +85,28 @@ cdef class TreeValue:
             return obj._detach()
         else:
             return obj
+
+    @cython.binding(True)
+    cpdef get(self, str key, object default=_GET_NO_DEFAULT):
+        r"""
+        Overview:
+            Get item from the tree node.
+
+        Arguments:
+            - key (:obj:`str`): Item's name.
+            - default (:obj:`default`): Default value when this item is not found, default is \
+                `_GET_NO_DEFAULT` which means just raise `KeyError` when not found.
+
+        Returns:
+            - value: Item's value.
+        """
+        cdef object value
+        if default is _GET_NO_DEFAULT:
+            value = self._st.get(key)
+        else:
+            value = self._st.get_or_default(key, default)
+
+        return self._unraw(value)
 
     @cython.binding(True)
     cpdef _attr_extern(self, str key):

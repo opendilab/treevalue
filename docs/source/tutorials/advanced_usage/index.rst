@@ -877,6 +877,98 @@ For further informaon of function ``typetrans``, \
 take a look at :ref:`apidoc_tree_tree_typetrans`.
 
 
+Walk
+~~~~~~~~~~~~~~~
+
+You can use function :func:`treevalue.tree.tree.walk` to iterate all the nodes \
+in the tree, like the example below:
+
+.. literalinclude:: walk_demo.demo.py
+    :language: python
+    :linenos:
+
+The output should be like below:
+
+.. literalinclude:: walk_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+For further informaon of function ``walk``, \
+take a look at :ref:`apidoc_tree_tree_walk`.
+
+
+Flatten Utilities
+----------------------
+
+In order to support the parallel calculation in values of \
+``TreeValue`` object, :func:`treevalue.tree.tree.flatten` and \
+:func:`treevalue.tree.tree.unflatten` is provided to dump a \
+sequence of nodes' information and value, and recover it to \
+original tree structure when calculation is completed.
+
+Flatten
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The values and node structures can be dumped \
+by function :func:`treevalue.tree.tree.flatten` as a list, \
+like this:
+
+.. literalinclude:: flatten_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below:
+
+.. literalinclude:: flatten_demo.demo.py.txt
+    :language: python
+    :linenos:
+
+.. note::
+
+    Function :func:`treevalue.tree.tree.flatten` is different from \
+    :func:`treevalue.tree.tree.walk` because ``flatten`` \
+    has fewer features because it is designed entirely for \
+    the dumping process before parallel calculation.
+
+    So when you need to do parallel calculation, please use \
+    :func:`treevalue.tree.tree.flatten` to dump the values to ensure the \
+    speed performance.
+
+For further informaon of function ``flatten``, \
+take a look at :ref:`apidoc_tree_tree_flatten`.
+
+
+Unflatten
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The dumped nodes' information and value can be \
+recovered to a ``TreeValue`` object by \
+function :func:`treevalue.tree.tree.unflatten`, like this:
+
+.. literalinclude:: unflatten_demo.demo.py
+    :language: python
+    :linenos:
+
+The result should be like below:
+
+.. literalinclude:: unflatten_demo.demo.py.txt
+    :language: text
+    :linenos:
+
+.. note::
+
+    It is recommended to pass an ordered iterable object \
+    in ``pairs``, this will improve the speed performance of \
+    function :func:`treevalue.tree.tree.unflatten`.
+
+    Because of this, it is a good idea to keep \
+    the :func:`treevalue.tree.tree.flatten`'s result's order \
+    when executing your own parallel processing logic.
+
+For further informaon of function ``unflatten``, \
+take a look at :ref:`apidoc_tree_tree_unflatten`.
+
+
 IO Utilities
 -----------------------
 

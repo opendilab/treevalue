@@ -23,6 +23,17 @@ class TestTreeStorage:
         with pytest.raises(KeyError):
             _ = t.get('fff')
 
+    def test_get_or_default(self):
+        t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
+        assert t.get_or_default('a', 233) == 1
+        assert t.get_or_default('b', 233) == 2
+        assert t.get_or_default('c', 233) == {'x': 3, 'y': 4}
+        assert isinstance(t.get_or_default('d', 233), TreeStorage)
+        assert t.get_or_default('d', 233).get_or_default('x', 233) == 3
+        assert t.get_or_default('d', 233).get_or_default('y', 233) == 4
+
+        assert t.get_or_default('fff', 233) == 233
+
     def test_set(self):
         t = create_storage({})
         t.set('a', 1)

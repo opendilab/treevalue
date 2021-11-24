@@ -9,7 +9,7 @@ TreeValue
 ---------------
 
 .. autoclass:: TreeValue
-    :members: __init__, __getattr__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__
+    :members: __init__, __getattr__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__, get
 
 
 .. _apidoc_tree_tree_jsonify:
@@ -42,6 +42,22 @@ walk
 -------------------
 
 .. autofunction:: walk
+
+
+.. _apidoc_tree_tree_flatten:
+
+flatten
+-------------------
+
+.. autofunction:: flatten
+
+
+.. _apidoc_tree_tree_unflatten:
+
+unflatten
+-------------------
+
+.. autofunction:: unflatten
 
 
 .. _apidoc_tree_tree_mapping:
