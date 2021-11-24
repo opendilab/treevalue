@@ -40,6 +40,9 @@ cdef class TreeStorage:
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
+    cpdef public object get_or_default(self, str key, object default):
+        return self.map.get(key, default)
+
     cpdef public void del_(self, str key) except *:
         try:
             del self.map[key]
