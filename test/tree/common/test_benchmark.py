@@ -40,6 +40,10 @@ class TestTreeStorageBenchmark:
     def test_get(self, benchmark, key):
         benchmark(TreeStorage.get, self.__setup_storage(), key)
 
+    @pytest.mark.parametrize('key, default', [('a', 1), ('e', 1)])
+    def test_get_or_default(self, benchmark, key, default):
+        benchmark(TreeStorage.get_or_default, self.__setup_storage(), key, default)
+
     @pytest.mark.parametrize('key, data', [('b', {'x': 1, 'y': 2})])
     def test_set(self, benchmark, key, data):
         benchmark(TreeStorage.set, self.__setup_storage(), key, data)
