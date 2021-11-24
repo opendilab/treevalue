@@ -3,7 +3,7 @@ import re
 
 import pytest
 
-from treevalue.tree.tree import TreeValue
+from treevalue import raw, TreeValue
 
 
 class _Container:
@@ -179,3 +179,14 @@ class TestTreeTreeTree:
         })
         bt2 = pickle.dumps(tv2)
         assert pickle.loads(bt2) == tv2
+
+    def test_get(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+
+        assert tv1.get('a') == 1
+        assert tv1.get('b') == 2
+        assert tv1.get('c') == TreeValue({'x': 2, 'y': 3})
+        assert tv1.get('d') == {'x': 2, 'y': 3}
+        with pytest.raises(KeyError):
+            _ = tv1.get('e')
+        assert tv1.get('e', 233) == 233

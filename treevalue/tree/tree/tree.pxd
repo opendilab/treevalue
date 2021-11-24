@@ -11,6 +11,7 @@ cdef class TreeValue:
     cdef object _unraw(self, object obj)
     cdef object _raw(self, object obj)
     cpdef _attr_extern(self, str key)
+    cpdef get(self, str key, object default= *)
 
 cdef str _prefix_fix(object text, object prefix)
 cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, tuple path)
