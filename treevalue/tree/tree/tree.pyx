@@ -27,6 +27,8 @@ cdef inline TreeStorage _dict_unpack(dict d):
 
     return create_storage(result)
 
+_DEFAULT_STORAGE = create_storage({})
+
 cdef class TreeValue:
     r"""
     Overview:
@@ -35,6 +37,10 @@ cdef class TreeValue:
         please use `FastTreeValue` in `treevalue.tree.general`. \
         The `TreeValue` class is a light-weight framework just for DIY.
     """
+
+    def __cinit__(self, object data):
+        self._st = _DEFAULT_STORAGE
+        self._type = type(self)
 
     @cython.binding(True)
     def __init__(self, object data):
@@ -65,8 +71,6 @@ cdef class TreeValue:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
                     type=repr(type(data).__name__)))
-
-        self._type = type(self)
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
@@ -125,8 +129,31 @@ cdef class TreeValue:
         """
         raise AttributeError("Attribute {key} not found.".format(key=repr(key)))
 
+    # @cython.binding(True)
+    # def __getattr__(self, str item):
+    #     """
+    #     Overview:
+    #         Get item from this tree value.
+    #
+    #     Arguments:
+    #         - key (:obj:`str`): Attribute name.
+    #
+    #     Returns:
+    #         - attr (:obj:): Target attribute value.
+    #
+    #     Example:
+    #         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+    #         >>> t.a    # 1
+    #         >>> t.b    # 2
+    #         >>> t.x.c  # 3
+    #     """
+    #     try:
+    #         return self._unraw(self._st.get(item))
+    #     except KeyError:
+    #         return self._attr_extern(item)
+
     @cython.binding(True)
-    def __getattr__(self, str item):
+    def __getattribute__(self, str item):
         """
         Overview:
             Get item from this tree value.
@@ -143,10 +170,13 @@ cdef class TreeValue:
             >>> t.b    # 2
             >>> t.x.c  # 3
         """
-        try:
+        if self._st.contains(item):
             return self._unraw(self._st.get(item))
-        except KeyError:
-            return self._attr_extern(item)
+        else:
+            try:
+                return object.__getattribute__(self, item)
+            except AttributeError:
+                return self._attr_extern(item)
 
     @cython.binding(True)
     def __setattr__(self, str key, object value):
@@ -341,7 +371,6 @@ cdef class TreeValue:
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
         self._st = state
-        self._type = type(self)
 
     @cython.binding(True)
     def __getstate__(self):
