@@ -129,29 +129,6 @@ cdef class TreeValue:
         """
         raise AttributeError("Attribute {key} not found.".format(key=repr(key)))
 
-    # @cython.binding(True)
-    # def __getattr__(self, str item):
-    #     """
-    #     Overview:
-    #         Get item from this tree value.
-    #
-    #     Arguments:
-    #         - key (:obj:`str`): Attribute name.
-    #
-    #     Returns:
-    #         - attr (:obj:): Target attribute value.
-    #
-    #     Example:
-    #         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-    #         >>> t.a    # 1
-    #         >>> t.b    # 2
-    #         >>> t.x.c  # 3
-    #     """
-    #     try:
-    #         return self._unraw(self._st.get(item))
-    #     except KeyError:
-    #         return self._attr_extern(item)
-
     @cython.binding(True)
     def __getattribute__(self, str item):
         """
