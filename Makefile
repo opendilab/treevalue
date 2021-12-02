@@ -49,7 +49,9 @@ unittest:
 benchmark:
 	pytest "${RANGE_TEST_DIR}" \
 		-sv -m benchmark \
-		--durations=0 \
+		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
+		--benchmark-disable-gc \
+		--benchmark-sort=mean \
 		$(if ${WORKERS},-n ${WORKERS},)
 
 docs:
