@@ -5,7 +5,7 @@ from typing import Type
 import numpy as np
 import pytest
 
-from treevalue.tree import func_treelize, TreeValue, raw
+from treevalue.tree import func_treelize, TreeValue, raw, mapping
 
 
 def get_tree_test(tree_value_clazz: Type[TreeValue]):
@@ -110,8 +110,8 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 }
             })
 
-            npeq = func_treelize(return_type=tree_value_clazz)(np.array_equal)
-            assert npeq((t1 @ t2), tree_value_clazz({
+            tnp_array_equal = func_treelize(return_type=tree_value_clazz)(np.array_equal)
+            assert tnp_array_equal((t1 @ t2), tree_value_clazz({
                 'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
                 'b': np.array([[2, 3], [4, 5]]) @ np.array([[3, 4], [5, 6]]),
                 'x': {
@@ -126,7 +126,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                     'd': True,
                 }
             })
-            assert npeq(
+            assert tnp_array_equal(
                 (t2.__rmatmul__(np.array([[1, 2], [3, 4]]))), tree_value_clazz({
                     'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
                     'b': np.array([[1, 2], [3, 4]]) @ np.array([[3, 4], [5, 6]]),
@@ -144,13 +144,40 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 }
             })
 
-            original_id = id(t1._detach())
-            original_id_x = id(t1.x._detach())
-            t4 = t1 @ t2
-            t1 @= t2
-            assert npeq(t1, t4)
-            assert id(t1._detach()) == original_id
-            assert id(t1.x._detach()) == original_id_x
+            class Ft:
+                def __init__(self, x):
+                    self.x = x
+                    self.c = 0
+                    self.rc = 0
+                    self.ic = 0
+
+                def __matmul__(self, other):
+                    self.c += 1
+                    return Ft(self.x @ other.x)
+
+                def __rmatmul__(self, other):
+                    self.rc += 1
+                    return Ft(other.x @ self.x)
+
+                def __imatmul__(self, other):
+                    self.ic += 1
+                    self.x = self.x @ other.x
+                    return self
+
+            tt1 = mapping(t1, lambda x, p: Ft(x))
+            tt2 = mapping(t2, lambda x, p: Ft(x))
+
+            original_id = id(tt1._detach())
+            original_id_x = id(tt1.x._detach())
+            tt4 = tt1 @ tt2
+            tt1 @= tt2
+            assert tnp_array_equal(tt1.x, tt4.x)
+            assert tt1.a.c == 1
+            assert tt1.a.rc == 0
+            assert tt1.a.ic == 1
+
+            assert id(tt1._detach()) == original_id
+            assert id(tt1.x._detach()) == original_id_x
 
         def test_numeric_floordiv(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
