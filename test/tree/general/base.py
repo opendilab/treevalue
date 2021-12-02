@@ -110,8 +110,8 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 }
             })
 
-            npeq = func_treelize(return_type=tree_value_clazz)(np.array_equal)
-            assert npeq((t1 @ t2), tree_value_clazz({
+            tnp_array_equal = func_treelize(return_type=tree_value_clazz)(np.array_equal)
+            assert tnp_array_equal((t1 @ t2), tree_value_clazz({
                 'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
                 'b': np.array([[2, 3], [4, 5]]) @ np.array([[3, 4], [5, 6]]),
                 'x': {
@@ -126,7 +126,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                     'd': True,
                 }
             })
-            assert npeq(
+            assert tnp_array_equal(
                 (t2.__rmatmul__(np.array([[1, 2], [3, 4]]))), tree_value_clazz({
                     'a': np.array([[1, 2], [3, 4]]) @ np.array([[4, 5], [6, 7]]),
                     'b': np.array([[1, 2], [3, 4]]) @ np.array([[3, 4], [5, 6]]),
@@ -171,7 +171,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             original_id_x = id(tt1.x._detach())
             tt4 = tt1 @ tt2
             tt1 @= tt2
-            assert npeq(tt1.x, tt4.x)
+            assert tnp_array_equal(tt1.x, tt4.x)
             assert tt1.a.c == 1
             assert tt1.a.rc == 0
             assert tt1.a.ic == 1
