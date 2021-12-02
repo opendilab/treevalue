@@ -12,7 +12,7 @@ _TREE_DATA_2 = {'a': torch.randn(2, 3), 'x': {'c': torch.randn(3, 4)}}
 _TREE_2 = FastTreeValue(_TREE_DATA_2)
 _BATCH_2 = Batch(**_TREE_DATA_2)
 
-_TREE_DATA_3 = {'a': torch.randn(30, 40), 'x': {'c': torch.randn(30, 50)}}
+_TREE_DATA_3 = {'obs': torch.randn(4, 84, 84), 'action': torch.randint(0, 6, size=(1,)), 'reward': torch.rand(1)}
 _TREE_3 = FastTreeValue(_TREE_DATA_3)
 _BATCH_3 = Batch(**_TREE_DATA_3)
 
@@ -52,36 +52,48 @@ class TestCompareWithTianShouBatch:
     def test_tv_setattr(self, benchmark):
         benchmark(setattr, self.__setup_tree(), 'a', torch.randn(2, 3))
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    _LEVELS = [2 ** i for i in range(1, 6)]
+
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tsb_stack(self, benchmark, cnt):
         batches = [self.__setup_batch() for _ in range(cnt)]
         benchmark(Batch.stack, batches)
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tv_stack(self, benchmark, cnt):
         stack = FastTreeValue.func(subside=True)(torch.stack)
         trees = [self.__setup_tree() for _ in range(cnt)]
         benchmark(stack, trees)
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tsb_cat(self, benchmark, cnt):
         batches = [self.__setup_batch() for _ in range(cnt)]
         benchmark(Batch.cat, batches)
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tv_cat(self, benchmark, cnt):
         cat = FastTreeValue.func(subside=True)(torch.cat)
         trees = [self.__setup_tree() for _ in range(cnt)]
         benchmark(cat, trees)
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tsb_split(self, benchmark, cnt):
         def split(*args, **kwargs):
             return list(Batch.split(*args, **kwargs))
 
-        benchmark(split, _BATCH_3, cnt, shuffle=False, merge_last=True)
+        batch = Batch({
+            'obs': torch.randn(4 * cnt, 84, 84),
+            'action': torch.randint(0, 6, size=(4 * cnt,)),
+            'reward': torch.rand(4 * cnt)}
+        )
+        benchmark(split, batch, 4, shuffle=False, merge_last=True)
 
-    @pytest.mark.parametrize('cnt', [3, 10])
+    @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tv_split(self, benchmark, cnt):
         split = FastTreeValue.func(rise=True)(torch.split)
-        benchmark(split, _TREE_3, cnt)
+        tree = FastTreeValue({
+            'obs': torch.randn(4 * cnt, 84, 84),
+            'action': torch.randint(0, 6, size=(4 * cnt,)),
+            'reward': torch.rand(4 * cnt)}
+        )
+        benchmark(split, tree, 4)
