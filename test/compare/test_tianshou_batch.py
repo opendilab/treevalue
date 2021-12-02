@@ -1,3 +1,5 @@
+import copy
+
 import pytest
 import torch
 from tianshou.data import Batch  # tianshou Batch https://tianshou.readthedocs.io/en/master/api/tianshou.data.html#batch
@@ -51,6 +53,12 @@ class TestCompareWithTianShouBatch:
 
     def test_tv_setattr(self, benchmark):
         benchmark(setattr, self.__setup_tree(), 'a', torch.randn(2, 3))
+
+    def test_tv_deepcopy(self, benchmark):
+        benchmark(copy.deepcopy, _TREE_3)
+
+    def test_tsb_deepcopy(self, benchmark):
+        benchmark(copy.deepcopy, _BATCH_3)
 
     _LEVELS = [2 ** i for i in range(1, 6)]
 
