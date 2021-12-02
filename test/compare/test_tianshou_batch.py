@@ -1,6 +1,6 @@
 import pytest
 import torch
-from tianshou.data import Batch
+from tianshou.data import Batch  # tianshou Batch https://tianshou.readthedocs.io/en/master/api/tianshou.data.html#batch
 
 from treevalue import FastTreeValue
 
