@@ -147,6 +147,10 @@ cdef class TreeValue:
             >>> t.b    # 2
             >>> t.x.c  # 3
         """
+
+        # original order: __dict__, self._st, self._attr_extern
+        # new order: self._st, __dict__, self._attr_extern
+        # this may cause problem when pickle.loads, so __getnewargs_ex__ and __cinit__ is necessary
         if self._st.contains(item):
             return self._unraw(self._st.get(item))
         else:
