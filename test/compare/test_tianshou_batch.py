@@ -90,18 +90,18 @@ class TestCompareWithTianShouBatch:
             return list(Batch.split(*args, **kwargs))
 
         batch = Batch({
-            'obs': torch.randn(4 * cnt, 84, 84),
-            'action': torch.randint(0, 6, size=(4 * cnt,)),
-            'reward': torch.rand(4 * cnt)}
+            'obs': torch.randn(cnt, 4, 84, 84),
+            'action': torch.randint(0, 6, size=(cnt, 1,)),
+            'reward': torch.rand(cnt, 1)}
         )
-        benchmark(split, batch, 4, shuffle=False, merge_last=True)
+        benchmark(split, batch, 1, shuffle=False, merge_last=True)
 
     @pytest.mark.parametrize('cnt', _LEVELS)
     def test_tv_split(self, benchmark, cnt):
         split = FastTreeValue.func(rise=True)(torch.split)
         tree = FastTreeValue({
-            'obs': torch.randn(4 * cnt, 84, 84),
-            'action': torch.randint(0, 6, size=(4 * cnt,)),
-            'reward': torch.rand(4 * cnt)}
+            'obs': torch.randn(cnt, 4, 84, 84),
+            'action': torch.randint(0, 6, size=(cnt, 1,)),
+            'reward': torch.rand(cnt, 1)}
         )
-        benchmark(split, tree, 4)
+        benchmark(split, tree, 1)
