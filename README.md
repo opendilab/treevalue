@@ -146,6 +146,31 @@ For more quick start explanation and further usage, take a look at:
 * [Basic Usage](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html)
 * [Advanced Usage](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html)
 
+## Speed Performance
+
+Here is the speed performance of all the operations in `FastTreeValue`
+
+|                                                     |     flatten      |  flatten(with path)  |          map          |   map(with path)    |
+| --------------------------------------------------- | :--------------: | :------------------: | :-------------------: | :-----------------: |
+| [treevalue](https://github.com/opendilab/treevalue) |       ---        | **511 ns ± 6.92 ns** | **3.16 µs ± 42.8 ns** | **1.58 µs ± 30 ns** |
+| [dm-tree](https://github.com/deepmind/tree)         | 830 ns ± 8.53 ns |   11.9 µs ± 358 ns   |   13.3 µs ± 87.2 ns   |  62.9 µs ± 2.26 µs  |
+
+
+
+|                                                      |          get           |          set           |         init         |       deepcopy       |        stack         |          cat          |       split        |
+| ---------------------------------------------------- | :--------------------: | :--------------------: | :------------------: | :------------------: | :------------------: | :-------------------: | :----------------: |
+| [treevalue](https://github.com/opendilab/treevalue)  |   51.6 ns ± 0.609 ns   | **64.4 ns ± 0.564 ns** | **750 ns ± 14.2 ns** | **88.9 µs ± 887 ns** | **50.2 µs ± 771 ns** | **40.3 µs ± 1.08 µs** | **62 µs ± 1.2 µs** |
+| [tianshou Batch](https://github.com/thu-ml/tianshou) | **43.2 ns ± 0.698 ns** |    396 ns ± 8.99 ns    |   11.1 µs ± 277 ns   |   89 µs ± 1.42 µs    |   119 µs ± 1.1 µs    |   194 µs ± 1.81 µs    |  653 µs ± 17.8 µs  |
+
+And this is the comparasion between tianshou Batch and us, with `cat` , `stack` and `split` operations
+
+![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.png)
+
+![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.png)
+
+![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.png)
+
+
 ## Contribution
 
 We appreciate all contributions to improve treevalue, both logic and system designs. Please refer to CONTRIBUTING.md for more guides.
