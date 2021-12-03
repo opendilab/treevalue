@@ -53,6 +53,18 @@ cpdef TreeValue mapping(TreeValue tree, object func):
         - tree (:obj:`_TreeValue`): Tree value object
         - func (:obj:`Callable`): Function for mapping
 
+    .. note::
+        There are 3 different patterns of given ``func``:
+        
+        - ``lambda :v``, which means map all the original value to the new ``v``.
+        - ``lambda v: f(v)``, which means map the original value to a new value based on given ``v``.
+        - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
+            to a new values based on given ``v`` and given ``p``.
+        
+        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
+        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
+        function is to given a ``lambda v, p: f(v, p)`` in it.
+
     Returns:
         - tree (:obj:`_TreeValue`): Mapped tree value object.
 
@@ -94,6 +106,18 @@ cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty=True):
         - tree (:obj:`_TreeValue`): Tree value object
         - func (:obj:`Callable`): Function for filtering
         - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.
+
+    .. note::
+        There are 3 different patterns of given ``func``:
+        
+        - ``lambda :v``, which means map all the original value to the new ``v``.
+        - ``lambda v: f(v)``, which means map the original value to a new value based on given ``v``.
+        - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
+            to a new values based on given ``v`` and given ``p``.
+        
+        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
+        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
+        function is to given a ``lambda v, p: f(v, p)`` in it.
 
     Returns:
         - tree (:obj:`_TreeValue`): Filtered tree value object.
