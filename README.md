@@ -170,6 +170,11 @@ And this is the comparasion between tianshou Batch and us, with `cat` , `stack` 
 
 ![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.png)
 
+Test benchmark code can be found here:
+
+* [Comparasion with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/test_dm_tree.py)
+* [Comparasion with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/test_tianshou_batch.py)
+
 
 ## Contribution
 
