@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.tree.common.tree &mdash; treevalue 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.tree.common.tree</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.tree.common.tree</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseTree</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">init_magic</span>
+
+
+<span class="k">class</span> <span class="nc">_RawWrapped</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span>
+
+
+<span class="n">_RAW_NEEDED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,)</span>
+
+
+<div class="viewcode-block" id="raw"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.raw">[docs]</a><span class="k">def</span> <span class="nf">raw</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_RawWrapped</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Wrap raw value to init tree or set item, can be used for dict.</span>
+<span class="sd">        Can only performs when value is a dict object, otherwise just return the original value.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - value (:obj:): Original value.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - wrapped (:obj:`_RawWrapped`): Wrapped value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = Tree({</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;b&#39;: 2}),</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;b&#39;: raw({&#39;a&#39;: 3, &#39;b&#39;: 4}),</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;x&#39;: {</span>
+<span class="sd">        &gt;&gt;&gt;         &#39;c&#39;: raw({&#39;a&#39;: 5, &#39;b&#39;: 6}),</span>
+<span class="sd">        &gt;&gt;&gt;         &#39;d&#39;: raw({&#39;a&#39;: 7, &#39;b&#39;: 8}),</span>
+<span class="sd">        &gt;&gt;&gt;     }</span>
+<span class="sd">        &gt;&gt;&gt; })</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;a&#39;]  # {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;b&#39;]  # {&#39;a&#39;: 3, &#39;b&#39;: 4}</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;x&#39;][&#39;c&#39;]  # {&#39;a&#39;: 5, &#39;b&#39;: 6}</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;x&#39;][&#39;d&#39;]  # {&#39;a&#39;: 7, &#39;b&#39;: 8}</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;a&#39;] = raw({&#39;a&#39;: 9, &#39;b&#39;: 10})</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;a&#39;]  # {&#39;a&#39;: 9, &#39;b&#39;: 10}</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;a&#39;] = {&#39;a&#39;: 9, &#39;b&#39;: 10}</span>
+<span class="sd">        &gt;&gt;&gt; t[&#39;a&#39;]  # should be a Tree object when raw not used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_RawWrapped</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_RAW_NEEDED_TYPES</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_RawWrapped</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<span class="k">def</span> <span class="nf">_unraw</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_RawWrapped</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="n">_KEY_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-zA-Z_][a-zA-Z0-9_]{0,65534}$&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_check_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_KEY_PATTERN</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Tree&#39;s key should be an ascii string matching regex of </span><span class="si">{regexp}</span><span class="s2">, &quot;</span>
+                       <span class="s2">&quot;but </span><span class="si">{key}</span><span class="s2"> found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">regexp</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">_KEY_PATTERN</span><span class="o">.</span><span class="n">pattern</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">key</span>
+
+
+<span class="k">def</span> <span class="nf">_to_tree_decorator</span><span class="p">(</span><span class="n">init_func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">init_func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_new_init_func</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">BaseTree</span><span class="p">):</span>
+            <span class="n">_new_init_func</span><span class="p">(</span><span class="n">_tree_dump</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">init_func</span><span class="p">({</span>
+                <span class="n">_check_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">Tree</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">_unraw</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Dict value expected for dispatch value but </span><span class="si">{type}</span><span class="s2"> actually.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">_new_init_func</span>
+
+
+<span class="k">def</span> <span class="nf">_copy_func</span><span class="p">(</span><span class="n">copy</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">copy</span>
+    <span class="k">elif</span> <span class="n">copy</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,)):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">copy</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">dumper</span><span class="p">,</span> <span class="n">loader</span> <span class="o">=</span> <span class="n">copy</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">loader</span><span class="p">(</span><span class="n">dumper</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dumper</span><span class="p">,</span> <span class="n">loader</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;dumps&#39;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;loads&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">loader</span><span class="p">(</span><span class="n">dumper</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_tree_dump</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="s1">&#39;BaseTree&#39;</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">copy_value</span> <span class="o">=</span> <span class="n">_copy_func</span><span class="p">(</span><span class="n">copy_value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_recursion</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">BaseTree</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">raw</span><span class="p">(</span><span class="n">copy_value</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">actual</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="Tree"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree">[docs]</a><span class="nd">@init_magic</span><span class="p">(</span><span class="n">_to_tree_decorator</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="n">BaseTree</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Tree node data model, based on `BaseTree`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tree.__init__"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="s1">&#39;Tree&#39;</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="s1">&#39;Tree&#39;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Constructor of `Tree`, can be `dict`, `Tree`, `TreeView`.</span>
+<span class="sd">            When dict passed in, a new tree structure will be created once.</span>
+<span class="sd">            When `Tree` or `TreeView` passed in, a fully copy will be constructed in this object.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            - data (:obj:`Union[Dict[str, Union[&#39;Tree&#39;, Any]], &#39;Tree&#39;]`): Any data can be parsed into `Tree`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; t = Tree({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})  # t is a new tree structure</span>
+<span class="sd">            &gt;&gt;&gt; t2 = Tree(t)                                       # t2 is a full copy of t1</span>
+<span class="sd">            &gt;&gt;&gt; t3 = Tree({&#39;a&#39;: t, &#39;b&#39;: t2})                       # t3 is a tree with subtree of t and t2 (not copy)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span> <span class="o">=</span> <span class="n">data</span></div>
+
+    <span class="k">def</span> <span class="nf">__check_key_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Key </span><span class="si">{key}</span><span class="s2"> not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="Tree.__getitem__"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__check_key_exist</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tree.__setitem__"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.__setitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">_check_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_unraw</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tree.__delitem__"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.__delitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__check_key_exist</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tree.view"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.view">[docs]</a>    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="kn">from</span> <span class="nn">.view</span> <span class="kn">import</span> <span class="n">TreeView</span>
+        <span class="k">return</span> <span class="n">TreeView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tree.clone"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">_tree_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Tree.copy_from"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.copy_from">[docs]</a>    <span class="k">def</span> <span class="nf">copy_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;BaseTree&#39;</span><span class="p">):</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">actual</span><span class="p">()</span>
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">BaseTree</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">BaseTree</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">actual</span><span class="p">()</span><span class="o">.</span><span class="n">copy_from</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">actual</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Tree.items"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree.keys"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree.values"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tree.actual"><a class="viewcode-back" href="../../../../api_doc/tree/common.html#treevalue.tree.common.tree.Tree.actual">[docs]</a>    <span class="k">def</span> <span class="nf">actual</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Tree&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">actual</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseTree</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict</span> <span class="o">=</span> <span class="n">state</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.1.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../../v0.0.1/index.html">v0.0.1</a></dd>
+                        <dd><a href="tree.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

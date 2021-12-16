@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.utils.func &mdash; treevalue 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="treevalue.utils.imports" href="imports.html" />
+    <link rel="prev" title="treevalue.utils.final" href="final.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">treevalue.utils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clazz.html">treevalue.utils.clazz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="color.html">treevalue.utils.color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html">treevalue.utils.enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html">treevalue.utils.exception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="final.html">treevalue.utils.final</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">treevalue.utils.func</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#args-iter">args_iter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-call">dynamic_call</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#static-call">static_call</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-process">pre_process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-process">post_process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raising">raising</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#warning">warning_</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#freduce">freduce</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="imports.html">treevalue.utils.imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random.html">treevalue.utils.random</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singleton.html">treevalue.utils.singleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree.html">treevalue.utils.tree</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">treevalue.utils</a> &raquo;</li>
+        
+      <li>treevalue.utils.func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_doc/utils/func.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <div class="section" id="treevalue-utils-func">
+<h1>treevalue.utils.func<a class="headerlink" href="#treevalue-utils-func" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="args-iter">
+<h2>args_iter<a class="headerlink" href="#args-iter" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.args_iter">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">args_iter</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#args_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.args_iter" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Iterate all the arguments with index and value.
+If argument is in <cite>args</cite>, the index should be integer increasing from 0.
+If argument is in <cite>kwargs</cite>, the index should be string which meaning the argument’s name.
+The numeric indices will appear before the string indices,
+and <strong>the order of the string indices are not approved</strong>.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>args (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tuple[Any]</span></code>): Argument list</p></li>
+<li><p>kwargs (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">Any]</span></code>): Argument mapping</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">args_iter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">0</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="dynamic-call">
+<h2>dynamic_call<a class="headerlink" href="#dynamic-call" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.dynamic_call">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">dynamic_call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#dynamic_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.dynamic_call" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Decorate function to dynamic-call-supported function.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>func (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Original function to be decorated.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>new_func (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Decorated function.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="n">y</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="n">y</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>  <span class="c1"># 8, 3rd is ignored</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># ((4, 5), (3, 1, 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (1, 2), key word supported</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># ({&#39;k&#39;: 2}, 1, 3)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="static-call">
+<h2>static_call<a class="headerlink" href="#static-call" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.static_call">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">static_call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">static_ok</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#static_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.static_call" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Static call, anti-calculation of dynamic call.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>func (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Given dynamic function.</p></li>
+<li><p>static_ok (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Allow given function to be static, default is <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>static (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Static function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="pre-process">
+<h2>pre_process<a class="headerlink" href="#pre-process" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.pre_process">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">pre_process</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#pre_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.pre_process" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Pre processor for function.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>processor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Pre processor.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>decorator (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Function decorator</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@pre_process</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">plus</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># 5, 5 = -1 + (1 + 2) * 2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="post-process">
+<h2>post_process<a class="headerlink" href="#post-process" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.post_process">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">post_process</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#post_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.post_process" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Post processor for function.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>processor (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Post processor.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>decorator (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Function decorator</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@post_process</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">plus</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="raising">
+<h2>raising<a class="headerlink" href="#raising" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.raising">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">raising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Callable<span class="p">, </span>BaseException<span class="p">, </span>Type<span class="p">[</span>BaseException<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#raising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.raising" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Decorate function with exception object return value to a raisisng function.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>func (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Callable,</span> <span class="pre">BaseException,</span> <span class="pre">Type[BaseException]]</span></code>): Not decorated function or class</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>decorated (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Decorated new function</p></li>
+</ul>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">raising</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">)()</span>  <span class="c1"># RuntimeError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raising</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;value error - </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="p">)))(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># ValueError, value error - 1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="warning">
+<h2>warning_<a class="headerlink" href="#warning" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.warning_">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">warning_</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Callable<span class="p">, </span>Warning<span class="p">, </span>Type<span class="p">[</span>Warning<span class="p">]</span><span class="p">, </span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#warning_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.warning_" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Decorate function with exception object return value to a <code class="docutils literal notranslate"><span class="pre">warning_</span></code> function.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>func (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Callable,</span> <span class="pre">Warning,</span> <span class="pre">Type[Warning],</span> <span class="pre">str]</span></code>): Not decorated function or class</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>decorated (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Decorated new function</p></li>
+</ul>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">warning_</span><span class="p">(</span><span class="ne">RuntimeWarning</span><span class="p">)()</span>  <span class="c1"># RuntimeWarning</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raising</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ne">Warning</span><span class="p">(</span><span class="s1">&#39;value warning - </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="p">)))(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Warning, value warning - 1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="freduce">
+<h2>freduce<a class="headerlink" href="#freduce" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.func.freduce">
+<code class="sig-prename descclassname">treevalue.utils.func.</code><code class="sig-name descname">freduce</code><span class="sig-paren">(</span><em class="sig-param">init=&lt;SingletonMark 'no_initial'&gt;</em>, <em class="sig-param">pass_kwargs: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/func.html#freduce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.func.freduce" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Make binary function be reducible.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>init (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Initial data generator or             initial data, default is <cite>NO_INITIAL</cite> which means no initial data.             Missing of positional arguments is forbidden.</p></li>
+<li><p>pass_kwargs (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Pass kwargs into initial function and wrapped function or not,             default is <cite>True</cite> which means pass the arguments in.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>decorator (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Decorator for the original function.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@freduce</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">plus</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">()</span>            <span class="c1"># 0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>           <span class="c1"># 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>        <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plus</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>  <span class="c1"># 10</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="imports.html" class="btn btn-neutral float-right" title="treevalue.utils.imports" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="final.html" class="btn btn-neutral float-left" title="treevalue.utils.final" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.1.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../v0.0.1/api_doc/utils/func.html">v0.0.1</a></dd>
+                        <dd><a href="func.html">v0.1.0</a></dd>
+                        <dd><a href="../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

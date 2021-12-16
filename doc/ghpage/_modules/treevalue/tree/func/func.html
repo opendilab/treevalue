@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.tree.func.func &mdash; treevalue 1.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.tree.func.func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.tree.func.func</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">hbutils.design</span> <span class="kn">import</span> <span class="n">SingletonMark</span>
+
+<span class="kn">from</span> <span class="nn">.cfunc</span> <span class="kn">import</span> <span class="n">MISSING_NOT_ALLOW</span>
+<span class="kn">from</span> <span class="nn">.cfunc</span> <span class="kn">import</span> <span class="n">func_treelize</span> <span class="k">as</span> <span class="n">_c_func_treelize</span>
+<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+
+<span class="n">TreeClassType_</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;TreeClassType_&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">TreeValue</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="func_treelize"><a class="viewcode-back" href="../../../../tutorials/advanced_usage/index.html#treevalue.tree.func.func_treelize">[docs]</a><span class="k">def</span> <span class="nf">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">TreeClassType_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">,</span>
+                  <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span>
+                  <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Wrap a common function to tree-supported function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
+<span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
+<span class="sd">            and subside configuration, default is `None` which means do not use subside. \</span>
+<span class="sd">            When subside is `True`, it will use all the default arguments in `subside` function.</span>
+<span class="sd">        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function&#39;s return value or not, \</span>
+<span class="sd">            and rise configuration, default is `None` which means do not use rise. \</span>
+<span class="sd">            When rise is `True`, it will use all the default arguments in `rise` function. \</span>
+<span class="sd">            (Not recommend to use auto mode when your return structure is not so strict.)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Wrapper for tree-supported function.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; @func_treelize()</span>
+<span class="sd">        &gt;&gt;&gt; def ssum(a, b):</span>
+<span class="sd">        &gt;&gt;&gt;     return a + b  # the a and b will be integers, not TreeValue</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t1 = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; t2 = TreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 5}})</span>
+<span class="sd">        &gt;&gt;&gt; ssum(1, 2)    # 3</span>
+<span class="sd">        &gt;&gt;&gt; ssum(t1, t2)  # TreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 36, &#39;d&#39;: 9}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">_treelized</span> <span class="o">=</span> <span class="n">_c_func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_treelized</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_new_func</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<span class="c1">#: Default value of the ``return_type`` arguments \</span>
+<span class="c1">#: of ``method_treelize`` and ``classmethod_treelize``, \</span>
+<span class="c1">#: which means return type will be auto configured to</span>
+<span class="c1">#: the current class.</span>
+<span class="n">AUTO_DETECT_RETURN_TYPE</span> <span class="o">=</span> <span class="n">SingletonMark</span><span class="p">(</span><span class="s2">&quot;auto_detect_return_type&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="method_treelize"><a class="viewcode-back" href="../../../../api_doc/tree/func.html#treevalue.tree.func.method_treelize">[docs]</a><span class="k">def</span> <span class="nf">method_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">TreeClassType_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">AUTO_DETECT_RETURN_TYPE</span><span class="p">,</span>
+                    <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span>
+                    <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">self_copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Wrap a common instance method to tree-supported method.</span>
+
+<span class="sd">    Attention:</span>
+<span class="sd">        - This decorator can only used to instance method, usage with class method may cause unconditional fatal.</span>
+<span class="sd">        - When decorated instance method is called, the `self` argument will be no longer the class instance, \</span>
+<span class="sd">            but the single element of the tree instead.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \</span>
+<span class="sd">            default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method&#39;s class.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
+<span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
+<span class="sd">            and subside configuration, default is `None` which means do not use subside. \</span>
+<span class="sd">            When subside is `True`, it will use all the default arguments in `subside` function.</span>
+<span class="sd">        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function&#39;s return value or not, \</span>
+<span class="sd">            and rise configuration, default is `None` which means do not use rise. \</span>
+<span class="sd">            When rise is `True`, it will use all the default arguments in `rise` function. \</span>
+<span class="sd">            (Not recommend to use auto mode when your return structure is not so strict.)</span>
+<span class="sd">        - self_copy (:obj:`bool`): Self copy mode, if enabled, the result data will be copied to \</span>
+<span class="sd">            ``self`` argument and ``self`` will be returned as result. Default is ``False``, \</span>
+<span class="sd">            which means do not do self copy.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Wrapper for tree-supported method.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; class MyTreeValue(TreeValue):</span>
+<span class="sd">        &gt;&gt;&gt;     @method_treelize()</span>
+<span class="sd">        &gt;&gt;&gt;     def append(self, *args):</span>
+<span class="sd">        &gt;&gt;&gt;         return sum([self, *args])  # the self will be the integers, not MyTreeValue</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t1 = MyTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; t2 = MyTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 5}})</span>
+<span class="sd">        &gt;&gt;&gt; t1.append(2)   # MyTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4, &#39;x&#39;: {&#39;c&#39;: 5, &#39;d&#39;: 6}})</span>
+<span class="sd">        &gt;&gt;&gt; t1.append(t2)  # MyTreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 36, &#39;d&#39;: 9}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="n">AUTO_DETECT_RETURN_TYPE</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">_get_self_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">_get_self_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">return_type</span>
+
+    <span class="k">if</span> <span class="n">self_copy</span> <span class="ow">and</span> <span class="n">rise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The rise configuration </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="n">rise</span><span class="p">)</span><span class="si">}</span><span class="s1"> will be ignored &#39;</span>
+                                  <span class="sa">f</span><span class="s1">&#39;due to the enable of the self_copy option.&#39;</span><span class="p">),</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">rise</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+        <span class="n">_treelized</span> <span class="o">=</span> <span class="n">_c_func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">_get_self_class</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)(</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_new_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">_result</span> <span class="o">=</span> <span class="n">_treelized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">self_copy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_detach</span><span class="p">()</span><span class="o">.</span><span class="n">copy_from</span><span class="p">(</span><span class="n">_result</span><span class="o">.</span><span class="n">_detach</span><span class="p">())</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_result</span>
+
+        <span class="k">return</span> <span class="n">_new_method</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<div class="viewcode-block" id="classmethod_treelize"><a class="viewcode-back" href="../../../../api_doc/tree/func.html#treevalue.tree.func.classmethod_treelize">[docs]</a><span class="k">def</span> <span class="nf">classmethod_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">TreeClassType_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">AUTO_DETECT_RETURN_TYPE</span><span class="p">,</span>
+                         <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span>
+                         <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Wrap a common class method to tree-supported method.</span>
+
+<span class="sd">    Attention:</span>
+<span class="sd">        - This decorator can only used to class method, usage with instance method may cause unconditional fatal.</span>
+<span class="sd">        - When decorated instance method is called, the `cls` argument will still be the calling class.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \</span>
+<span class="sd">            default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method&#39;s class.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
+<span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
+<span class="sd">            and subside configuration, default is `None` which means do not use subside. \</span>
+<span class="sd">            When subside is `True`, it will use all the default arguments in `subside` function.</span>
+<span class="sd">        - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function&#39;s return value or not, \</span>
+<span class="sd">            and rise configuration, default is `None` which means do not use rise. \</span>
+<span class="sd">            When rise is `True`, it will use all the default arguments in `rise` function. \</span>
+<span class="sd">            (Not recommend to use auto mode when your return structure is not so strict.)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Wrapper for tree-supported class method.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; class TestUtils:</span>
+<span class="sd">        &gt;&gt;&gt;     @classmethod</span>
+<span class="sd">        &gt;&gt;&gt;     @classmethod_treelize(return_type=TreeValue)</span>
+<span class="sd">        &gt;&gt;&gt;     def add(cls, a, b):</span>
+<span class="sd">        &gt;&gt;&gt;         return cls, a + b</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; TestUtils.add(</span>
+<span class="sd">        &gt;&gt;&gt;     TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2}),</span>
+<span class="sd">        &gt;&gt;&gt;     TreeValue({&#39;a&#39;: 11, &#39;b&#39;: 23}),</span>
+<span class="sd">        &gt;&gt;&gt; )  # TreeValue({&#39;a&#39;: (TestUtils, 12), &#39;b&#39;: (TestUtils, 25)})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="n">AUTO_DETECT_RETURN_TYPE</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">_get_cls_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">_get_cls_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">return_type</span>
+
+    <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">_get_cls_class</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: doc/ghpage
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../../../v0.0.1/index.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="func.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

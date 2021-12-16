@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.tree.tree.utils &mdash; treevalue 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.tree.tree.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.tree.tree.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span> <span class="nn">.tree</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">get_data_property</span>
+<span class="kn">from</span> <span class="nn">..common</span> <span class="kn">import</span> <span class="n">raw</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">dynamic_call</span><span class="p">,</span> <span class="n">common_direct_base</span><span class="p">,</span> <span class="n">SingletonMark</span>
+
+<span class="n">_TreeValue</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_TreeValue&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">TreeValue</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="jsonify"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.jsonify">[docs]</a><span class="k">def</span> <span class="nf">jsonify</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Dump `TreeValue` object to json data.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - json (:obj:`dict`): Dumped json data.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; jsonify(TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}))  # {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_data_property</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="view"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.view">[docs]</a><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Create a `TreeValue` object which is a view of given tree.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object.</span>
+<span class="sd">        - path (:obj:`List[str]`): Path of the view.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Viewed tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; view(TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}), [&#39;x&#39;])  # TreeValue({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">get_data_property</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="clone"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.clone">[docs]</a><span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Create a fully clone of the given tree.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \</span>
+<span class="sd">            default is `None` which means do not deep copy the values. \</span>
+<span class="sd">            If deep copy is required, just set it to `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Cloned tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; clone(t.x)  # TreeValue({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">get_data_property</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">copy_value</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="typetrans"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.typetrans">[docs]</a><span class="k">def</span> <span class="nf">typetrans</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">return_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_TreeValue</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Transform tree value object to another tree value type. \</span>
+<span class="sd">        Attention that in this function, no copy will be made, \</span>
+<span class="sd">        the original tree value and the transformed tree value are using the same space area.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`TreeValue`): Tree value object</span>
+<span class="sd">        - return_type (:obj:`Type[_TreeValue]`): Target tree value type</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Transformed tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = MyTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; typetrans(t, TreeValue)  # TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">return_type</span><span class="p">,</span> <span class="n">TreeValue</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Tree value should be subclass of TreeValue, but </span><span class="si">{type}</span><span class="s2"> found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">type</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">return_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">return_type</span><span class="p">(</span><span class="n">get_data_property</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_build_path_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_recursion</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_recursion</span><span class="p">([],</span> <span class="n">tree</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="mapping"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.mapping">[docs]</a><span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Do mapping on every value in this tree.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - func (:obj:`Callable`): Function for mapping</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Mapped tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; mapping(t, lambda x: x + 2)  # TreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4, &#39;x&#39;: {&#39;c&#39;: 5, &#39;d&#39;: 6}})</span>
+<span class="sd">        &gt;&gt;&gt; mapping(t, lambda: 1)        # TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 1, &#39;d&#39;: 1}})</span>
+<span class="sd">        &gt;&gt;&gt; mapping(t, lambda x, p: p)   # TreeValue({&#39;a&#39;: (&#39;a&#39;,), &#39;b&#39;: (&#39;b&#39;,), &#39;x&#39;: {&#39;c&#39;: (&#39;x&#39;, &#39;c&#39;), &#39;d&#39;: (&#39;x&#39;, &#39;d&#39;)}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">..func</span> <span class="kn">import</span> <span class="n">func_treelize</span>
+    <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">return_type</span><span class="o">=</span><span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)(</span><span class="k">lambda</span> <span class="n">args</span><span class="p">:</span> <span class="n">dynamic_call</span><span class="p">(</span><span class="n">func</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">))(</span>
+        <span class="n">union</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">_build_path_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_filter_by_masked_tree</span><span class="p">(</span><span class="n">masked_tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_recursion</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_TreeValue</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">_TreeValue</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">masked_tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="n">dict_result</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="p">}</span>
+            <span class="n">dict_result</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dict_result</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">flag</span><span class="p">}</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">masked_tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">dict_result</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="ow">not</span> <span class="ow">not</span> <span class="n">result</span> <span class="k">if</span> <span class="n">remove_empty</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">t</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">masked_tree</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_result</span>
+
+
+<div class="viewcode-block" id="mask"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.mask">[docs]</a><span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">mask_</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TreeValue</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Filter the element in the tree with a mask</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - `tree` (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - `mask_` (:obj:`TreeValue`): Tree value mask object</span>
+<span class="sd">        - `remove_empty` (:obj:`bool`): Remove empty tree node automatically, default is `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Filtered tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; mask(t, TreeValue({&#39;a&#39;: True, &#39;b&#39;: False, &#39;x&#39;: False}))                    # TreeValue({&#39;a&#39;: 1})</span>
+<span class="sd">        &gt;&gt;&gt; mask(t, TreeValue({&#39;a&#39;: True, &#39;b&#39;: False, &#39;x&#39;: {&#39;c&#39;: True, &#39;d&#39;: False}}))  # TreeValue({&#39;a&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 3}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_filter_by_masked_tree</span><span class="p">(</span><span class="n">union</span><span class="p">(</span><span class="n">mask_</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">),</span> <span class="n">remove_empty</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="filter_"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.filter_">[docs]</a><span class="k">def</span> <span class="nf">filter_</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Filter the element in the tree with a predict function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - func (:obj:`Callable`): Function for filtering</span>
+<span class="sd">        - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Filtered tree value object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; filter_(t, lambda x: x &lt; 3)                  # TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; filter_(t, lambda x: x &lt; 3, False)           # TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {}})</span>
+<span class="sd">        &gt;&gt;&gt; filter_(t, lambda x: x % 2 == 1)             # TreeValue({&#39;a&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 3}})</span>
+<span class="sd">        &gt;&gt;&gt; filter_(t, lambda x, p: p[0] in {&#39;b&#39;, &#39;x&#39;})  # TreeValue({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">mask</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">mapping</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">func</span><span class="p">),</span> <span class="n">remove_empty</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="union"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.union">[docs]</a><span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="o">*</span><span class="n">trees</span><span class="p">:</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Union tree values together.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - trees (:obj:`_TreeValue`): Tree value objects.</span>
+<span class="sd">        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.</span>
+<span class="sd">        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \</span>
+<span class="sd">            means raise `KeyError` when missing detected.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - result (:obj:`TreeValue`): Unionised tree value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; tx = mapping(t, lambda v: v % 2 == 1)</span>
+<span class="sd">        &gt;&gt;&gt; union(t, tx)  # TreeValue({&#39;a&#39;: (1, True), &#39;b&#39;: (2, False), &#39;x&#39;: {&#39;c&#39;: (3, True), &#39;d&#39;: (4, False)}})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">return_type</span> <span class="o">=</span> <span class="n">trees</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span> <span class="k">if</span> <span class="n">trees</span> <span class="k">else</span> <span class="n">TreeValue</span>
+
+    <span class="k">return</span> <span class="n">subside</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">trees</span><span class="p">),</span> <span class="n">return_type</span><span class="o">=</span><span class="n">return_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="subside"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.subside">[docs]</a><span class="k">def</span> <span class="nf">subside</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">_TreeValue</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Drift down the structures (list, tuple, dict) down to the tree&#39;s value.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - value (:obj:): Original value object, may be nested dict, list or tuple.</span>
+<span class="sd">        - `dict_` (:obj:`bool`): Enable dict subside, default is `True`.</span>
+<span class="sd">        - `list_` (:obj:`bool`): Enable list subside, default is `True`.</span>
+<span class="sd">        - `tuple_` (:obj:`bool`): Enable list subside, default is `True`.</span>
+<span class="sd">        - mode (:obj:): Mode of the wrapping (string or TreeMode both okay), default is `strict`.</span>
+<span class="sd">        - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \</span>
+<span class="sd">            will be auto detected when there is exactly one tree value type in this original value, \</span>
+<span class="sd">            otherwise the default will be `TreeValue`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \</span>
+<span class="sd">            means raise `KeyError` when missing detected.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - return (:obj:`_TreeValue`): Subsided tree value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; data = {</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;a&#39;: TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2}),</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;x&#39;: {</span>
+<span class="sd">        &gt;&gt;&gt;         &#39;c&#39;: TreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4}),</span>
+<span class="sd">        &gt;&gt;&gt;         &#39;d&#39;: [</span>
+<span class="sd">        &gt;&gt;&gt;             TreeValue({&#39;a&#39;: 5, &#39;b&#39;: 6}),</span>
+<span class="sd">        &gt;&gt;&gt;             TreeValue({&#39;a&#39;: 7, &#39;b&#39;: 8}),</span>
+<span class="sd">        &gt;&gt;&gt;         ]</span>
+<span class="sd">        &gt;&gt;&gt;     },</span>
+<span class="sd">        &gt;&gt;&gt;     &#39;k&#39;: &#39;233&#39;</span>
+<span class="sd">        &gt;&gt;&gt; }</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; tree = subside(data)</span>
+<span class="sd">        &gt;&gt;&gt; # tree should be --&gt; TreeValue({</span>
+<span class="sd">        &gt;&gt;&gt; #    &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;k&#39;: &#39;233&#39;, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: [5, 7]}}),</span>
+<span class="sd">        &gt;&gt;&gt; #    &#39;b&#39;: raw({&#39;a&#39;: 2, &#39;k&#39;: &#39;233&#39;, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: [6, 8]}}),</span>
+<span class="sd">        &gt;&gt;&gt; #}), all structures above the tree values are subsided to the bottom of the tree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_build_func</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">iter</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">dict_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">_build_func</span><span class="p">(</span><span class="n">value_</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+
+            <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">returns</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">returns</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">position</span><span class="p">:</span><span class="n">position</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">])</span>
+                    <span class="n">position</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)(</span><span class="n">returns</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cnt</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">chain</span><span class="p">(</span>
+                <span class="o">*</span><span class="p">[</span><span class="n">it</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">_new_func</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">list_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">tuple_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">_build_func</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+
+            <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">returns</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">position</span><span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">]))</span>
+                    <span class="n">position</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)(</span><span class="n">returns</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cnt</span> <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">chain</span><span class="p">(</span>
+                <span class="o">*</span><span class="p">[</span><span class="n">it</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">_new_func</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">v</span><span class="p">,)</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">(),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">_get_default_type</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TreeValue</span><span class="p">)}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">common_direct_base</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">types</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">count</span><span class="p">,</span> <span class="n">iter_</span><span class="p">,</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">_build_func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">arguments</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iter_</span><span class="p">)</span>
+    <span class="n">return_type</span> <span class="o">=</span> <span class="n">return_type</span> <span class="ow">or</span> <span class="n">_get_default_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span> <span class="ow">or</span> <span class="n">TreeValue</span>
+    <span class="k">assert</span> <span class="n">count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">..func</span> <span class="kn">import</span> <span class="n">func_treelize</span>
+    <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">return_type</span><span class="o">=</span><span class="n">return_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)(</span><span class="n">builder</span><span class="p">)(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span></div>
+
+
+<span class="n">NO_RISE_TEMPLATE</span> <span class="o">=</span> <span class="n">SingletonMark</span><span class="p">(</span><span class="s2">&quot;no_rise_template&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="rise"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.rise">[docs]</a><span class="k">def</span> <span class="nf">rise</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+         <span class="n">template</span><span class="o">=</span><span class="n">NO_RISE_TEMPLATE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.</span>
+<span class="sd">        - `list_` (:obj:`bool`): Enable list rise, default is `True`.</span>
+<span class="sd">        - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.</span>
+<span class="sd">        - template (:obj:): Rising template, default is `NO_RISE_TEMPLATE`, which means auto detect.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - risen (:obj:): Risen value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;x&#39;: raw({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3]}), &#39;y&#39;: raw({&#39;a&#39;: [5, 6, 7], &#39;b&#39;: [7, 8]})})</span>
+<span class="sd">        &gt;&gt;&gt; dt = rise(t)</span>
+<span class="sd">        &gt;&gt;&gt; # dt will be {&#39;a&#39;: &lt;TreeValue 1&gt;, &#39;b&#39;: [&lt;TreeValue 2&gt;, &lt;TreeValue 3&gt;]}</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 1 will be TreeValue({&#39;x&#39;: [1, 2], &#39;y&#39;: [5, 6, 7]})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 2 will be TreeValue({&#39;x&#39;: 2, &#39;y&#39;: 7})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 3 will be TreeValue({&#39;x&#39;: 3, &#39;y&#39;: 8})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t2 = TreeValue({&#39;x&#39;: raw({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3]}), &#39;y&#39;: raw({&#39;a&#39;: [5, 6], &#39;b&#39;: [7, 8]})})</span>
+<span class="sd">        &gt;&gt;&gt; dt2 = rise(t2)</span>
+<span class="sd">        &gt;&gt;&gt; # dt2 will be {&#39;a&#39;: [&lt;TreeValue 1&gt;, &lt;TreeValue 2&gt;], &#39;b&#39;: [&lt;TreeValue 3&gt;, &lt;TreeValue 4&gt;]}</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 1 will be TreeValue({&#39;x&#39;: 1, &#39;y&#39;: 5})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 2 will be TreeValue({&#39;x&#39;: 2, &#39;y&#39;: 6})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 3 will be TreeValue({&#39;x&#39;: 2, &#39;y&#39;: 7})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 4 will be TreeValue({&#39;x&#39;: 3, &#39;y&#39;: 8})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; dt3 = rise(t2, template={&#39;a&#39;: None, &#39;b&#39;: None})</span>
+<span class="sd">        &gt;&gt;&gt; # dt3 will be {&#39;a&#39;: &lt;TreeValue 1&gt;, &#39;b&#39;: &lt;TreeValue 2&gt;}</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 1 will be TreeValue({&#39;x&#39;: [1, 2], &#39;y&#39;: [5, 6]})</span>
+<span class="sd">        &gt;&gt;&gt; # TreeValue 2 will be TreeValue({&#39;x&#39;: [2, 3], &#39;y&#39;: [7, 8]})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_tree_builder</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">TreeValue</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">_get_tree_builder</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="p">])</span>
+
+            <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">returns</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">func_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">returns</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">func_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">position</span><span class="p">:</span><span class="n">position</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">])</span>
+                    <span class="n">position</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cnt</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">chain</span><span class="p">(</span>
+                <span class="o">*</span><span class="p">[</span><span class="n">iter_</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">iter_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="n">_new_func</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,)</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">(),</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">raw</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_common_structure_getter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">tpl</span><span class="o">=</span><span class="n">NO_RISE_TEMPLATE</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[],</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">clone</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+
+        <span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tpl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">NO_RISE_TEMPLATE</span><span class="p">:</span>
+            <span class="n">types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span>
+        <span class="n">base_class</span> <span class="o">=</span> <span class="n">common_direct_base</span><span class="p">(</span><span class="o">*</span><span class="n">types</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dict_</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">keysets</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">keysets</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">keyset</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">keysets</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">_get_common_structure_getter</span><span class="p">(</span>
+                    <span class="o">*</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">],</span>
+                    <span class="n">tpl</span><span class="o">=</span><span class="n">NO_RISE_TEMPLATE</span> <span class="k">if</span> <span class="n">tpl</span> <span class="ow">is</span> <span class="n">NO_RISE_TEMPLATE</span> <span class="k">else</span> <span class="n">tpl</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keyset</span><span class="p">]</span>
+                <span class="n">getter_lists</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">getters</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">getters</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">}</span>
+
+                <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args_</span><span class="p">):</span>
+                    <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args_</span><span class="p">[</span><span class="n">position</span><span class="p">:</span><span class="n">position</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">])</span>
+                        <span class="n">position</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                    <span class="k">return</span> <span class="n">base_class</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cnt</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="p">[</span>
+                    <span class="n">partial</span><span class="p">(</span><span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">key</span><span class="p">,</span> <span class="n">getter</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keyset</span> <span class="k">for</span> <span class="n">getter</span> <span class="ow">in</span> <span class="n">getter_lists</span><span class="p">[</span><span class="n">key</span><span class="p">]],</span> <span class="n">_new_func</span>
+
+        <span class="k">elif</span> <span class="p">(</span><span class="n">list_</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> \
+                <span class="ow">or</span> <span class="p">(</span><span class="n">tuple_</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lengths</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lengths</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">_get_common_structure_getter</span><span class="p">(</span>
+                    <span class="o">*</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">],</span>
+                    <span class="n">tpl</span><span class="o">=</span><span class="n">NO_RISE_TEMPLATE</span> <span class="k">if</span> <span class="n">tpl</span> <span class="ow">is</span> <span class="n">NO_RISE_TEMPLATE</span> <span class="k">else</span> <span class="n">tpl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">)]</span>
+                <span class="n">getter_lists</span> <span class="o">=</span> <span class="p">[</span><span class="n">getters</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">getters</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+
+                <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args_</span><span class="p">):</span>
+                    <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args_</span><span class="p">[</span><span class="n">position</span><span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">]))</span>
+                        <span class="n">position</span> <span class="o">+=</span> <span class="n">cnt</span>
+
+                    <span class="k">return</span> <span class="n">base_class</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">cnt</span> <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> <span class="p">[</span>
+                    <span class="n">partial</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">index</span><span class="p">,</span> <span class="n">getter</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="k">for</span> <span class="n">getter</span> <span class="ow">in</span> <span class="n">getter_lists</span><span class="p">[</span><span class="n">index</span><span class="p">]],</span> <span class="n">_new_func</span>
+
+        <span class="k">if</span> <span class="n">tpl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">NO_RISE_TEMPLATE</span> <span class="ow">and</span> <span class="p">((</span><span class="n">dict_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tpl</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">list_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tpl</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">tuple_</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tpl</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Template not able to be applied &quot;</span>
+                             <span class="s2">&quot;for schema </span><span class="si">{tpl}</span><span class="s2"> expected but not match is some values.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tpl</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">tpl</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">],</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="n">value_count</span><span class="p">,</span> <span class="n">value_iter</span><span class="p">,</span> <span class="n">tree_builder</span> <span class="o">=</span> <span class="n">_get_tree_builder</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+    <span class="n">value_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value_iter</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">value_count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">value_list</span><span class="p">)</span>
+
+    <span class="n">meta_value_count</span><span class="p">,</span> <span class="n">meta_value_getters</span><span class="p">,</span> <span class="n">value_builder</span> <span class="o">=</span> <span class="n">_get_common_structure_getter</span><span class="p">(</span><span class="o">*</span><span class="n">value_list</span><span class="p">,</span> <span class="n">tpl</span><span class="o">=</span><span class="n">template</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">meta_value_count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_value_getters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">value_builder</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">tree_builder</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">getter_</span><span class="p">(</span><span class="n">item_</span><span class="p">)</span> <span class="k">for</span> <span class="n">item_</span> <span class="ow">in</span> <span class="n">value_list</span><span class="p">])</span> <span class="k">for</span> <span class="n">getter_</span> <span class="ow">in</span> <span class="n">meta_value_getters</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="reduce_"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.utils.reduce_">[docs]</a><span class="k">def</span> <span class="nf">reduce_</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview</span>
+<span class="sd">        Reduce the tree to value.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - tree (:obj:`_TreeValue`): Tree value object</span>
+<span class="sd">        - func (:obj:): Function for reducing</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - result (:obj:): Reduce result</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from functools import reduce</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; t = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">        &gt;&gt;&gt; reduce_(t, lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)</span>
+<span class="sd">        &gt;&gt;&gt; reduce_(t, lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_recursion</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">_TreeValue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="n">_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="p">})</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_result</span><span class="p">,</span> <span class="n">TreeValue</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">typetrans</span><span class="p">(</span><span class="n">_result</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">t</span>
+
+    <span class="k">return</span> <span class="n">_recursion</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.0.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="utils.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

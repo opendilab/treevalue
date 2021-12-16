@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.utils.tree &mdash; treevalue 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.utils.tree</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.utils.tree</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+
+<span class="kn">from</span> <span class="nn">treelib</span> <span class="kn">import</span> <span class="n">Tree</span> <span class="k">as</span> <span class="n">LibTree</span>
+
+<span class="n">_ROOT_ID</span> <span class="o">=</span> <span class="s1">&#39;_root&#39;</span>
+<span class="n">_NODE_ID_TEMP</span> <span class="o">=</span> <span class="s1">&#39;_node_</span><span class="si">{id}</span><span class="s1">&#39;</span>
+
+
+<div class="viewcode-block" id="build_tree"><a class="viewcode-back" href="../../../api_doc/utils/tree.html#treevalue.utils.tree.build_tree">[docs]</a><span class="k">def</span> <span class="nf">build_tree</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">represent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iterate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LibTree</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Build a treelib object by an object.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - root (:obj:`Any`): Root object.</span>
+<span class="sd">        - represent (:obj:`Optional[Callable]`): Represent function, default is primitive `repr`.</span>
+<span class="sd">        - iterate (:obj:`Optional[Callable]`): Iterate function, default is `lambda x: x.items()`.</span>
+<span class="sd">        - recurse (:obj:`Optional[Callable]`): Recurse check function, default is `lambda x: hasattr(x, &#39;items&#39;)`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - tree (:obj:`treelib.Tree`): Built tree.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">         &gt;&gt;&gt; t = build_tree(</span>
+<span class="sd">         &gt;&gt;&gt;     {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}, &#39;z&#39;: [1, 2], &#39;v&#39;: {&#39;1&#39;: &#39;2&#39;}},</span>
+<span class="sd">         &gt;&gt;&gt;     represent=lambda x: &#39;&lt;node&gt;&#39; if isinstance(x, dict) else repr(x),</span>
+<span class="sd">         &gt;&gt;&gt;     recurse=lambda x: isinstance(x, dict),</span>
+<span class="sd">         &gt;&gt;&gt; )</span>
+<span class="sd">         &gt;&gt;&gt; print(t)</span>
+
+<span class="sd">         The output should be</span>
+
+<span class="sd">         &gt;&gt;&gt; &lt;node&gt;</span>
+<span class="sd">         &gt;&gt;&gt; ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">         &gt;&gt;&gt; ├── &#39;b&#39; --&gt; 2</span>
+<span class="sd">         &gt;&gt;&gt; ├── &#39;v&#39; --&gt; &lt;node&gt;</span>
+<span class="sd">         &gt;&gt;&gt; │   └── &#39;1&#39; --&gt; &#39;2&#39;</span>
+<span class="sd">         &gt;&gt;&gt; ├── &#39;x&#39; --&gt; &lt;node&gt;</span>
+<span class="sd">         &gt;&gt;&gt; │   ├── &#39;c&#39; --&gt; 3</span>
+<span class="sd">         &gt;&gt;&gt; │   └── &#39;d&#39; --&gt; 4</span>
+<span class="sd">         &gt;&gt;&gt; └── &#39;z&#39; --&gt; [1, 2]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">represent</span> <span class="o">=</span> <span class="n">represent</span> <span class="ow">or</span> <span class="nb">repr</span>
+    <span class="n">iterate</span> <span class="o">=</span> <span class="n">iterate</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">recurse</span> <span class="o">=</span> <span class="n">recurse</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;items&#39;</span><span class="p">))</span>
+
+    <span class="n">_tree</span> <span class="o">=</span> <span class="n">LibTree</span><span class="p">()</span>
+    <span class="n">_tree</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">represent</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="n">_ROOT_ID</span><span class="p">)</span>
+    <span class="n">_index</span><span class="p">,</span> <span class="n">_queue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="n">_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">_ROOT_ID</span><span class="p">,</span> <span class="n">root</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+        <span class="n">_parent_id</span><span class="p">,</span> <span class="n">_parent_tree</span> <span class="o">=</span> <span class="n">_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">iterate</span><span class="p">(</span><span class="n">_parent_tree</span><span class="p">):</span>
+            <span class="n">_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">_current_id</span> <span class="o">=</span> <span class="n">_NODE_ID_TEMP</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">_index</span><span class="p">)</span>
+            <span class="n">_tree</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{key}</span><span class="s2"> --&gt; </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">represent</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span>
+                <span class="n">_current_id</span><span class="p">,</span>
+                <span class="n">_parent_id</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">recurse</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="n">_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">_current_id</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">_tree</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.0.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="tree.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

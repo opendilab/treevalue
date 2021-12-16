@@ -1,0 +1,1216 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.tree.common &mdash; treevalue 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="treevalue.tree.tree" href="tree.html" />
+    <link rel="prev" title="treevalue.tree" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">treevalue.config</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">treevalue.tree</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">treevalue.tree.common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basetree">BaseTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tree">Tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raw">raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#treeview">TreeView</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tree.html">treevalue.tree.tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func.html">treevalue.tree.func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html">treevalue.tree.general</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">treevalue.tree</a> &raquo;</li>
+        
+      <li>treevalue.tree.common</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_doc/tree/common.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <div class="section" id="treevalue-tree-common">
+<h1>treevalue.tree.common<a class="headerlink" href="#treevalue-tree-common" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basetree">
+<span id="apidoc-tree-common-basetree"></span><h2>BaseTree<a class="headerlink" href="#basetree" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="treevalue.tree.common.base.BaseTree">
+<em class="property">class </em><code class="sig-prename descclassname">treevalue.tree.common.base.</code><code class="sig-name descname">BaseTree</code><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Base abstract structure of a tree data class.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__delitem__">
+<em class="property">abstract </em><code class="sig-name descname">__delitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__delitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Delete item from this tree node.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;d&#39;: 4}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__eq__">
+<code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__getitem__">
+<em class="property">abstract </em><code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item from this tree node, raw value and tree node returns.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>return (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Tree node or raw value (if the sub node is value node).</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>       <span class="c1"># 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>       <span class="c1"># Tree({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__hash__">
+<code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__setitem__">
+<em class="property">abstract </em><code class="sig-name descname">__setitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Set item to this tree node, raw value and tree node supported.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+<li><p>value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Given mode or value to be set.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4, &#39;e&#39;: 10}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Return tree-formatted string.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>string (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Tree-formatted string.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">})})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; &lt;Tree 0x7f9fa48b9588 keys: [&#39;a&#39;, &#39;b&#39;, &#39;v&#39;, &#39;x&#39;, &#39;z&#39;]&gt;
+&gt;&gt;&gt; ├── &#39;a&#39; --&gt; 1
+&gt;&gt;&gt; ├── &#39;b&#39; --&gt; 2
+&gt;&gt;&gt; ├── &#39;v&#39; --&gt; {&#39;1&#39;: &#39;2&#39;}
+&gt;&gt;&gt; ├── &#39;x&#39; --&gt; &lt;Tree 0x7f9fa48b95c0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+&gt;&gt;&gt; │   ├── &#39;c&#39; --&gt; 3
+&gt;&gt;&gt; │   └── &#39;d&#39; --&gt; 4
+&gt;&gt;&gt; └── &#39;z&#39; --&gt; [1, 2]
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.actual">
+<em class="property">abstract </em><code class="sig-name descname">actual</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.actual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.actual" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get actual tree node of current tree object.
+If this is a <cite>Tree</cite> object, just return itself.
+If this is a <cite>TreeView</cite> object, it will return the actually viewed tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>actual (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Actual tree node.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.clone">
+<em class="property">abstract </em><code class="sig-name descname">clone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>bool<span class="p">, </span>Callable<span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Fully clone this tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>copy_value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[None,</span> <span class="pre">bool,</span> <span class="pre">Callable,</span> <span class="pre">Any]</span></code>): Deep copy value or not,                 default is <cite>None</cite> which means do not deep copy the values.                 If deep copy is required, just set it to <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>cloned (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Cloned new tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>                 <span class="c1"># Tree({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="ow">is</span> <span class="n">t</span>            <span class="c1"># False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  <span class="c1"># False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.items">
+<em class="property">abstract </em><code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.items" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Item iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.json">
+<code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.json" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get full json data of this tree.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>json (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Json data</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.keys">
+<em class="property">abstract </em><code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.keys" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get key iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Key iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.values">
+<em class="property">abstract </em><code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.values" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get value iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Value iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.base.BaseTree.view">
+<em class="property">abstract </em><code class="sig-name descname">view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/base.html#BaseTree.view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.base.BaseTree.view" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get view of the current tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>path (<code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code>): Viewing path.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>viewed_tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeView</span></code>): Viewed tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tree">
+<span id="apidoc-tree-common-tree"></span><h2>Tree<a class="headerlink" href="#tree" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="treevalue.tree.common.tree.Tree">
+<em class="property">class </em><code class="sig-prename descclassname">treevalue.tree.common.tree.</code><code class="sig-name descname">Tree</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Tree node data model, based on <cite>BaseTree</cite>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__delitem__">
+<code class="sig-name descname">__delitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.__delitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Delete item from this tree node.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;d&#39;: 4}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__eq__">
+<code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item from this tree node, raw value and tree node returns.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>return (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Tree node or raw value (if the sub node is value node).</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>       <span class="c1"># 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>       <span class="c1"># Tree({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__hash__">
+<code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Union<span class="p">[</span><a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree">Tree</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><span class="p">, </span><a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree">Tree</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Constructor of <cite>Tree</cite>, can be <cite>dict</cite>, <cite>Tree</cite>, <cite>TreeView</cite>.
+When dict passed in, a new tree structure will be created once.
+When <cite>Tree</cite> or <cite>TreeView</cite> passed in, a fully copy will be constructed in this object.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>data (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Dict[str,</span> <span class="pre">Union['Tree',</span> <span class="pre">Any]],</span> <span class="pre">'Tree']</span></code>): Any data can be parsed into <cite>Tree</cite>.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>  <span class="c1"># t is a new tree structure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>                                       <span class="c1"># t2 is a full copy of t1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t3</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">t2</span><span class="p">})</span>                       <span class="c1"># t3 is a tree with subtree of t and t2 (not copy)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__setitem__">
+<code class="sig-name descname">__setitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Set item to this tree node, raw value and tree node supported.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+<li><p>value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Given mode or value to be set.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4, &#39;e&#39;: 10}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.tree.Tree.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Return tree-formatted string.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>string (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Tree-formatted string.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">})})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; &lt;Tree 0x7f9fa48b9588 keys: [&#39;a&#39;, &#39;b&#39;, &#39;v&#39;, &#39;x&#39;, &#39;z&#39;]&gt;
+&gt;&gt;&gt; ├── &#39;a&#39; --&gt; 1
+&gt;&gt;&gt; ├── &#39;b&#39; --&gt; 2
+&gt;&gt;&gt; ├── &#39;v&#39; --&gt; {&#39;1&#39;: &#39;2&#39;}
+&gt;&gt;&gt; ├── &#39;x&#39; --&gt; &lt;Tree 0x7f9fa48b95c0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+&gt;&gt;&gt; │   ├── &#39;c&#39; --&gt; 3
+&gt;&gt;&gt; │   └── &#39;d&#39; --&gt; 4
+&gt;&gt;&gt; └── &#39;z&#39; --&gt; [1, 2]
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.actual">
+<code class="sig-name descname">actual</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.actual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.actual" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get actual tree node of current tree object.
+If this is a <cite>Tree</cite> object, just return itself.
+If this is a <cite>TreeView</cite> object, it will return the actually viewed tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>actual (<a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code></a>): Actual tree node.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>bool<span class="p">, </span>Callable<span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Fully clone this tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>copy_value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[None,</span> <span class="pre">bool,</span> <span class="pre">Callable,</span> <span class="pre">Any]</span></code>): Deep copy value or not,                 default is <cite>None</cite> which means do not deep copy the values.                 If deep copy is required, just set it to <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>cloned (<a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code></a>): Cloned new tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>                 <span class="c1"># Tree({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="ow">is</span> <span class="n">t</span>            <span class="c1"># False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  <span class="c1"># False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.items" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Item iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.json">
+<code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.tree.Tree.json" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get full json data of this tree.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>json (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Json data</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.keys" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get key iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Key iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.values" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get value iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Value iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.tree.Tree.view">
+<code class="sig-name descname">view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#Tree.view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.Tree.view" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get view of the current tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>path (<code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code>): Viewing path.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>viewed_tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeView</span></code>): Viewed tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="raw">
+<span id="apidoc-tree-common-raw"></span><h2>raw<a class="headerlink" href="#raw" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.tree.common.tree.raw">
+<code class="sig-prename descclassname">treevalue.tree.common.tree.</code><code class="sig-name descname">raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span> &#x2192; treevalue.tree.common.tree._RawWrapped<a class="reference internal" href="../../_modules/treevalue/tree/common/tree.html#raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.tree.raw" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Wrap raw value to init tree or set item, can be used for dict.
+Can only performs when value is a dict object, otherwise just return the original value.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>value (:obj:): Original value.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>wrapped (<code class="xref py py-obj docutils literal notranslate"><span class="pre">_RawWrapped</span></code>): Wrapped value.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">}),</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">})</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>  <span class="c1"># {&#39;a&#39;: 3, &#39;b&#39;: 4}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># {&#39;a&#39;: 5, &#39;b&#39;: 6}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;d&#39;</span><span class="p">]</span>  <span class="c1"># {&#39;a&#39;: 7, &#39;b&#39;: 8}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># {&#39;a&#39;: 9, &#39;b&#39;: 10}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  <span class="c1"># should be a Tree object when raw not used</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="treeview">
+<span id="apidoc-tree-common-treeview"></span><h2>TreeView<a class="headerlink" href="#treeview" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="treevalue.tree.common.view.TreeView">
+<em class="property">class </em><code class="sig-prename descclassname">treevalue.tree.common.view.</code><code class="sig-name descname">TreeView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree">treevalue.tree.common.tree.Tree</a></span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Tree view data model, based on <cite>BaseTree</cite>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__delitem__">
+<code class="sig-name descname">__delitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.__delitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Delete item from this tree node.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;b&#39;: 2, &#39;x&#39;: {&#39;d&#39;: 4}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__eq__">
+<code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item from this tree node, raw value and tree node returns.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>return (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Tree node or raw value (if the sub node is value node).</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>       <span class="c1"># 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>       <span class="c1"># Tree({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__hash__">
+<code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#treevalue.tree.common.tree.Tree" title="treevalue.tree.common.tree.Tree">treevalue.tree.common.tree.Tree</a></span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Constructor of <cite>TreeValue</cite>.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Based tree.</p></li>
+<li><p>path (<code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code>): Viewing path.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tv</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>                <span class="c1"># tv should be equal to Tree({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tv</span>                                <span class="c1"># tv should be equal to Tree({&#39;c&#39;: 5, &#39;d&#39;: 6})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__setitem__">
+<code class="sig-name descname">__setitem__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Set item to this tree node, raw value and tree node supported.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Key of the sub tree node.</p></li>
+<li><p>value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>): Given mode or value to be set.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>  <span class="c1"># Tree({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4, &#39;e&#39;: 10}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.view.TreeView.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Return tree-formatted string.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>string (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Tree-formatted string.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">({</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">})})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; &lt;Tree 0x7f9fa48b9588 keys: [&#39;a&#39;, &#39;b&#39;, &#39;v&#39;, &#39;x&#39;, &#39;z&#39;]&gt;
+&gt;&gt;&gt; ├── &#39;a&#39; --&gt; 1
+&gt;&gt;&gt; ├── &#39;b&#39; --&gt; 2
+&gt;&gt;&gt; ├── &#39;v&#39; --&gt; {&#39;1&#39;: &#39;2&#39;}
+&gt;&gt;&gt; ├── &#39;x&#39; --&gt; &lt;Tree 0x7f9fa48b95c0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+&gt;&gt;&gt; │   ├── &#39;c&#39; --&gt; 3
+&gt;&gt;&gt; │   └── &#39;d&#39; --&gt; 4
+&gt;&gt;&gt; └── &#39;z&#39; --&gt; [1, 2]
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.actual">
+<code class="sig-name descname">actual</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.actual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.actual" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get actual tree node of current tree object.
+If this is a <cite>Tree</cite> object, just return itself.
+If this is a <cite>TreeView</cite> object, it will return the actually viewed tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>actual (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Actual tree node.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">copy_value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>bool<span class="p">, </span>Callable<span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Fully clone this tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>copy_value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[None,</span> <span class="pre">bool,</span> <span class="pre">Callable,</span> <span class="pre">Any]</span></code>): Deep copy value or not,                 default is <cite>None</cite> which means do not deep copy the values.                 If deep copy is required, just set it to <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>cloned (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Cloned new tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span>                 <span class="c1"># Tree({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="ow">is</span> <span class="n">t</span>            <span class="c1"># False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  <span class="c1"># False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.items" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Item iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.json">
+<code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.view.TreeView.json" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get full json data of this tree.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>json (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>): Json data</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.keys" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get key iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Key iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.values" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get value iterator of this tree node.</p>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>iter (<code class="xref py py-obj docutils literal notranslate"><span class="pre">iter</span></code>): Value iterator of this tree node.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output should be</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">&lt;</span><span class="n">Tree</span> <span class="mh">0x7f74f6daaf60</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.view.TreeView.view">
+<code class="sig-name descname">view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/tree/common/view.html#TreeView.view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.tree.common.view.TreeView.view" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get view of the current tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>path (<code class="xref py py-obj docutils literal notranslate"><span class="pre">List[str]</span></code>): Viewing path.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>viewed_tree (<a class="reference internal" href="#treevalue.tree.common.view.TreeView" title="treevalue.tree.common.view.TreeView"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeView</span></code></a>): Viewed tree.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">view</span><span class="p">([</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>  <span class="c1"># 5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tree.html" class="btn btn-neutral float-right" title="treevalue.tree.tree" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="treevalue.tree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.0.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="common.html">v0.0.1</a></dd>
+                        <dd><a href="../../../v0.1.0/api_doc/tree/common.html">v0.1.0</a></dd>
+                        <dd><a href="../../../v1.0.0/api_doc/tree/common.html">v1.0.0</a></dd>
+                        <dd><a href="../../../v1.1.0/api_doc/tree/common.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../doc/ghpage/api_doc/tree/common.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../main/api_doc/tree/common.html">main</a></dd>
+                        <dd><a href="../../../refactor/color/api_doc/tree/common.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

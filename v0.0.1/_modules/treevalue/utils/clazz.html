@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.utils.clazz &mdash; treevalue 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.utils.clazz</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.utils.clazz</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="fm">__and__</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="n">_ClassType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;_ClassType&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="class_wraps"><a class="viewcode-back" href="../../../api_doc/utils/clazz.html#treevalue.utils.clazz.class_wraps">[docs]</a><span class="k">def</span> <span class="nf">class_wraps</span><span class="p">(</span><span class="n">original_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_ClassType</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Wrap class like functools.wraps, can be used in class decorators.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - original_class (:obj:`Type[_ClassType]`): Original class for wrapping.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; def cls_dec(clazz):</span>
+<span class="sd">        &gt;&gt;&gt;     @class_wraps(clazz)</span>
+<span class="sd">        &gt;&gt;&gt;     class _NewClazz(clazz):</span>
+<span class="sd">        &gt;&gt;&gt;         pass</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;     return _NewClazz</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># noinspection PyTypeChecker</span>
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">clazz</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_ClassType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">_ClassType</span><span class="p">]:</span>
+        <span class="n">new_clazz</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">original_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="p">(</span><span class="n">clazz</span><span class="p">,),</span> <span class="p">{</span>
+            <span class="s1">&#39;__doc__&#39;</span><span class="p">:</span> <span class="n">original_class</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span>
+            <span class="s1">&#39;__module__&#39;</span><span class="p">:</span> <span class="n">original_class</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">new_clazz</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<div class="viewcode-block" id="init_magic"><a class="viewcode-back" href="../../../api_doc/utils/clazz.html#treevalue.utils.clazz.init_magic">[docs]</a><span class="k">def</span> <span class="nf">init_magic</span><span class="p">(</span><span class="n">init_decorator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Magic for initialization function of a class.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - init_decorator (:obj:`Callable`): Initialization function decorator.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from functools import wraps</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; def _init_dec(func):</span>
+<span class="sd">        &gt;&gt;&gt;     @wraps(func)</span>
+<span class="sd">        &gt;&gt;&gt;     def _new_func(value):</span>
+<span class="sd">        &gt;&gt;&gt;         func(value + 1)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;     return _new_func</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; @init_magic(_init_dec)</span>
+<span class="sd">        &gt;&gt;&gt; class Container:</span>
+<span class="sd">        &gt;&gt;&gt;     def __init__(self, value):</span>
+<span class="sd">        &gt;&gt;&gt;         self.__value = value</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;     @property</span>
+<span class="sd">        &gt;&gt;&gt;     def value(self):</span>
+<span class="sd">        &gt;&gt;&gt;         return self.__value</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; c = Container(1)</span>
+<span class="sd">        &gt;&gt;&gt; c.value   # 2</span>
+<span class="sd">        &gt;&gt;&gt; c2 = Container(33)</span>
+<span class="sd">        &gt;&gt;&gt; c2.value  # 34</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">clazz</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_ClassType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">_ClassType</span><span class="p">]:</span>
+        <span class="nd">@class_wraps</span><span class="p">(</span><span class="n">clazz</span><span class="p">)</span>
+        <span class="k">class</span> <span class="nc">_NewClass</span><span class="p">(</span><span class="n">clazz</span><span class="p">):</span>
+            <span class="nd">@wraps</span><span class="p">(</span><span class="n">clazz</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">init_decorator</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">clazz</span><span class="o">.</span><span class="fm">__init__</span><span class="p">,</span> <span class="bp">self</span><span class="p">))(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_NewClass</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_all_bases</span><span class="p">(</span><span class="n">clazz</span><span class="p">:</span> <span class="n">Type</span><span class="p">):</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">clazz</span><span class="p">}</span>
+    <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">clazz</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_type</span> <span class="ow">in</span> <span class="n">current</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_type</span><span class="p">)</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">_type</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_get_all_direct_bases</span><span class="p">(</span><span class="n">clazz</span><span class="p">:</span> <span class="n">Type</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">clazz</span><span class="p">)</span>
+        <span class="n">clazz</span> <span class="o">=</span> <span class="n">clazz</span><span class="o">.</span><span class="n">__base__</span>
+        <span class="k">if</span> <span class="n">clazz</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_base_process</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">Type</span><span class="p">],</span> <span class="n">Type</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="p">(</span><span class="n">base</span><span class="p">,)</span>
+    <span class="k">elif</span> <span class="n">base</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">base</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">base</span>
+
+
+<span class="k">def</span> <span class="nf">_all_commons</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">Type</span><span class="p">],</span> <span class="n">Type</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="n">base</span> <span class="o">=</span> <span class="n">_base_process</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">_intersection</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="fm">__and__</span><span class="p">,</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">])</span>
+    <span class="n">_result</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">_base_class</span> <span class="ow">in</span> <span class="n">_intersection</span><span class="p">:</span>
+        <span class="n">acceptable</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">_another_base_class</span> <span class="ow">in</span> <span class="n">_intersection</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_base_class</span> <span class="o">==</span> <span class="n">_another_base_class</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">_another_base_class</span><span class="p">,</span> <span class="n">_base_class</span><span class="p">):</span>
+                <span class="n">acceptable</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">acceptable</span><span class="p">:</span>
+            <span class="n">_result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_base_class</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">base</span><span class="p">:</span>
+        <span class="n">_result</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_result</span> <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">base</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">_result</span>
+
+
+<div class="viewcode-block" id="common_bases"><a class="viewcode-back" href="../../../api_doc/utils/clazz.html#treevalue.utils.clazz.common_bases">[docs]</a><span class="k">def</span> <span class="nf">common_bases</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">Type</span><span class="p">],</span> <span class="n">Type</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Get all the common bases of the classes.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - classes (:obj:`Type`): Target classes.</span>
+<span class="sd">        - base (:obj:`Union[Collection[Type], Type, None]`): Limit of the base class, \</span>
+<span class="sd">            default is `None` which means no limit.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - bases (:obj:`Set[Type]`): A set of classes which is the common bases of the classes, \</span>
+<span class="sd">            only high leveled classes will be kept.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_all_commons</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">_get_all_bases</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="common_direct_base"><a class="viewcode-back" href="../../../api_doc/utils/clazz.html#treevalue.utils.clazz.common_direct_base">[docs]</a><span class="k">def</span> <span class="nf">common_direct_base</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">Type</span><span class="p">],</span> <span class="n">Type</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Get the common direct base of the classes.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - classes (:obj:`Type`): Target classes.</span>
+<span class="sd">        - base (:obj:`Union[Collection[Type], Type, None]`): Limit of the base class, \</span>
+<span class="sd">            default is `None` which means no limit.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - base (:obj:`Type`): A class which is all the bases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">_base_process</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">_bases</span> <span class="o">=</span> <span class="n">_all_commons</span><span class="p">(</span><span class="o">*</span><span class="n">classes</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">_get_all_direct_bases</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_bases</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_bases</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">base</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;No common base found with </span><span class="si">{classes}</span><span class="s2"> which is based on </span><span class="si">{bases}</span><span class="s2">.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;No common base found with </span><span class="si">{classes}</span><span class="s2">.&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classes</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">classes</span><span class="p">),</span> <span class="n">bases</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">base</span><span class="p">)))</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.0.1
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="clazz.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

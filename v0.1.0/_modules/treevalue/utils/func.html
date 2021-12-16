@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.utils.func &mdash; treevalue 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.utils.func</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.utils.func</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Parameter</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Type</span>
+
+<span class="kn">from</span> <span class="nn">.singleton</span> <span class="kn">import</span> <span class="n">SingletonMark</span>
+
+
+<div class="viewcode-block" id="args_iter"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.args_iter">[docs]</a><span class="k">def</span> <span class="nf">args_iter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Iterate all the arguments with index and value.</span>
+<span class="sd">        If argument is in `args`, the index should be integer increasing from 0.</span>
+<span class="sd">        If argument is in `kwargs`, the index should be string which meaning the argument&#39;s name.</span>
+<span class="sd">        The numeric indices will appear before the string indices,</span>
+<span class="sd">        and **the order of the string indices are not approved**.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - args (:obj:`Tuple[Any]`): Argument list</span>
+<span class="sd">        - kwargs (:obj:`Dict[str, Any]`): Argument mapping</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; for index, value in args_iter(1, 2, 3, a=1, b=2, c=3)):</span>
+<span class="sd">        &gt;&gt;&gt;     print(index, value)</span>
+
+<span class="sd">        The output should be</span>
+
+<span class="sd">        &gt;&gt;&gt; 0 1</span>
+<span class="sd">        &gt;&gt;&gt; 1 2</span>
+<span class="sd">        &gt;&gt;&gt; 2 3</span>
+<span class="sd">        &gt;&gt;&gt; a 1</span>
+<span class="sd">        &gt;&gt;&gt; b 2</span>
+<span class="sd">        &gt;&gt;&gt; c 3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_index</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">),</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">())):</span>
+        <span class="k">yield</span> <span class="n">_index</span><span class="p">,</span> <span class="n">_item</span></div>
+
+
+<span class="n">_STATICAL</span> <span class="o">=</span> <span class="s1">&#39;__statical__&#39;</span>
+
+
+<div class="viewcode-block" id="dynamic_call"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.dynamic_call">[docs]</a><span class="k">def</span> <span class="nf">dynamic_call</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Decorate function to dynamic-call-supported function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - func (:obj:`Callable`): Original function to be decorated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - new_func (:obj:`Callable`): Decorated function.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; dynamic_call(lambda x, y: x ** y)(2, 3)  # 8</span>
+<span class="sd">        &gt;&gt;&gt; dynamic_call(lambda x, y: x ** y)(2, 3, 4)  # 8, 3rd is ignored</span>
+<span class="sd">        &gt;&gt;&gt; dynamic_call(lambda x, y, t, *args: (args, (t, x, y)))(1, 2, 3, 4, 5)  # ((4, 5), (3, 1, 2))</span>
+<span class="sd">        &gt;&gt;&gt; dynamic_call(lambda x, y: (x, y))(y=2, x=1)  # (1, 2), key word supported</span>
+<span class="sd">        &gt;&gt;&gt; dynamic_call(lambda x, y, **kwargs: (kwargs, x, y))(1, k=2, y=3)  # ({&#39;k&#39;: 2}, 1, 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">_STATICAL</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="n">enable_args</span><span class="p">,</span> <span class="n">args_count</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="n">enable_kwargs</span><span class="p">,</span> <span class="n">kwargs_set</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">follow_wrapped</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">{</span><span class="n">Parameter</span><span class="o">.</span><span class="n">POSITIONAL_ONLY</span><span class="p">,</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">POSITIONAL_OR_KEYWORD</span><span class="p">}:</span>
+            <span class="n">args_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Parameter</span><span class="o">.</span><span class="n">KEYWORD_ONLY</span><span class="p">,</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">POSITIONAL_OR_KEYWORD</span><span class="p">):</span>
+            <span class="n">kwargs_set</span> <span class="o">|=</span> <span class="p">{</span><span class="n">name</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">:</span>
+            <span class="n">enable_args</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">:</span>
+            <span class="n">enable_kwargs</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_get_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">args</span> <span class="k">if</span> <span class="n">enable_args</span> <span class="k">else</span> <span class="n">args</span><span class="p">[:</span><span class="n">args_count</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">kwargs</span> <span class="k">if</span> <span class="n">enable_kwargs</span> <span class="k">else</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs_set</span><span class="p">}</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">_get_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">),</span> <span class="o">**</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">_new_func</span><span class="p">,</span> <span class="n">_STATICAL</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_new_func</span></div>
+
+
+<div class="viewcode-block" id="static_call"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.static_call">[docs]</a><span class="k">def</span> <span class="nf">static_call</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">static_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Static call, anti-calculation of dynamic call.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - func (:obj:`Callable`): Given dynamic function.</span>
+<span class="sd">        - static_ok (:obj:`bool`): Allow given function to be static, default is `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - static (:obj:`Callable`): Static function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">static_ok</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">_STATICAL</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Given callable is already static.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;__wrapped__&#39;</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pre_process"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.pre_process">[docs]</a><span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Pre processor for function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - processor (:obj:`Callable`): Pre processor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Function decorator</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; @pre_process(lambda x, y: (-x, (x + 2) * y))</span>
+<span class="sd">        &gt;&gt;&gt; def plus(a, b):</span>
+<span class="sd">        &gt;&gt;&gt;     return a + b</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; plus(1, 2)  # 5, 5 = -1 + (1 + 2) * 2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_processor</span> <span class="o">=</span> <span class="n">dynamic_call</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">pargs</span> <span class="o">=</span> <span class="n">_processor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pargs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> \
+                    <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pargs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> \
+                    <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pargs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,)):</span>
+                <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pargs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pargs</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pargs</span><span class="p">),</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pargs</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,)):</span>
+                <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="p">(),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="p">(</span><span class="n">pargs</span><span class="p">,),</span> <span class="p">{}</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs_</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_new_func</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<div class="viewcode-block" id="post_process"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.post_process">[docs]</a><span class="k">def</span> <span class="nf">post_process</span><span class="p">(</span><span class="n">processor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Post processor for function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - processor (:obj:`Callable`): Post processor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Function decorator</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; @post_process(lambda x: -x)</span>
+<span class="sd">        &gt;&gt;&gt; def plus(a, b):</span>
+<span class="sd">        &gt;&gt;&gt;     return a + b</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; plus(1, 2)  # -3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">processor</span> <span class="o">=</span> <span class="n">dynamic_call</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">processor</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_new_func</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_throwable</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_post_for_raising</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_is_throwable</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ret</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+
+<div class="viewcode-block" id="raising"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.raising">[docs]</a><span class="k">def</span> <span class="nf">raising</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Decorate function with exception object return value to a raisisng function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - func (:obj:`Union[Callable, BaseException, Type[BaseException]]`): Not decorated function or class</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorated (:obj:`Callable`): Decorated new function</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; raising(RuntimeError)()  # RuntimeError</span>
+<span class="sd">        &gt;&gt;&gt; raising(lambda x: ValueError(&#39;value error - %s&#39; % (repr(x), )))(1)  # ValueError, value error - 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_is_throwable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">raising</span><span class="p">(</span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">func</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">post_process</span><span class="p">(</span><span class="n">_post_for_raising</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_warning</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="ne">Warning</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_warn</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">w</span><span class="p">()</span> <span class="k">if</span> <span class="n">_is_warning</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">)</span> <span class="k">else</span> <span class="n">w</span>
+
+
+<span class="k">def</span> <span class="nf">_post_for_warning</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+    <span class="n">_matched</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">_is_warning</span><span class="p">(</span><span class="n">ret</span><span class="p">):</span>
+        <span class="n">_matched</span><span class="p">,</span> <span class="n">_w</span><span class="p">,</span> <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{}</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_is_warning</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">_w</span><span class="p">,</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ret</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">_matched</span><span class="p">,</span> <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_matched</span><span class="p">,</span> <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(),</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_matched</span><span class="p">,</span> <span class="n">args_</span><span class="p">,</span> <span class="n">kwargs_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ret</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_matched</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ret</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># noinspection PyUnboundLocalVariable</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_warn</span><span class="p">(</span><span class="n">_w</span><span class="p">),</span> <span class="o">*</span><span class="n">args_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs_</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="warning_"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.warning_">[docs]</a><span class="k">def</span> <span class="nf">warning_</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="ne">Warning</span><span class="p">],</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Decorate function with exception object return value to a ``warning_`` function.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - func (:obj:`Union[Callable, Warning, Type[Warning], str]`): Not decorated function or class</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorated (:obj:`Callable`): Decorated new function</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; warning_(RuntimeWarning)()  # RuntimeWarning</span>
+<span class="sd">        &gt;&gt;&gt; raising(lambda x: Warning(&#39;value warning - %s&#39; % (repr(x), )))(1)  # Warning, value warning - 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_is_warning</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">warning_</span><span class="p">(</span><span class="n">dynamic_call</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">func</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">post_process</span><span class="p">(</span><span class="n">_post_for_warning</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span></div>
+
+
+<span class="n">NO_INITIAL</span> <span class="o">=</span> <span class="n">SingletonMark</span><span class="p">(</span><span class="s2">&quot;no_initial&quot;</span><span class="p">)</span>
+
+<span class="n">_ElementType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_ElementType&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="freduce"><a class="viewcode-back" href="../../../api_doc/utils/func.html#treevalue.utils.func.freduce">[docs]</a><span class="k">def</span> <span class="nf">freduce</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="n">NO_INITIAL</span><span class="p">,</span> <span class="n">pass_kwargs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Make binary function be reducible.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - init (:obj:`Any`): Initial data generator or \</span>
+<span class="sd">            initial data, default is `NO_INITIAL` which means no initial data. \</span>
+<span class="sd">            Missing of positional arguments is forbidden.</span>
+<span class="sd">        - pass_kwargs (:obj:`bool`): Pass kwargs into initial function and wrapped function or not, \</span>
+<span class="sd">            default is `True` which means pass the arguments in.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - decorator (:obj:`Callable`): Decorator for the original function.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; @freduce(init=0)</span>
+<span class="sd">        &gt;&gt;&gt; def plus(a, b):</span>
+<span class="sd">        &gt;&gt;&gt;     return a + b</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; plus()            # 0</span>
+<span class="sd">        &gt;&gt;&gt; plus(1)           # 1</span>
+<span class="sd">        &gt;&gt;&gt; plus(1, 2)        # 3</span>
+<span class="sd">        &gt;&gt;&gt; plus(1, 2, 3, 4)  # 10</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">init</span> <span class="ow">is</span> <span class="n">NO_INITIAL</span><span class="p">:</span>
+        <span class="n">init_func</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">init_func</span> <span class="o">=</span> <span class="n">dynamic_call</span><span class="p">(</span><span class="n">init</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">init</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">init</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">dynamic_call</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_ElementType</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pass_kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="ne">SyntaxWarning</span><span class="p">(</span>
+                    <span class="s2">&quot;Key-word arguments detected but will not be passed due to the pass_kwargs setting - </span><span class="si">{kwargs}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">kwargs</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">kwargs</span><span class="p">))))</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span> <span class="k">if</span> <span class="n">pass_kwargs</span> <span class="k">else</span> <span class="p">{}</span>
+
+            <span class="k">if</span> <span class="n">init_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span>
+                        <span class="s2">&quot;No less than 1 argument expected in function </span><span class="si">{func}</span><span class="s2"> but 0 found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">func</span><span class="p">)))</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">init_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">current</span>
+
+        <span class="k">return</span> <span class="n">_new_func</span>
+
+    <span class="k">return</span> <span class="n">_decorator</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.1.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../v0.0.1/index.html">v0.0.1</a></dd>
+                        <dd><a href="func.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

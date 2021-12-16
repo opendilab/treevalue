@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.utils.clazz &mdash; treevalue 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="treevalue.utils.color" href="color.html" />
+    <link rel="prev" title="treevalue.utils" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">treevalue.utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">treevalue.utils.clazz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#class-wraps">class_wraps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init-magic">init_magic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-bases">common_bases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-direct-base">common_direct_base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-class-full-name">get_class_full_name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="color.html">treevalue.utils.color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html">treevalue.utils.enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html">treevalue.utils.exception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="final.html">treevalue.utils.final</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func.html">treevalue.utils.func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imports.html">treevalue.utils.imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random.html">treevalue.utils.random</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singleton.html">treevalue.utils.singleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tree.html">treevalue.utils.tree</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">treevalue.utils</a> &raquo;</li>
+        
+      <li>treevalue.utils.clazz</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api_doc/utils/clazz.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <div class="section" id="treevalue-utils-clazz">
+<h1>treevalue.utils.clazz<a class="headerlink" href="#treevalue-utils-clazz" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-wraps">
+<h2>class_wraps<a class="headerlink" href="#class-wraps" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.clazz.class_wraps">
+<code class="sig-prename descclassname">treevalue.utils.clazz.</code><code class="sig-name descname">class_wraps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">original_class</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>_ClassType<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/clazz.html#class_wraps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.clazz.class_wraps" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Wrap class like functools.wraps, can be used in class decorators.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>original_class (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Type[_ClassType]</span></code>): Original class for wrapping.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">cls_dec</span><span class="p">(</span><span class="n">clazz</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nd">@class_wraps</span><span class="p">(</span><span class="n">clazz</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">class</span> <span class="nc">_NewClazz</span><span class="p">(</span><span class="n">clazz</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">_NewClazz</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="init-magic">
+<h2>init_magic<a class="headerlink" href="#init-magic" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.clazz.init_magic">
+<code class="sig-prename descclassname">treevalue.utils.clazz.</code><code class="sig-name descname">init_magic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">init_decorator</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/clazz.html#init_magic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.clazz.init_magic" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Magic for initialization function of a class.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>init_decorator (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable</span></code>): Initialization function decorator.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">_init_dec</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">func</span><span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">_new_func</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@init_magic</span><span class="p">(</span><span class="n">_init_dec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">__value</span> <span class="o">=</span> <span class="n">value</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nd">@property</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__value</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Container</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">value</span>   <span class="c1"># 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">Container</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># 34</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="common-bases">
+<h2>common_bases<a class="headerlink" href="#common-bases" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.clazz.common_bases">
+<code class="sig-prename descclassname">treevalue.utils.clazz.</code><code class="sig-name descname">common_bases</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">classes</span><span class="p">:</span> <span class="n">Type</span></em>, <em class="sig-param"><span class="n">base</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>Collection<span class="p">[</span>Type<span class="p">]</span><span class="p">, </span>Type<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Set<span class="p">[</span>Type<span class="p">]</span><a class="reference internal" href="../../_modules/treevalue/utils/clazz.html#common_bases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.clazz.common_bases" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get all the common bases of the classes.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>classes (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Type</span></code>): Target classes.</p></li>
+<li><p>base (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Collection[Type],</span> <span class="pre">Type,</span> <span class="pre">None]</span></code>): Limit of the base class,             default is <cite>None</cite> which means no limit.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>bases (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Set[Type]</span></code>): A set of classes which is the common bases of the classes,             only high leveled classes will be kept.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="common-direct-base">
+<h2>common_direct_base<a class="headerlink" href="#common-direct-base" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.clazz.common_direct_base">
+<code class="sig-prename descclassname">treevalue.utils.clazz.</code><code class="sig-name descname">common_direct_base</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">classes</span><span class="p">:</span> <span class="n">Type</span></em>, <em class="sig-param"><span class="n">base</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>Collection<span class="p">[</span>Type<span class="p">]</span><span class="p">, </span>Type<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/clazz.html#common_direct_base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.clazz.common_direct_base" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get the common direct base of the classes.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>classes (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Type</span></code>): Target classes.</p></li>
+<li><p>base (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Collection[Type],</span> <span class="pre">Type,</span> <span class="pre">None]</span></code>): Limit of the base class,             default is <cite>None</cite> which means no limit.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>base (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Type</span></code>): A class which is all the bases.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="get-class-full-name">
+<h2>get_class_full_name<a class="headerlink" href="#get-class-full-name" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.utils.clazz.get_class_full_name">
+<code class="sig-prename descclassname">treevalue.utils.clazz.</code><code class="sig-name descname">get_class_full_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">clazz</span><span class="p">:</span> <span class="n">type</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/treevalue/utils/clazz.html#get_class_full_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#treevalue.utils.clazz.get_class_full_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Get full name of a class.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>clazz (<code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code>): Given class.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Full name of the given class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="color.html" class="btn btn-neutral float-right" title="treevalue.utils.color" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="treevalue.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.1.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../v0.0.1/api_doc/utils/clazz.html">v0.0.1</a></dd>
+                        <dd><a href="clazz.html">v0.1.0</a></dd>
+                        <dd><a href="../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../v1.1.0/index.html">v1.1.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../doc/ghpage/index.html">doc/ghpage</a></dd>
+                        <dd><a href="../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../refactor/color/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
