@@ -60,6 +60,14 @@ flatten_values
 .. autofunction:: flatten_values
 
 
+.. _apidoc_tree_tree_flatten_keys:
+
+flatten_keys
+-------------------
+
+.. autofunction:: flatten_keys
+
+
 .. _apidoc_tree_tree_unflatten:
 
 unflatten
