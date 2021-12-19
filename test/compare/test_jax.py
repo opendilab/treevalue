@@ -31,3 +31,21 @@ class TestCompareWithJaxPytree:
     def test_tv_unflatten(self, benchmark):
         flatted = flatten(_TREE_1)
         benchmark(unflatten, flatted)
+
+    def test_jax_tree_all(self, benchmark):
+        benchmark(pytree.tree_all, _TREE_DATA_1)
+
+    def test_tv_flatten_all(self, benchmark):
+        def _flatten_all(tree):
+            return all((v for _, v in flatten(tree)))
+
+        benchmark(_flatten_all, _TREE_1)
+
+    def test_jax_tree_leaves(self, benchmark):
+        benchmark(pytree.tree_leaves, _TREE_DATA_1)
+
+    def test_tv_flatten_leaves(self, benchmark):
+        def _flatten_leaves(tree):
+            return [v for _, v in flatten(tree)]
+
+        benchmark(_flatten_leaves, _TREE_1)
