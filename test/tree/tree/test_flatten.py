@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import TreeValue, raw, flatten, unflatten
+from treevalue.tree import TreeValue, raw, flatten, unflatten, flatten_values
 
 
 class MyTreeValue(TreeValue):
@@ -21,6 +21,12 @@ class TestTreeTreeFlatten:
             (('d', 'x'), 3),
             (('d', 'y'), 4)
         ]
+
+    def test_flatten_values(self):
+        t = TreeValue({'a': 1, 'b': 5, 'c': {'x': 3, 'y': 4}, 'd': {'x': 3, 'y': 4}})
+
+        flatted_values = sorted(flatten_values(t))
+        assert flatted_values == [1, 3, 3, 4, 4, 5]
 
     def test_unflatten(self):
         flatted = [

@@ -1,4 +1,4 @@
-from .flatten import flatten, unflatten
+from .flatten import flatten, unflatten, flatten_values
 from .functional import mapping, filter_, mask, reduce_
 from .graph import graphics
 from .io import loads, load, dumps, dump
