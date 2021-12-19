@@ -12,5 +12,8 @@ cpdef list flatten(TreeValue tree)
 cdef void _c_flatten_values(TreeStorage st, list res) except *
 cpdef list flatten_values(TreeValue tree)
 
+cdef void _c_flatten_keys(TreeStorage st, tuple path, list res) except *
+cpdef list flatten_keys(TreeValue tree)
+
 cdef TreeStorage _c_unflatten(object pairs)
 cpdef TreeValue unflatten(object pairs, object return_type= *)
