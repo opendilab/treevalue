@@ -1,3 +1,5 @@
+from functools import reduce
+
 import jax.tree_util as pytree
 import pytest
 
@@ -46,3 +48,23 @@ class TestCompareWithJaxPytree:
 
     def test_tv_flatten_values(self, benchmark):
         benchmark(flatten_values, _TREE_1)
+
+    def test_jax_tree_reduce(self, benchmark):
+        benchmark(pytree.tree_reduce, lambda x, y: x + y, _TREE_DATA_1)
+
+    def test_jax_tree_reduce_with_init(self, benchmark):
+        benchmark(pytree.tree_reduce, lambda x, y: x + y, _TREE_DATA_1, 0)
+
+    def test_tv_flatten_reduce(self, benchmark):
+        def _flatten_reduce(tree):
+            values = flatten_values(tree)
+            return reduce(lambda x, y: x + y, values)
+
+        return benchmark(_flatten_reduce, _TREE_1)
+
+    def test_tv_flatten_reduce_with_init(self, benchmark):
+        def _flatten_reduce_with_init(tree):
+            values = flatten_values(tree)
+            return reduce(lambda x, y: x + y, values, 0)
+
+        return benchmark(_flatten_reduce_with_init, _TREE_1)
