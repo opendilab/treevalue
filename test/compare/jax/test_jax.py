@@ -3,7 +3,7 @@ from functools import reduce
 import jax.tree_util as pytree
 import pytest
 
-from treevalue import FastTreeValue, mapping, flatten, unflatten, flatten_values, flatten_keys
+from treevalue import FastTreeValue, mapping, flatten, unflatten, flatten_values, flatten_keys, subside, rise, raw
 
 _TREE_DATA_1 = {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
 _TREE_1 = FastTreeValue(_TREE_DATA_1)
@@ -74,3 +74,52 @@ class TestCompareWithJaxPytree:
 
     def test_tv_flatten_keys(self, benchmark):
         benchmark(flatten_keys, _TREE_1)
+
+    def test_jax_tree_transpose(self, benchmark):
+        sto = pytree.tree_structure({'a': 1, 'b': 2, 'c': {'x': 3, 'y': 4}})
+        sti = pytree.tree_structure({'a': 1, 'b': {'x': 2, 'y': 3}})
+
+        value = (
+            {'a': 1, 'b': {'x': 2, 'y': 3}},
+            {
+                'a': {'a': 10, 'b': {'x': 20, 'y': 30}},
+                'b': [
+                    {'a': 100, 'b': {'x': 200, 'y': 300}},
+                    {'a': 400, 'b': {'x': 500, 'y': 600}},
+                ],
+            }
+        )
+        benchmark(pytree.tree_transpose, sto, sti, value)
+
+    def test_tv_subside(self, benchmark):
+        value = {
+            'a': FastTreeValue({'a': 1, 'b': {'x': 2, 'y': 3}}),
+            'b': FastTreeValue({'a': 10, 'b': {'x': 20, 'y': 30}}),
+            'c': {
+                'x': FastTreeValue({'a': 100, 'b': {'x': 200, 'y': 300}}),
+                'y': FastTreeValue({'a': 400, 'b': {'x': 500, 'y': 600}}),
+            },
+        }
+        benchmark(subside, value)
+
+    def test_tv_rise(self, benchmark):
+        value = FastTreeValue({
+            'a': raw({'a': 1, 'b': {'x': 2, 'y': 3}}),
+            'b': raw({'a': 10, 'b': {'x': 20, 'y': 30}}),
+            'c': {
+                'x': raw({'a': 100, 'b': {'x': 200, 'y': 300}}),
+                'y': raw({'a': 400, 'b': {'x': 500, 'y': 600}}),
+            },
+        })
+        benchmark(rise, value)
+
+    def test_tv_rise_with_template(self, benchmark):
+        value = FastTreeValue({
+            'a': raw({'a': 1, 'b': {'x': 2, 'y': 3}}),
+            'b': raw({'a': 10, 'b': {'x': 20, 'y': 30}}),
+            'c': {
+                'x': raw({'a': 100, 'b': {'x': 200, 'y': 300}}),
+                'y': raw({'a': 400, 'b': {'x': 500, 'y': 600}}),
+            },
+        })
+        benchmark(rise, value, template={'a': None, 'b': {'x': None, 'y': None}})
