@@ -52,6 +52,14 @@ flatten
 .. autofunction:: flatten
 
 
+.. _apidoc_tree_tree_flatten_values:
+
+flatten_values
+-------------------
+
+.. autofunction:: flatten_values
+
+
 .. _apidoc_tree_tree_unflatten:
 
 unflatten
