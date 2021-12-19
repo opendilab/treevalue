@@ -28,7 +28,7 @@ cpdef list flatten(TreeValue tree):
         Flatten the key-value pairs in the tree.
 
     Arguments:
-        - tree (:obj:`TreeValue`): Tree object to be flatten. 
+        - tree (:obj:`TreeValue`): Tree object to be flatten.
 
     Returns:
         - flatted (:obj:`list`): Flatted tree, a list of tuple with (path, value).
@@ -68,6 +68,35 @@ cpdef list flatten_values(TreeValue tree):
     """
     cdef list result = []
     _c_flatten_values(tree._detach(), result)
+    return result
+
+cdef void _c_flatten_keys(TreeStorage st, tuple path, list res) except *:
+    cdef dict data = st.detach()
+    cdef tuple curpath
+
+    cdef str k
+    cdef object v
+    for k, v in data.items():
+        curpath = path + (k,)
+        if isinstance(v, TreeStorage):
+            _c_flatten_keys(v, curpath, res)
+        else:
+            res.append(curpath)
+
+@cython.binding(True)
+cpdef list flatten_keys(TreeValue tree):
+    r"""
+    Overview:
+        Flatten the keys in the tree.
+
+    Arguments:
+        - tree (:obj:`TreeValue`): Tree object to be flatten.
+
+    Returns:
+        - flatted (:obj:`list`): Flatted tree, a list of paths.
+    """
+    cdef list result = []
+    _c_flatten_keys(tree._detach(), (), result)
     return result
 
 cdef TreeStorage _c_unflatten(object pairs):
