@@ -3,7 +3,7 @@ from functools import reduce
 import jax.tree_util as pytree
 import pytest
 
-from treevalue import FastTreeValue, mapping, flatten, unflatten, flatten_values
+from treevalue import FastTreeValue, mapping, flatten, unflatten, flatten_values, flatten_keys
 
 _TREE_DATA_1 = {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
 _TREE_1 = FastTreeValue(_TREE_DATA_1)
@@ -68,3 +68,9 @@ class TestCompareWithJaxPytree:
             return reduce(lambda x, y: x + y, values, 0)
 
         return benchmark(_flatten_reduce_with_init, _TREE_1)
+
+    def test_jax_tree_structure(self, benchmark):
+        benchmark(pytree.tree_structure, _TREE_DATA_1)
+
+    def test_tv_flatten_keys(self, benchmark):
+        benchmark(flatten_keys, _TREE_1)
