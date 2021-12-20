@@ -161,13 +161,13 @@ The following 2 tables are the performance comparison result with [jax pytree](h
 |                                                     |       mapping        |  mapping(with path)   |       flatten        |      unflatten       |    flatten_values    |     flatten_keys     |
 | --------------------------------------------------- | :------------------: | :-------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
 | [treevalue](https://github.com/opendilab/treevalue) | **3.2 µs ± 85.5 ns** | **2.16 µs ± 123 ns**  | **515 ns ± 7.53 ns** | **601 ns ± 5.99 ns** | **301 ns ± 12.9 ns** | **451 ns ± 17.3 ns** |
-|                                                     |     **tree_map**     | **(Can not acheive)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
+|                                                     |     **tree_map**     | **(Not Implemented)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
 | [jax pytree](https://github.com/google/jax)         |   4.67 µs ± 184 ns   |          ---          |  1.29 µs ± 27.2 ns   |   742 ns ± 5.82 ns   |   1.29 µs ± 22 ns    |  1.27 µs ± 16.5 ns   |
 
 |                                                     |    flatten + all     |   flatten + reduce   | flatten + reduce(with init) | rise(given structure) | rise(automatic structure) |
 | --------------------------------------------------- | :------------------: | :------------------: | :-------------------------: | :-------------------: | :-----------------------: |
 | [treevalue](https://github.com/opendilab/treevalue) | **425 ns ± 9.33 ns** | **702 ns ± 5.93 ns** |    **793 ns ± 13.4 ns**     | **9.14 µs ± 129 ns**  |   **11.5 µs ± 182 ns**    |
-|                                                     |     **tree_all**     |   **tree_reduce**    | **tree_reduce(with init)**  |  **tree_transpose**   |   **(Can not acheive)**   |
+|                                                     |     **tree_all**     |   **tree_reduce**    | **tree_reduce(with init)**  |  **tree_transpose**   |   **(Not Implemented)**   |
 | [jax pytree](https://github.com/google/jax)         |   1.47 µs ± 37 ns    |  1.88 µs ± 27.2 ns   |      1.91 µs ± 47.4 ns      |    10 µs ± 117 ns     |            ---            |
 
 The following table is the performance comparison result with [tianshou Batch](https://github.com/thu-ml/tianshou).
