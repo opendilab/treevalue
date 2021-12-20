@@ -111,6 +111,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#typetrans">typetrans</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#walk">walk</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flatten">flatten</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flatten-values">flatten_values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flatten-keys">flatten_keys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#unflatten">unflatten</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mapping">mapping</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mask">mask</a></li>
@@ -640,7 +642,7 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <dt id="treevalue.tree.tree.flatten">
 <code class="sig-prename descclassname">treevalue.tree.tree.</code><code class="sig-name descname">flatten</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.flatten" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Overview:</dt><dd><p>Flatten the values in the tree.</p>
+<dt>Overview:</dt><dd><p>Flatten the key-value pairs in the tree.</p>
 </dd>
 <dt>Arguments:</dt><dd><ul class="simple">
 <li><p>tree (<a class="reference internal" href="#treevalue.tree.tree.TreeValue" title="treevalue.tree.tree.TreeValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeValue</span></code></a>): Tree object to be flatten.</p></li>
@@ -655,6 +657,46 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <p class="admonition-title">Note</p>
 <p>The result of function <a class="reference internal" href="#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">flatten()</span></code></a> is guaranteed to be ordered, which means it obey one of the tree traversal order. But please note that the order of key values under the same subtree is not guaranteed.</p>
 </div>
+</dd></dl>
+
+</div>
+<div class="section" id="flatten-values">
+<span id="apidoc-tree-tree-flatten-values"></span><h2>flatten_values<a class="headerlink" href="#flatten-values" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.tree.tree.flatten_values">
+<code class="sig-prename descclassname">treevalue.tree.tree.</code><code class="sig-name descname">flatten_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.flatten_values" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Flatten the values in the tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>tree (<a class="reference internal" href="#treevalue.tree.tree.TreeValue" title="treevalue.tree.tree.TreeValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeValue</span></code></a>): Tree object to be flatten.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>flatted (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>): Flatted tree, a list of values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="flatten-keys">
+<span id="apidoc-tree-tree-flatten-keys"></span><h2>flatten_keys<a class="headerlink" href="#flatten-keys" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.tree.tree.flatten_keys">
+<code class="sig-prename descclassname">treevalue.tree.tree.</code><code class="sig-name descname">flatten_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tree</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.flatten_keys" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Flatten the keys in the tree.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>tree (<a class="reference internal" href="#treevalue.tree.tree.TreeValue" title="treevalue.tree.tree.TreeValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeValue</span></code></a>): Tree object to be flatten.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>flatted (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>): Flatted tree, a list of paths.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1056,27 +1098,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7feb16378550 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7feb16378b10 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7feb16378550__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7feb16378550 -&gt; value__node_7feb16378550__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7feb16378550__b [label=&quot;array([[5, 6],
+	node_7fbfb1ede550 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7fbfb1edeb10 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7fbfb1ede550__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fbfb1ede550 -&gt; value__node_7fbfb1ede550__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fbfb1ede550__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7feb16378550 -&gt; value__node_7feb16378550__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7feb16378510 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7feb16378550 -&gt; node_7feb16378510 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7feb16378b10 -&gt; node_7feb16378510 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7feb16378b50 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7feb16378b10 -&gt; node_7feb16378b50 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7feb16378510__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7feb16378510 -&gt; value__node_7feb16378510__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7feb16378510__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7feb16378510 -&gt; value__node_7feb16378510__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7feb16378510__e [label=&quot;array([[1, 2],
+	node_7fbfb1ede550 -&gt; value__node_7fbfb1ede550__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1ede510 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fbfb1ede550 -&gt; node_7fbfb1ede510 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1edeb10 -&gt; node_7fbfb1ede510 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1edeb50 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fbfb1edeb10 -&gt; node_7fbfb1edeb50 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fbfb1ede510__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fbfb1ede510 -&gt; value__node_7fbfb1ede510__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fbfb1ede510__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fbfb1ede510 -&gt; value__node_7fbfb1ede510__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fbfb1ede510__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7feb16378510 -&gt; value__node_7feb16378510__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7feb16378b50 -&gt; node_7feb16378550 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7feb16378b50 -&gt; node_7feb16378510 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1ede510 -&gt; value__node_7fbfb1ede510__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1edeb50 -&gt; node_7fbfb1ede550 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fbfb1edeb50 -&gt; node_7fbfb1ede510 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div>
 </td></tr></table></div>
@@ -1309,9 +1351,7 @@ below</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../20/merge/api_doc/tree/tree.html">20/merge</a></dd>
                         <dd><a href="../../../dev/compare/api_doc/tree/tree.html">dev/compare</a></dd>
-                        <dd><a href="../../../dev/flatten/api_doc/tree/tree.html">dev/flatten</a></dd>
                         <dd><a href="tree.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
                 </dl>
