@@ -8,6 +8,7 @@ from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .modes cimport _e_tree_mode, _c_keyset, _c_load_mode, _c_check
+from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
 from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
@@ -21,7 +22,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
     cdef bool has_tree = False
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     for v in args:
         if isinstance(v, TreeStorage):
             ck_args.append((v.detach(), True))
@@ -66,7 +67,13 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
         for i, (av, at) in enumerate(ck_args):
             if at:
                 try:
-                    _l_args.append(av[k])
+                    v = av[k]
+                    nv = undelay(v)
+                    if nv is not v:
+                        v = nv
+                        av[k] = v
+
+                    _l_args.append(v)
                 except KeyError:
                     if allow_missing:
                         _l_args.append(_VALUE_IS_MISSING)
@@ -76,7 +83,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                         ))
             else:
                 if inherit:
-                    _l_args.append(av)
+                    _l_args.append(undelay(av))
                 else:
                     raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
                         type=repr(type(av).__name__), index=repr(i),
@@ -86,7 +93,13 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
         for ak, av, at in ck_kwargs:
             if at:
                 try:
-                    _d_kwargs[ak] = av[k]
+                    v = av[k]
+                    nv = undelay(v)
+                    if nv is not v:
+                        v = nv
+                        av[k] = v
+
+                    _d_kwargs[ak] = v
                 except KeyError:
                     if allow_missing:
                         _d_kwargs[ak] = _VALUE_IS_MISSING
@@ -96,7 +109,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                         ))
             else:
                 if inherit:
-                    _d_kwargs[ak] = av
+                    _d_kwargs[ak] = undelay(av)
                 else:
                     raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
                         type=repr(type(av).__name__), index=repr(ak),

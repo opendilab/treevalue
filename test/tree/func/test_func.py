@@ -3,7 +3,7 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import func_treelize, TreeValue, method_treelize, classmethod_treelize
+from treevalue.tree import func_treelize, TreeValue, method_treelize, classmethod_treelize, delayed
 
 
 # noinspection DuplicatedCode
@@ -256,4 +256,43 @@ class TestTreeFuncFunc:
                 'e': [3],
                 'f': [4],
             },
+        })
+
+    def test_delay_support(self):
+        @func_treelize(return_type=TreeValue)
+        def f(x, y, z):
+            return x + y * 2 + z * 3
+
+        t1 = TreeValue({
+            'a': 1,
+            'b': delayed(lambda x: x ** 2, 3),
+            'c': {'x': 2, 'y': delayed(lambda: 4)},
+        })
+        t2 = TreeValue({
+            'a': delayed(lambda x: x + 1, t1.a),
+            'b': delayed(lambda: t1.c.y),
+            'c': delayed(lambda: 5),
+        })
+        t3 = delayed(lambda: 6)
+
+        assert f(t1, t2, t3) == TreeValue({
+            'a': 23, 'b': 35,
+            'c': {'x': 30, 'y': 32},
+        })
+
+        t1 = TreeValue({
+            'a': 1,
+            'b': delayed(lambda x: x ** 2, 3),
+            'c': {'x': 2, 'y': delayed(lambda: 4)},
+        })
+        t2 = TreeValue({
+            'a': delayed(lambda x: x + 1, t1.a),
+            'b': delayed(lambda: t1.c.y),
+            'c': delayed(lambda: 5),
+        })
+        t3 = delayed(lambda: 6)
+
+        assert f(x=t1, y=t2, z=t3) == TreeValue({
+            'a': 23, 'b': 35,
+            'c': {'x': 30, 'y': 32},
         })
