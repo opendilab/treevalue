@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import TreeValue, mapping, union, raw, subside, rise
+from treevalue.tree import TreeValue, mapping, union, raw, subside, rise, delayed
 
 
 # noinspection DuplicatedCode
@@ -19,6 +19,11 @@ class TestTreeTreeStructural:
         assert union(t1, t) == MyTreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(1, 2) == (1, 2)
         assert union(1, 2, return_type=TreeValue) == (1, 2)
+
+        tp = MyTreeValue({'v': delayed(lambda: t)})
+        tp1 = TreeValue({'v': delayed(lambda: t1)})
+        assert union(tp, tp1) == MyTreeValue({'v': {'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}}})
+        assert union(tp1, tp) == TreeValue({'v': {'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}}})
 
     def test_subside(self):
         assert subside({'a': (1, 2), 'b': [3, 4]}) == {'a': (1, 2), 'b': [3, 4]}
@@ -203,3 +208,21 @@ class TestTreeTreeStructural:
             rise(t5, template=[object, object, object, object, object, ...])
 
         assert rise(1) == 1
+
+        t1 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
+        assert rise(t1) == {
+            'a': TreeValue({'x': [1, 2], 'y': [5, 6, 7]}),
+            'b': [
+                TreeValue({'x': 2, 'y': 7}),
+                TreeValue({'x': 3, 'y': 8}),
+            ]
+        }
+
+        t10 = MyTreeValue({'v': delayed(lambda: t1)})
+        assert rise(t10) == {
+            'a': MyTreeValue({'v': {'x': [1, 2], 'y': [5, 6, 7]}}),
+            'b': [
+                MyTreeValue({'v': {'x': 2, 'y': 7}}),
+                MyTreeValue({'v': {'x': 3, 'y': 8}}),
+            ]
+        }
