@@ -7,6 +7,7 @@ import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
+from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
 
 cdef class _ValuePathFuncWrapper:
@@ -32,9 +33,14 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
     cdef dict _d_res = {}
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef tuple curpath
     for k, v in _d_st.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            _d_st[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             _d_res[k] = _c_mapping(v, func, curpath)
@@ -81,10 +87,15 @@ cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove
     cdef dict _d_res = {}
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef tuple curpath
     cdef TreeStorage curst
     for k, v in _d_st.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            _d_st[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             curst = _c_filter_(v, func, curpath, remove_empty)
@@ -138,15 +149,24 @@ cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
     cdef dict _d_res = {}
 
     cdef str k
-    cdef object v, mv
+    cdef object v, mv, nv, nmv
     cdef tuple curpath
     cdef object curres
     for k, v in _d_st.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            _d_st[k] = v
+
         curpath = path + (k,)
         if _b_tree_mask:
             mv = _d_sm[k]
         else:
             mv = sm
+        nmv = undelay(mv)
+        if nmv is not mv:
+            mv = nmv
+            _d_sm[k] = mv
 
         if isinstance(v, TreeStorage):
             curres = _c_mask(v, mv, curpath, remove_empty)
@@ -188,10 +208,15 @@ cdef object _c_reduce(TreeStorage st, object func, tuple path, object return_typ
     cdef dict _d_kwargs = {}
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef tuple curpath
     cdef object curst
     for k, v in _d_st.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            _d_st[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             curst = _c_reduce(v, func, curpath, return_type)

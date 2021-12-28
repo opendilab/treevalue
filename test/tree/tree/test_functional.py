@@ -3,7 +3,7 @@ from operator import __mul__
 
 import pytest
 
-from treevalue.tree import TreeValue, mapping, raw, mask, filter_, reduce_
+from treevalue.tree import TreeValue, mapping, raw, mask, filter_, reduce_, delayed
 
 
 # noinspection DuplicatedCode
@@ -30,6 +30,11 @@ class TestTreeTreeFunctional:
         })
         assert tv6 == TreeValue({'a': 1.0, 'b': 2.0, 'c': {'x': 2.0, 'y': 3.0}})
 
+        tv8 = TreeValue({'v': delayed(lambda: tv1)})
+        assert mapping(tv8, lambda x: x + 2) == TreeValue({'v': {
+            'a': 3, 'b': 4, 'c': {'x': 4, 'y': 5}
+        }})
+
     def test_mask(self):
         class MyTreeValue(TreeValue):
             pass
@@ -46,6 +51,10 @@ class TestTreeTreeFunctional:
         with pytest.raises(TypeError):
             assert mask(t2, m2)
 
+        t1 = TreeValue({'v': delayed(lambda: t)})
+        m11 = TreeValue({'v': delayed(lambda: m1)})
+        assert mask(t1, m11) == TreeValue({'v': {'a': 1}})
+
     def test_filter(self):
         class MyTreeValue(TreeValue):
             pass
@@ -55,6 +64,9 @@ class TestTreeTreeFunctional:
         assert filter_(t, lambda x: x < 3) == MyTreeValue({'a': 1, 'b': 2})
         assert filter_(t, lambda x: x < 3, remove_empty=False) == MyTreeValue({'a': 1, 'b': 2, 'x': {}})
         assert filter_(t, lambda x: x % 2 == 1) == MyTreeValue({'a': 1, 'x': {'c': 3}})
+
+        t2 = TreeValue({'v': delayed(lambda: t)})
+        assert filter_(t2, lambda x: x < 3) == TreeValue({'v': {'a': 1, 'b': 2}})
 
     def test_reduce(self):
         class MyTreeValue(TreeValue):
@@ -74,3 +86,8 @@ class TestTreeTreeFunctional:
         assert reduce_(t2, lambda **kwargs: TreeValue(
             {k + k: (v ** 2 if not isinstance(v, TreeValue) else v) for k, v in kwargs.items()})) == MyTreeValue(
             {'aa': 1, 'bb': 4, 'xx': {'cc': 9, 'dd': 16}})
+
+        t1 = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        t3 = TreeValue({'v': delayed(lambda: t1), 'v2': delayed(lambda: t1)})
+        assert reduce_(t3, lambda **kwargs: sum(kwargs.values())) == 20
+        assert reduce_(t3, lambda **kwargs: reduce(__mul__, list(kwargs.values()))) == 576
