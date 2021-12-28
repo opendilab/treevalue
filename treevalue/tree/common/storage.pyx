@@ -6,11 +6,12 @@ from copy import deepcopy
 from libc.string cimport strlen
 
 from .base cimport raw, unraw
+from .delay cimport unwrap_proxy, DelayedProxy
 
 cdef inline object _keep_object(object obj):
     return obj
 
-cdef inline void _key_validate(const char*key) except *:
+cdef inline void _key_validate(const char *key) except *:
     cdef int n = strlen(key)
     if n < 1:
         raise KeyError(f'Key {repr(key)} is too short, minimum length is 1 but {n} found.')
@@ -35,8 +36,15 @@ cdef class TreeStorage:
         self.map[key] = value
 
     cpdef public object get(self, str key):
+        cdef object v, newv
         try:
-            return self.map[key]
+            v = self.map[key]
+            newv = unwrap_proxy(v)
+            if newv is not v:
+                self.map[key] = v
+                return newv
+            else:
+                return v
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
@@ -70,11 +78,16 @@ cdef class TreeStorage:
     cpdef public dict jsondumpx(self, copy_func, object need_raw):
         cdef dict result = {}
         cdef str k
-        cdef object v, obj
+        cdef object v, obj, newv
         for k, v in self.map.items():
             if isinstance(v, TreeStorage):
                 result[k] = v.jsondumpx(copy_func, need_raw)
             else:
+                newv = unwrap_proxy(v)
+                if newv is not v:
+                    v  = newv
+                    self.map[k] = v
+
                 obj = copy_func(v)
                 if need_raw:
                     obj = raw(obj)
@@ -106,7 +119,7 @@ cdef class TreeStorage:
         cdef set keys = set(self.map.keys()) | set(detached.keys())
 
         cdef str k
-        cdef object
+        cdef object v, nv
         cdef TreeStorage newv
         for k in keys:
             if k in detached:
@@ -119,6 +132,10 @@ cdef class TreeStorage:
                         newv.copy_from(v)
                         self.map[k] = newv
                 else:
+                    nv = unwrap_proxy(v)
+                    if nv is not v:
+                        v = nv
+                        detached[k] = v
                     self.map[k] = copy_func(v)
             else:
                 del self.map[k]
