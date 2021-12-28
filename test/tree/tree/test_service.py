@@ -1,6 +1,6 @@
 import pytest
 
-from treevalue.tree import jsonify, TreeValue, clone, typetrans, raw, walk
+from treevalue.tree import jsonify, TreeValue, clone, typetrans, raw, walk, delayed
 
 
 # noinspection DuplicatedCode
@@ -18,6 +18,18 @@ class TestTreeTreeService:
             'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}
         }
         assert tv2.c == {'x': 2, 'y': 3}
+
+        tv3 = TreeValue({
+            'a': delayed(lambda: tv1.a),
+            'b': delayed(lambda: tv1.b),
+            'c1': delayed(lambda: tv1.c),
+            'c2': delayed(lambda: tv2.c),
+        })
+        assert jsonify(tv3) == {
+            'a': 1, 'b': 2, 'c1': {'x': 2, 'y': 3}, 'c2': {'x': 2, 'y': 3}
+        }
+        assert tv3.c1 == TreeValue({'x': 2, 'y': 3})
+        assert tv3.c2 == {'x': 2, 'y': 3}
 
     def test_clone(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
@@ -63,6 +75,14 @@ class TestTreeTreeService:
         assert tv5.x.c is not tv3.x.c
         assert tv5.x.d is not tv3.x.d
 
+        tv6 = TreeValue({
+            'a': delayed(lambda: tv3.a),
+            'b': delayed(lambda: tv3.b),
+            'x': delayed(lambda: tv3.x),
+        })
+        tv7 = clone(tv6, lambda x: x)
+        assert tv7 == tv3
+
     def test_typetrans(self):
         class MyTreeValue(TreeValue):
             pass
@@ -96,6 +116,18 @@ class TestTreeTreeService:
             ('a',): 1,
             ('b',): 2,
             ('c',): MyTreeValue({'x': 2, 'y': 3}),
+            ('c', 'x',): 2,
+            ('c', 'y',): 3,
+        }
+
+        tv2 = MyTreeValue({
+            'a': delayed(lambda: tv1.a),
+            'b': delayed(lambda: tv1.b),
+            'c': delayed(lambda: tv1.c),
+        })
+        assert dict(walk(tv2)) == {
+            ('a',): 1,
+            ('b',): 2,
             ('c', 'x',): 2,
             ('c', 'y',): 3,
         }

@@ -9,6 +9,7 @@ import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
+from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
 
 cdef object _keep_object(object obj):
@@ -95,9 +96,14 @@ def _p_walk(TreeStorage tree, object type_, tuple path, bool include_nodes):
 
     cdef dict data = tree.detach()
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef tuple curpath
     for k, v in data.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            data[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             yield from _p_walk(v, type_, curpath, include_nodes)
