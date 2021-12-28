@@ -6,7 +6,7 @@ from copy import deepcopy
 from libc.string cimport strlen
 
 from .base cimport raw, unraw
-from .delay cimport unwrap_proxy, DelayedProxy
+from .delay cimport unwrap_proxy
 
 cdef inline object _keep_object(object obj):
     return obj
@@ -36,13 +36,13 @@ cdef class TreeStorage:
         self.map[key] = value
 
     cpdef public object get(self, str key):
-        cdef object v, newv
+        cdef object v, nv
         try:
             v = self.map[key]
-            newv = unwrap_proxy(v)
-            if newv is not v:
-                self.map[key] = v
-                return newv
+            nv = unwrap_proxy(v)
+            if nv is not v:
+                self.map[key] = nv
+                return nv
             else:
                 return v
         except KeyError:
@@ -78,16 +78,16 @@ cdef class TreeStorage:
     cpdef public dict jsondumpx(self, copy_func, object need_raw):
         cdef dict result = {}
         cdef str k
-        cdef object v, obj, newv
+        cdef object v, obj, nv
         for k, v in self.map.items():
+            nv = unwrap_proxy(v)
+            if nv is not v:
+                v = nv
+                self.map[k] = v
+
             if isinstance(v, TreeStorage):
                 result[k] = v.jsondumpx(copy_func, need_raw)
             else:
-                newv = unwrap_proxy(v)
-                if newv is not v:
-                    v  = newv
-                    self.map[k] = v
-
                 obj = copy_func(v)
                 if need_raw:
                     obj = raw(obj)
@@ -124,6 +124,11 @@ cdef class TreeStorage:
         for k in keys:
             if k in detached:
                 v = detached[k]
+                nv = unwrap_proxy(v)
+                if nv is not v:
+                    v = nv
+                    detached[k] = v
+
                 if isinstance(v, TreeStorage):
                     if k in self.map and isinstance(self.map[k], TreeStorage):
                         self.map[k].copy_from(v)
@@ -132,10 +137,6 @@ cdef class TreeStorage:
                         newv.copy_from(v)
                         self.map[k] = newv
                 else:
-                    nv = unwrap_proxy(v)
-                    if nv is not v:
-                        v = nv
-                        detached[k] = v
                     self.map[k] = copy_func(v)
             else:
                 del self.map[k]
@@ -162,12 +163,22 @@ cdef class TreeStorage:
         cdef list other_keys = sorted(other.detach().keys())
 
         cdef str key
-        cdef object self_v
-        cdef object other_v
+        cdef object self_v, self_nv
+        cdef object other_v, other_nv
         if self_keys == other_keys:
             for key in self_keys:
                 self_v = self.map[key]
+                self_nv = unwrap_proxy(self_v)
+                if self_nv is not self_v:
+                    self_v = self_nv
+                    self.map[key] = self_v
+
                 other_v = other_map[key]
+                other_nv = unwrap_proxy(other_v)
+                if other_nv is not other_v:
+                    other_v = other_nv
+                    other_map[key] = other_v
+
                 if self_v != other_v:
                     return False
             return True
@@ -187,10 +198,26 @@ cdef class TreeStorage:
         return self.map.keys()
 
     def values(self):
-        return self.map.values()
+        cdef str k
+        cdef object v, nv
+        for k, v in self.map.items():
+            nv = unwrap_proxy(v)
+            if nv is not v:
+                v = nv
+                self.map[k] = v
+
+            yield v
 
     def items(self):
-        return self.map.items()
+        cdef str k
+        cdef object v, nv
+        for k, v in self.map.items():
+            nv = unwrap_proxy(v)
+            if nv is not v:
+                v = nv
+                self.map[k] = v
+
+            yield k, v
 
 cpdef object create_storage(dict value):
     cdef dict _map = {}

@@ -3,6 +3,8 @@
 
 import cython
 
+from .base cimport unraw
+
 cdef class DelayedProxy:
     cpdef object value(self):
         raise NotImplementedError  # pragma: no cover
@@ -58,7 +60,8 @@ def delayed_partial(func, *args, **kwargs):
 
 @cython.binding(True)
 cpdef inline object unwrap_proxy(object proxy):
-    if isinstance(proxy, DelayedProxy):
-        return unwrap_proxy(proxy.value())
-    else:
-        return proxy
+    cdef object p = proxy
+    while isinstance(p, DelayedProxy):
+        p = p.value()
+
+    return unraw(p)

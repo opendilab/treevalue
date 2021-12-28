@@ -2,7 +2,7 @@ import pickle
 
 import pytest
 
-from treevalue.tree.common import create_storage, raw, TreeStorage
+from treevalue.tree.common import create_storage, raw, TreeStorage, delayed_partial
 
 
 # noinspection PyArgumentList,DuplicatedCode
@@ -22,6 +22,52 @@ class TestTreeStorage:
 
         with pytest.raises(KeyError):
             _ = t.get('fff')
+
+        cnt1, cnt2, cnt3 = 0, 0, 0
+
+        def f1():
+            nonlocal cnt1
+            cnt1 += 1
+            return 2
+
+        def f2(x, y):
+            nonlocal cnt2
+            cnt2 += 1
+            return {'x': x, 'y': y}
+
+        def f3(x, y):
+            nonlocal cnt3
+            cnt3 += 1
+            return create_storage({'x': x, 'y': raw(y)})
+
+        t2 = create_storage({
+            'a': 1,
+            'b': delayed_partial(f1),
+            'c': delayed_partial(f2, delayed_partial(f1), 3),
+            'd': delayed_partial(f3, 3, delayed_partial(f2, 3, 4))
+        })
+
+        assert t2.get('a') == 1
+
+        assert cnt1 == 0
+        assert t2.get('b') == 2
+        assert cnt1 == 1
+        assert t2.get('b') == 2
+        assert cnt1 == 1
+
+        assert (cnt1, cnt2) == (1, 0)
+        assert t2.get('c') == {'x': 2, 'y': 3}
+        assert (cnt1, cnt2) == (2, 1)
+        assert t2.get('c') == {'x': 2, 'y': 3}
+        assert (cnt1, cnt2) == (2, 1)
+
+        assert (cnt1, cnt2, cnt3) == (2, 1, 0)
+        assert t2.get('d').get('x') == 3
+        assert t2.get('d').get('y') == {'x': 3, 'y': 4}
+        assert (cnt1, cnt2, cnt3) == (2, 2, 1)
+        assert t2.get('d').get('x') == 3
+        assert t2.get('d').get('y') == {'x': 3, 'y': 4}
+        assert (cnt1, cnt2, cnt3) == (2, 2, 1)
 
     def test_get_or_default(self):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
@@ -116,6 +162,19 @@ class TestTreeStorage:
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
 
         _dumped = t.dump()
+        assert _dumped['a'] == 1
+        assert _dumped['b'] == 2
+        assert _dumped['c'].value() is h1
+        assert _dumped['d']['x'] == 3
+        assert _dumped['d']['y'] == 4
+
+        t2 = create_storage({
+            'a': 1,
+            'b': delayed_partial(lambda x: x + 1, 1),
+            'c': delayed_partial(lambda: h1),
+            'd': delayed_partial(lambda: create_storage(h2)),
+        })
+        _dumped = t2.dump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
         assert _dumped['c'].value() is h1
@@ -232,6 +291,19 @@ class TestTreeStorage:
         assert t1.get('f').get('y') == 4
         assert t1.get('f') is not t.get('f')
 
+        t2 = create_storage({
+            'a': delayed_partial(lambda: 11),
+            'b': delayed_partial(lambda: 22),
+            'c': delayed_partial(lambda: {'x': 3, 'y': 5}),
+            'd': delayed_partial(lambda: create_storage({'x': 3, 'y': 7})),
+        })
+        t1.copy_from(t2)
+        assert t1.get('a') == 11
+        assert t1.get('b') == 22
+        assert t1.get('c') == {'x': 3, 'y': 5}
+        assert t1.get('d').get('x') == 3
+        assert t1.get('d').get('y') == 7
+
     def test_deepcopy_from(self):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
@@ -272,6 +344,21 @@ class TestTreeStorage:
         assert t == t
         assert t == t1
         assert t != t2
+        assert t != None
+
+        t3 = create_storage({
+            'a': delayed_partial(lambda: 11),
+            'b': delayed_partial(lambda: 22),
+            'c': delayed_partial(lambda: {'x': 3, 'y': 5}),
+            'd': delayed_partial(lambda: create_storage({'x': 3, 'y': 7})),
+        })
+        t4 = create_storage({
+            'a': delayed_partial(lambda: t3.get('a')),
+            'b': delayed_partial(lambda: t3.get('b')),
+            'c': delayed_partial(lambda: t3.get('c')),
+            'd': delayed_partial(lambda: t3.get('d')),
+        })
+        assert t3 == t4
 
     def test_keys(self):
         h1 = {'x': 3, 'y': 4}
@@ -286,15 +373,40 @@ class TestTreeStorage:
         t = create_storage({'a': 1, 'b': 2, 'd': h1})
 
         assert set(t.get('d').values()) == {3, 4}
-        assert len(t.values()) == 3
+        assert len(list(t.values())) == 3
         assert 1 in t.values()
         assert 2 in t.values()
+
+        t1 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: t.get('b')),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+        assert set(t1.get('d').values()) == {3, 4}
+        assert len(list(t1.values())) == 3
+        assert 1 in t1.values()
+        assert 2 in t1.values()
 
     def test_items(self):
         h1 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'd': raw(h1)})
 
         for k, v in t.items():
+            if k == 'a':
+                assert v == 1
+            elif k == 'b':
+                assert v == 2
+            elif k == 'd':
+                assert v == h1
+            else:
+                pytest.fail('Should not reach here.')
+
+        t1 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: t.get('b')),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+        for k, v in t1.items():
             if k == 'a':
                 assert v == 1
             elif k == 'b':
