@@ -49,7 +49,15 @@ cdef class TreeStorage:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
     cpdef public object get_or_default(self, str key, object default):
-        return self.map.get(key, default)
+        cdef object v, nv
+        v = self.map.get(key, default)
+        nv = unwrap_proxy(v)
+        if nv is not v:
+            v = nv
+            if key in self.map:
+                self.map[key] = v
+
+        return v
 
     cpdef public void del_(self, str key) except *:
         try:
@@ -189,7 +197,7 @@ cdef class TreeStorage:
         cdef str k
         cdef object v
         cdef list _items = []
-        for k, v in sorted(self.map.items(), key=lambda x: x[0]):
+        for k, v in sorted(self.items(), key=lambda x: x[0]):
             _items.append((k, v))
 
         return hash(tuple(_items))

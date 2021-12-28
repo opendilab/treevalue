@@ -5,7 +5,7 @@ import pytest
 from treevalue.tree.common import create_storage, raw, TreeStorage, delayed_partial
 
 
-# noinspection PyArgumentList,DuplicatedCode
+# noinspection PyArgumentList,DuplicatedCode,PyTypeChecker
 @pytest.mark.unittest
 class TestTreeStorage:
     def test_init(self):
@@ -79,6 +79,23 @@ class TestTreeStorage:
         assert t.get_or_default('d', 233).get_or_default('y', 233) == 4
 
         assert t.get_or_default('fff', 233) == 233
+
+        t1 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: t.get('b')),
+            'c': delayed_partial(lambda: t.get('c')),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+        assert t1.get_or_default('a', 233) == 1
+        assert t1.get_or_default('b', 233) == 2
+        assert t1.get_or_default('c', 233) == {'x': 3, 'y': 4}
+        assert isinstance(t1.get_or_default('d', 233), TreeStorage)
+        assert t1.get_or_default('d', 233).get_or_default('x', 233) == 3
+        assert t1.get_or_default('d', 233).get_or_default('y', 233) == 4
+
+        assert t1.get_or_default('fff', 233) == 233
+        assert t1.get_or_default('fff', delayed_partial(lambda: 2345)) == 2345
+        assert not t1.contains('fff')
 
     def test_set(self):
         t = create_storage({})
@@ -415,3 +432,24 @@ class TestTreeStorage:
                 assert v == h1
             else:
                 pytest.fail('Should not reach here.')
+
+    def test_hash(self):
+        h = {}
+
+        h1 = {'x': 3, 'y': 4}
+        t = create_storage({'a': 1, 'b': 2, 'd': h1})
+        t1 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: t.get('b')),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+        t2 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: 3),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+
+        h[t] = 1
+        assert t1 in h
+        assert h[t1] == 1
+        assert t2 not in h
