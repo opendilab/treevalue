@@ -6,6 +6,7 @@
 import cython
 
 from .tree cimport TreeValue
+from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
 
 cdef void _c_flatten(TreeStorage st, tuple path, list res) except *:
@@ -13,8 +14,13 @@ cdef void _c_flatten(TreeStorage st, tuple path, list res) except *:
     cdef tuple curpath
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     for k, v in data.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            data[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             _c_flatten(v, curpath, res)
@@ -47,8 +53,13 @@ cdef void _c_flatten_values(TreeStorage st, list res) except *:
     cdef dict data = st.detach()
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     for k, v in data.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            data[k] = v
+
         if isinstance(v, TreeStorage):
             _c_flatten_values(v, res)
         else:
@@ -75,8 +86,13 @@ cdef void _c_flatten_keys(TreeStorage st, tuple path, list res) except *:
     cdef tuple curpath
 
     cdef str k
-    cdef object v
+    cdef object v, nv
     for k, v in data.items():
+        nv = undelay(v)
+        if nv is not v:
+            v = nv
+            data[k] = v
+
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             _c_flatten_keys(v, curpath, res)
