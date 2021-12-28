@@ -7,7 +7,7 @@ from libc.string cimport strlen
 from libcpp cimport bool
 
 from .base cimport raw, unraw
-from .delay cimport unwrap_proxy
+from .delay cimport undelay
 
 cdef inline object _keep_object(object obj):
     return obj
@@ -40,7 +40,7 @@ cdef class TreeStorage:
         cdef object v, nv
         try:
             v = self.map[key]
-            nv = unwrap_proxy(v)
+            nv = undelay(v)
             if nv is not v:
                 self.map[key] = nv
                 return nv
@@ -52,7 +52,7 @@ cdef class TreeStorage:
     cpdef public object get_or_default(self, str key, object default):
         cdef object v, nv
         v = self.map.get(key, default)
-        nv = unwrap_proxy(v)
+        nv = undelay(v)
         if nv is not v:
             v = nv
             if key in self.map:
@@ -90,7 +90,7 @@ cdef class TreeStorage:
         cdef object v, obj, nv
         for k, v in self.map.items():
             if not allow_delayed:
-                nv = unwrap_proxy(v)
+                nv = undelay(v)
                 if nv is not v:
                     v = nv
                     self.map[k] = v
@@ -134,7 +134,7 @@ cdef class TreeStorage:
             if k in detached:
                 v = detached[k]
                 if not allow_delayed:
-                    nv = unwrap_proxy(v)
+                    nv = undelay(v)
                     if nv is not v:
                         v = nv
                         detached[k] = v
@@ -181,13 +181,13 @@ cdef class TreeStorage:
         if self_keys == other_keys:
             for key in self_keys:
                 self_v = self.map[key]
-                self_nv = unwrap_proxy(self_v)
+                self_nv = undelay(self_v)
                 if self_nv is not self_v:
                     self_v = self_nv
                     self.map[key] = self_v
 
                 other_v = other_map[key]
-                other_nv = unwrap_proxy(other_v)
+                other_nv = undelay(other_v)
                 if other_nv is not other_v:
                     other_v = other_nv
                     other_map[key] = other_v
@@ -214,7 +214,7 @@ cdef class TreeStorage:
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
-            nv = unwrap_proxy(v)
+            nv = undelay(v)
             if nv is not v:
                 v = nv
                 self.map[k] = v
@@ -225,7 +225,7 @@ cdef class TreeStorage:
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
-            nv = unwrap_proxy(v)
+            nv = undelay(v)
             if nv is not v:
                 v = nv
                 self.map[k] = v

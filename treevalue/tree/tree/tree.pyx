@@ -7,6 +7,7 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
+from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage
 from ...utils import format_tree
 
@@ -385,7 +386,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
     cdef list children = []
 
     cdef str k, _t_prefix
-    cdef object v
+    cdef object v, nv
     cdef dict data
     cdef tuple curpath
     if nid in id_pool:
@@ -395,6 +396,11 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
         id_pool[nid] = path
         data = st.detach()
         for k, v in sorted(data.items()):
+            nv = undelay(v)
+            if nv is not v:
+                v = nv
+                data[k] = v
+
             curpath = path + (k,)
             _t_prefix = f'{k} --> '
             if isinstance(v, TreeStorage):
@@ -404,3 +410,35 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
 
     self_repr = _prefix_fix(self_repr, prefix)
     return self_repr, children
+
+cdef class DetachedDelayedProxy(DelayedProxy):
+    def __init__(self, DelayedProxy proxy):
+        self.proxy = proxy
+        self.calculated = False
+        self.val = None
+
+    cpdef object value(self):
+        if not self.calculated:
+            self.val = undelay(self.proxy, False)
+            self.calculated = True
+
+        return self.val
+
+    cpdef object fvalue(self):
+        cdef object v = self.value()
+        if isinstance(v, TreeValue):
+            v = v._detach()
+        return v
+
+@cython.binding(True)
+def delayed(func, *args, **kwargs):
+    r"""
+    Overview:
+        Use delayed function in treevalue.
+
+    Arguments:
+        - func: Delayed function.
+        - args: Positional arguments.
+        - kwargs: Key-word arguments.
+    """
+    return DetachedDelayedProxy(_c_delayed_partial(func, args, kwargs))

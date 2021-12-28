@@ -5,6 +5,7 @@ from libcpp cimport bool
 
 cdef class DelayedProxy:
     cpdef object value(self)
+    cpdef object fvalue(self)
 
 cdef class DelayedValueProxy(DelayedProxy):
     cdef readonly object func
@@ -22,4 +23,5 @@ cdef class DelayedFuncProxy(DelayedProxy):
 
     cpdef object value(self)
 
-cpdef object unwrap_proxy(object proxy)
+cdef DelayedProxy _c_delayed_partial(func, args, kwargs)
+cpdef object undelay(object p, bool is_final= *)

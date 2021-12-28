@@ -2,12 +2,14 @@
 # cython:language_level=3
 
 import cython
-
-from .base cimport unraw
+from libcpp cimport bool
 
 cdef class DelayedProxy:
     cpdef object value(self):
         raise NotImplementedError  # pragma: no cover
+
+    cpdef object fvalue(self):
+        return self.value()
 
 cdef class DelayedValueProxy(DelayedProxy):
     def __cinit__(self, object func):
@@ -18,7 +20,7 @@ cdef class DelayedValueProxy(DelayedProxy):
     cpdef object value(self):
         cdef object f
         if not self.calculated:
-            f = unwrap_proxy(self.func)
+            f = undelay(self.func, False)
             self.val = f()
             self.calculated = True
 
@@ -39,29 +41,34 @@ cdef class DelayedFuncProxy(DelayedProxy):
         cdef object item
         cdef object f
         if not self.calculated:
-            f = unwrap_proxy(self.func)
             pas = []
             pks = {}
+            f = undelay(self.func, False)
             for item in self.args:
-                pas.append(unwrap_proxy(item))
+                pas.append(undelay(item, False))
             for key, item in self.kwargs.items():
-                pks[key] = unwrap_proxy(item)
+                pks[key] = undelay(item, False)
 
             self.val = f(*pas, **pks)
             self.calculated = True
 
         return self.val
 
-def delayed_partial(func, *args, **kwargs):
+cdef inline DelayedProxy _c_delayed_partial(func, args, kwargs):
     if args or kwargs:
         return DelayedFuncProxy(func, args, kwargs)
     else:
         return DelayedValueProxy(func)
 
-@cython.binding(True)
-cpdef inline object unwrap_proxy(object proxy):
-    cdef object p = proxy
-    while isinstance(p, DelayedProxy):
-        p = p.value()
+def delayed_partial(func, *args, **kwargs):
+    return _c_delayed_partial(func, args, kwargs)
 
-    return unraw(p)
+@cython.binding(True)
+cpdef inline object undelay(object p, bool is_final=True):
+    if isinstance(p, DelayedProxy):
+        if is_final:
+            return p.fvalue()
+        else:
+            return p.value()
+    else:
+        return p
