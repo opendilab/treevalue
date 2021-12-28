@@ -253,7 +253,7 @@ class TestTreeStorage:
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
 
-        t1 = t.deepcopyx(lambda x: -x if isinstance(x, int) else {'holy': 'shit'})
+        t1 = t.deepcopyx(lambda x: -x if isinstance(x, int) else {'holy': 'shit'}, False)
         assert t1.get('a') == -1
         assert t1.get('b') == -2
         assert t1.get('c') == {'holy': 'shit'}
@@ -341,6 +341,19 @@ class TestTreeStorage:
         assert t1.get('f').get('x') == 3
         assert t1.get('f').get('y') == 4
         assert t1.get('f') is not t.get('f')
+
+        t2 = create_storage({
+            'a': delayed_partial(lambda: 11),
+            'b': delayed_partial(lambda: 22),
+            'c': delayed_partial(lambda: {'x': 3, 'y': 5}),
+            'd': delayed_partial(lambda: create_storage({'x': 3, 'y': 7})),
+        })
+        t1.deepcopy_from(t2)
+        assert t1.get('a') == 11
+        assert t1.get('b') == 22
+        assert t1.get('c') == {'x': 3, 'y': 5}
+        assert t1.get('d').get('x') == 3
+        assert t1.get('d').get('y') == 7
 
     def test_repr(self):
         h1 = {'x': 3, 'y': 4}

@@ -29,7 +29,7 @@ cpdef object jsonify(TreeValue val):
     Example:
         >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
     """
-    return val._detach().jsondumpx(_keep_object, False)
+    return val._detach().jsondumpx(_keep_object, False, False)
 
 @cython.binding(True)
 cpdef TreeValue clone(TreeValue t, object copy_value=None):
@@ -50,10 +50,18 @@ cpdef TreeValue clone(TreeValue t, object copy_value=None):
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
+    cdef bool need_copy
     if not callable(copy_value):
-        copy_value = copy.deepcopy if copy_value else _keep_object
+        if copy_value:
+            need_copy = True
+            copy_value = copy.deepcopy
+        else:
+            need_copy = False
+            copy_value = _keep_object
+    else:
+        need_copy = True
 
-    return type(t)(t._detach().deepcopyx(copy_value))
+    return type(t)(t._detach().deepcopyx(copy_value, not need_copy))
 
 @cython.binding(True)
 cpdef TreeValue typetrans(TreeValue t, object return_type):

@@ -1,6 +1,8 @@
 # distutils:language=c++
 # cython:language_level=3
 
+from libcpp cimport bool
+
 ctypedef unsigned char boolean
 ctypedef unsigned int uint
 
@@ -19,13 +21,13 @@ cdef class TreeStorage:
     cpdef public dict dump(self)
     cpdef public dict deepdump(self)
     cpdef public dict deepdumpx(self, copy_func)
-    cpdef public dict jsondumpx(self, copy_func, object need_raw)
+    cpdef public dict jsondumpx(self, copy_func, bool need_raw, bool allow_delayed)
     cpdef public TreeStorage copy(self)
     cpdef public TreeStorage deepcopy(self)
-    cpdef public TreeStorage deepcopyx(self, copy_func)
+    cpdef public TreeStorage deepcopyx(self, copy_func, bool allow_delayed)
     cpdef public dict detach(self)
     cpdef public void copy_from(self, TreeStorage ts)
     cpdef public void deepcopy_from(self, TreeStorage ts)
-    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func)
+    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func, bool allow_delayed)
 
 cpdef public object create_storage(dict value)

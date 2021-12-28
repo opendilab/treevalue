@@ -4,6 +4,7 @@
 from copy import deepcopy
 
 from libc.string cimport strlen
+from libcpp cimport bool
 
 from .base cimport raw, unraw
 from .delay cimport unwrap_proxy
@@ -81,22 +82,23 @@ cdef class TreeStorage:
         return self.deepdumpx(deepcopy)
 
     cpdef public dict deepdumpx(self, copy_func):
-        return self.jsondumpx(copy_func, True)
+        return self.jsondumpx(copy_func, True, False)
 
-    cpdef public dict jsondumpx(self, copy_func, object need_raw):
+    cpdef public dict jsondumpx(self, copy_func, bool need_raw, bool allow_delayed):
         cdef dict result = {}
         cdef str k
         cdef object v, obj, nv
         for k, v in self.map.items():
-            nv = unwrap_proxy(v)
-            if nv is not v:
-                v = nv
-                self.map[k] = v
+            if not allow_delayed:
+                nv = unwrap_proxy(v)
+                if nv is not v:
+                    v = nv
+                    self.map[k] = v
 
             if isinstance(v, TreeStorage):
-                result[k] = v.jsondumpx(copy_func, need_raw)
+                result[k] = v.jsondumpx(copy_func, need_raw, allow_delayed)
             else:
-                obj = copy_func(v)
+                obj = copy_func(v) if not allow_delayed else v
                 if need_raw:
                     obj = raw(obj)
                 result[k] = obj
@@ -104,25 +106,24 @@ cdef class TreeStorage:
         return result
 
     cpdef public TreeStorage copy(self):
-        return self.deepcopyx(_keep_object)
+        return self.deepcopyx(_keep_object, True)
 
     cpdef public TreeStorage deepcopy(self):
-        return self.deepcopyx(deepcopy)
+        return self.deepcopyx(deepcopy, False)
 
-    cpdef public TreeStorage deepcopyx(self, copy_func):
-        cdef type cls = type(self)
-        return create_storage(self.deepdumpx(copy_func))
+    cpdef public TreeStorage deepcopyx(self, copy_func, bool allow_delayed):
+        return create_storage(self.jsondumpx(copy_func, True, allow_delayed))
 
     cpdef public dict detach(self):
         return self.map
 
     cpdef public void copy_from(self, TreeStorage ts):
-        self.deepcopyx_from(ts, _keep_object)
+        self.deepcopyx_from(ts, _keep_object, True)
 
     cpdef public void deepcopy_from(self, TreeStorage ts):
-        self.deepcopyx_from(ts, deepcopy)
+        self.deepcopyx_from(ts, deepcopy, False)
 
-    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func):
+    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func, bool allow_delayed):
         cdef dict detached = ts.detach()
         cdef set keys = set(self.map.keys()) | set(detached.keys())
 
@@ -132,20 +133,24 @@ cdef class TreeStorage:
         for k in keys:
             if k in detached:
                 v = detached[k]
-                nv = unwrap_proxy(v)
-                if nv is not v:
-                    v = nv
-                    detached[k] = v
+                if not allow_delayed:
+                    nv = unwrap_proxy(v)
+                    if nv is not v:
+                        v = nv
+                        detached[k] = v
 
                 if isinstance(v, TreeStorage):
                     if k in self.map and isinstance(self.map[k], TreeStorage):
-                        self.map[k].copy_from(v)
+                        self.map[k].deepcopyx_from(v, copy_func, allow_delayed)
                     else:
                         newv = TreeStorage({})
-                        newv.copy_from(v)
+                        newv.deepcopyx_from(v, copy_func, allow_delayed)
                         self.map[k] = newv
                 else:
-                    self.map[k] = copy_func(v)
+                    if not allow_delayed:
+                        self.map[k] = copy_func(v)
+                    else:
+                        self.map[k] = v
             else:
                 del self.map[k]
 
