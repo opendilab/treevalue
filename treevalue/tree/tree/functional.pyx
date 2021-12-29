@@ -30,7 +30,7 @@ cdef class _ValuePathFuncWrapper:
             except TypeError:
                 self.index -= 1
 
-def _p_delayed_mapping(object so, object func, tuple path, bool delayed):
+cdef object _c_delayed_mapping(object so, object func, tuple path, bool delayed):
     cdef object nso = undelay(so)
     if isinstance(nso, TreeValue):
         nso = nso._detach()
@@ -59,7 +59,7 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path, bool delaye
             _d_res[k] = _c_mapping(v, func, curpath, delayed)
         else:
             if delayed:
-                _d_res[k] = delayed_partial(_p_delayed_mapping, v, func, curpath, delayed)
+                _d_res[k] = delayed_partial(_c_delayed_mapping, v, func, curpath, delayed)
             else:
                 _d_res[k] = func(v, curpath)
 
