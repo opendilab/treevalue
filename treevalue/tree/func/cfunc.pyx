@@ -122,8 +122,8 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
     return TreeStorage(_d_res)
 
 def _w_subside_func(object value, bool dict_=True, bool list_=True, bool tuple_=True, bool inherit=True,
-                    object missing=MISSING_NOT_ALLOW):
-    return _c_subside(value, dict_, list_, tuple_, inherit, missing)[0]
+                    object mode='strict', object missing=MISSING_NOT_ALLOW):
+    return _c_subside(value, dict_, list_, tuple_, inherit, mode, missing)[0]
 
 def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True, object template=None):
     return _c_rise(tree, dict_, list_, tuple_, template)

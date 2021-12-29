@@ -16,6 +16,8 @@ class TestTreeTreeStructural:
 
         t1 = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         assert union(t, t1) == TreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
+        assert union(t, t1, return_type=MyTreeValue) == MyTreeValue(
+            {'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(t1, t) == MyTreeValue({'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}})
         assert union(1, 2) == (1, 2)
         assert union(1, 2, return_type=TreeValue) == (1, 2)
@@ -24,6 +26,18 @@ class TestTreeTreeStructural:
         tp1 = TreeValue({'v': delayed(lambda: t1)})
         assert union(tp, tp1) == MyTreeValue({'v': {'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}}})
         assert union(tp1, tp) == TreeValue({'v': {'a': (1, 1), 'b': (2, 2), 'x': {'c': (3, 3), 'd': (4, 4)}}})
+
+        t = MyTreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
+        t1 = TreeValue({
+            'a': delayed(lambda: t.x.c),
+            'x': {
+                'c': delayed(lambda: t.a),
+                'd': delayed(lambda: t.b),
+            }
+        })
+        assert union(t, t1, mode='outer', missing=None) == MyTreeValue({
+            'a': (1, 3), 'b': (2, None), 'x': {'c': (3, 1), 'd': (None, 2)},
+        })
 
     def test_subside(self):
         assert subside({'a': (1, 2), 'b': [3, 4]}) == {'a': (1, 2), 'b': [3, 4]}

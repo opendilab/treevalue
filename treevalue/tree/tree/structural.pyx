@@ -80,13 +80,11 @@ cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
         else:
             return (object, None), (value,), ()
 
-STRICT = _c_load_mode('STRICT')
-
 cdef inline void _c_subside_missing():
     pass
 
 cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit,
-                       object missing):
+                       object mode, object missing):
     cdef object builder, _i_args, _i_types
     builder, _i_args, _i_types = _c_subside_build(value, dict_, list_, tuple_)
     cdef list args = list(_i_args)
@@ -96,14 +94,15 @@ cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool i
     allow_missing, missing_func = _c_missing_process(missing)
 
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
-                                STRICT, inherit, allow_missing, missing_func), _i_types
+                                _c_load_mode(mode), inherit, allow_missing, missing_func), _i_types
 
 cdef inline object _c_subside_keep_type(object t):
     return t
 
 @cython.binding(True)
 cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_=True,
-                     object return_type=None, bool inherit=True, object missing=MISSING_NOT_ALLOW):
+                     object return_type=None, bool inherit=True,
+                     object mode='strict', object missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Drift down the structures (list, tuple, dict) down to the tree's value.
@@ -117,6 +116,9 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
             will be auto detected when there is exactly one tree value type in this original value, \
             otherwise the default will be `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
 
     Returns:
         - return (:obj:`_TreeValue`): Subsided tree value.
@@ -141,7 +143,7 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
         >>> #}), all structures above the tree values are subsided to the bottom of the tree.
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit, missing)
+    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit, mode, missing)
 
     cdef object type_
     cdef set types
@@ -159,7 +161,8 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
     return type_(result)
 
 @cython.binding(True)
-def union(*trees, object return_type=None, bool inherit=True, object missing=MISSING_NOT_ALLOW):
+def union(*trees, object return_type=None, bool inherit=True,
+          object mode='strict', object missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Union tree values together.
@@ -168,6 +171,9 @@ def union(*trees, object return_type=None, bool inherit=True, object missing=MIS
         - trees (:obj:`_TreeValue`): Tree value objects.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
 
     Returns:
         - result (:obj:`TreeValue`): Unionised tree value.
@@ -178,7 +184,7 @@ def union(*trees, object return_type=None, bool inherit=True, object missing=MIS
         >>> union(t, tx)  # TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit, missing)
+    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit, mode, missing)
 
     cdef object type_
     cdef list types
