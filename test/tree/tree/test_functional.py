@@ -35,6 +35,54 @@ class TestTreeTreeFunctional:
             'a': 3, 'b': 4, 'c': {'x': 4, 'y': 5}
         }})
 
+    def test_mapping_delayed(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        tv8 = TreeValue({'v': delayed(lambda: tv1)})
+        assert mapping(tv8, lambda x: x + 2, delayed=True) == TreeValue({'v': {
+            'a': 3, 'b': 4, 'c': {'x': 4, 'y': 5}
+        }})
+
+        cnt_f, cnt_v = 0, 0
+
+        def f(x):
+            nonlocal cnt_f
+            cnt_f += 1
+            return TreeValue({
+                'a': x * 2, 'b': x + 1, 'c': x ** 2,
+            })
+
+        def v():
+            nonlocal cnt_v
+            cnt_v += 1
+            return 3
+
+        t = TreeValue({
+            'a': 1, 'b': delayed(f, 1),
+            'x': {'c': delayed(v), 'd': 4, },
+            'y': delayed(f, 3),
+        })
+        t1 = mapping(t, lambda x: (x + 3) ** 2, delayed=True)
+        assert cnt_v == 0
+        assert cnt_f == 0
+
+        assert t1 == TreeValue({
+            'a': 16,
+            'b': {'a': 25, 'b': 25, 'c': 16, },
+            'x': {'c': 36, 'd': 49, },
+            'y': {'a': 81, 'b': 49, 'c': 144, },
+        })
+        assert cnt_v == 1
+        assert cnt_f == 2
+
+        assert t == TreeValue({
+            'a': 1,
+            'b': {'a': 2, 'b': 2, 'c': 1, },
+            'x': {'c': 3, 'd': 4, },
+            'y': {'a': 6, 'b': 4, 'c': 9, },
+        })
+        assert cnt_v == 1
+        assert cnt_f == 2
+
     def test_mask(self):
         class MyTreeValue(TreeValue):
             pass

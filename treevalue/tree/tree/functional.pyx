@@ -7,7 +7,9 @@ import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
+from .tree import delayed as _func_delayed
 from ..common.delay cimport undelay
+from ..common.delay import delayed_partial
 from ..common.storage cimport TreeStorage
 
 cdef class _ValuePathFuncWrapper:
@@ -28,7 +30,17 @@ cdef class _ValuePathFuncWrapper:
             except TypeError:
                 self.index -= 1
 
-cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
+def _p_delayed_mapping(object so, object func, tuple path, bool delayed):
+    cdef object nso = undelay(so)
+    if isinstance(nso, TreeValue):
+        nso = nso._detach()
+
+    if isinstance(nso, TreeStorage):
+        return _c_mapping(nso, func, path, delayed)
+    else:
+        return func(nso, path)
+
+cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path, bool delayed):
     cdef dict _d_st = st.detach()
     cdef dict _d_res = {}
 
@@ -36,21 +48,25 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
     cdef object v, nv
     cdef tuple curpath
     for k, v in _d_st.items():
-        nv = undelay(v)
-        if nv is not v:
-            v = nv
-            _d_st[k] = v
+        if not delayed:
+            nv = undelay(v)
+            if nv is not v:
+                v = nv
+                _d_st[k] = v
 
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
-            _d_res[k] = _c_mapping(v, func, curpath)
+            _d_res[k] = _c_mapping(v, func, curpath, delayed)
         else:
-            _d_res[k] = func(v, curpath)
+            if delayed:
+                _d_res[k] = delayed_partial(_p_delayed_mapping, v, func, curpath, delayed)
+            else:
+                _d_res[k] = func(v, curpath)
 
     return TreeStorage(_d_res)
 
 @cython.binding(True)
-cpdef TreeValue mapping(TreeValue tree, object func):
+cpdef TreeValue mapping(TreeValue tree, object func, bool delayed=False):
     """
     Overview:
         Do mapping on every value in this tree.
@@ -80,7 +96,7 @@ cpdef TreeValue mapping(TreeValue tree, object func):
         >>> mapping(t, lambda: 1)        # TreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
         >>> mapping(t, lambda x, p: p)   # TreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
     """
-    return type(tree)(_c_mapping(tree._detach(), _ValuePathFuncWrapper(func), ()))
+    return type(tree)(_c_mapping(tree._detach(), _ValuePathFuncWrapper(func), (), delayed))
 
 cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove_empty):
     cdef dict _d_st = st.detach()

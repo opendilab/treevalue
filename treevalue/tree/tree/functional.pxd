@@ -12,8 +12,8 @@ cdef class _ValuePathFuncWrapper:
     cdef readonly object func
     cdef int index
 
-cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path)
-cpdef TreeValue mapping(TreeValue tree, object func)
+cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path, bool delayed)
+cpdef TreeValue mapping(TreeValue tree, object func, bool delayed= *)
 cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove_empty)
 cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty= *)
 cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty)
