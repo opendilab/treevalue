@@ -159,7 +159,7 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
 
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
-cdef _c_common_value(object item):
+cdef object _c_common_value(object item):
     return item
 
 # build-time function
