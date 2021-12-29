@@ -6,13 +6,16 @@
 from itertools import chain
 
 import cython
+from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .tree cimport TreeValue
 from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
-from ..func.cfunc cimport _c_func_treelize_run
+from ..func.cfunc cimport _c_func_treelize_run, _c_missing_process
 from ..func.modes cimport _c_load_mode
+
+MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 cdef object _c_subside_process(tuple value, object it):
     cdef type type_
@@ -82,20 +85,25 @@ STRICT = _c_load_mode('STRICT')
 cdef inline void _c_subside_missing():
     pass
 
-cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit):
+cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit,
+                       object missing):
     cdef object builder, _i_args, _i_types
     builder, _i_args, _i_types = _c_subside_build(value, dict_, list_, tuple_)
     cdef list args = list(_i_args)
 
+    cdef bool allow_missing
+    cdef object missing_func
+    allow_missing, missing_func = _c_missing_process(missing)
+
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
-                                STRICT, inherit, False, _c_subside_missing), _i_types
+                                STRICT, inherit, allow_missing, missing_func), _i_types
 
 cdef inline object _c_subside_keep_type(object t):
     return t
 
 @cython.binding(True)
 cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_=True,
-                     object return_type=None, bool inherit=True):
+                     object return_type=None, bool inherit=True, object missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Drift down the structures (list, tuple, dict) down to the tree's value.
@@ -133,7 +141,7 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
         >>> #}), all structures above the tree values are subsided to the bottom of the tree.
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit)
+    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit, missing)
 
     cdef object type_
     cdef set types
@@ -151,7 +159,7 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
     return type_(result)
 
 @cython.binding(True)
-def union(*trees, object return_type=None, bool inherit=True):
+def union(*trees, object return_type=None, bool inherit=True, object missing=MISSING_NOT_ALLOW):
     """
     Overview:
         Union tree values together.
@@ -170,7 +178,7 @@ def union(*trees, object return_type=None, bool inherit=True):
         >>> union(t, tx)  # TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit)
+    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit, missing)
 
     cdef object type_
     cdef list types
@@ -268,7 +276,7 @@ cdef tuple _c_rise_struct_process(list objs, object template):
             _l_obj_0 = len(objs[0])
             if _l_obj_0 < _l_temp - 2:
                 raise ValueError(f"At least {repr(_l_temp - 2)} value expected due to template "
-                                f"{repr(template)}, but length is {repr(_l_obj_0)}.")
+                                 f"{repr(template)}, but length is {repr(_l_obj_0)}.")
 
             _a_template = type(template)(chain(template[:-2], (template[-2],) * (_l_obj_0 - _l_temp + 2)))
         else:

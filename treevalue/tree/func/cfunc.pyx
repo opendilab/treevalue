@@ -14,6 +14,7 @@ from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
 
 _VALUE_IS_MISSING = SingletonMark('value_is_missing')
+MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                                  _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):
@@ -120,8 +121,9 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
 
     return TreeStorage(_d_res)
 
-def _w_subside_func(object value, bool dict_=True, bool list_=True, bool tuple_=True, bool inherit=True):
-    return _c_subside(value, dict_, list_, tuple_, inherit)[0]
+def _w_subside_func(object value, bool dict_=True, bool list_=True, bool tuple_=True, bool inherit=True,
+                    object missing=MISSING_NOT_ALLOW):
+    return _c_subside(value, dict_, list_, tuple_, inherit, missing)[0]
 
 def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True, object template=None):
     return _c_rise(tree, dict_, list_, tuple_, template)
@@ -157,15 +159,10 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
     else:
         return None
 
-MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
-
 cdef object _c_common_value(object item):
     return item
 
-# build-time function
-cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing,
-                              object subside, object rise):
-    cdef _e_tree_mode _v_mode = _c_load_mode(mode)
+cdef inline tuple _c_missing_process(object missing):
     cdef bool allow_missing
     cdef object missing_func
     if missing is MISSING_NOT_ALLOW:
@@ -174,6 +171,16 @@ cpdef object _d_func_treelize(object func, object mode, object return_type, bool
     else:
         allow_missing = True
         missing_func = missing if callable(missing) else partial(_c_common_value, missing)
+
+    return allow_missing, missing_func
+
+# build-time function
+cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing,
+                              object subside, object rise):
+    cdef _e_tree_mode _v_mode = _c_load_mode(mode)
+    cdef bool allow_missing
+    cdef object missing_func
+    allow_missing, missing_func = _c_missing_process(missing)
 
     cdef object _v_subside, _v_rise
     if subside is not None and not isinstance(subside, dict):
