@@ -435,10 +435,42 @@ def delayed(func, *args, **kwargs):
     r"""
     Overview:
         Use delayed function in treevalue.
+        The given ``func`` will not be called until its value is accessed, and \
+        it will be only called once, after that the delayed node will be replaced by the actual value.
 
     Arguments:
         - func: Delayed function.
         - args: Positional arguments.
         - kwargs: Key-word arguments.
+
+    Examples::
+        >>> from treevalue import TreeValue, delayed
+        >>>
+        >>> def f(x):
+        >>>     print('f is called, x is', x)
+        >>>     return x ** x
+        >>>
+        >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
+        >>> t.a
+        f is called, x is 2
+        4
+        >>> t.x
+        f is called, x is 3
+        27
+        >>> t.a
+        4
+        >>> t.x
+        27
+        >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
+        >>> print(t)
+        f is called, x is 2
+        f is called, x is 3
+        <TreeValue 0x7f0fb7f03198>
+        ├── a --> 4
+        └── x --> 27
+        >>> print(t)
+        <TreeValue 0x7f0fb7f03198>
+        ├── a --> 4
+        └── x --> 27
     """
     return DetachedDelayedProxy(_c_delayed_partial(func, args, kwargs))
