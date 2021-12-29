@@ -320,13 +320,14 @@
             <span class="k">return</span> <span class="n">typetrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clazz</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
-        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
 <span class="sd">                Do mapping on every value in this tree.</span>
 
 <span class="sd">            Arguments:</span>
 <span class="sd">                - func (:obj:): Function for mapping</span>
+<span class="sd">                - delayed (:obj:`bool`): Enable delayed mode for this mapping.</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                - tree (:obj:`_TreeValue`): Mapped tree value object.</span>
@@ -337,7 +338,7 @@
 <span class="sd">                &gt;&gt;&gt; t.map(lambda: 1)        # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 1, &#39;d&#39;: 1}})</span>
 <span class="sd">                &gt;&gt;&gt; t.map(lambda x, p: p)   # FastTreeValue({&#39;a&#39;: (&#39;a&#39;,), &#39;b&#39;: (&#39;b&#39;,), &#39;x&#39;: {&#39;c&#39;: (&#39;x&#39;, &#39;c&#39;), &#39;d&#39;: (&#39;x&#39;, &#39;d&#39;)}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="n">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
         <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_</span><span class="p">:</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
