@@ -147,13 +147,14 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return typetrans(self, clazz)
 
         @_decorate_method
-        def map(self, mapper):
+        def map(self, mapper, delayed=False):
             """
             Overview:
                 Do mapping on every value in this tree.
 
             Arguments:
                 - func (:obj:): Function for mapping
+                - delayed (:obj:`bool`): Enable delayed mode for this mapping.
 
             Returns:
                 - tree (:obj:`_TreeValue`): Mapped tree value object.
@@ -164,7 +165,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t.map(lambda: 1)        # FastTreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
                 >>> t.map(lambda x, p: p)   # FastTreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
             """
-            return mapping(self, mapper)
+            return mapping(self, mapper, delayed)
 
         @_decorate_method
         def mask(self, mask_: TreeValue, remove_empty: bool = True):
