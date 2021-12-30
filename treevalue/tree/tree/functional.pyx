@@ -8,7 +8,6 @@ from functools import partial
 from libcpp cimport bool
 
 from .tree cimport TreeValue
-from .tree import delayed as _func_delayed
 from ..common.delay cimport undelay
 from ..common.delay import delayed_partial
 from ..common.storage cimport TreeStorage
