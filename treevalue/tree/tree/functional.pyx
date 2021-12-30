@@ -4,28 +4,34 @@
 # mapping, filter_, mask, reduce_
 
 import cython
+from functools import partial
 from libcpp cimport bool
 
 from .tree cimport TreeValue
 from ..common.storage cimport TreeStorage
 
-cdef class _ValuePathFuncWrapper:
-    def __cinit__(self, func):
-        self.func = func
-        self.index = 2
+cdef inline object _c_no_arg(object func, object v, object p):
+    return func()
 
-    def __call__(self, object v, tuple path):
-        while True:
-            if self.index == 0:
-                return self.func()
+cdef inline object _c_one_arg(object func, object v, object p):
+    return func(v)
 
-            try:
-                if self.index == 1:
-                    return self.func(v)
-                else:
-                    return self.func(v, path)
-            except TypeError:
-                self.index -= 1
+cdef inline object _c_two_args(object func, object v, object p):
+    return func(v, p)
+
+cdef inline object _c_wrap_mapping_func(object func):
+    cdef int argcnt
+    try:
+        argcnt = func.__code__.co_argcount
+    except AttributeError:
+        argcnt = 1
+
+    if argcnt == 1:
+        return partial(_c_one_arg, func)
+    elif argcnt > 1:
+        return partial(_c_two_args, func)
+    else:
+        return partial(_c_no_arg, func)
 
 cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path):
     cdef dict _d_st = st.detach()
@@ -61,9 +67,9 @@ cpdef TreeValue mapping(TreeValue tree, object func):
         - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
             to a new values based on given ``v`` and given ``p``.
         
-        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
-        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
-        function is to given a ``lambda v, p: f(v, p)`` in it.
+        When the given ``func`` is a python function (with ``__code__`` attribute), its number of arguments will \
+        be detected automatically, and use the correct way to call it when doing mapping, otherwise it will be \
+        directly used with the pattern of ``lambda v: f(v)``.
 
     Returns:
         - tree (:obj:`_TreeValue`): Mapped tree value object.
@@ -74,7 +80,7 @@ cpdef TreeValue mapping(TreeValue tree, object func):
         >>> mapping(t, lambda: 1)        # TreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
         >>> mapping(t, lambda x, p: p)   # TreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
     """
-    return type(tree)(_c_mapping(tree._detach(), _ValuePathFuncWrapper(func), ()))
+    return type(tree)(_c_mapping(tree._detach(), _c_wrap_mapping_func(func), ()))
 
 cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove_empty):
     cdef dict _d_st = st.detach()
@@ -115,9 +121,9 @@ cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty=True):
         - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
             to a new values based on given ``v`` and given ``p``.
         
-        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
-        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
-        function is to given a ``lambda v, p: f(v, p)`` in it.
+        When the given ``func`` is a python function (with ``__code__`` attribute), its number of arguments will \
+        be detected automatically, and use the correct way to call it when doing filter, otherwise it will be \
+        directly used with the pattern of ``lambda v: f(v)``.
 
     Returns:
         - tree (:obj:`_TreeValue`): Filtered tree value object.
@@ -129,7 +135,7 @@ cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty=True):
         >>> filter_(t, lambda x: x % 2 == 1)             # TreeValue({'a': 1, 'x': {'c': 3}})
         >>> filter_(t, lambda x, p: p[0] in {'b', 'x'})  # TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
     """
-    return type(tree)(_c_filter_(tree._detach(), _ValuePathFuncWrapper(func), (), remove_empty))
+    return type(tree)(_c_filter_(tree._detach(), _c_wrap_mapping_func(func), (), remove_empty))
 
 cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
     cdef bool _b_tree_mask = isinstance(sm, TreeStorage)
