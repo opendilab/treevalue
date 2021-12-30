@@ -67,9 +67,9 @@ cpdef TreeValue mapping(TreeValue tree, object func):
         - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
             to a new values based on given ``v`` and given ``p``.
         
-        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
-        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
-        function is to given a ``lambda v, p: f(v, p)`` in it.
+        When the given ``func`` is a python function (with ``__code__`` attribute), its number of arguments will \
+        be detected automatically, and use the correct way to call it when doing mapping, otherwise it will be \
+        directly used with the pattern of ``lambda v: f(v)``.
 
     Returns:
         - tree (:obj:`_TreeValue`): Mapped tree value object.
@@ -121,9 +121,9 @@ cpdef TreeValue filter_(TreeValue tree, object func, bool remove_empty=True):
         - ``lambda v, p: f(v, p)``, which means map the original value and full path (in form of ``tuple``) \
             to a new values based on given ``v`` and given ``p``.
         
-        When the given ``func`` is used, it is firstly tries as ``lambda v, p: f(v, p)``. If ``TypeError`` is \
-        raised, then the next is ``lambda v: f(v)``, and the ``lambda :v``. So the fastest way to use this \
-        function is to given a ``lambda v, p: f(v, p)`` in it.
+        When the given ``func`` is a python function (with ``__code__`` attribute), its number of arguments will \
+        be detected automatically, and use the correct way to call it when doing filter, otherwise it will be \
+        directly used with the pattern of ``lambda v: f(v)``.
 
     Returns:
         - tree (:obj:`_TreeValue`): Filtered tree value object.
