@@ -179,7 +179,13 @@
 <h1>Apply into Scikit-Learn<a class="headerlink" href="#apply-into-scikit-learn" title="Permalink to this headline">¶</a></h1>
 <p>Actually, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be used in practice with not only <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">torch</span></code> library, such as <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.
 In the following part, a demo of PCA to tree-structured arrays will be shown.</p>
-<p>We can do this with the following code</p>
+<p>In the field of traditional machine learning, PCA (Principal Component Analysis) is often used to preprocess data,
+by normalizing the data range, and trying to reduce the dimensionality of the data, so as to reduce the complexity
+of the input data and improve machine learning’s efficiency and quality.</p>
+<p>In the scikit-learn library, the PCA class is provided to support this function, and the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>
+can be used to simplify the data. For a set of <code class="docutils literal notranslate"><span class="pre">np.array</span></code> format data that presents a tree structure,
+we can implement the operation support for the tree structure by quickly wrapping the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>.
+The specific code is as follows</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -246,41 +252,31 @@ In the following part, a demo of PCA to tree-structured arrays will be shown.</p
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7f01e542c610&gt;
-├── a --&gt; array([[-1, 13,  4],
-│                [ 0,  3, 10],
-│                [ 6,  1, -5],
-│                [-2,  6,  7]])
-└── x --&gt; &lt;FastTreeValue 0x7f01e5402050&gt;
-    └── c --&gt; array([[ -1,   3,  -8,  -5],
-                     [  3,   1,  -3,  -8],
-                     [  3, -11, -13, -15],
-                     [  3,  -3, -15,   2],
-                     [-12, -14,   0,   2]])
+<span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Original int data:
+&lt;FastTreeValue 0x7f40d0b7d490&gt;
+├── a --&gt; array([[-2,  9,  3],
+│                [-4,  0,  7],
+│                [13, 10, -4],
+│                [11,  8, -2]])
+└── x --&gt; &lt;FastTreeValue 0x7f40d0b4fe90&gt;
+    └── c --&gt; array([[-11,  -7,  -3, -12],
+                     [  3, -13,  -9,  -9],
+                     [  1,  -1,  -4,  -6],
+                     [ -4,   4, -10,  -9],
+                     [ -6,   4, -11,   4]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7f01e52e3110&gt;
-├── a --&gt; array([[-3.78063849,  6.41340865, -0.44717121],
-│                [-3.94425457, -5.28486452, -0.7987884 ],
-│                [11.45085277, -0.05290844, -0.01310039],
-│                [-3.72595971, -1.0756357 ,  1.25906001]])
-└── x --&gt; &lt;FastTreeValue 0x7f01e52de750&gt;
-    └── c --&gt; array([[-3.63959122e+00, -5.77966336e+00, -2.45747514e+00,
-                       2.87570568e+00],
-                     [-4.37656753e+00, -3.10396578e+00, -6.87679383e+00,
-                      -2.29799036e+00],
-                     [-6.36291786e+00,  1.19591991e+01,  5.23647583e-01,
-                       4.20270921e-01],
-                     [-3.36648027e+00, -4.54966868e+00,  9.09710478e+00,
-                      -9.84890946e-01],
-                     [ 1.77455569e+01,  1.47409877e+00, -2.86483386e-01,
-                      -1.30953012e-02]])
+&lt;FastTreeValue 0x7f40d0a2fd50&gt;
+├── a --&gt; array([[  5.49986066,   4.58950532,   0.0217637 ],
+│                [ 12.01889218,  -3.05888547,  -0.04416316],
+│                [-10.38015572,  -0.18395365,  -0.17614848],
+│                [ -7.13859712,  -1.34666619,   0.19854794]])
+└── x --&gt; &lt;FastTreeValue 0x7f40d0a3a250&gt;
+    └── c --&gt; array([[ -6.24859973,   9.10978363,  -2.35059934,   0.53059061],
+                     [-10.30619309,  -6.85570821,  -1.52960589,  -1.6976321 ],
+                     [  0.01240086,  -2.4902468 ,   3.08188772,   4.23562099],
+                     [  4.31028513,   2.09432299,   5.08162044,  -2.94149401],
+                     [ 12.23210684,  -1.85815161,  -4.28330294,  -0.12708549]])
 </pre></div>
 </td></tr></table></div>
 </div>
@@ -337,9 +333,8 @@ Fit transformed data:
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../25/merge/best_practice/sklearn/index.html">25/merge</a></dd>
-                        <dd><a href="../../../../dev/delay/index.html">dev/delay</a></dd>
                         <dd><a href="index.html">doc/practice</a></dd>
+                        <dd><a href="../../../../dev/delay/index.html">dev/delay</a></dd>
                         <dd><a href="../../../../main/index.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
                 </dl>
