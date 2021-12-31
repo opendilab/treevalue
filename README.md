@@ -170,6 +170,12 @@ The following 2 tables are the performance comparison result with [jax pytree](h
 |                                                     |     **tree_all**     |   **tree_reduce**    | **tree_reduce(with init)**  |  **tree_transpose**   |   **(Not Implemented)**   |
 | [jax pytree](https://github.com/google/jax)         |   1.47 µs ± 37 ns    |  1.88 µs ± 27.2 ns   |      1.91 µs ± 47.4 ns      |    10 µs ± 117 ns     |            ---            |
 
+This is the comparison between dm-tree, jax-libtree and us, with `flatten` and `mapping` operations (**lower value means less time cost and runs faster**)
+
+![Time cost of flatten operation](docs/source/_static/Time%20cost%20of%20flatten%20operation.svg)
+
+![Time cost of mapping operation](docs/source/_static/Time%20cost%20of%20mapping%20operation.svg)
+
 The following table is the performance comparison result with [tianshou Batch](https://github.com/thu-ml/tianshou).
 
 |                                                      |          get           |          set           |         init         |       deepcopy       |        stack         |          cat          |       split        |
@@ -177,13 +183,13 @@ The following table is the performance comparison result with [tianshou Batch](h
 | [treevalue](https://github.com/opendilab/treevalue)  |   51.6 ns ± 0.609 ns   | **64.4 ns ± 0.564 ns** | **750 ns ± 14.2 ns** | **88.9 µs ± 887 ns** | **50.2 µs ± 771 ns** | **40.3 µs ± 1.08 µs** | **62 µs ± 1.2 µs** |
 | [tianshou Batch](https://github.com/thu-ml/tianshou) | **43.2 ns ± 0.698 ns** |    396 ns ± 8.99 ns    |   11.1 µs ± 277 ns   |   89 µs ± 1.42 µs    |   119 µs ± 1.1 µs    |   194 µs ± 1.81 µs    |  653 µs ± 17.8 µs  |
 
-And this is the comparasion between tianshou Batch and us, with `cat` , `stack` and `split` operations
+And this is the comparison between tianshou Batch and us, with `cat` , `stack` and `split` operations (**lower value means less time cost and runs faster**)
 
-![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.png)
+![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.svg)
 
-![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.png)
+![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.svg)
 
-![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.png)
+![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.svg)
 
 Test benchmark code can be found here:
 
