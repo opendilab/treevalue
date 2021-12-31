@@ -181,7 +181,11 @@
 In the following part, a demo of PCA to tree-structured arrays will be shown.</p>
 <p>In the field of traditional machine learning, PCA (Principal Component Analysis) is often used to preprocess data,
 by normalizing the data range, and trying to reduce the dimensionality of the data, so as to reduce the complexity
-of the input data and improve machine learning’s efficiency and quality.</p>
+of the input data and improve machine learning’s efficiency and quality. Just as the following image</p>
+<div class="figure align-default" id="id1">
+<img alt="PCA Principle" src="../../_images/heading_of_pca.jpg" />
+<p class="caption"><span class="caption-text">PCA in a nutshell. Source: Lavrenko and Sutton 2011, slide 13.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
 <p>In the scikit-learn library, the PCA class is provided to support this function, and the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>
 can be used to simplify the data. For a set of <code class="docutils literal notranslate"><span class="pre">np.array</span></code> format data that presents a tree structure,
 we can implement the operation support for the tree structure by quickly wrapping the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>.
@@ -253,32 +257,37 @@ The specific code is as follows</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7efda2a491d0&gt;
-├── a --&gt; array([[-2, 12, -5],
-│                [ 0,  9,  8],
-│                [-3,  9,  6],
-│                [-5, 14,  4]])
-└── x --&gt; &lt;FastTreeValue 0x7efda2416590&gt;
-    └── c --&gt; array([[ -9,  -2,  -9,  -6],
-                     [-14, -10,  -9,  -3],
-                     [-11, -15,   0,  -6],
-                     [-13,   0,  -2, -12],
-                     [ -2,   3,  -4,  -5]])
+&lt;FastTreeValue 0x7ff2d2456550&gt;
+├── a --&gt; array([[-5, -5, 12],
+│                [14, -5, -4],
+│                [11,  8,  0],
+│                [10,  4,  0]])
+└── x --&gt; &lt;FastTreeValue 0x7ff2d2429f10&gt;
+    └── c --&gt; array([[ -4,  -5,  -5,  -3],
+                     [  0,   3, -12,  -8],
+                     [ -3,   4,  -1,   4],
+                     [-12,  -9, -13, -10],
+                     [  4,  -3,  -6,   3]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7efda22c8e90&gt;
-├── a --&gt; array([[ 8.18015642, -1.54671672, -0.07216902],
-│                [-5.27294142, -2.02149691, -0.96028069],
-│                [-3.10881554, -0.3847843 ,  1.41410996],
-│                [ 0.20160054,  3.95299794, -0.38166025]])
-└── x --&gt; &lt;FastTreeValue 0x7efdb71b9390&gt;
-    └── c --&gt; array([[  3.05558164,  -3.3548891 ,  -2.14078953,   1.05126598],
-                     [ -6.56380681,  -4.68913082,  -2.87890073,  -0.72140343],
-                     [-10.02731678,   2.88858911,   4.438556  ,   0.29697087],
-                     [  3.50223445,   6.62810467,  -4.03010609,  -0.20205741],
-                     [ 10.0333075 ,  -1.47267386,   4.61124035,  -0.42477601]])
+&lt;FastTreeValue 0x7ff2d2308f90&gt;
+├── a --&gt; array([[16.92030651,  0.45046098, -0.01767775],
+│                [-6.77093516,  7.91534346, -0.04213107],
+│                [-6.04612881, -5.99387358, -0.13343872],
+│                [-4.10324254, -2.37193086,  0.19324754]])
+└── x --&gt; &lt;FastTreeValue 0x7ff2d2313350&gt;
+    └── c --&gt; array([[ 0.76972325, -3.26159007,  0.92734244,  1.92603019],
+                     [ 1.76666058,  8.79620818, -1.2783094 ,  0.26750159],
+                     [-9.53428992, -2.74427923, -4.9481253 , -0.53132223],
+                     [14.30779213, -2.75659602, -0.31902403, -0.88684072],
+                     [-7.30988604, -0.03374286,  5.61811629, -0.77536882]])
 </pre></div>
 </td></tr></table></div>
+<p>For further information, see the links below:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA">Official documentation of PCA in scikit-learn</a></p></li>
+<li><p><a class="reference external" href="https://devopedia.org/principal-component-analysis">Details of PCA</a></p></li>
+</ul>
 </div>
 
 
@@ -333,9 +342,8 @@ Fit transformed data:
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../25/merge/best_practice/sklearn/index.html">25/merge</a></dd>
-                        <dd><a href="../../../../dev/delay/index.html">dev/delay</a></dd>
                         <dd><a href="index.html">doc/practice</a></dd>
+                        <dd><a href="../../../../dev/delay/index.html">dev/delay</a></dd>
                         <dd><a href="../../../../main/index.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
                 </dl>
