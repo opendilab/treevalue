@@ -193,8 +193,9 @@ And this is the comparison between tianshou Batch and us, with `cat` , `stack` a
 
 Test benchmark code can be found here:
 
-* [Comparasion with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/test_dm_tree.py)
-* [Comparasion with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/test_tianshou_batch.py)
+* [Comparison with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/deepmind/test_dm_tree.py)
+* [Comparison with jax-libtree](https://github.com/opendilab/treevalue/blob/main/test/compare/jax/test_jax.py)
+* [Comparison with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/tianshou/test_tianshou_batch.py)
 
 
 ## Contribution
