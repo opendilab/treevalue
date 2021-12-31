@@ -11,20 +11,35 @@ _TREE_1 = FastTreeValue(_TREE_DATA_1)
 
 @pytest.mark.benchmark(group='jax-pytree')
 class TestCompareWithJaxPytree:
-    def test_jax_tree_map(self, benchmark):
-        benchmark(pytree.tree_map, lambda x: x ** 2, _TREE_DATA_1)
+    N = 5
 
-    def test_tv_mapping(self, benchmark):
-        benchmark(mapping, _TREE_1, lambda x: x ** 2)
+    def __create_nested_tree_data(self, n):
+        return {
+            ('no_%04d' % (i + 1,)): _TREE_DATA_1 for i in range(n)
+        }
 
-    def test_tv_mapping_with_path(self, benchmark):
-        benchmark(mapping, _TREE_1, lambda x, p: x ** 2)
+    def __create_nested_tree(self, n):
+        return FastTreeValue(self.__create_nested_tree_data(n))
 
-    def test_jax_tree_flatten(self, benchmark):
-        benchmark(pytree.tree_flatten, _TREE_DATA_1)
+    @pytest.mark.parametrize('n', [2 ** i for i in range(N)])
+    def test_jax_tree_map(self, benchmark, n):
+        benchmark(pytree.tree_map, lambda x: x ** 2, self.__create_nested_tree_data(n))
 
-    def test_tv_flatten(self, benchmark):
-        benchmark(flatten, _TREE_1)
+    @pytest.mark.parametrize('n', [2 ** i for i in range(N)])
+    def test_tv_mapping(self, benchmark, n):
+        benchmark(mapping, self.__create_nested_tree(n), lambda x: x ** 2)
+
+    @pytest.mark.parametrize('n', [2 ** i for i in range(N)])
+    def test_tv_mapping_with_path(self, benchmark, n):
+        benchmark(mapping, self.__create_nested_tree(n), lambda x, p: x ** 2)
+
+    @pytest.mark.parametrize('n', [2 ** i for i in range(N)])
+    def test_jax_tree_flatten(self, benchmark, n):
+        benchmark(pytree.tree_flatten, self.__create_nested_tree_data(n))
+
+    @pytest.mark.parametrize('n', [2 ** i for i in range(N)])
+    def test_tv_flatten(self, benchmark, n):
+        benchmark(flatten, self.__create_nested_tree(n))
 
     def test_jax_tree_unflatten(self, benchmark):
         leaves, treedef = pytree.tree_flatten(_TREE_DATA_1)
