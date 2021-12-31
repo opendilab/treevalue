@@ -4,7 +4,14 @@ Apply into Scikit-Learn
 Actually, ``TreeValue`` can be used in practice with not only ``numpy`` or ``torch`` library, such as ``scikit-learn``.
 In the following part, a demo of PCA to tree-structured arrays will be shown.
 
-We can do this with the following code
+In the field of traditional machine learning, PCA (Principal Component Analysis) is often used to preprocess data,
+by normalizing the data range, and trying to reduce the dimensionality of the data, so as to reduce the complexity
+of the input data and improve machine learning's efficiency and quality.
+
+In the scikit-learn library, the PCA class is provided to support this function, and the function ``fit_transform``
+can be used to simplify the data. For a set of ``np.array`` format data that presents a tree structure,
+we can implement the operation support for the tree structure by quickly wrapping the function ``fit_transform``.
+The specific code is as follows
 
 .. literalinclude:: sklearn.demo.py
     :language: python
