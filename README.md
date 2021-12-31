@@ -158,11 +158,11 @@ Here is the speed performance of all the operations in `FastTreeValue`, the foll
 
 The following 2 tables are the performance comparison result with [jax pytree](https://github.com/google/jax).
 
-|                                                     |       mapping        |  mapping(with path)   |       flatten        |      unflatten       |    flatten_values    |     flatten_keys     |
-| --------------------------------------------------- | :------------------: | :-------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
-| [treevalue](https://github.com/opendilab/treevalue) | **3.2 µs ± 85.5 ns** | **2.16 µs ± 123 ns**  | **515 ns ± 7.53 ns** | **601 ns ± 5.99 ns** | **301 ns ± 12.9 ns** | **451 ns ± 17.3 ns** |
-|                                                     |     **tree_map**     | **(Not Implemented)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
-| [jax pytree](https://github.com/google/jax)         |   4.67 µs ± 184 ns   |          ---          |  1.29 µs ± 27.2 ns   |   742 ns ± 5.82 ns   |   1.29 µs ± 22 ns    |  1.27 µs ± 16.5 ns   |
+|                                                     |        mapping        |  mapping(with path)   |       flatten        |      unflatten       |    flatten_values    |     flatten_keys     |
+| --------------------------------------------------- | :-------------------: | :-------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
+| [treevalue](https://github.com/opendilab/treevalue) | **2.21 µs ± 32.2 ns** | **2.16 µs ± 123 ns**  | **515 ns ± 7.53 ns** | **601 ns ± 5.99 ns** | **301 ns ± 12.9 ns** | **451 ns ± 17.3 ns** |
+|                                                     |     **tree_map**      | **(Not Implemented)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
+| [jax pytree](https://github.com/google/jax)         |   4.67 µs ± 184 ns    |          ---          |  1.29 µs ± 27.2 ns   |   742 ns ± 5.82 ns   |   1.29 µs ± 22 ns    |  1.27 µs ± 16.5 ns   |
 
 |                                                     |    flatten + all     |   flatten + reduce   | flatten + reduce(with init) | rise(given structure) | rise(automatic structure) |
 | --------------------------------------------------- | :------------------: | :------------------: | :-------------------------: | :-------------------: | :-----------------------: |
