@@ -158,17 +158,23 @@ Here is the speed performance of all the operations in `FastTreeValue`, the foll
 
 The following 2 tables are the performance comparison result with [jax pytree](https://github.com/google/jax).
 
-|                                                     |       mapping        |  mapping(with path)   |       flatten        |      unflatten       |    flatten_values    |     flatten_keys     |
-| --------------------------------------------------- | :------------------: | :-------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
-| [treevalue](https://github.com/opendilab/treevalue) | **3.2 µs ± 85.5 ns** | **2.16 µs ± 123 ns**  | **515 ns ± 7.53 ns** | **601 ns ± 5.99 ns** | **301 ns ± 12.9 ns** | **451 ns ± 17.3 ns** |
-|                                                     |     **tree_map**     | **(Not Implemented)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
-| [jax pytree](https://github.com/google/jax)         |   4.67 µs ± 184 ns   |          ---          |  1.29 µs ± 27.2 ns   |   742 ns ± 5.82 ns   |   1.29 µs ± 22 ns    |  1.27 µs ± 16.5 ns   |
+|                                                     |        mapping        |  mapping(with path)   |       flatten        |      unflatten       |    flatten_values    |     flatten_keys     |
+| --------------------------------------------------- | :-------------------: | :-------------------: | :------------------: | :------------------: | :------------------: | :------------------: |
+| [treevalue](https://github.com/opendilab/treevalue) | **2.21 µs ± 32.2 ns** | **2.16 µs ± 123 ns**  | **515 ns ± 7.53 ns** | **601 ns ± 5.99 ns** | **301 ns ± 12.9 ns** | **451 ns ± 17.3 ns** |
+|                                                     |     **tree_map**      | **(Not Implemented)** |   **tree_flatten**   |  **tree_unflatten**  |   **tree_leaves**    |  **tree_structure**  |
+| [jax pytree](https://github.com/google/jax)         |   4.67 µs ± 184 ns    |          ---          |  1.29 µs ± 27.2 ns   |   742 ns ± 5.82 ns   |   1.29 µs ± 22 ns    |  1.27 µs ± 16.5 ns   |
 
 |                                                     |    flatten + all     |   flatten + reduce   | flatten + reduce(with init) | rise(given structure) | rise(automatic structure) |
 | --------------------------------------------------- | :------------------: | :------------------: | :-------------------------: | :-------------------: | :-----------------------: |
 | [treevalue](https://github.com/opendilab/treevalue) | **425 ns ± 9.33 ns** | **702 ns ± 5.93 ns** |    **793 ns ± 13.4 ns**     | **9.14 µs ± 129 ns**  |   **11.5 µs ± 182 ns**    |
 |                                                     |     **tree_all**     |   **tree_reduce**    | **tree_reduce(with init)**  |  **tree_transpose**   |   **(Not Implemented)**   |
 | [jax pytree](https://github.com/google/jax)         |   1.47 µs ± 37 ns    |  1.88 µs ± 27.2 ns   |      1.91 µs ± 47.4 ns      |    10 µs ± 117 ns     |            ---            |
+
+This is the comparison between dm-tree, jax-libtree and us, with `flatten` and `mapping` operations (**lower value means less time cost and runs faster**)
+
+![Time cost of flatten operation](docs/source/_static/Time%20cost%20of%20flatten%20operation.svg)
+
+![Time cost of mapping operation](docs/source/_static/Time%20cost%20of%20mapping%20operation.svg)
 
 The following table is the performance comparison result with [tianshou Batch](https://github.com/thu-ml/tianshou).
 
@@ -177,18 +183,19 @@ The following table is the performance comparison result with [tianshou Batch](h
 | [treevalue](https://github.com/opendilab/treevalue)  |   51.6 ns ± 0.609 ns   | **64.4 ns ± 0.564 ns** | **750 ns ± 14.2 ns** | **88.9 µs ± 887 ns** | **50.2 µs ± 771 ns** | **40.3 µs ± 1.08 µs** | **62 µs ± 1.2 µs** |
 | [tianshou Batch](https://github.com/thu-ml/tianshou) | **43.2 ns ± 0.698 ns** |    396 ns ± 8.99 ns    |   11.1 µs ± 277 ns   |   89 µs ± 1.42 µs    |   119 µs ± 1.1 µs    |   194 µs ± 1.81 µs    |  653 µs ± 17.8 µs  |
 
-And this is the comparasion between tianshou Batch and us, with `cat` , `stack` and `split` operations
+And this is the comparison between tianshou Batch and us, with `cat` , `stack` and `split` operations (**lower value means less time cost and runs faster**)
 
-![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.png)
+![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.svg)
 
-![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.png)
+![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.svg)
 
-![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.png)
+![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.svg)
 
 Test benchmark code can be found here:
 
-* [Comparasion with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/test_dm_tree.py)
-* [Comparasion with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/test_tianshou_batch.py)
+* [Comparison with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/deepmind/test_dm_tree.py)
+* [Comparison with jax-libtree](https://github.com/opendilab/treevalue/blob/main/test/compare/jax/test_jax.py)
+* [Comparison with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/tianshou/test_tianshou_batch.py)
 
 
 ## Contribution
