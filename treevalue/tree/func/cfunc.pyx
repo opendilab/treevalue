@@ -8,6 +8,7 @@ from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .modes cimport _e_tree_mode, _c_keyset, _c_load_mode, _c_check
+from ..common.delay import delayed_partial
 from ..common.delay cimport undelay
 from ..common.storage cimport TreeStorage
 from ..tree.structural cimport _c_subside, _c_rise
@@ -16,10 +17,31 @@ from ..tree.tree cimport TreeValue
 _VALUE_IS_MISSING = SingletonMark('value_is_missing')
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
-cdef object _c_func_treelize_run(object func, list args, dict kwargs,
-                                 _e_tree_mode mode, bool inherit,
-                                 bool allow_missing, object missing_func,
-                                 bool delayed):
+cdef inline object _c_wrap_func_treelize_run(object func, list args, dict kwargs, _e_tree_mode mode, bool inherit,
+                                             bool allow_missing, object missing_func, bool delayed):
+    cdef list _l_args = []
+    cdef dict _d_kwargs = {}
+    cdef str k, ak
+    cdef object av, v, nv
+    for av, k, v in args:
+        nv = undelay(v)
+        if nv is not v and k is not None:
+            av[k] = nv
+
+        _l_args.append(nv)
+
+    for ak, (av, k, v) in kwargs.items():
+        nv = undelay(v)
+        if nv is not v and k is not None:
+            av[k] = nv
+
+        _d_kwargs[ak] = nv
+
+    return _c_func_treelize_run(func, _l_args, _d_kwargs,
+                                mode, inherit, allow_missing, missing_func, delayed)
+
+cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mode mode, bool inherit,
+                                 bool allow_missing, object missing_func, bool delayed):
     cdef list ck_args = []
     cdef list ck_kwargs = []
     cdef bool has_tree = False
@@ -71,22 +93,31 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
             if at:
                 try:
                     v = av[k]
-                    nv = undelay(v)
-                    if nv is not v:
-                        v = nv
-                        av[k] = v
+                    if delayed:
+                        _l_args.append((av, k, v))
+                    else:
+                        nv = undelay(v)
+                        if nv is not v:
+                            v = nv
+                            av[k] = v
 
-                    _l_args.append(v)
+                        _l_args.append(v)
                 except KeyError:
                     if allow_missing:
-                        _l_args.append(_VALUE_IS_MISSING)
+                        if delayed:
+                            _l_args.append((None, None, _VALUE_IS_MISSING))
+                        else:
+                            _l_args.append(_VALUE_IS_MISSING)
                     else:
                         raise KeyError("Missing is off, key {key} not found in {item}.".format(
                             key=repr(k), item=repr(av),
                         ))
             else:
                 if inherit:
-                    _l_args.append(undelay(av))
+                    if delayed:
+                        _l_args.append((None, None, av))
+                    else:
+                        _l_args.append(undelay(av))
                 else:
                     raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
                         type=repr(type(av).__name__), index=repr(i),
@@ -97,29 +128,42 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
             if at:
                 try:
                     v = av[k]
-                    nv = undelay(v)
-                    if nv is not v:
-                        v = nv
-                        av[k] = v
+                    if delayed:
+                        _d_kwargs[ak] = (av, k, v)
+                    else:
+                        nv = undelay(v)
+                        if nv is not v:
+                            v = nv
+                            av[k] = v
 
-                    _d_kwargs[ak] = v
+                        _d_kwargs[ak] = v
                 except KeyError:
                     if allow_missing:
-                        _d_kwargs[ak] = _VALUE_IS_MISSING
+                        if delayed:
+                            _d_kwargs[ak] = (None, None, _VALUE_IS_MISSING)
+                        else:
+                            _d_kwargs[ak] = _VALUE_IS_MISSING
                     else:
                         raise KeyError("Missing is off, key {key} not found in {item}.".format(
                             key=repr(k), item=repr(av),
                         ))
             else:
                 if inherit:
-                    _d_kwargs[ak] = undelay(av)
+                    if delayed:
+                        _d_kwargs[ak] = (None, None, av)
+                    else:
+                        _d_kwargs[ak] = undelay(av)
                 else:
                     raise TypeError("Inherit is off, tree value expected but {type} found in args {index}.".format(
                         type=repr(type(av).__name__), index=repr(ak),
                     ))
 
-        _d_res[k] = _c_func_treelize_run(func, _l_args, _d_kwargs,
-                                         mode, inherit, allow_missing, missing_func, delayed)
+        if delayed:
+            _d_res[k] = delayed_partial(_c_wrap_func_treelize_run, func, _l_args, _d_kwargs,
+                                        mode, inherit, allow_missing, missing_func, delayed)
+        else:
+            _d_res[k] = _c_func_treelize_run(func, _l_args, _d_kwargs,
+                                             mode, inherit, allow_missing, missing_func, delayed)
 
     return TreeStorage(_d_res)
 
@@ -213,6 +257,8 @@ cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.

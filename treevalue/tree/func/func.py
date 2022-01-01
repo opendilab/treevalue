@@ -24,6 +24,8 @@ def func_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType
         - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.

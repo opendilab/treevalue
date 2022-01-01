@@ -296,3 +296,108 @@ class TestTreeFuncFunc:
             'a': 23, 'b': 35,
             'c': {'x': 30, 'y': 32},
         })
+
+    def test_delayed_treelize(self):
+        t1 = TreeValue({
+            'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4},
+        })
+        t2 = TreeValue({
+            'a': 11, 'b': 23, 'x': {'c': 35, 'd': 47},
+        })
+
+        cnt_1 = 0
+
+        @func_treelize(delayed=True)
+        def total(a, b):
+            nonlocal cnt_1
+            cnt_1 += 1
+            return a + b
+
+        # positional
+        t3 = total(t1, t2)
+        assert cnt_1 == 0
+
+        assert t3.a == 12
+        assert cnt_1 == 1
+        assert t3.x == TreeValue({'c': 38, 'd': 51})
+        assert cnt_1 == 3
+        assert t3 == TreeValue({
+            'a': 12, 'b': 25, 'x': {'c': 38, 'd': 51}
+        })
+        assert cnt_1 == 4
+
+        # keyword
+        cnt_1 = 0
+        t3 = total(a=t1, b=t2)
+        assert cnt_1 == 0
+
+        assert t3.a == 12
+        assert cnt_1 == 1
+        assert t3.x == TreeValue({'c': 38, 'd': 51})
+        assert cnt_1 == 3
+        assert t3 == TreeValue({
+            'a': 12, 'b': 25, 'x': {'c': 38, 'd': 51}
+        })
+        assert cnt_1 == 4
+
+        # positional, with constant
+        cnt_1 = 0
+        t3 = total(1, t2)
+        assert cnt_1 == 0
+
+        assert t3.a == 12
+        assert cnt_1 == 1
+        assert t3.x == TreeValue({'c': 36, 'd': 48})
+        assert cnt_1 == 3
+        assert t3 == TreeValue({
+            'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}
+        })
+        assert cnt_1 == 4
+
+        # keyword, with constant
+        cnt_1 = 0
+        t3 = total(b=1, a=t2)
+        assert cnt_1 == 0
+
+        assert t3.a == 12
+        assert cnt_1 == 1
+        assert t3.x == TreeValue({'c': 36, 'd': 48})
+        assert cnt_1 == 3
+        assert t3 == TreeValue({
+            'a': 12, 'b': 24, 'x': {'c': 36, 'd': 48}
+        })
+        assert cnt_1 == 4
+
+        # positional, with delay
+        cnt_1 = 0
+        t4 = TreeValue({'v': delayed(lambda: t1)})
+        t5 = TreeValue({'v': delayed(lambda: t2)})
+
+        t6 = total(t4, t5)
+        assert cnt_1 == 0
+
+        assert t6.v.a == 12
+        assert cnt_1 == 1
+        assert t6.v.x == TreeValue({'c': 38, 'd': 51})
+        assert cnt_1 == 3
+        assert t6 == TreeValue({
+            'v': {'a': 12, 'b': 25, 'x': {'c': 38, 'd': 51}},
+        })
+        assert cnt_1 == 4
+
+        # keyword, with delay
+        cnt_1 = 0
+        t4 = TreeValue({'v': delayed(lambda: t1)})
+        t5 = TreeValue({'v': delayed(lambda: t2)})
+
+        t6 = total(a=t4, b=t5)
+        assert cnt_1 == 0
+
+        assert t6.v.a == 12
+        assert cnt_1 == 1
+        assert t6.v.x == TreeValue({'c': 38, 'd': 51})
+        assert cnt_1 == 3
+        assert t6 == TreeValue({
+            'v': {'a': 12, 'b': 25, 'x': {'c': 38, 'd': 51}},
+        })
+        assert cnt_1 == 4
