@@ -26,6 +26,7 @@ structure processing when the calculation is tree-based.
     :caption: Best Practice
 
     best_practice/numpy/index
+    best_practice/sklearn/index
 
 .. toctree::
     :maxdepth: 2
