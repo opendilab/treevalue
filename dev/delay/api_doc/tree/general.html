@@ -1164,7 +1164,7 @@ Original id of self will be kept.</p>
 
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.func">
-<em class="property">classmethod </em><code class="sig-name descname">func</code><span class="sig-paren">(</span><em class="sig-param">mode: str = 'strict'</em>, <em class="sig-param">inherit: bool = True</em>, <em class="sig-param">missing: Union[Any</em>, <em class="sig-param">Callable] = &lt;SingletonMark 'missing_not_allow'&gt;</em>, <em class="sig-param">subside: Optional[Union[Mapping</em>, <em class="sig-param">bool]] = None</em>, <em class="sig-param">rise: Optional[Union[Mapping</em>, <em class="sig-param">bool]] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.func" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">func</code><span class="sig-paren">(</span><em class="sig-param">mode: str = 'strict'</em>, <em class="sig-param">inherit: bool = True</em>, <em class="sig-param">missing: Union[Any</em>, <em class="sig-param">Callable] = &lt;SingletonMark 'missing_not_allow'&gt;</em>, <em class="sig-param">delayed: bool = False</em>, <em class="sig-param">subside: Optional[Union[Mapping</em>, <em class="sig-param">bool]] = None</em>, <em class="sig-param">rise: Optional[Union[Mapping</em>, <em class="sig-param">bool]] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.func" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>Overview:</dt><dd><p>Wrap a common function to tree-supported function based on this type.</p>
 </dd>
@@ -1172,6 +1172,7 @@ Original id of self will be kept.</p>
 <li><p>mode (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Mode of the wrapping, default is <cite>strict</cite>.</p></li>
 <li><p>inherit (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Allow inherit in wrapped function, default is <cite>True</cite>.</p></li>
 <li><p>missing (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Any,</span> <span class="pre">Callable]</span></code>): Missing value or lambda generator of when missing,                     default is <cite>MISSING_NOT_ALLOW</cite>, which means raise <cite>KeyError</cite> when missing detected.</p></li>
+<li><p>delayed (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Enable delayed mode or not, the calculation will be delayed when enabled,                     default is <code class="docutils literal notranslate"><span class="pre">False</span></code>, which means to all the calculation at once.</p></li>
 <li><p>subside (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Mapping,</span> <span class="pre">bool,</span> <span class="pre">None]</span></code>): Subside enabled to function’s arguments or not,                     and subside configuration, default is <cite>None</cite> which means do not use subside.                     When subside is <cite>True</cite>, it will use all the default arguments in <cite>subside</cite> function.</p></li>
 <li><p>rise (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[Mapping,</span> <span class="pre">bool,</span> <span class="pre">None]</span></code>): Rise enabled to function’s return value or not,                     and rise configuration, default is <cite>None</cite> which means do not use rise.                     When rise is <cite>True</cite>, it will use all the default arguments in <cite>rise</cite> function.                     (Not recommend to use auto mode when your return structure is not so strict.)</p></li>
 </ul>
@@ -1517,7 +1518,7 @@ Multiple tree values is supported.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2021, HansBug, DI-engine&#39;s Contributors
+        &copy; Copyright 2022, HansBug, DI-engine&#39;s Contributors
 
     </p>
   </div>
@@ -1548,7 +1549,6 @@ Multiple tree values is supported.</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../25/merge/api_doc/tree/general.html">25/merge</a></dd>
                         <dd><a href="general.html">dev/delay</a></dd>
                         <dd><a href="../../../../doc/practice/api_doc/tree/general.html">doc/practice</a></dd>
                         <dd><a href="../../../../main/api_doc/tree/general.html">main</a></dd>
