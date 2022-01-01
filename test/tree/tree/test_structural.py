@@ -39,6 +39,14 @@ class TestTreeTreeStructural:
             'a': (1, 3), 'b': (2, None), 'x': {'c': (3, 1), 'd': (None, 2)},
         })
 
+    def test_union_delayed(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+        t1 = MyTreeValue({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 44}})
+        assert union(t, t1, delayed=True) == TreeValue({'a': (1, 11), 'b': (2, 22), 'x': {'c': (3, 33), 'd': (4, 44)}})
+
     def test_subside(self):
         assert subside({'a': (1, 2), 'b': [3, 4]}) == {'a': (1, 2), 'b': [3, 4]}
         assert subside({'a': (1, 2), 'b': [3, 4]}, return_type=TreeValue) == {'a': (1, 2), 'b': [3, 4]}
@@ -106,6 +114,30 @@ class TestTreeTreeStructural:
 
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
+    def test_subside_delayed(self):
+        class MyTreeValue(TreeValue):
+            pass
+
+        original2 = {
+            'a': TreeValue({'a': 1, 'b': 2}),
+            'x': {
+                'c': MyTreeValue({'a': 3, 'b': 4}),
+                'd': [
+                    MyTreeValue({'a': 5, 'b': 6}),
+                    MyTreeValue({'a': 7, 'b': 8}),
+                ]
+            },
+            'k': '233'
+        }
+        assert subside(original2, delayed=True) == TreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
+        assert subside(original2, return_type=MyTreeValue, delayed=True) == MyTreeValue({
+            'a': raw({'a': 1, 'k': '233', 'x': {'c': 3, 'd': [5, 7]}}),
+            'b': raw({'a': 2, 'k': '233', 'x': {'c': 4, 'd': [6, 8]}}),
+        })
 
     def test_rise(self):
         t1 = TreeValue({'x': raw({'a': [1, 2], 'b': [2, 3]}), 'y': raw({'a': [5, 6, 7], 'b': [7, 8]})})
