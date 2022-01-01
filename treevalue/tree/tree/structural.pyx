@@ -94,7 +94,7 @@ cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool i
     allow_missing, missing_func = _c_missing_process(missing)
 
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
-                                _c_load_mode(mode), inherit, allow_missing, missing_func), _i_types
+                                _c_load_mode(mode), inherit, allow_missing, missing_func, False), _i_types
 
 cdef inline object _c_subside_keep_type(object t):
     return t

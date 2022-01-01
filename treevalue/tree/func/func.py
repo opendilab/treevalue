@@ -12,7 +12,7 @@ TreeClassType_ = TypeVar("TreeClassType_", bound=TreeValue)
 
 
 def func_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = TreeValue,
-                  inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                  inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW, delayed: bool = False,
                   subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None):
     """
     Overview:
@@ -21,7 +21,7 @@ def func_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType
     Arguments:
         - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
@@ -47,7 +47,7 @@ def func_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType
     """
 
     def _decorator(func):
-        _treelized = _c_func_treelize(mode, return_type, inherit, missing, subside, rise)(func)
+        _treelized = _c_func_treelize(mode, return_type, inherit, missing, delayed, subside, rise)(func)
 
         @wraps(func)
         def _new_func(*args, **kwargs):
@@ -82,7 +82,7 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
         - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
@@ -154,7 +154,7 @@ def classmethod_treelize(mode: str = 'strict', return_type: Optional[Type[TreeCl
         - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
         - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \
             default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method's class.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \

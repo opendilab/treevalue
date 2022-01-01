@@ -17,7 +17,9 @@ _VALUE_IS_MISSING = SingletonMark('value_is_missing')
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 cdef object _c_func_treelize_run(object func, list args, dict kwargs,
-                                 _e_tree_mode mode, bool inherit, bool allow_missing, object missing_func):
+                                 _e_tree_mode mode, bool inherit,
+                                 bool allow_missing, object missing_func,
+                                 bool delayed):
     cdef list ck_args = []
     cdef list ck_kwargs = []
     cdef bool has_tree = False
@@ -117,7 +119,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs,
                     ))
 
         _d_res[k] = _c_func_treelize_run(func, _l_args, _d_kwargs,
-                                         mode, inherit, allow_missing, missing_func)
+                                         mode, inherit, allow_missing, missing_func, delayed)
 
     return TreeStorage(_d_res)
 
@@ -131,7 +133,7 @@ def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True
 # runtime function
 def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object __w_return_type,
                          bool __w_inherit, bool __w_allow_missing, object __w_missing_func,
-                         object __w_subside, object __w_rise, **kwargs):
+                         bool __w_delayed, object __w_subside, object __w_rise, **kwargs):
     cdef list _a_args = [(item._detach() if isinstance(item, TreeValue) else item) for item in args]
     cdef dict _a_kwargs = {k: (v._detach() if isinstance(v, TreeValue) else v) for k, v in kwargs.items()}
 
@@ -140,7 +142,7 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
         _a_kwargs = {key: _w_subside_func(value, **__w_subside) for key, value in _a_kwargs.items()}
 
     cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode,
-                                               __w_inherit, __w_allow_missing, __w_missing_func)
+                                               __w_inherit, __w_allow_missing, __w_missing_func, __w_delayed)
 
     cdef object _o_res
     if __w_return_type is not None:
@@ -176,7 +178,7 @@ cdef inline tuple _c_missing_process(object missing):
 
 # build-time function
 cpdef object _d_func_treelize(object func, object mode, object return_type, bool inherit, object missing,
-                              object subside, object rise):
+                              bool delayed, object subside, object rise):
     cdef _e_tree_mode _v_mode = _c_load_mode(mode)
     cdef bool allow_missing
     cdef object missing_func
@@ -195,12 +197,12 @@ cpdef object _d_func_treelize(object func, object mode, object return_type, bool
     _c_check(_v_mode, return_type, inherit, allow_missing, missing_func)
     return partial(_w_func_treelize_run, __w_func=func, __w_mode=_v_mode, __w_return_type=return_type,
                    __w_inherit=inherit, __w_allow_missing=allow_missing, __w_missing_func=missing_func,
-                   __w_subside=_v_subside, __w_rise=_v_rise)
+                   __w_delayed=delayed, __w_subside=_v_subside, __w_rise=_v_rise)
 
 @cython.binding(True)
 cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
                            bool inherit=True, object missing=MISSING_NOT_ALLOW,
-                           object subside=None, object rise=None):
+                           bool delayed=False, object subside=None, object rise=None):
     """
     Overview:
         Wrap a common function to tree-supported function.
@@ -233,4 +235,4 @@ cpdef object func_treelize(object mode='strict', object return_type=TreeValue,
         >>> ssum(t1, t2)  # TreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
     """
     return partial(_d_func_treelize, mode=mode, return_type=return_type,
-                   inherit=inherit, missing=missing, subside=subside, rise=rise)
+                   inherit=inherit, missing=missing, delayed=delayed, subside=subside, rise=rise)
