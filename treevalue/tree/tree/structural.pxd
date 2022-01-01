@@ -12,10 +12,10 @@ cdef object _c_subside_process(tuple value, object it)
 cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_)
 cdef void _c_subside_missing()
 cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit,
-                       object mode, object missing)
+                       object mode, object missing, bool delayed)
 cdef object _c_subside_keep_type(object t)
 cpdef object subside(object value, bool dict_= *, bool list_= *, bool tuple_= *,
-                     object return_type= *, bool inherit= *, object mode= *, object missing= *)
+                     object return_type= *, bool inherit= *, object mode= *, object missing= *, bool delayed= *)
 
 cdef object _c_rise_tree_builder(tuple p, object it)
 cdef tuple _c_rise_tree_process(object t)

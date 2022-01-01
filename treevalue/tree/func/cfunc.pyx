@@ -168,8 +168,8 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mo
     return TreeStorage(_d_res)
 
 def _w_subside_func(object value, bool dict_=True, bool list_=True, bool tuple_=True, bool inherit=True,
-                    object mode='strict', object missing=MISSING_NOT_ALLOW):
-    return _c_subside(value, dict_, list_, tuple_, inherit, mode, missing)[0]
+                    object mode='strict', object missing=MISSING_NOT_ALLOW, bool delayed=False):
+    return _c_subside(value, dict_, list_, tuple_, inherit, mode, missing, delayed)[0]
 
 def _w_rise_func(object tree, bool dict_=True, bool list_=True, bool tuple_=True, object template=None):
     return _c_rise(tree, dict_, list_, tuple_, template)
@@ -181,9 +181,11 @@ def _w_func_treelize_run(*args, object __w_func, _e_tree_mode __w_mode, object _
     cdef list _a_args = [(item._detach() if isinstance(item, TreeValue) else item) for item in args]
     cdef dict _a_kwargs = {k: (v._detach() if isinstance(v, TreeValue) else v) for k, v in kwargs.items()}
 
+    cdef dict _w_subside_cfg
     if __w_subside is not None:
-        _a_args = [_w_subside_func(item, **__w_subside) for item in _a_args]
-        _a_kwargs = {key: _w_subside_func(value, **__w_subside) for key, value in _a_kwargs.items()}
+        _w_subside_cfg = {'delayed': __w_delayed, **__w_subside}
+        _a_args = [_w_subside_func(item, **_w_subside_cfg) for item in _a_args]
+        _a_kwargs = {key: _w_subside_func(value, **_w_subside_cfg) for key, value in _a_kwargs.items()}
 
     cdef object _st_res = _c_func_treelize_run(__w_func, _a_args, _a_kwargs, __w_mode,
                                                __w_inherit, __w_allow_missing, __w_missing_func, __w_delayed)
