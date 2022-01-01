@@ -602,4 +602,23 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
 
             assert ssum(t1, t2) == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
 
+            cnt_1 = 0
+
+            @tree_value_clazz.func(delayed=True)
+            def ssumx(x, y):
+                nonlocal cnt_1
+                cnt_1 += 1
+                return x + y
+
+            cnt_1 = 0
+            t3 = ssumx(t1, t2)
+            assert cnt_1 == 0
+
+            assert t3.a == 12
+            assert cnt_1 == 1
+            assert t3.x == tree_value_clazz({'c': 36, 'd': 52})
+            assert cnt_1 == 3
+            assert t3 == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
+            assert cnt_1 == 4
+
     return _TestClass
