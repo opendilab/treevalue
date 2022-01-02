@@ -8,7 +8,7 @@ import cython
 from hbutils.design import SingletonMark
 
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
-from ..common.storage cimport TreeStorage, create_storage
+from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
 
 _GET_NO_DEFAULT = SingletonMark('get_no_default')
@@ -396,11 +396,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
         id_pool[nid] = path
         data = st.detach()
         for k, v in sorted(data.items()):
-            nv = undelay(v)
-            if nv is not v:
-                v = nv
-                data[k] = v
-
+            v = _c_undelay_data(data, k, v)
             curpath = path + (k,)
             _t_prefix = f'{k} --> '
             if isinstance(v, TreeStorage):

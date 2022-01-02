@@ -31,3 +31,6 @@ cdef class TreeStorage:
     cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func, bool allow_delayed)
 
 cpdef public object create_storage(dict value)
+cdef object _c_undelay_data(dict data, object k, object v)
+cdef object _c_undelay_not_none_data(dict data, object k, object v)
+cdef object _c_undelay_check_data(dict data, object k, object v)

@@ -40,25 +40,14 @@ cdef class TreeStorage:
         cdef object v, nv
         try:
             v = self.map[key]
-            nv = undelay(v)
-            if nv is not v:
-                self.map[key] = nv
-                return nv
-            else:
-                return v
+            return _c_undelay_data(self.map, key, v)
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
     cpdef public object get_or_default(self, str key, object default):
         cdef object v, nv
         v = self.map.get(key, default)
-        nv = undelay(v)
-        if nv is not v:
-            v = nv
-            if key in self.map:
-                self.map[key] = v
-
-        return v
+        return _c_undelay_check_data(self.map, key, v)
 
     cpdef public void del_(self, str key) except *:
         try:
@@ -90,10 +79,7 @@ cdef class TreeStorage:
         cdef object v, obj, nv
         for k, v in self.map.items():
             if not allow_delayed:
-                nv = undelay(v)
-                if nv is not v:
-                    v = nv
-                    self.map[k] = v
+                v = _c_undelay_data(self.map, k, v)
 
             if isinstance(v, TreeStorage):
                 result[k] = v.jsondumpx(copy_func, need_raw, allow_delayed)
@@ -134,10 +120,7 @@ cdef class TreeStorage:
             if k in detached:
                 v = detached[k]
                 if not allow_delayed:
-                    nv = undelay(v)
-                    if nv is not v:
-                        v = nv
-                        detached[k] = v
+                    v = _c_undelay_data(detached, k, v)
 
                 if isinstance(v, TreeStorage):
                     if k in self.map and isinstance(self.map[k], TreeStorage):
@@ -181,16 +164,10 @@ cdef class TreeStorage:
         if self_keys == other_keys:
             for key in self_keys:
                 self_v = self.map[key]
-                self_nv = undelay(self_v)
-                if self_nv is not self_v:
-                    self_v = self_nv
-                    self.map[key] = self_v
+                self_v = _c_undelay_data(self.map, key, self_v)
 
                 other_v = other_map[key]
-                other_nv = undelay(other_v)
-                if other_nv is not other_v:
-                    other_v = other_nv
-                    other_map[key] = other_v
+                other_v = _c_undelay_data(other_map, key, other_v)
 
                 if self_v != other_v:
                     return False
@@ -214,21 +191,13 @@ cdef class TreeStorage:
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
-            nv = undelay(v)
-            if nv is not v:
-                v = nv
-                self.map[k] = v
-
-            yield v
+            yield _c_undelay_data(self.map, k, v)
 
     def items(self):
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
-            nv = undelay(v)
-            if nv is not v:
-                v = nv
-                self.map[k] = v
+            v = _c_undelay_data(self.map, k, v)
 
             yield k, v
 
@@ -244,3 +213,21 @@ cpdef object create_storage(dict value):
             _map[k] = unraw(v)
 
     return TreeStorage(_map)
+
+cdef inline object _c_undelay_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v:
+        data[k] = nv
+    return nv
+
+cdef inline object _c_undelay_not_none_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v and k is not None:
+        data[k] = nv
+    return nv
+
+cdef inline object _c_undelay_check_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v and k in data:
+        data[k] = nv
+    return nv

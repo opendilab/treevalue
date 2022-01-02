@@ -10,7 +10,7 @@ from libcpp cimport bool
 from .tree cimport TreeValue
 from ..common.delay cimport undelay
 from ..common.delay import delayed_partial
-from ..common.storage cimport TreeStorage
+from ..common.storage cimport TreeStorage, _c_undelay_data
 
 cdef inline object _c_no_arg(object func, object v, object p):
     return func()
@@ -54,10 +54,7 @@ cdef TreeStorage _c_mapping(TreeStorage st, object func, tuple path, bool delaye
     cdef tuple curpath
     for k, v in _d_st.items():
         if not delayed:
-            nv = undelay(v)
-            if nv is not v:
-                v = nv
-                _d_st[k] = v
+            v = _c_undelay_data(_d_st, k, v)
 
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
@@ -112,11 +109,7 @@ cdef TreeStorage _c_filter_(TreeStorage st, object func, tuple path, bool remove
     cdef tuple curpath
     cdef TreeStorage curst
     for k, v in _d_st.items():
-        nv = undelay(v)
-        if nv is not v:
-            v = nv
-            _d_st[k] = v
-
+        v = _c_undelay_data(_d_st, k, v)
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             curst = _c_filter_(v, func, curpath, remove_empty)
@@ -170,24 +163,17 @@ cdef object _c_mask(TreeStorage st, object sm, tuple path, bool remove_empty):
     cdef dict _d_res = {}
 
     cdef str k
-    cdef object v, mv, nv, nmv
+    cdef object v, mv
     cdef tuple curpath
     cdef object curres
     for k, v in _d_st.items():
-        nv = undelay(v)
-        if nv is not v:
-            v = nv
-            _d_st[k] = v
-
+        v = _c_undelay_data(_d_st, k, v)
         curpath = path + (k,)
         if _b_tree_mask:
             mv = _d_sm[k]
+            mv = _c_undelay_data(_d_sm, k, mv)
         else:
             mv = sm
-        nmv = undelay(mv)
-        if nmv is not mv:
-            mv = nmv
-            _d_sm[k] = mv
 
         if isinstance(v, TreeStorage):
             curres = _c_mask(v, mv, curpath, remove_empty)
@@ -233,11 +219,7 @@ cdef object _c_reduce(TreeStorage st, object func, tuple path, object return_typ
     cdef tuple curpath
     cdef object curst
     for k, v in _d_st.items():
-        nv = undelay(v)
-        if nv is not v:
-            v = nv
-            _d_st[k] = v
-
+        v = _c_undelay_data(_d_st, k, v)
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             curst = _c_reduce(v, func, curpath, return_type)

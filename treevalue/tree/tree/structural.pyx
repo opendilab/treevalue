@@ -10,8 +10,7 @@ from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .tree cimport TreeValue
-from ..common.delay cimport undelay
-from ..common.storage cimport TreeStorage
+from ..common.storage cimport TreeStorage, _c_undelay_data
 from ..func.cfunc cimport _c_func_treelize_run, _c_missing_process
 from ..func.modes cimport _c_load_mode
 
@@ -228,11 +227,7 @@ cdef tuple _c_rise_tree_process(object t):
         _l_items = []
         _l_values = []
         for k, v in detached.items():
-            nv = undelay(v)
-            if nv is not v:
-                v = nv
-                detached[k] = v
-
+            v = _c_undelay_data(detached, k, v)
             _i_item, _i_value = _c_rise_tree_process(v)
             _l_items.append((k, _i_item))
             _l_values.append(_i_value)

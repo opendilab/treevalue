@@ -10,12 +10,14 @@ from libcpp cimport bool
 from .modes cimport _e_tree_mode, _c_keyset, _c_load_mode, _c_check
 from ..common.delay import delayed_partial
 from ..common.delay cimport undelay
-from ..common.storage cimport TreeStorage
+from ..common.storage cimport TreeStorage, _c_undelay_not_none_data, _c_undelay_data
 from ..tree.structural cimport _c_subside, _c_rise
 from ..tree.tree cimport TreeValue
 
 _VALUE_IS_MISSING = SingletonMark('value_is_missing')
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
+
+
 
 cdef inline object _c_wrap_func_treelize_run(object func, list args, dict kwargs, _e_tree_mode mode, bool inherit,
                                              bool allow_missing, object missing_func, bool delayed):
@@ -24,18 +26,10 @@ cdef inline object _c_wrap_func_treelize_run(object func, list args, dict kwargs
     cdef str k, ak
     cdef object av, v, nv
     for av, k, v in args:
-        nv = undelay(v)
-        if nv is not v and k is not None:
-            av[k] = nv
-
-        _l_args.append(nv)
+        _l_args.append(_c_undelay_not_none_data(av, k, v))
 
     for ak, (av, k, v) in kwargs.items():
-        nv = undelay(v)
-        if nv is not v and k is not None:
-            av[k] = nv
-
-        _d_kwargs[ak] = nv
+        _d_kwargs[ak] = _c_undelay_not_none_data(av, k, v)
 
     return _c_func_treelize_run(func, _l_args, _d_kwargs,
                                 mode, inherit, allow_missing, missing_func, delayed)
@@ -96,11 +90,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mo
                     if delayed:
                         _l_args.append((av, k, v))
                     else:
-                        nv = undelay(v)
-                        if nv is not v:
-                            v = nv
-                            av[k] = v
-
+                        v = _c_undelay_data(av, k, v)
                         _l_args.append(v)
                 except KeyError:
                     if allow_missing:
@@ -131,11 +121,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mo
                     if delayed:
                         _d_kwargs[ak] = (av, k, v)
                     else:
-                        nv = undelay(v)
-                        if nv is not v:
-                            v = nv
-                            av[k] = v
-
+                        v = _c_undelay_data(av, k, v)
                         _d_kwargs[ak] = v
                 except KeyError:
                     if allow_missing:
