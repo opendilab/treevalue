@@ -32,7 +32,16 @@ You can simply install it with `pip` command line from the official PyPI site.
 pip install treevalue
 ```
 
-For more information about installation, you can refer to [Installation](https://opendilab.github.io/treevalue/main/tutorials/installation/index.html#).
+If you want to link with the [potc](https://github.com/potc-dev/potc) package so that treevalue can support source code conversion, you can use the following command to install it.
+
+```shell
+pip install treevalue[potc]
+```
+
+For more information about installation, you can refer to
+
+* [Installation](https://opendilab.github.io/treevalue/main/tutorials/installation/index.html)
+* [Potc Plugin Installation](https://opendilab.github.io/treevalue/main/tutorials/plugins/index.html#potc-support)
 
 ## Documentation
 
