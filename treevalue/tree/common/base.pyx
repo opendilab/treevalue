@@ -39,7 +39,7 @@ cdef class RawWrapper:
         self.val = state
 
 @cython.binding(True)
-cpdef public object raw(object obj):
+cpdef inline object raw(object obj):
     """
     Overview:
         Try wrap the given ``obj`` to raw wrapper.
@@ -57,7 +57,7 @@ cpdef public object raw(object obj):
         return obj
 
 @cython.binding(True)
-cpdef public object unraw(object wrapped):
+cpdef inline object unraw(object wrapped):
     """
     Overview:
         Try unwrap the given ``wrapped`` to original object.

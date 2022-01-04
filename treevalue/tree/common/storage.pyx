@@ -4,13 +4,15 @@
 from copy import deepcopy
 
 from libc.string cimport strlen
+from libcpp cimport bool
 
 from .base cimport raw, unraw
+from .delay cimport undelay
 
 cdef inline object _keep_object(object obj):
     return obj
 
-cdef inline void _key_validate(const char*key) except *:
+cdef inline void _key_validate(const char *key) except *:
     cdef int n = strlen(key)
     if n < 1:
         raise KeyError(f'Key {repr(key)} is too short, minimum length is 1 but {n} found.')
@@ -35,13 +37,17 @@ cdef class TreeStorage:
         self.map[key] = value
 
     cpdef public object get(self, str key):
+        cdef object v, nv
         try:
-            return self.map[key]
+            v = self.map[key]
+            return _c_undelay_data(self.map, key, v)
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
     cpdef public object get_or_default(self, str key, object default):
-        return self.map.get(key, default)
+        cdef object v, nv
+        v = self.map.get(key, default)
+        return _c_undelay_check_data(self.map, key, v)
 
     cpdef public void del_(self, str key) except *:
         try:
@@ -65,17 +71,20 @@ cdef class TreeStorage:
         return self.deepdumpx(deepcopy)
 
     cpdef public dict deepdumpx(self, copy_func):
-        return self.jsondumpx(copy_func, True)
+        return self.jsondumpx(copy_func, True, False)
 
-    cpdef public dict jsondumpx(self, copy_func, object need_raw):
+    cpdef public dict jsondumpx(self, copy_func, bool need_raw, bool allow_delayed):
         cdef dict result = {}
         cdef str k
-        cdef object v, obj
+        cdef object v, obj, nv
         for k, v in self.map.items():
+            if not allow_delayed:
+                v = _c_undelay_data(self.map, k, v)
+
             if isinstance(v, TreeStorage):
-                result[k] = v.jsondumpx(copy_func, need_raw)
+                result[k] = v.jsondumpx(copy_func, need_raw, allow_delayed)
             else:
-                obj = copy_func(v)
+                obj = copy_func(v) if not allow_delayed else v
                 if need_raw:
                     obj = raw(obj)
                 result[k] = obj
@@ -83,43 +92,48 @@ cdef class TreeStorage:
         return result
 
     cpdef public TreeStorage copy(self):
-        return self.deepcopyx(_keep_object)
+        return self.deepcopyx(_keep_object, True)
 
     cpdef public TreeStorage deepcopy(self):
-        return self.deepcopyx(deepcopy)
+        return self.deepcopyx(deepcopy, False)
 
-    cpdef public TreeStorage deepcopyx(self, copy_func):
-        cdef type cls = type(self)
-        return create_storage(self.deepdumpx(copy_func))
+    cpdef public TreeStorage deepcopyx(self, copy_func, bool allow_delayed):
+        return create_storage(self.jsondumpx(copy_func, True, allow_delayed))
 
     cpdef public dict detach(self):
         return self.map
 
     cpdef public void copy_from(self, TreeStorage ts):
-        self.deepcopyx_from(ts, _keep_object)
+        self.deepcopyx_from(ts, _keep_object, True)
 
     cpdef public void deepcopy_from(self, TreeStorage ts):
-        self.deepcopyx_from(ts, deepcopy)
+        self.deepcopyx_from(ts, deepcopy, False)
 
-    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func):
+    cpdef public void deepcopyx_from(self, TreeStorage ts, copy_func, bool allow_delayed):
         cdef dict detached = ts.detach()
         cdef set keys = set(self.map.keys()) | set(detached.keys())
 
         cdef str k
-        cdef object
+        cdef object v, nv
         cdef TreeStorage newv
         for k in keys:
             if k in detached:
                 v = detached[k]
+                if not allow_delayed:
+                    v = _c_undelay_data(detached, k, v)
+
                 if isinstance(v, TreeStorage):
                     if k in self.map and isinstance(self.map[k], TreeStorage):
-                        self.map[k].copy_from(v)
+                        self.map[k].deepcopyx_from(v, copy_func, allow_delayed)
                     else:
                         newv = TreeStorage({})
-                        newv.copy_from(v)
+                        newv.deepcopyx_from(v, copy_func, allow_delayed)
                         self.map[k] = newv
                 else:
-                    self.map[k] = copy_func(v)
+                    if not allow_delayed:
+                        self.map[k] = copy_func(v)
+                    else:
+                        self.map[k] = v
             else:
                 del self.map[k]
 
@@ -145,12 +159,16 @@ cdef class TreeStorage:
         cdef list other_keys = sorted(other.detach().keys())
 
         cdef str key
-        cdef object self_v
-        cdef object other_v
+        cdef object self_v, self_nv
+        cdef object other_v, other_nv
         if self_keys == other_keys:
             for key in self_keys:
                 self_v = self.map[key]
+                self_v = _c_undelay_data(self.map, key, self_v)
+
                 other_v = other_map[key]
+                other_v = _c_undelay_data(other_map, key, other_v)
+
                 if self_v != other_v:
                     return False
             return True
@@ -161,7 +179,7 @@ cdef class TreeStorage:
         cdef str k
         cdef object v
         cdef list _items = []
-        for k, v in sorted(self.map.items(), key=lambda x: x[0]):
+        for k, v in sorted(self.items(), key=lambda x: x[0]):
             _items.append((k, v))
 
         return hash(tuple(_items))
@@ -170,10 +188,18 @@ cdef class TreeStorage:
         return self.map.keys()
 
     def values(self):
-        return self.map.values()
+        cdef str k
+        cdef object v, nv
+        for k, v in self.map.items():
+            yield _c_undelay_data(self.map, k, v)
 
     def items(self):
-        return self.map.items()
+        cdef str k
+        cdef object v, nv
+        for k, v in self.map.items():
+            v = _c_undelay_data(self.map, k, v)
+
+            yield k, v
 
 cpdef object create_storage(dict value):
     cdef dict _map = {}
@@ -187,3 +213,21 @@ cpdef object create_storage(dict value):
             _map[k] = unraw(v)
 
     return TreeStorage(_map)
+
+cdef inline object _c_undelay_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v:
+        data[k] = nv
+    return nv
+
+cdef inline object _c_undelay_not_none_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v and k is not None:
+        data[k] = nv
+    return nv
+
+cdef inline object _c_undelay_check_data(dict data, object k, object v):
+    cdef object nv = undelay(v)
+    if nv is not v and k in data:
+        data[k] = nv
+    return nv
