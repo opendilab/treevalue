@@ -5,7 +5,7 @@ from typing import Type
 import numpy as np
 import pytest
 
-from treevalue.tree import func_treelize, TreeValue, raw, mapping
+from treevalue.tree import func_treelize, TreeValue, raw, mapping, delayed
 
 
 def get_tree_test(tree_value_clazz: Type[TreeValue]):
@@ -356,8 +356,38 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert t2.add(t1) == tree_value_clazz({'a': 2, 'b': 4, 'x': {'c': 6, 'd': 8}})
 
         def test_map(self):
+            cnt = 0
+
+            def f(x):
+                nonlocal cnt
+                cnt += 1
+                return x + 2
+
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            assert t1.map(lambda x: x + 2) == tree_value_clazz({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
+            assert cnt == 0
+            t2 = t1.map(f)
+            assert cnt == 4
+            assert t2 == tree_value_clazz({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
+
+            cnt = 0
+            t3 = tree_value_clazz({
+                'a': delayed(lambda: t1.a),
+                'b': delayed(lambda: t1.b),
+                'x': delayed(lambda: t1.x),
+            })
+            assert cnt == 0
+
+            t4 = t3.map(f, delayed=True)
+            assert cnt == 0
+
+            assert t4.a == 3
+            assert cnt == 1
+
+            assert t4 == tree_value_clazz({'a': 3, 'b': 4, 'x': {'c': 5, 'd': 6}})
+            assert cnt == 4
+
+            assert t4.a == 3
+            assert cnt == 4
 
         def test_type(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -571,5 +601,24 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 return x + y
 
             assert ssum(t1, t2) == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
+
+            cnt_1 = 0
+
+            @tree_value_clazz.func(delayed=True)
+            def ssumx(x, y):
+                nonlocal cnt_1
+                cnt_1 += 1
+                return x + y
+
+            cnt_1 = 0
+            t3 = ssumx(t1, t2)
+            assert cnt_1 == 0
+
+            assert t3.a == 12
+            assert cnt_1 == 1
+            assert t3.x == tree_value_clazz({'c': 36, 'd': 52})
+            assert cnt_1 == 3
+            assert t3 == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
+            assert cnt_1 == 4
 
     return _TestClass

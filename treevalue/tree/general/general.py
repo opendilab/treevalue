@@ -147,13 +147,14 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return typetrans(self, clazz)
 
         @_decorate_method
-        def map(self, mapper):
+        def map(self, mapper, delayed=False):
             """
             Overview:
                 Do mapping on every value in this tree.
 
             Arguments:
                 - func (:obj:): Function for mapping
+                - delayed (:obj:`bool`): Enable delayed mode for this mapping.
 
             Returns:
                 - tree (:obj:`_TreeValue`): Mapped tree value object.
@@ -164,7 +165,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t.map(lambda: 1)        # FastTreeValue({'a': 1, 'b': 1, 'x': {'c': 1, 'd': 1}})
                 >>> t.map(lambda x, p: p)   # FastTreeValue({'a': ('a',), 'b': ('b',), 'x': {'c': ('x', 'c'), 'd': ('x', 'd')}})
             """
-            return mapping(self, mapper)
+            return mapping(self, mapper, delayed)
 
         @_decorate_method
         def mask(self, mask_: TreeValue, remove_empty: bool = True):
@@ -308,9 +309,8 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
         @classmethod
         @_decorate_method
         def func(cls, mode: str = 'strict', inherit: bool = True,
-                 missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
-                 subside: Union[Mapping, bool, None] = None,
-                 rise: Union[Mapping, bool, None] = None):
+                 missing: Union[Any, Callable] = MISSING_NOT_ALLOW, delayed: bool = False,
+                 subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None):
             """
             Overview:
                 Wrap a common function to tree-supported function based on this type.
@@ -320,6 +320,8 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
                 - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
                     default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+                - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+                    default is ``False``, which means to all the calculation at once.
                 - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
                     and subside configuration, default is `None` which means do not use subside. \
                     When subside is `True`, it will use all the default arguments in `subside` function.
@@ -343,7 +345,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> ssum(1, 2)    # 3
                 >>> ssum(t1, t2)  # FastTreeValue({'a': 12, 'b': 24, 'x': {'c': 36, 'd': 9}})
             """
-            return func_treelize(mode, cls, inherit, missing, subside, rise)
+            return func_treelize(mode, cls, inherit, missing, delayed, subside, rise)
 
         @classmethod
         @_decorate_method

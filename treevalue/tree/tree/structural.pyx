@@ -6,12 +6,15 @@
 from itertools import chain
 
 import cython
+from hbutils.design import SingletonMark
 from libcpp cimport bool
 
 from .tree cimport TreeValue
-from ..common.storage cimport TreeStorage
-from ..func.cfunc cimport _c_func_treelize_run
+from ..common.storage cimport TreeStorage, _c_undelay_data
+from ..func.cfunc cimport _c_func_treelize_run, _c_missing_process
 from ..func.modes cimport _c_load_mode
+
+MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
 cdef object _c_subside_process(tuple value, object it):
     cdef type type_
@@ -76,25 +79,29 @@ cdef tuple _c_subside_build(object value, bool dict_, bool list_, bool tuple_):
         else:
             return (object, None), (value,), ()
 
-STRICT = _c_load_mode('STRICT')
-
 cdef inline void _c_subside_missing():
     pass
 
-cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit):
+cdef object _c_subside(object value, bool dict_, bool list_, bool tuple_, bool inherit,
+                       object mode, object missing, bool delayed):
     cdef object builder, _i_args, _i_types
     builder, _i_args, _i_types = _c_subside_build(value, dict_, list_, tuple_)
     cdef list args = list(_i_args)
 
+    cdef bool allow_missing
+    cdef object missing_func
+    allow_missing, missing_func = _c_missing_process(missing)
+
     return _c_func_treelize_run(_SubsideCall(builder), args, {},
-                                STRICT, inherit, False, _c_subside_missing), _i_types
+                                _c_load_mode(mode), inherit, allow_missing, missing_func, delayed), _i_types
 
 cdef inline object _c_subside_keep_type(object t):
     return t
 
 @cython.binding(True)
 cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_=True,
-                     object return_type=None, bool inherit=True):
+                     object return_type=None, bool inherit=True,
+                     object mode='strict', object missing=MISSING_NOT_ALLOW, bool delayed=False):
     """
     Overview:
         Drift down the structures (list, tuple, dict) down to the tree's value.
@@ -108,6 +115,11 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
             will be auto detected when there is exactly one tree value type in this original value, \
             otherwise the default will be `TreeValue`.
         - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
 
     Returns:
         - return (:obj:`_TreeValue`): Subsided tree value.
@@ -132,7 +144,7 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
         >>> #}), all structures above the tree values are subsided to the bottom of the tree.
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit)
+    result, _i_types = _c_subside(value, dict_, list_, tuple_, inherit, mode, missing, delayed)
 
     cdef object type_
     cdef set types
@@ -150,7 +162,8 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
     return type_(result)
 
 @cython.binding(True)
-def union(*trees, object return_type=None, bool inherit=True):
+def union(*trees, object return_type=None, bool inherit=True,
+          object mode='strict', object missing=MISSING_NOT_ALLOW, bool delayed=False):
     """
     Overview:
         Union tree values together.
@@ -158,7 +171,12 @@ def union(*trees, object return_type=None, bool inherit=True):
     Arguments:
         - trees (:obj:`_TreeValue`): Tree value objects.
         - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.
-        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.
+        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
+        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.
+        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
+            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
 
     Returns:
         - result (:obj:`TreeValue`): Unionised tree value.
@@ -169,7 +187,7 @@ def union(*trees, object return_type=None, bool inherit=True):
         >>> union(t, tx)  # TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
     """
     cdef object result, _i_types
-    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit)
+    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit, mode, missing, delayed)
 
     cdef object type_
     cdef list types
@@ -200,7 +218,7 @@ cdef object _c_rise_tree_builder(tuple p, object it):
 
 cdef tuple _c_rise_tree_process(object t):
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef list _l_items, _l_values
     cdef object _i_item, _i_value
     cdef dict detached
@@ -209,6 +227,7 @@ cdef tuple _c_rise_tree_process(object t):
         _l_items = []
         _l_values = []
         for k, v in detached.items():
+            v = _c_undelay_data(detached, k, v)
             _i_item, _i_value = _c_rise_tree_process(v)
             _l_items.append((k, _i_item))
             _l_values.append(_i_value)
@@ -262,7 +281,7 @@ cdef tuple _c_rise_struct_process(list objs, object template):
             _l_obj_0 = len(objs[0])
             if _l_obj_0 < _l_temp - 2:
                 raise ValueError(f"At least {repr(_l_temp - 2)} value expected due to template "
-                                f"{repr(template)}, but length is {repr(_l_obj_0)}.")
+                                 f"{repr(template)}, but length is {repr(_l_obj_0)}.")
 
             _a_template = type(template)(chain(template[:-2], (template[-2],) * (_l_obj_0 - _l_temp + 2)))
         else:

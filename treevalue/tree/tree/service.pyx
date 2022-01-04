@@ -9,7 +9,7 @@ import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
-from ..common.storage cimport TreeStorage
+from ..common.storage cimport TreeStorage, _c_undelay_data
 
 cdef object _keep_object(object obj):
     return obj
@@ -29,7 +29,7 @@ cpdef object jsonify(TreeValue val):
     Example:
         >>> jsonify(TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}))  # {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
     """
-    return val._detach().jsondumpx(_keep_object, False)
+    return val._detach().jsondumpx(_keep_object, False, False)
 
 @cython.binding(True)
 cpdef TreeValue clone(TreeValue t, object copy_value=None):
@@ -50,10 +50,18 @@ cpdef TreeValue clone(TreeValue t, object copy_value=None):
         >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         >>> clone(t.x)  # TreeValue({'c': 3, 'd': 4})
     """
+    cdef bool need_copy
     if not callable(copy_value):
-        copy_value = copy.deepcopy if copy_value else _keep_object
+        if copy_value:
+            need_copy = True
+            copy_value = copy.deepcopy
+        else:
+            need_copy = False
+            copy_value = _keep_object
+    else:
+        need_copy = True
 
-    return type(t)(t._detach().deepcopyx(copy_value))
+    return type(t)(t._detach().deepcopyx(copy_value, not need_copy))
 
 @cython.binding(True)
 cpdef TreeValue typetrans(TreeValue t, object return_type):
@@ -87,9 +95,10 @@ def _p_walk(TreeStorage tree, object type_, tuple path, bool include_nodes):
 
     cdef dict data = tree.detach()
     cdef str k
-    cdef object v
+    cdef object v, nv
     cdef tuple curpath
     for k, v in data.items():
+        v = _c_undelay_data(data, k, v)
         curpath = path + (k,)
         if isinstance(v, TreeStorage):
             yield from _p_walk(v, type_, curpath, include_nodes)

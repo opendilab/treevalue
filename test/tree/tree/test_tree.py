@@ -3,7 +3,7 @@ import re
 
 import pytest
 
-from treevalue import raw, TreeValue
+from treevalue import raw, TreeValue, delayed
 
 
 class _Container:
@@ -120,6 +120,20 @@ class TestTreeTreeTree:
         assert "y --> 3" in repr(tv2)
         assert "c --> <TreeValue" in repr(tv2)
         assert "(The same address as <root>)" in repr(tv2)
+
+        tv3 = TreeValue({
+            'a': delayed(lambda: tv1.a),
+            'b': delayed(lambda: tv1.b),
+            'c': delayed(lambda: tv1.c),
+        })
+
+        assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv3))
+        assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv3.c))
+        assert "a --> 1" in str(tv3)
+        assert "b --> 2" in str(tv3)
+        assert "x --> 2" in str(tv3)
+        assert "y --> 3" in str(tv3)
+        assert "c --> <TreeValue" in str(tv3)
 
     def test_tree_value_iter(self):
         # Attention: dict(tv1) is not supported in python 3.7+

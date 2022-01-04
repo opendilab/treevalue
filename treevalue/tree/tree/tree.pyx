@@ -7,7 +7,8 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
-from ..common.storage cimport TreeStorage, create_storage
+from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
+from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
 
 _GET_NO_DEFAULT = SingletonMark('get_no_default')
@@ -385,7 +386,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
     cdef list children = []
 
     cdef str k, _t_prefix
-    cdef object v
+    cdef object v, nv
     cdef dict data
     cdef tuple curpath
     if nid in id_pool:
@@ -395,6 +396,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
         id_pool[nid] = path
         data = st.detach()
         for k, v in sorted(data.items()):
+            v = _c_undelay_data(data, k, v)
             curpath = path + (k,)
             _t_prefix = f'{k} --> '
             if isinstance(v, TreeStorage):
@@ -404,3 +406,67 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
 
     self_repr = _prefix_fix(self_repr, prefix)
     return self_repr, children
+
+cdef class DetachedDelayedProxy(DelayedProxy):
+    def __init__(self, DelayedProxy proxy):
+        self.proxy = proxy
+        self.calculated = False
+        self.val = None
+
+    cpdef object value(self):
+        if not self.calculated:
+            self.val = undelay(self.proxy, False)
+            self.calculated = True
+
+        return self.val
+
+    cpdef object fvalue(self):
+        cdef object v = self.value()
+        if isinstance(v, TreeValue):
+            v = v._detach()
+        return v
+
+@cython.binding(True)
+def delayed(func, *args, **kwargs):
+    r"""
+    Overview:
+        Use delayed function in treevalue.
+        The given ``func`` will not be called until its value is accessed, and \
+        it will be only called once, after that the delayed node will be replaced by the actual value.
+
+    Arguments:
+        - func: Delayed function.
+        - args: Positional arguments.
+        - kwargs: Key-word arguments.
+
+    Examples::
+        >>> from treevalue import TreeValue, delayed
+        >>>
+        >>> def f(x):
+        >>>     print('f is called, x is', x)
+        >>>     return x ** x
+        >>>
+        >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
+        >>> t.a
+        f is called, x is 2
+        4
+        >>> t.x
+        f is called, x is 3
+        27
+        >>> t.a
+        4
+        >>> t.x
+        27
+        >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
+        >>> print(t)
+        f is called, x is 2
+        f is called, x is 3
+        <TreeValue 0x7f0fb7f03198>
+        ├── a --> 4
+        └── x --> 27
+        >>> print(t)
+        <TreeValue 0x7f0fb7f03198>
+        ├── a --> 4
+        └── x --> 27
+    """
+    return DetachedDelayedProxy(_c_delayed_partial(func, args, kwargs))
