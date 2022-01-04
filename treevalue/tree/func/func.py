@@ -68,7 +68,7 @@ AUTO_DETECT_RETURN_TYPE = SingletonMark("auto_detect_return_type")
 
 
 def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE,
-                    inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                    inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW, delayed: bool = False,
                     subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None,
                     self_copy: bool = False):
     """
@@ -87,6 +87,8 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
         - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.
@@ -125,7 +127,7 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
         rise = None
 
     def _decorator(method):
-        _treelized = _c_func_treelize(mode, _get_self_class, inherit, missing, subside, rise)(method)
+        _treelized = _c_func_treelize(mode, _get_self_class, inherit, missing, delayed, subside, rise)(method)
 
         @wraps(method)
         def _new_method(self, *args, **kwargs):
@@ -142,7 +144,7 @@ def method_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassTy
 
 
 def classmethod_treelize(mode: str = 'strict', return_type: Optional[Type[TreeClassType_]] = AUTO_DETECT_RETURN_TYPE,
-                         inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW,
+                         inherit: bool = True, missing: Union[Any, Callable] = MISSING_NOT_ALLOW, delayed: bool = False,
                          subside: Union[Mapping, bool, None] = None, rise: Union[Mapping, bool, None] = None):
     """
     Overview:
@@ -159,6 +161,8 @@ def classmethod_treelize(mode: str = 'strict', return_type: Optional[Type[TreeCl
         - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.
         - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \
             default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.
+        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \
+            default is ``False``, which means to all the calculation at once.
         - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function's arguments or not, \
             and subside configuration, default is `None` which means do not use subside. \
             When subside is `True`, it will use all the default arguments in `subside` function.
@@ -190,4 +194,4 @@ def classmethod_treelize(mode: str = 'strict', return_type: Optional[Type[TreeCl
         def _get_cls_class(cls):
             return return_type
 
-    return func_treelize(mode, _get_cls_class, inherit, missing, subside, rise)
+    return func_treelize(mode, _get_cls_class, inherit, missing, delayed, subside, rise)
