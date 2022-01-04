@@ -187,7 +187,7 @@
 
 
 <div class="viewcode-block" id="func_treelize"><a class="viewcode-back" href="../../../../tutorials/advanced_usage/index.html#treevalue.tree.func.func_treelize">[docs]</a><span class="k">def</span> <span class="nf">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">TreeClassType_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">,</span>
-                  <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span>
+                  <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span> <span class="n">delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                   <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Overview:</span>
@@ -196,9 +196,11 @@
 <span class="sd">    Arguments:</span>
 <span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
 <span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, default is `TreeValue`.</span>
-<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.</span>
 <span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
 <span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">        - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \</span>
+<span class="sd">            default is ``False``, which means to all the calculation at once.</span>
 <span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
 <span class="sd">            and subside configuration, default is `None` which means do not use subside. \</span>
 <span class="sd">            When subside is `True`, it will use all the default arguments in `subside` function.</span>
@@ -222,7 +224,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="n">_treelized</span> <span class="o">=</span> <span class="n">_c_func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">_treelized</span> <span class="o">=</span> <span class="n">_c_func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
 
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">_new_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -257,7 +259,7 @@
 <span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
 <span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \</span>
 <span class="sd">            default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method&#39;s class.</span>
-<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.</span>
 <span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
 <span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
 <span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
@@ -329,7 +331,7 @@
 <span class="sd">        - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
 <span class="sd">        - return_type (:obj:`Optional[Type[TreeClassType_]]`): Return type of the wrapped function, \</span>
 <span class="sd">            default is `AUTO_DETECT_RETURN_VALUE`, which means automatically use the decorated method&#39;s class.</span>
-<span class="sd">        - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">        - inherit (:obj:`bool`): Allow inheriting in wrapped function, default is `True`.</span>
 <span class="sd">        - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
 <span class="sd">            default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
 <span class="sd">        - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
@@ -408,9 +410,8 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="func.html">dev/potc</a></dd>
-                        <dd><a href="../../../../../delay/index.html">dev/delay</a></dd>
                         <dd><a href="../../../../../../main/index.html">main</a></dd>
+                        <dd><a href="func.html">dev/potc</a></dd>
                         <dd><a href="../../../../../../refactor/color/index.html">refactor/color</a></dd>
                 </dl>
         </div>

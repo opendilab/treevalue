@@ -321,13 +321,14 @@
             <span class="k">return</span> <span class="n">typetrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clazz</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
-        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
 <span class="sd">                Do mapping on every value in this tree.</span>
 
 <span class="sd">            Arguments:</span>
 <span class="sd">                - func (:obj:): Function for mapping</span>
+<span class="sd">                - delayed (:obj:`bool`): Enable delayed mode for this mapping.</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                - tree (:obj:`_TreeValue`): Mapped tree value object.</span>
@@ -338,7 +339,7 @@
 <span class="sd">                &gt;&gt;&gt; t.map(lambda: 1)        # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 1, &#39;d&#39;: 1}})</span>
 <span class="sd">                &gt;&gt;&gt; t.map(lambda x, p: p)   # FastTreeValue({&#39;a&#39;: (&#39;a&#39;,), &#39;b&#39;: (&#39;b&#39;,), &#39;x&#39;: {&#39;c&#39;: (&#39;x&#39;, &#39;c&#39;), &#39;d&#39;: (&#39;x&#39;, &#39;d&#39;)}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="n">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
         <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_</span><span class="p">:</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
@@ -482,9 +483,8 @@
         <span class="nd">@classmethod</span>
         <span class="nd">@_decorate_method</span>
         <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                 <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span>
-                 <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                 <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span> <span class="n">delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
 <span class="sd">                Wrap a common function to tree-supported function based on this type.</span>
@@ -494,6 +494,8 @@
 <span class="sd">                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
 <span class="sd">                - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
 <span class="sd">                    default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">                - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \</span>
+<span class="sd">                    default is ``False``, which means to all the calculation at once.</span>
 <span class="sd">                - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
 <span class="sd">                    and subside configuration, default is `None` which means do not use subside. \</span>
 <span class="sd">                    When subside is `True`, it will use all the default arguments in `subside` function.</span>
@@ -517,7 +519,7 @@
 <span class="sd">                &gt;&gt;&gt; ssum(1, 2)    # 3</span>
 <span class="sd">                &gt;&gt;&gt; ssum(t1, t2)  # FastTreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 36, &#39;d&#39;: 9}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)</span>
 
         <span class="nd">@classmethod</span>
         <span class="nd">@_decorate_method</span>
@@ -1284,9 +1286,8 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../../dev/potc/index.html">dev/potc</a></dd>
-                        <dd><a href="../../../../../dev/delay/index.html">dev/delay</a></dd>
                         <dd><a href="general.html">main</a></dd>
+                        <dd><a href="../../../../../dev/potc/index.html">dev/potc</a></dd>
                         <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
                 </dl>
         </div>
