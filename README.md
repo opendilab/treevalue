@@ -32,16 +32,7 @@ You can simply install it with `pip` command line from the official PyPI site.
 pip install treevalue
 ```
 
-If you want to link with the [potc](https://github.com/potc-dev/potc) package so that treevalue can support source code conversion, you can use the following command to install it.
-
-```shell
-pip install treevalue[potc]
-```
-
-For more information about installation, you can refer to
-
-* [Installation](https://opendilab.github.io/treevalue/main/tutorials/installation/index.html)
-* [Potc Plugin Installation](https://opendilab.github.io/treevalue/main/tutorials/plugins/index.html#potc-support)
+For more information about installation, you can refer to the [installation guide](https://opendilab.github.io/treevalue/main/tutorials/installation/index.html).
 
 ## Documentation
 
@@ -206,6 +197,29 @@ Test benchmark code can be found here:
 * [Comparison with jax-libtree](https://github.com/opendilab/treevalue/blob/main/test/compare/jax/test_jax.py)
 * [Comparison with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/tianshou/test_tianshou_batch.py)
 
+## Extension
+
+If you need to translate `treevalue` object to runnable source code, you may use the [potc-treevalue](https://github.com/potc-dev/potc-treevalue) plugin with the installation command below
+
+```shell
+pip install potc-treevalue
+```
+
+Or just install it with `treevalue` itself
+
+```shell
+pip install treevalue[potc]
+```
+
+In potc, you can translate the objects to runnable python source code, which can be loaded to objects afterwards by the python interpreter, like the following graph
+
+![potc system](docs/source/_static/potc-doing.svg)
+
+For more information, you can refer to
+
+* [potc-dev/potc](https://github.com/potc-dev/potc)
+* [potc-dev/potc-treevalue](https://github.com/potc-dev/potc-treevalue)
+* [Potc Plugin Installation](https://opendilab.github.io/treevalue/main/tutorials/plugins/index.html#potc-support)
 
 ## Contribution
 
