@@ -142,11 +142,11 @@ class TestEntryCliExport:
 
             assert result.exit_code == 0
             assert os.path.exists('t1.btv')
-            assert 260 < os.path.getsize('t1.btv') < 310
+            assert 260 < os.path.getsize('t1.btv') < 330
             assert os.path.exists('t2.btv')
-            assert 280 < os.path.getsize('t2.btv') < 400
+            assert 280 < os.path.getsize('t2.btv') < 430
             assert os.path.exists('t3.btv')
-            assert 280 < os.path.getsize('t3.btv') < 350
+            assert 280 < os.path.getsize('t3.btv') < 375
 
             with open('t1.btv', 'rb') as file:
                 assert load(file, type_=FastTreeValue) == t1
