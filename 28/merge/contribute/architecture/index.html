@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Architecture &mdash; treevalue 1.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="treevalue.utils.tree" href="../../api_doc/utils/tree.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/plugins/index.html">Plugins</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../best_practice/sklearn/index.html">Apply into Scikit-Learn</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tree">Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#treevalue">TreeValue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#func-treelize">func_treelize</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Architecture</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/contribute/architecture/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <div class="section" id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
+<p>In this part, the generic architecture of tree value will be introduced.
+You can try to understand its core ideas by reading this page.</p>
+<p>Like that in numpy and pytorch, tree value’s data layer and logic layer are separated with each other.
+The data layer is called <code class="docutils literal notranslate"><span class="pre">Tree</span></code> and the logic layer is called <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>.
+One or more tree values may be pointed to one tree, they share the same memory.
+In order to support the tree-to-tree operations (tree-to-value or value-to-value are special cases of tree-to-tree) ,<code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> are provided to transform a common value-based function to a tree-based function.</p>
+<p>The core architecture is like this:</p>
+<img alt="../../_images/architecture.puml.svg" class="align-center" src="../../_images/architecture.puml.svg" /><div class="section" id="tree">
+<h2>Tree<a class="headerlink" href="#tree" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Tree</span></code> class is the data layer of the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>. The relation with <code class="docutils literal notranslate"><span class="pre">Tree</span></code> and <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> is similar to that of <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.Buffer</span></code>. Actually, there can be multiple <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> nodes pointed at the same <code class="docutils literal notranslate"><span class="pre">Tree</span></code> node, they will share the same memory and when one the them are modified, the other <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> pointed at the same position will be effected all at a time.</p>
+<p>Here is a example with the usage of the same memories.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>  <span class="c1"># use the same memory with t1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial t1:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial t2:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="n">t1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">t1</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span>  <span class="c1"># only t1 is updated in code</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updated t1:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updated t2:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>The output is like the following, you can see the memory address of <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> are the same, when <code class="docutils literal notranslate"><span class="pre">t1</span></code> is updated, <code class="docutils literal notranslate"><span class="pre">t2</span></code> will be changed together.</p>
+<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Initial t1:
+&lt;TreeValue 0x7f18d9a6d410&gt;
+├── a --&gt; 1
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7f18d9a6d3d0&gt;
+    ├── c --&gt; 3
+    └── d --&gt; 4
+
+Initial t2:
+&lt;TreeValue 0x7f18d9a6d410&gt;
+├── a --&gt; 1
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7f18d9a6d3d0&gt;
+    ├── c --&gt; 3
+    └── d --&gt; 4
+
+
+Updated t1:
+&lt;TreeValue 0x7f18d9a6d410&gt;
+├── a --&gt; 7
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7f18d9a6d3d0&gt;
+    ├── c --&gt; 5
+    └── d --&gt; 4
+
+Updated t2:
+&lt;TreeValue 0x7f18d9a6d410&gt;
+├── a --&gt; 7
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7f18d9a6d3d0&gt;
+    ├── c --&gt; 5
+    └── d --&gt; 4
+</pre></div>
+</td></tr></table></div>
+<p>For contributor, you can get the tree instance inside of a <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> instance, by using <code class="docutils literal notranslate"><span class="pre">_detach()</span></code> method, like the following code.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+    <span class="n">storage</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">_detach</span><span class="p">()</span>  <span class="c1"># tree is the data tree</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;t1:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;tree storage:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">storage</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;data:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>t1:
+&lt;TreeValue 0x7f735f838490&gt;
+├── a --&gt; 1
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7f735f838450&gt;
+    ├── c --&gt; 3
+    └── d --&gt; 4
+
+tree storage:
+&lt;TreeStorage at 0x7f735f838490, keys: (&#39;a&#39;, &#39;b&#39;, &#39;x&#39;)&gt;
+data:
+{&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: &lt;TreeStorage at 0x7f735f838450, keys: (&#39;c&#39;, &#39;d&#39;)&gt;}
+</pre></div>
+</td></tr></table></div>
+<p>For further information, take a look at <a class="reference internal" href="../../api_doc/tree/common.html#apidoc-tree-common-treestorage"><span class="std std-ref">API documentation of BaseTree</span></a>.</p>
+</div>
+<div class="section" id="treevalue">
+<h2>TreeValue<a class="headerlink" href="#treevalue" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> is the logic layer, all the operations and calculations are performed on this layer.</p>
+<p>There are 2 primitive <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> classes in this project, which are called <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> and <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>. In class <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, only the least necessary features are implemented, while the common and frequently-used features are all implement in the <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>, which inherits from <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>.</p>
+<p>When coding, if you need to define a kind of tree which has the common convenient features, just implement class <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> or use function <code class="docutils literal notranslate"><span class="pre">general_tree_value</span></code> is okay. But if you need to define your own operations from an empty template, just inherit the raw <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> class.</p>
+<p>For further information of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, take a look at:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../tutorials/main_idea/index.html#tutorials-mainidea-definition-treevalue"><span class="std std-ref">Definition of TreeValue</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-treevalue"><span class="std std-ref">API documentation of TreeValue</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-fasttreevalue"><span class="std std-ref">API documentation of FastTreeValue</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-generaltreevalue"><span class="std std-ref">API documentation of general_tree_value</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="func-treelize">
+<h2>func_treelize<a class="headerlink" href="#func-treelize" title="Permalink to this headline">¶</a></h2>
+<p>Function <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> is the core feature of this project, almost all the convenient calculations and operations are based on this function.</p>
+<p>For further information of <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code>, take a look at the following pages and their source code implements:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../tutorials/main_idea/index.html#tutorials-mainidea-definition-treelize"><span class="std std-ref">Definition of treelize</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-functreelize"><span class="std std-ref">API documentation of func_treelize</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-methodtreelize"><span class="std std-ref">API documentation of method_treelize</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-classmethodtreelize"><span class="std std-ref">API documentation of classmethod_treelize</span></a>.</p></li>
+</ul>
+</div>
+</div>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../../api_doc/utils/tree.html" class="btn btn-neutral float-left" title="treevalue.utils.tree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 28/merge
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../v0.0.1/contribute/architecture/index.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../v0.1.0/contribute/architecture/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../v1.0.0/contribute/architecture/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../v1.1.0/contribute/architecture/index.html">v1.1.0</a></dd>
+                        <dd><a href="../../../../v1.2.0/contribute/architecture/index.html">v1.2.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">28/merge</a></dd>
+                        <dd><a href="../../../../dev/items/contribute/architecture/index.html">dev/items</a></dd>
+                        <dd><a href="../../../../dev/tvwalk/contribute/architecture/index.html">dev/tvwalk</a></dd>
+                        <dd><a href="../../../../main/contribute/architecture/index.html">main</a></dd>
+                        <dd><a href="../../../../refactor/color/contribute/architecture/index.html">refactor/color</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
