@@ -107,7 +107,7 @@ def _p_walk(TreeStorage tree, object type_, tuple path, bool include_nodes):
 
 @cython.binding(True)
 cpdef walk(TreeValue tree, bool include_nodes=False):
-    r"""
+    """
     Overview:
         Walk the values and nodes in the tree.
         The order of walk is not promised, if you need the ordered walking result, \
@@ -121,5 +121,31 @@ cpdef walk(TreeValue tree, bool include_nodes=False):
     Returns:
         - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \
             path of the node, the 2nd one is the value.
+
+    Examples::
+        >>> from treevalue import TreeValue, walk
+        >>> tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
+        >>> for k, v in walk(tv1):
+        ...     print(k, v)
+        ('a',) 1
+        ('b',) 2
+        ('c', 'x') 2
+        ('c', 'y') 2
+
+        >>> for k, v in walk(tv1, include_nodes=True):
+        ...     print(k, v)
+        () <TreeValue 0x7f2a88eb1a20>
+        ├── a --> 1
+        ├── b --> 2
+        └── c --> <TreeValue 0x7f2a88eb19b0>
+            ├── x --> 2
+            └── y --> 2
+        ('a',) 1
+        ('b',) 2
+        ('c',) <TreeValue 0x7f2a88eb19b0>
+        ├── x --> 2
+        └── y --> 2
+        ('c', 'x') 2
+        ('c', 'y') 2
     """
     return _p_walk(tree._detach(), type(tree), (), include_nodes)

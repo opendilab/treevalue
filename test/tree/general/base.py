@@ -621,4 +621,34 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert t3 == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
             assert cnt_1 == 4
 
+        def test_walk(self):
+            tv1 = tree_value_clazz({'a': 1, 'b': 'dks', 'c': {'x': 2, 'y': 3}})
+            for p, v in tv1.walk():
+                if p == ('a',):
+                    assert v == 1
+                elif p == ('b',):
+                    assert v == 'dks'
+                elif p == ('c', 'x',):
+                    assert v == 2
+                elif p == ('c', 'y',):
+                    assert v == 3
+                else:
+                    pytest.fail('Should not reach here - %s is accessed.' % (repr(p),))
+
+            for p, v in tv1.walk(include_nodes=True):
+                if p == ():
+                    assert v == tv1
+                elif p == ('a',):
+                    assert v == 1
+                elif p == ('b',):
+                    assert v == 'dks'
+                elif p == ('c',):
+                    assert v == tree_value_clazz({'x': 2, 'y': 3})
+                elif p == ('c', 'x',):
+                    assert v == 2
+                elif p == ('c', 'y',):
+                    assert v == 3
+                else:
+                    pytest.fail('Should not reach here - %s is accessed.' % (repr(p),))
+
     return _TestClass

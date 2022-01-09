@@ -6,7 +6,7 @@ from graphviz import Digraph
 from hbutils.reflection import dynamic_call, raising
 
 from ..func import method_treelize, MISSING_NOT_ALLOW, func_treelize
-from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, graphics
+from ..tree import TreeValue, jsonify, clone, typetrans, mapping, mask, filter_, reduce_, union, graphics, walk
 from ..tree import rise as rise_func
 from ..tree import subside as subside_func
 
@@ -208,6 +208,50 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t.filter(lambda x, p: p[0] in {'b', 'x'})  # FastTreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
             """
             return filter_(self, func, remove_empty)
+
+        @_decorate_method
+        def walk(self, include_nodes: bool = False):
+            """
+            Overview:
+                Walk the values and nodes in the tree.
+                The order of walk is not promised, if you need the ordered walking result, \
+                just use function ``sorted`` at the outer side of :func:`walk`.
+
+            Arguments:
+                - include_nodes (:obj:`bool`): Not only the value nodes will be walked,
+                    but the tree nodes as well.
+
+            Returns:
+                - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \
+                    path of the node, the 2nd one is the value.
+
+            Examples::
+                >>> from treevalue import FastTreeValue, walk
+                >>> tv1 = FastTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
+                >>> for k, v in tv1.walk():
+                ...     print(k, v)
+                ('a',) 1
+                ('b',) 2
+                ('c', 'x') 2
+                ('c', 'y') 2
+
+                >>> for k, v in tv1.walk(include_nodes=True):
+                ...     print(k, v)
+                () <TreeValue 0x7f2a88eb1a20>
+                ├── a --> 1
+                ├── b --> 2
+                └── c --> <TreeValue 0x7f2a88eb19b0>
+                    ├── x --> 2
+                    └── y --> 2
+                ('a',) 1
+                ('b',) 2
+                ('c',) <TreeValue 0x7f2a88eb19b0>
+                ├── x --> 2
+                └── y --> 2
+                ('c', 'x') 2
+                ('c', 'y') 2
+            """
+            return walk(self, include_nodes)
 
         @_decorate_method
         def reduce(self, func):
