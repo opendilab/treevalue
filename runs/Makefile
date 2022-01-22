@@ -2,5 +2,4 @@
 
 all: run
 run:
-	echo "hello world"
-	echo ${PYTHONPATH}
+	python test_main.py
