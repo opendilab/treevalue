@@ -57,3 +57,10 @@ jobs:
           LINETRACE: 1
         run: |
           make clean build run
+      - name: Show the artifacts
+        run: |
+          tree runs/artifacts
+      - uses: actions/upload-artifact@v2
+        with:
+          name: run-artifacts-${{ matrix.os }}-${{ matrix.python-version }}
+          path: runs/artifacts
