@@ -210,43 +210,45 @@
 
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="n">FORK</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u251c</span><span class="s1">&#39;</span>
-<span class="n">LAST</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2514</span><span class="s1">&#39;</span>
-<span class="n">VERTICAL</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2502</span><span class="s1">&#39;</span>
-<span class="n">HORIZONTAL</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2500</span><span class="s1">&#39;</span>
-<span class="n">NEWLINE</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
+<span class="n">_DEFAULT_ENCODING</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYTHONIOENCODING&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">getdefaultencoding</span><span class="p">())</span>
+
+<span class="n">_UTF8_CHARS</span> <span class="o">=</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u251c</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2514</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2502</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u2500</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">_ASCII_CHARS</span> <span class="o">=</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;`&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_format_newlines</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">formatted_node</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_format_newlines</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">formatted_node</span><span class="p">,</span> <span class="n">chars</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert newlines into U+23EC characters, followed by an actual newline and</span>
 <span class="sd">    then a tree prefix so as to position the remaining text under the previous</span>
 <span class="sd">    line.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FORK</span><span class="p">,</span> <span class="n">LAST</span><span class="p">,</span> <span class="n">VERTICAL</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="n">NEWLINE</span> <span class="o">=</span> <span class="n">chars</span>
     <span class="n">replacement</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">NEWLINE</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">,</span> <span class="n">prefix</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">replacement</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">formatted_node</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
 
 
-<span class="k">def</span> <span class="nf">_format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">chars</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="n">_UTF8_CHARS</span><span class="p">):</span>
+    <span class="n">FORK</span><span class="p">,</span> <span class="n">LAST</span><span class="p">,</span> <span class="n">VERTICAL</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="n">NEWLINE</span> <span class="o">=</span> <span class="n">chars</span>
     <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">get_children</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
     <span class="n">next_prefix</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">prefix</span><span class="p">,</span> <span class="n">VERTICAL</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;   &#39;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
         <span class="k">yield</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
             <span class="n">prefix</span><span class="p">,</span> <span class="n">FORK</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
-            <span class="n">_format_newlines</span><span class="p">(</span><span class="n">next_prefix</span><span class="p">,</span> <span class="n">format_node</span><span class="p">(</span><span class="n">child</span><span class="p">))])</span>
-        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">_format_tree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">next_prefix</span><span class="p">):</span>
+            <span class="n">_format_newlines</span><span class="p">(</span><span class="n">next_prefix</span><span class="p">,</span> <span class="n">format_node</span><span class="p">(</span><span class="n">child</span><span class="p">),</span> <span class="n">chars</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">_format_tree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">next_prefix</span><span class="p">,</span> <span class="n">chars</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">result</span>
     <span class="k">if</span> <span class="n">children</span><span class="p">:</span>
         <span class="n">last_prefix</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">prefix</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;    &#39;</span><span class="p">])</span>
         <span class="k">yield</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
             <span class="n">prefix</span><span class="p">,</span> <span class="n">LAST</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="n">HORIZONTAL</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
-            <span class="n">_format_newlines</span><span class="p">(</span><span class="n">last_prefix</span><span class="p">,</span> <span class="n">format_node</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))])</span>
-        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">_format_tree</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">last_prefix</span><span class="p">):</span>
+            <span class="n">_format_newlines</span><span class="p">(</span><span class="n">last_prefix</span><span class="p">,</span> <span class="n">format_node</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">chars</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">_format_tree</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">last_prefix</span><span class="p">,</span> <span class="n">chars</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">result</span>
 
 
-<div class="viewcode-block" id="format_tree"><a class="viewcode-back" href="../../../api_doc/utils/formattree.html#treevalue.utils.formattree.format_tree">[docs]</a><span class="k">def</span> <span class="nf">format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="format_tree"><a class="viewcode-back" href="../../../api_doc/utils/formattree.html#treevalue.utils.formattree.format_tree">[docs]</a><span class="k">def</span> <span class="nf">format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Overview:</span>
 <span class="sd">        Format the given tree.</span>
@@ -255,6 +257,8 @@
 <span class="sd">        - node: Node object</span>
 <span class="sd">        - format_node: Format node getter</span>
 <span class="sd">        - get_children: Children getter.</span>
+<span class="sd">        - encoding: Encoding to be used. Default is ``None`` which means system encoding. \</span>
+<span class="sd">            When ASCII encoding is used, ASCII chars will be used instead of original chars.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        - formatted: Formatted string.</span>
@@ -286,12 +290,16 @@
 <span class="sd">            └── c</span>
 <span class="sd">                d</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">lines</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+    <span class="k">if</span> <span class="s1">&#39;ASCII&#39;</span> <span class="ow">in</span> <span class="p">(</span><span class="n">encoding</span> <span class="ow">or</span> <span class="n">_DEFAULT_ENCODING</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+        <span class="n">_chars</span> <span class="o">=</span> <span class="n">_ASCII_CHARS</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_chars</span> <span class="o">=</span> <span class="n">_UTF8_CHARS</span>
+
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
         <span class="p">[</span><span class="n">format_node</span><span class="p">(</span><span class="n">node</span><span class="p">)],</span>
-        <span class="n">_format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">),</span>
+        <span class="n">_format_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">format_node</span><span class="p">,</span> <span class="n">get_children</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">_chars</span><span class="p">),</span>
         <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="p">))</span></div>
 </pre></div>
 
 
@@ -337,10 +345,10 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../dev/texttree/index.html">dev/texttree</a></dd>
-                        <dd><a href="../../../../dev/items/index.html">dev/items</a></dd>
-                        <dd><a href="../../../../dev/tvwalk/index.html">dev/tvwalk</a></dd>
                         <dd><a href="formattree.html">main</a></dd>
+                        <dd><a href="../../../../dev/items/index.html">dev/items</a></dd>
+                        <dd><a href="../../../../dev/texttree/index.html">dev/texttree</a></dd>
+                        <dd><a href="../../../../dev/tvwalk/index.html">dev/tvwalk</a></dd>
                         <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../../run/paper/index.html">run/paper</a></dd>
                         <dd><a href="../../../../test/compare_nest/index.html">test/compare_nest</a></dd>
