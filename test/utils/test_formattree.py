@@ -34,8 +34,8 @@ from treevalue.utils import (
 @pytest.mark.unittest
 class TestFormatTree(TestCase):
 
-    def format_tree(self, tree):
-        return format_tree(tree, itemgetter(0), itemgetter(1))
+    def format_tree(self, tree, encoding='utf8'):
+        return format_tree(tree, itemgetter(0), itemgetter(1), encoding)
 
     def test_single_node_tree(self):
         tree = ('foo', [])
@@ -58,6 +58,22 @@ class TestFormatTree(TestCase):
         ├── bar
         ├── baz
         └── qux
+        '''), output)
+
+    def test_single_level_tree_with_ascii(self):
+        tree = (
+            'foo', [
+                ('bar', []),
+                ('baz', []),
+                ('qux', []),
+            ],
+        )
+        output = self.format_tree(tree, encoding='ascii')
+        self.assertEqual(dedent(u'''\
+        foo
+        +-- bar
+        +-- baz
+        `-- qux
         '''), output)
 
     def test_multi_level_tree(self):
