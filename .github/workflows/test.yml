@@ -155,3 +155,12 @@ jobs:
         run: |
           make package
           ls -al dist
+      - name: Get package version
+        run: |
+          make build
+          python -c 'from treevalue.config.meta import __VERSION__;print(__VERSION__)'
+          echo "PACKAGE_VERSION=$(python -c 'from treevalue.config.meta import __VERSION__;print(__VERSION__)')" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v2
+        with:
+          name: treevalue-v${{ env.PACKAGE_VERSION }}-${{ matrix.os }}-${{ matrix.python-version }}
+          path: dist
