@@ -210,10 +210,8 @@ def union(*trees, object return_type=None, bool inherit=True,
         type_ = _c_subside_keep_type
     elif return_type:
         type_ = return_type
-    elif trees:
-        type_ = type(trees[0])
     else:
-        type_ = TreeValue
+        type_ = type(trees[0])
 
     return type_(result)
 
