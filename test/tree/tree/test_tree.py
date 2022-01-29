@@ -204,3 +204,34 @@ class TestTreeTreeTree:
         with pytest.raises(KeyError):
             _ = tv1.get('e')
         assert tv1.get('e', 233) == 233
+
+    def test_keys(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert set(tv1.keys()) == {'a', 'b', 'c', 'd'}
+
+    def test_values(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        assert set(tv1.c.values()) == {2, 3}
+        assert len(list(tv1.values())) == 3
+        assert 1 in tv1.values()
+        assert 2 in tv1.values()
+
+    def test_items(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert sorted(tv1.items()) == [
+            ('a', 1),
+            ('b', 2),
+            ('c', TreeValue({'x': 2, 'y': 3})),
+            ('d', {'x': 2, 'y': 3}),
+        ]
+
+        class MyTreeValue(TreeValue):
+            pass
+
+        tv2 = MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert sorted(tv2.items()) == [
+            ('a', 1),
+            ('b', 2),
+            ('c', MyTreeValue({'x': 2, 'y': 3})),
+            ('d', {'x': 2, 'y': 3}),
+        ]

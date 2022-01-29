@@ -370,6 +370,50 @@ cdef class TreeValue:
         """
         return self._st
 
+    @cython.binding(True)
+    def keys(self):
+        """
+        Overview:
+            Get keys of this treevalue object, like the :class:`dict`.
+
+        Returns:
+            - keys: A generator of all the keys.
+        """
+        return self._st.keys()
+
+    @cython.binding(True)
+    def values(self):
+        """
+        Overview:
+            Get value of this treevalue object, like the :class:`dict`.
+
+        Returns:
+            - values: A generator of all the values
+        """
+        cdef object v
+        for v in self._st.values():
+            if isinstance(v, TreeStorage):
+                yield self._type(v)
+            else:
+                yield v
+
+    @cython.binding(True)
+    def items(self):
+        """
+        Overview:
+            Get pairs of keys and values of this treevalue object, like the :class:`items`.
+
+        Returns:
+            - items: A generator of pairs of keys and values.
+        """
+        cdef str k
+        cdef object v
+        for k, v in self._st.items():
+            if isinstance(v, TreeStorage):
+                yield k, self._type(v)
+            else:
+                yield k, v
+
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
     cdef int i
