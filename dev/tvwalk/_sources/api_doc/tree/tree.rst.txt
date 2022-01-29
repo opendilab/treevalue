@@ -9,7 +9,7 @@ TreeValue
 ---------------
 
 .. autoclass:: TreeValue
-    :members: __init__, __getattribute__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__, get
+    :members: __init__, __getattribute__, __setattr__, __delattr__, __contains__, __repr__, __iter__, __hash__, __eq__, _attr_extern, __len__, __bool__, __str__, __getstate__, __setstate__, get, keys, values, items
 
 
 .. _apidoc_tree_tree_delayed:
