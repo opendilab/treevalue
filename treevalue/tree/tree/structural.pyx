@@ -161,6 +161,9 @@ cpdef object subside(object value, bool dict_=True, bool list_=True, bool tuple_
 
     return type_(result)
 
+def _p_union_zip(*trees):
+    return trees
+
 @cython.binding(True)
 def union(*trees, object return_type=None, bool inherit=True,
           object mode='strict', object missing=MISSING_NOT_ALLOW, bool delayed=False):
@@ -186,17 +189,29 @@ def union(*trees, object return_type=None, bool inherit=True,
         >>> tx = mapping(t, lambda v: v % 2 == 1)
         >>> union(t, tx)  # TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
     """
-    cdef object result, _i_types
-    result, _i_types = _c_subside(tuple(trees), True, True, True, inherit, mode, missing, delayed)
+    cdef bool allow_missing
+    cdef object missing_func
+    allow_missing, missing_func = _c_missing_process(missing)
+
+    cdef list _l_trees = []
+    cdef object t
+    for t in trees:
+        if isinstance(t, TreeValue):
+            _l_trees.append(t._detach())
+        else:
+            _l_trees.append(t)
+
+    cdef object result
+    result = _c_func_treelize_run(_p_union_zip, _l_trees, {},
+                                  _c_load_mode(mode), inherit, allow_missing, missing_func, delayed)
 
     cdef object type_
-    cdef list types
     if not isinstance(result, TreeStorage):
         type_ = _c_subside_keep_type
     elif return_type:
         type_ = return_type
     else:
-        type_ = next(iter(_i_types))
+        type_ = type(trees[0])
 
     return type_(result)
 
