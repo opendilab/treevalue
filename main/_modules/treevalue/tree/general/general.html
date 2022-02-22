@@ -181,7 +181,7 @@
 <span class="kn">from</span> <span class="nn">hbutils.reflection</span> <span class="kn">import</span> <span class="n">dynamic_call</span><span class="p">,</span> <span class="n">raising</span>
 
 <span class="kn">from</span> <span class="nn">..func</span> <span class="kn">import</span> <span class="n">method_treelize</span><span class="p">,</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span> <span class="n">func_treelize</span>
-<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">clone</span><span class="p">,</span> <span class="n">typetrans</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">reduce_</span><span class="p">,</span> <span class="n">union</span><span class="p">,</span> <span class="n">graphics</span>
+<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">clone</span><span class="p">,</span> <span class="n">typetrans</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">reduce_</span><span class="p">,</span> <span class="n">union</span><span class="p">,</span> <span class="n">graphics</span><span class="p">,</span> <span class="n">walk</span>
 <span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">rise</span> <span class="k">as</span> <span class="n">rise_func</span>
 <span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">subside</span> <span class="k">as</span> <span class="n">subside_func</span>
 
@@ -383,6 +383,39 @@
 <span class="sd">                &gt;&gt;&gt; t.filter(lambda x, p: p[0] in {&#39;b&#39;, &#39;x&#39;})  # FastTreeValue({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">filter_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Walk the values and nodes in the tree.</span>
+<span class="sd">                The order of walk is not promised, if you need the ordered walking result, \</span>
+<span class="sd">                just use function ``sorted`` at the outer side of :func:`walk`.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \</span>
+<span class="sd">                    path of the node, the 2nd one is the value.</span>
+
+<span class="sd">            Examples::</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, walk</span>
+<span class="sd">                &gt;&gt;&gt; tv1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: {&#39;x&#39;: 2, &#39;y&#39;: 2}})</span>
+<span class="sd">                &gt;&gt;&gt; for k, v in tv1.walk():</span>
+<span class="sd">                ...     print(k, v)</span>
+<span class="sd">                () &lt;TreeValue 0x7f2a88eb1a20&gt;</span>
+<span class="sd">                ├── a --&gt; 1</span>
+<span class="sd">                ├── b --&gt; 2</span>
+<span class="sd">                └── c --&gt; &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
+<span class="sd">                    ├── x --&gt; 2</span>
+<span class="sd">                    └── y --&gt; 2</span>
+<span class="sd">                (&#39;a&#39;,) 1</span>
+<span class="sd">                (&#39;b&#39;,) 2</span>
+<span class="sd">                (&#39;c&#39;,) &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
+<span class="sd">                ├── x --&gt; 2</span>
+<span class="sd">                └── y --&gt; 2</span>
+<span class="sd">                (&#39;c&#39;, &#39;x&#39;) 2</span>
+<span class="sd">                (&#39;c&#39;, &#39;y&#39;) 2</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
         <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -1289,7 +1322,6 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../../dev/tvwalk/index.html">dev/tvwalk</a></dd>
                         <dd><a href="general.html">main</a></dd>
                         <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../../../run/paper/index.html">run/paper</a></dd>
