@@ -385,7 +385,7 @@
             <span class="k">return</span> <span class="n">filter_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
-        <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
 <span class="sd">                Walk the values and nodes in the tree.</span>
@@ -395,6 +395,7 @@
 <span class="sd">            Arguments:</span>
 <span class="sd">                - include_nodes (:obj:`bool`): Not only the value nodes will be walked,</span>
 <span class="sd">                    but the tree nodes as well.</span>
+<span class="sd">                - depth (:obj:`int`): Maximum depth of this walking process.</span>
 
 <span class="sd">            Returns:</span>
 <span class="sd">                - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \</span>
@@ -426,7 +427,7 @@
 <span class="sd">                (&#39;c&#39;, &#39;x&#39;) 2</span>
 <span class="sd">                (&#39;c&#39;, &#39;y&#39;) 2</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_nodes</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_nodes</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
 
         <span class="nd">@_decorate_method</span>
         <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -1333,9 +1334,8 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../../../main/index.html">main</a></dd>
                         <dd><a href="general.html">dev/tvwalk</a></dd>
-                        <dd><a href="../../../../../union/index.html">dev/union</a></dd>
+                        <dd><a href="../../../../../../main/index.html">main</a></dd>
                         <dd><a href="../../../../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../../../../run/paper/index.html">run/paper</a></dd>
                 </dl>
