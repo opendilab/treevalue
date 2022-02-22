@@ -210,16 +210,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return filter_(self, func, remove_empty)
 
         @_decorate_method
-        def walk(self, include_nodes: bool = True):
+        def walk(self):
             """
             Overview:
                 Walk the values and nodes in the tree.
                 The order of walk is not promised, if you need the ordered walking result, \
                 just use function ``sorted`` at the outer side of :func:`walk`.
-
-            Arguments:
-                - include_nodes (:obj:`bool`): Not only the value nodes will be walked,
-                    but the tree nodes as well.
 
             Returns:
                 - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \
@@ -229,13 +225,6 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> from treevalue import FastTreeValue, walk
                 >>> tv1 = FastTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
                 >>> for k, v in tv1.walk():
-                ...     print(k, v)
-                ('a',) 1
-                ('b',) 2
-                ('c', 'x') 2
-                ('c', 'y') 2
-
-                >>> for k, v in tv1.walk(include_nodes=True):
                 ...     print(k, v)
                 () <TreeValue 0x7f2a88eb1a20>
                 ├── a --> 1
@@ -251,7 +240,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 ('c', 'x') 2
                 ('c', 'y') 2
             """
-            return walk(self, include_nodes)
+            return walk(self)
 
         @_decorate_method
         def reduce(self, func):
