@@ -104,14 +104,7 @@ class TestTreeTreeService:
             pass
 
         tv1 = MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-
         assert dict(walk(tv1)) == {
-            ('a',): 1,
-            ('b',): 2,
-            ('c', 'x',): 2,
-            ('c', 'y',): 3,
-        }
-        assert dict(walk(tv1, include_nodes=True)) == {
             (): MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}}),
             ('a',): 1,
             ('b',): 2,
@@ -126,8 +119,10 @@ class TestTreeTreeService:
             'c': delayed(lambda: tv1.c),
         })
         assert dict(walk(tv2)) == {
+            (): MyTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}}),
             ('a',): 1,
             ('b',): 2,
+            ('c',): MyTreeValue({'x': 2, 'y': 3}),
             ('c', 'x',): 2,
             ('c', 'y',): 3,
         }

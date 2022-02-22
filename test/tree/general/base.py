@@ -621,4 +621,15 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert t3 == tree_value_clazz({'a': 12, 'b': 22, 'x': {'c': 36, 'd': 52}})
             assert cnt_1 == 4
 
+        def test_walk(self):
+            tv1 = tree_value_clazz({'a': 1, 'b': 'dks', 'c': {'x': 2, 'y': 3}})
+            assert dict(tv1.walk()) == {
+                (): tree_value_clazz({'a': 1, 'b': 'dks', 'c': {'x': 2, 'y': 3}}),
+                ('a',): 1,
+                ('b',): 'dks',
+                ('c',): tree_value_clazz({'x': 2, 'y': 3}),
+                ('c', 'x'): 2,
+                ('c', 'y'): 3,
+            }
+
     return _TestClass
