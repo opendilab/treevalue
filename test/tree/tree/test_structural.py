@@ -10,6 +10,7 @@ class TestTreeTreeStructural:
         t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         tx = mapping(t, lambda v: v % 2 == 1)
         assert union(t, tx) == TreeValue({'a': (1, True), 'b': (2, False), 'x': {'c': (3, True), 'd': (4, False)}})
+        assert union() == ()
 
         class MyTreeValue(TreeValue):
             pass
