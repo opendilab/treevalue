@@ -67,17 +67,15 @@ class TestTreeUtilsBenchmark:
     def test_typetrans(self, benchmark):
         benchmark(typetrans, self.__setup_tree(), FastTreeValue)
 
-    @pytest.mark.parametrize('include_nodes', [True, False])
-    def test_walk(self, benchmark, include_nodes):
-        benchmark(walk, self.__setup_tree(), include_nodes)
+    def test_walk(self, benchmark):
+        benchmark(walk, self.__setup_tree())
 
-    @pytest.mark.parametrize('include_nodes', [True, False])
-    def test_walk_all(self, benchmark, include_nodes):
-        def walk_all(t, inp):
-            for _ in walk(t, inp):
+    def test_walk_all(self, benchmark):
+        def walk_all(t):
+            for _ in walk(t):
                 pass
 
-        benchmark(walk_all, self.__setup_tree(), include_nodes)
+        benchmark(walk_all, self.__setup_tree())
 
     @pytest.mark.parametrize('cnt', [2, 3, 4])
     def test_union(self, benchmark, cnt):
