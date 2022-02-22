@@ -1514,19 +1514,10 @@ Multiple tree values is supported.</p>
 
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.walk">
-<code class="sig-name descname">walk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_nodes</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">depth</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.walk" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">walk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.walk" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>Overview:</dt><dd><p>Walk the values and nodes in the tree.
 The order of walk is not promised, if you need the ordered walking result,                 just use function <code class="docutils literal notranslate"><span class="pre">sorted</span></code> at the outer side of <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.walk" title="treevalue.tree.general.FastTreeValue.walk"><code class="xref py py-func docutils literal notranslate"><span class="pre">walk()</span></code></a>.</p>
-</dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>include_nodes (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Not only the value nodes will be walked,</dt><dd><p>but the tree nodes as well.</p>
-</dd>
-</dl>
-</li>
-<li><p>depth (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>): Maximum depth of this walking process.</p></li>
-</ul>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full                     path of the node, the 2nd one is the value.</p></li>
@@ -1535,14 +1526,6 @@ The order of walk is not promised, if you need the ordered walking result,      
 <dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">walk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tv1</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tv1</span><span class="o">.</span><span class="n">walk</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-<span class="go">(&#39;a&#39;,) 1</span>
-<span class="go">(&#39;b&#39;,) 2</span>
-<span class="go">(&#39;c&#39;, &#39;x&#39;) 2</span>
-<span class="go">(&#39;c&#39;, &#39;y&#39;) 2</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tv1</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">include_nodes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 <span class="go">() &lt;TreeValue 0x7f2a88eb1a20&gt;</span>
 <span class="go">├── a --&gt; 1</span>
