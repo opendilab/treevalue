@@ -210,7 +210,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             return filter_(self, func, remove_empty)
 
         @_decorate_method
-        def walk(self, include_nodes: bool = False):
+        def walk(self, include_nodes: bool = True):
             """
             Overview:
                 Walk the values and nodes in the tree.

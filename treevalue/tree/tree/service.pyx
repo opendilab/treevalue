@@ -106,7 +106,7 @@ def _p_walk(TreeStorage tree, object type_, tuple path, bool include_nodes):
             yield curpath, v
 
 @cython.binding(True)
-cpdef walk(TreeValue tree, bool include_nodes=False):
+cpdef walk(TreeValue tree, bool include_nodes=True):
     """
     Overview:
         Walk the values and nodes in the tree.

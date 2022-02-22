@@ -623,7 +623,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
 
         def test_walk(self):
             tv1 = tree_value_clazz({'a': 1, 'b': 'dks', 'c': {'x': 2, 'y': 3}})
-            for p, v in tv1.walk():
+            for p, v in tv1.walk(include_nodes=False):
                 if p == ('a',):
                     assert v == 1
                 elif p == ('b',):
@@ -635,7 +635,7 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                 else:
                     pytest.fail('Should not reach here - %s is accessed.' % (repr(p),))
 
-            for p, v in tv1.walk(include_nodes=True):
+            for p, v in tv1.walk():
                 if p == ():
                     assert v == tv1
                 elif p == ('a',):
