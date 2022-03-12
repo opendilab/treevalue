@@ -64,6 +64,25 @@ class TestTreeTreeTree:
         assert isinstance(tv5.x.b, MyTreeValue)
         assert isinstance(tv5.x.c, MyTreeValue)
 
+    def test_tree_value_init_with_item(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        assert tv1['a'] == 1
+        assert tv1['b'] == 2
+
+        tv2 = TreeValue(tv1)
+        assert tv2['a'] == 1
+        assert tv2['b'] == 2
+
+        tv3 = TreeValue({'a': tv1, 'b': tv2, 'c': tv1})
+        assert tv3['a']['a'] == 1
+        assert tv3['b']['a'] == 1
+        assert tv3['c']['a'] == 1
+
+        with pytest.raises(KeyError):
+            _ = tv3['g']
+        with pytest.raises(KeyError):
+            _ = tv3[0]
+
     def test_tree_value_operate(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2 = TreeValue(tv1)
@@ -98,6 +117,38 @@ class TestTreeTreeTree:
 
         with pytest.raises(AttributeError):
             del tv1._property__data
+
+    def test_tree_value_operate_with_item(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        tv2 = TreeValue(tv1)
+        tv3 = TreeValue({'a': tv1, 'b': tv2, 'c': tv1})
+
+        tv1['a'] = 3
+        assert tv1.a == 3
+        assert tv2.a == 3
+        assert tv3.a.a == 3
+        assert tv3.b.a == 3
+        assert tv3.c.a == 3
+
+        tv1['f'] = 333
+        assert tv1.f == 333
+        assert tv1['f'] == 333
+        assert 'f' in tv1
+
+        with pytest.raises(NotImplementedError):
+            tv1[0] = 3
+
+        del tv1['b']
+        assert 'b' not in tv1
+        assert 'b' not in tv2
+        assert 'b' not in tv3.a
+        assert 'b' not in tv3.b
+        assert 'b' not in tv3.c
+
+        with pytest.raises(KeyError):
+            del tv1['g']
+        with pytest.raises(KeyError):
+            del tv1[0]
 
     def test_tree_value_repr(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})

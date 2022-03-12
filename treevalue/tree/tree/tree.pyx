@@ -197,6 +197,110 @@ cdef class TreeValue:
             raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(item)))
 
     @cython.binding(True)
+    cpdef _getitem_extern(self, object key):
+        r"""
+        Overview:
+            External protected function for support the getitem operation. \
+            Default is raise a `KeyError`.
+
+        Arguments:
+            - key (:obj:`object`): Item object.
+
+        Returns:
+            - return (:obj:): Anything you like, \
+                and if it is not able to validly return anything, \
+                just raise an ``KeyError`` here.
+        """
+        raise KeyError(f'Key {key} not found.')
+
+    @cython.binding(True)
+    def __getitem__(self, object key):
+        """
+        Overview:
+            Get item from this tree value.
+
+        Arguments:
+            - key (:obj:`str`): Item object.
+
+        Returns:
+            - value (:obj:): Target object value.
+
+        Example:
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t['a']       # 1
+            >>> t['b']       # 2
+            >>> t['x']['c']  # 3
+        """
+        if isinstance(key, str) and self._st.contains(key):
+            return self._unraw(self._st.get(key))
+        else:
+            return self._getitem_extern(key)
+
+    @cython.binding(True)
+    cpdef _setitem_extern(self, object key, object value):
+        r"""
+        Overview:
+            External function for supporting ``__setitem__`` operation.
+        
+        Arguments:
+            - key (:obj:`object`): Key object.
+            - value (:obj:`object`): Value object.
+        
+        Raises:
+            - NotImplementError: Just raise this when not implemented.
+        """
+        raise NotImplementedError
+
+    @cython.binding(True)
+    def __setitem__(self, object key, object value):
+        """
+        Overview:
+            Set item to current :class:`TreeValue` object.
+
+        Arguments:
+            - key (:obj:`object`): Key object.
+            - value (:obj:`object`): Value object.
+
+        Examples::
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t['a'] = 11
+            >>> t['x']['c'] = 30
+            >>> t
+        """
+        if isinstance(key, str):
+            self._st.set(key, self._raw(value))
+        else:
+            self._setitem_extern(key, value)
+
+    @cython.binding(True)
+    cpdef _delitem_extern(self, object key):
+        r"""
+        Overview:
+            External function for supporting ``__delitem__`` operation.
+        
+        Arguments:
+            - key (:obj:`object`): Key object.
+        
+        Raises:
+            - KeyError: Just raise this in default case.
+        """
+        raise KeyError(f'Key {key} not found.')
+
+    @cython.binding(True)
+    def __delitem__(self, object key):
+        """
+        Overview:
+            Delete item from current :class:`TreeValue`.
+
+        Arguments:
+            - key (:obj:`object`): Key object.
+        """
+        if isinstance(key, str) and self._st.contains(key):
+            self._st.del_(key)
+        else:
+            self._delitem_extern(key)
+
+    @cython.binding(True)
     def __contains__(self, str item):
         """
         Overview:

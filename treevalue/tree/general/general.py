@@ -1040,7 +1040,10 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
             """
             return ~self
 
-        @_decorate_treelize
+        @method_treelize()
+        def _getitem_extern(self, item):
+            return self[item]
+
         def __getitem__(self, item):
             """
             Overview:
@@ -1052,9 +1055,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1[-1]    # FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> t1[::-1]  # FastTreeValue({'a': [2, 1], 'b': [3, 2], 'x': {'c': [4, 3], 'd': [5, 4]}})
             """
-            return self[item]
+            return TreeValue.__getitem__(self, item)
 
-        @_decorate_treelize
+        @method_treelize()
+        def _setitem_extern(self, key, value):
+            self[key] = value
+
         def __setitem__(self, key, value):
             """
             Overview:
@@ -1066,9 +1072,12 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1[0] = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
                 >>> # FastTreeValue({'a': [2, 2], 'b': [3, 3], 'x': {'c': [4, 4], 'd': [5, 5]}})
             """
-            self[key] = value
+            TreeValue.__setitem__(self, key, value)
 
-        @_decorate_treelize
+        @method_treelize()
+        def _delitem_extern(self, key):
+            del self[key]
+
         def __delitem__(self, key):
             """
             Overview:
@@ -1078,7 +1087,7 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> t1 = FastTreeValue({'a': [1, 2], 'b': [2, 3], 'x': {'c': [3, 4], 'd': [4, 5]}})
                 >>> del t1[0]  # FastTreeValue({'a': [2], 'b': [3], 'x': {'c': [4], 'd': [5]}})
             """
-            del self[key]
+            return TreeValue.__delitem__(self, key)
 
         @_decorate_treelize
         def __call__(self, *args, **kwargs):
