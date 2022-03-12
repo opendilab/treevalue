@@ -389,13 +389,13 @@ cdef class TreeValue:
 
         Example:
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> repr(t)
-            <TreeValue 0x7f22681c69a0>
-            ├── a --> 1
-            ├── b --> 2
-            └── x --> <TreeValue 0x7f226629bc70>
-                ├── c --> 3
-                └── d --> 4
+            >>> t
+            <TreeValue 0x7f672fc53320>
+            ├── 'a' --> 1
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f672fc53390>
+                ├── 'c' --> 3
+                └── 'd' --> 4
         """
         return format_tree(
             _build_tree(self._detach(), self._type, '', {}, ()),
@@ -546,7 +546,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
         for k, v in sorted(data.items()):
             v = _c_undelay_data(data, k, v)
             curpath = path + (k,)
-            _t_prefix = f'{k} --> '
+            _t_prefix = f'{repr(k)} --> '
             if isinstance(v, TreeStorage):
                 children.append(_build_tree(v, type_, _t_prefix, id_pool, curpath))
             else:
@@ -589,11 +589,10 @@ def delayed(func, *args, **kwargs):
 
     Examples::
         >>> from treevalue import TreeValue, delayed
-        >>>
         >>> def f(x):
-        >>>     print('f is called, x is', x)
-        >>>     return x ** x
-        >>>
+        ...     print('f is called, x is', x)
+        ...     return x ** x
+        ...
         >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
         >>> t.a
         f is called, x is 2
@@ -609,12 +608,12 @@ def delayed(func, *args, **kwargs):
         >>> print(t)
         f is called, x is 2
         f is called, x is 3
-        <TreeValue 0x7f0fb7f03198>
-        ├── a --> 4
-        └── x --> 27
+        <TreeValue 0x7f672fc53550>
+        ├── 'a' --> 4
+        └── 'x' --> 27
         >>> print(t)
-        <TreeValue 0x7f0fb7f03198>
-        ├── a --> 4
-        └── x --> 27
+        <TreeValue 0x7f672fc53550>
+        ├── 'a' --> 4
+        └── 'x' --> 27
     """
     return DetachedDelayedProxy(_c_delayed_partial(func, args, kwargs))

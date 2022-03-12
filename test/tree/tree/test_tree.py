@@ -155,21 +155,21 @@ class TestTreeTreeTree:
 
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv1))
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv1.c))
-        assert "a --> 1" in str(tv1)
-        assert "b --> 2" in str(tv1)
-        assert "x --> 2" in str(tv1)
-        assert "y --> 3" in str(tv1)
-        assert "c --> <TreeValue" in str(tv1)
+        assert "'a' --> 1" in str(tv1)
+        assert "'b' --> 2" in str(tv1)
+        assert "'x' --> 2" in str(tv1)
+        assert "'y' --> 3" in str(tv1)
+        assert "'c' --> <TreeValue" in str(tv1)
 
         tv2 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2.c.z = tv2
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv2))
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv2.c))
-        assert "a --> 1" in repr(tv2)
-        assert "b --> 2" in repr(tv2)
-        assert "x --> 2" in repr(tv2)
-        assert "y --> 3" in repr(tv2)
-        assert "c --> <TreeValue" in repr(tv2)
+        assert "'a' --> 1" in repr(tv2)
+        assert "'b' --> 2" in repr(tv2)
+        assert "'x' --> 2" in repr(tv2)
+        assert "'y' --> 3" in repr(tv2)
+        assert "'c' --> <TreeValue" in repr(tv2)
         assert "(The same address as <root>)" in repr(tv2)
 
         tv3 = TreeValue({
@@ -180,11 +180,11 @@ class TestTreeTreeTree:
 
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv3))
         assert re.match(r"<TreeValue 0x[0-9a-f]+>", repr(tv3.c))
-        assert "a --> 1" in str(tv3)
-        assert "b --> 2" in str(tv3)
-        assert "x --> 2" in str(tv3)
-        assert "y --> 3" in str(tv3)
-        assert "c --> <TreeValue" in str(tv3)
+        assert "'a' --> 1" in str(tv3)
+        assert "'b' --> 2" in str(tv3)
+        assert "'x' --> 2" in str(tv3)
+        assert "'y' --> 3" in str(tv3)
+        assert "'c' --> <TreeValue" in str(tv3)
 
     def test_tree_value_iter(self):
         # Attention: dict(tv1) is not supported in python 3.7+

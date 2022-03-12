@@ -124,17 +124,17 @@ cpdef walk(TreeValue tree):
         >>> tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
         >>> for k, v in walk(tv1):
         ...     print(k, v)
-        () <TreeValue 0x7f2a88eb1a20>
-        ├── a --> 1
-        ├── b --> 2
-        └── c --> <TreeValue 0x7f2a88eb19b0>
-            ├── x --> 2
-            └── y --> 2
+        () <TreeValue 0x7f672fc53390>
+        ├── 'a' --> 1
+        ├── 'b' --> 2
+        └── 'c' --> <TreeValue 0x7f672fc53320>
+            ├── 'x' --> 2
+            └── 'y' --> 2
         ('a',) 1
         ('b',) 2
-        ('c',) <TreeValue 0x7f2a88eb19b0>
-        ├── x --> 2
-        └── y --> 2
+        ('c',) <TreeValue 0x7f672fc53320>
+        ├── 'x' --> 2
+        └── 'y' --> 2
         ('c', 'x') 2
         ('c', 'y') 2
     """

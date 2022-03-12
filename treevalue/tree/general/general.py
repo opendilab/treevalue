@@ -226,17 +226,17 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 >>> tv1 = FastTreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
                 >>> for k, v in tv1.walk():
                 ...     print(k, v)
-                () <TreeValue 0x7f2a88eb1a20>
-                ├── a --> 1
-                ├── b --> 2
-                └── c --> <TreeValue 0x7f2a88eb19b0>
-                    ├── x --> 2
-                    └── y --> 2
+                () <FastTreeValue 0x7f672fc533c8>
+                ├── 'a' --> 1
+                ├── 'b' --> 2
+                └── 'c' --> <FastTreeValue 0x7f672fc53438>
+                    ├── 'x' --> 2
+                    └── 'y' --> 2
                 ('a',) 1
                 ('b',) 2
-                ('c',) <TreeValue 0x7f2a88eb19b0>
-                ├── x --> 2
-                └── y --> 2
+                ('c',) <FastTreeValue 0x7f672fc53438>
+                ├── 'x' --> 2
+                └── 'y' --> 2
                 ('c', 'x') 2
                 ('c', 'y') 2
             """
