@@ -111,12 +111,14 @@ class TestTreeStorage:
         assert isinstance(t.get('d'), TreeStorage)
         assert t.get('_0a') is None
 
-        with pytest.raises(KeyError):
-            t.set('', 233)
-        with pytest.raises(KeyError):
-            t.set('a' * 1000, 233)
-        with pytest.raises(KeyError):
-            t.set('0' + 'a' * 10, 233)
+        t.set('', 233)
+        assert t.get('') == 233
+
+        t.set('a' * 1000, 234)
+        assert t.get('a' * 1000) == 234
+
+        t.set('0' * 1000, 235)
+        assert t.get('0' * 1000) == 235
 
     def test_del_(self):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
