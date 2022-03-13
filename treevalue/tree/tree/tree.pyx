@@ -226,10 +226,14 @@ cdef class TreeValue:
             - value (:obj:): Target object value.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> t['a']       # 1
-            >>> t['b']       # 2
-            >>> t['x']['c']  # 3
+            >>> t['a']
+            1
+            >>> t['b']
+            2
+            >>> t['x']['c']
+            3
         """
         if isinstance(key, str) and self._st.contains(key):
             return self._unraw(self._st.get(key))
@@ -262,10 +266,17 @@ cdef class TreeValue:
             - value (:obj:`object`): Value object.
 
         Examples::
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> t['a'] = 11
             >>> t['x']['c'] = 30
             >>> t
+            <TreeValue 0x7f11704c5358>
+            ├── 'a' --> 11
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f11704c52e8>
+                ├── 'c' --> 30
+                └── 'd' --> 4
         """
         if isinstance(key, str):
             self._st.set(key, self._raw(value))
@@ -294,6 +305,17 @@ cdef class TreeValue:
 
         Arguments:
             - key (:obj:`object`): Key object.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> del t['a']
+            >>> del t['x']['c']
+            >>> t
+            <TreeValue 0x7f11704c53c8>
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f11704c5438>
+                └── 'd' --> 4
         """
         if isinstance(key, str) and self._st.contains(key):
             self._st.del_(key)
