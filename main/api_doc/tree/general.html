@@ -799,13 +799,13 @@ Original id of self will be kept.</p>
 </ul>
 </dd>
 <dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-<span class="go">&lt;TreeValue 0x7f22681c69a0&gt;</span>
-<span class="go">├── a --&gt; 1</span>
-<span class="go">├── b --&gt; 2</span>
-<span class="go">└── x --&gt; &lt;TreeValue 0x7f226629bc70&gt;</span>
-<span class="go">    ├── c --&gt; 3</span>
-<span class="go">    └── d --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7f672fc53320&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f672fc53390&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
 </pre></div>
 </div>
 </dd>
@@ -1527,17 +1527,17 @@ The order of walk is not promised, if you need the ordered walking result,      
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tv1</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tv1</span><span class="o">.</span><span class="n">walk</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-<span class="go">() &lt;TreeValue 0x7f2a88eb1a20&gt;</span>
-<span class="go">├── a --&gt; 1</span>
-<span class="go">├── b --&gt; 2</span>
-<span class="go">└── c --&gt; &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="go">    ├── x --&gt; 2</span>
-<span class="go">    └── y --&gt; 2</span>
+<span class="go">() &lt;FastTreeValue 0x7f672fc533c8&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="go">    ├── &#39;x&#39; --&gt; 2</span>
+<span class="go">    └── &#39;y&#39; --&gt; 2</span>
 <span class="go">(&#39;a&#39;,) 1</span>
 <span class="go">(&#39;b&#39;,) 2</span>
-<span class="go">(&#39;c&#39;,) &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="go">├── x --&gt; 2</span>
-<span class="go">└── y --&gt; 2</span>
+<span class="go">(&#39;c&#39;,) &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="go">├── &#39;x&#39; --&gt; 2</span>
+<span class="go">└── &#39;y&#39; --&gt; 2</span>
 <span class="go">(&#39;c&#39;, &#39;x&#39;) 2</span>
 <span class="go">(&#39;c&#39;, &#39;y&#39;) 2</span>
 </pre></div>
@@ -1627,7 +1627,6 @@ The order of walk is not promised, if you need the ordered walking result,      
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../dev/getitem/api_doc/tree/general.html">dev/getitem</a></dd>
                         <dd><a href="general.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/general.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/tree/general.html">run/paper</a></dd>

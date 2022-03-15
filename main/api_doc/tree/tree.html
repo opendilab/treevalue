@@ -269,6 +269,31 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue.__delitem__">
+<code class="sig-name descname">__delitem__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Delete item from current <a class="reference internal" href="#treevalue.tree.tree.TreeValue" title="treevalue.tree.tree.TreeValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeValue</span></code></a>.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Key object.</p></li>
+</ul>
+</dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7f11704c53c8&gt;</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f11704c5438&gt;</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="treevalue.tree.tree.TreeValue.__eq__">
 <code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.__eq__" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
@@ -311,6 +336,34 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span>    <span class="c1"># 1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span>    <span class="c1"># 2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span>  <span class="c1"># 3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue.__getitem__">
+<code class="sig-name descname">__getitem__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Get item from this tree value.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Item object.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>value (:obj:): Target object value.</p></li>
+</ul>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="go">3</span>
 </pre></div>
 </div>
 </dd>
@@ -426,13 +479,13 @@
 </ul>
 </dd>
 <dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-<span class="go">&lt;TreeValue 0x7f22681c69a0&gt;</span>
-<span class="go">├── a --&gt; 1</span>
-<span class="go">├── b --&gt; 2</span>
-<span class="go">└── x --&gt; &lt;TreeValue 0x7f226629bc70&gt;</span>
-<span class="go">    ├── c --&gt; 3</span>
-<span class="go">    └── d --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7f672fc53320&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f672fc53390&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
 </pre></div>
 </div>
 </dd>
@@ -453,6 +506,34 @@
 <dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>                 <span class="c1"># t will be TreeValue({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># t will be TreeValue({&#39;a&#39;: 3, &#39;b&#39;: {&#39;x&#39;: 1, &#39;y&#39;: 2}, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue.__setitem__">
+<code class="sig-name descname">__setitem__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Overview:</dt><dd><p>Set item to current <a class="reference internal" href="#treevalue.tree.tree.TreeValue" title="treevalue.tree.tree.TreeValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeValue</span></code></a> object.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Key object.</p></li>
+<li><p>value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Value object.</p></li>
+</ul>
+</dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7f11704c5358&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 11</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f11704c52e8&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 30</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
 </pre></div>
 </div>
 </dd>
@@ -503,6 +584,62 @@
 </dd>
 </dl>
 </li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue._delitem_extern">
+<code class="sig-name descname">_delitem_extern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue._delitem_extern" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>External function for supporting <code class="docutils literal notranslate"><span class="pre">__delitem__</span></code> operation.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Key object.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>KeyError: Just raise this in default case.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue._getitem_extern">
+<code class="sig-name descname">_getitem_extern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue._getitem_extern" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>External protected function for support the getitem operation. Default is raise a <cite>KeyError</cite>.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Item object.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>return (:obj:): Anything you like, </dt><dd><p>and if it is not able to validly return anything, just raise an <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> here.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue._setitem_extern">
+<code class="sig-name descname">_setitem_extern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue._setitem_extern" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>External function for supporting <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> operation.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Key object.</p></li>
+<li><p>value (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>): Value object.</p></li>
+</ul>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>NotImplementError: Just raise this when not implemented.</p></li>
 </ul>
 </dd>
 </dl>
@@ -588,11 +725,10 @@ The given <code class="docutils literal notranslate"><span class="pre">func</spa
 </ul>
 </dd>
 <dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f is called, x is&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="n">x</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;f is called, x is&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="n">x</span>
+<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">delayed</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">delayed</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span>
 <span class="go">f is called, x is 2</span>
@@ -608,13 +744,13 @@ The given <code class="docutils literal notranslate"><span class="pre">func</spa
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 <span class="go">f is called, x is 2</span>
 <span class="go">f is called, x is 3</span>
-<span class="go">&lt;TreeValue 0x7f0fb7f03198&gt;</span>
-<span class="go">├── a --&gt; 4</span>
-<span class="go">└── x --&gt; 27</span>
+<span class="go">&lt;TreeValue 0x7f672fc53550&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 4</span>
+<span class="go">└── &#39;x&#39; --&gt; 27</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-<span class="go">&lt;TreeValue 0x7f0fb7f03198&gt;</span>
-<span class="go">├── a --&gt; 4</span>
-<span class="go">└── x --&gt; 27</span>
+<span class="go">&lt;TreeValue 0x7f672fc53550&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 4</span>
+<span class="go">└── &#39;x&#39; --&gt; 27</span>
 </pre></div>
 </div>
 </dd>
@@ -719,17 +855,17 @@ The order of walk is not promised, if you need the ordered walking result,      
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tv1</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">tv1</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-<span class="go">() &lt;TreeValue 0x7f2a88eb1a20&gt;</span>
-<span class="go">├── a --&gt; 1</span>
-<span class="go">├── b --&gt; 2</span>
-<span class="go">└── c --&gt; &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="go">    ├── x --&gt; 2</span>
-<span class="go">    └── y --&gt; 2</span>
+<span class="go">() &lt;TreeValue 0x7f672fc53390&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f672fc53320&gt;</span>
+<span class="go">    ├── &#39;x&#39; --&gt; 2</span>
+<span class="go">    └── &#39;y&#39; --&gt; 2</span>
 <span class="go">(&#39;a&#39;,) 1</span>
 <span class="go">(&#39;b&#39;,) 2</span>
-<span class="go">(&#39;c&#39;,) &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="go">├── x --&gt; 2</span>
-<span class="go">└── y --&gt; 2</span>
+<span class="go">(&#39;c&#39;,) &lt;TreeValue 0x7f672fc53320&gt;</span>
+<span class="go">├── &#39;x&#39; --&gt; 2</span>
+<span class="go">└── &#39;y&#39; --&gt; 2</span>
 <span class="go">(&#39;c&#39;, &#39;x&#39;) 2</span>
 <span class="go">(&#39;c&#39;, &#39;y&#39;) 2</span>
 </pre></div>
@@ -1207,27 +1343,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f559894d990 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f559894df50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f559894d990__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f559894d990 -&gt; value__node_7f559894d990__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f559894d990__b [label=&quot;array([[5, 6],
+	node_7f09b83ed7d0 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7f09b83edd90 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7f09b83ed7d0__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f09b83ed7d0 -&gt; value__node_7f09b83ed7d0__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f09b83ed7d0__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f559894d990 -&gt; value__node_7f559894d990__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f559894d950 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f559894d990 -&gt; node_7f559894d950 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f559894df50 -&gt; node_7f559894d950 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f559894df90 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f559894df50 -&gt; node_7f559894df90 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f559894d950__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f559894d950 -&gt; value__node_7f559894d950__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f559894d950__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f559894d950 -&gt; value__node_7f559894d950__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f559894d950__e [label=&quot;array([[1, 2],
+	node_7f09b83ed7d0 -&gt; value__node_7f09b83ed7d0__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83ed790 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f09b83ed7d0 -&gt; node_7f09b83ed790 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83edd90 -&gt; node_7f09b83ed790 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83eddd0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f09b83edd90 -&gt; node_7f09b83eddd0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f09b83ed790__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f09b83ed790 -&gt; value__node_7f09b83ed790__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f09b83ed790__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f09b83ed790 -&gt; value__node_7f09b83ed790__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f09b83ed790__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f559894d950 -&gt; value__node_7f559894d950__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f559894df90 -&gt; node_7f559894d990 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f559894df90 -&gt; node_7f559894d950 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83ed790 -&gt; value__node_7f09b83ed790__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83eddd0 -&gt; node_7f09b83ed7d0 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f09b83eddd0 -&gt; node_7f09b83ed790 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div>
 </td></tr></table></div>
@@ -1463,7 +1599,6 @@ below</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../dev/getitem/api_doc/tree/tree.html">dev/getitem</a></dd>
                         <dd><a href="tree.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/tree/tree.html">run/paper</a></dd>

@@ -401,17 +401,17 @@
 <span class="sd">                &gt;&gt;&gt; tv1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: {&#39;x&#39;: 2, &#39;y&#39;: 2}})</span>
 <span class="sd">                &gt;&gt;&gt; for k, v in tv1.walk():</span>
 <span class="sd">                ...     print(k, v)</span>
-<span class="sd">                () &lt;TreeValue 0x7f2a88eb1a20&gt;</span>
-<span class="sd">                ├── a --&gt; 1</span>
-<span class="sd">                ├── b --&gt; 2</span>
-<span class="sd">                └── c --&gt; &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="sd">                    ├── x --&gt; 2</span>
-<span class="sd">                    └── y --&gt; 2</span>
+<span class="sd">                () &lt;FastTreeValue 0x7f672fc533c8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="sd">                    ├── &#39;x&#39; --&gt; 2</span>
+<span class="sd">                    └── &#39;y&#39; --&gt; 2</span>
 <span class="sd">                (&#39;a&#39;,) 1</span>
 <span class="sd">                (&#39;b&#39;,) 2</span>
-<span class="sd">                (&#39;c&#39;,) &lt;TreeValue 0x7f2a88eb19b0&gt;</span>
-<span class="sd">                ├── x --&gt; 2</span>
-<span class="sd">                └── y --&gt; 2</span>
+<span class="sd">                (&#39;c&#39;,) &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="sd">                ├── &#39;x&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;y&#39; --&gt; 2</span>
 <span class="sd">                (&#39;c&#39;, &#39;x&#39;) 2</span>
 <span class="sd">                (&#39;c&#39;, &#39;y&#39;) 2</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -1215,7 +1215,10 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="o">~</span><span class="bp">self</span>
 
-        <span class="nd">@_decorate_treelize</span>
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_getitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
         <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
@@ -1227,9 +1230,12 @@
 <span class="sd">                &gt;&gt;&gt; t1[-1]    # FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
 <span class="sd">                &gt;&gt;&gt; t1[::-1]  # FastTreeValue({&#39;a&#39;: [2, 1], &#39;b&#39;: [3, 2], &#39;x&#39;: {&#39;c&#39;: [4, 3], &#39;d&#39;: [5, 4]}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 
-        <span class="nd">@_decorate_treelize</span>
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_setitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
         <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
@@ -1241,9 +1247,12 @@
 <span class="sd">                &gt;&gt;&gt; t1[0] = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
 <span class="sd">                &gt;&gt;&gt; # FastTreeValue({&#39;a&#39;: [2, 2], &#39;b&#39;: [3, 3], &#39;x&#39;: {&#39;c&#39;: [4, 4], &#39;d&#39;: [5, 5]}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-        <span class="nd">@_decorate_treelize</span>
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_delitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
         <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Overview:</span>
@@ -1253,7 +1262,7 @@
 <span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
 <span class="sd">                &gt;&gt;&gt; del t1[0]  # FastTreeValue({&#39;a&#39;: [2], &#39;b&#39;: [3], &#39;x&#39;: {&#39;c&#39;: [4], &#39;d&#39;: [5]}})</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 
         <span class="nd">@_decorate_treelize</span>
         <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1323,7 +1332,6 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../../dev/getitem/index.html">dev/getitem</a></dd>
                         <dd><a href="general.html">main</a></dd>
                         <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../../../run/paper/index.html">run/paper</a></dd>
