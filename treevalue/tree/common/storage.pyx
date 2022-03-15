@@ -12,19 +12,6 @@ from .delay cimport undelay
 cdef inline object _keep_object(object obj):
     return obj
 
-cdef inline void _key_validate(const char *key) except *:
-    cdef int n = strlen(key)
-    if n < 1:
-        raise KeyError(f'Key {repr(key)} is too short, minimum length is 1 but {n} found.')
-    elif n > 256:
-        raise KeyError(f'Key {repr(key)} is too long, maximum length is 256 but {n} found.')
-
-    cdef int i
-    for i in range(n):
-        if not (b'a' <= key[i] <= b'z' or b'A' <= key[i] <= b'Z' or key[i] == b'_'
-                or (i > 0 and b'0' <= key[i] <= b'9')):
-            raise KeyError(f'Invalid char {repr(key[i])} detected in position {repr(i)} of key {repr(key)}.')
-
 cdef class TreeStorage:
     def __cinit__(self, dict map_):
         self.map = map_
@@ -33,7 +20,6 @@ cdef class TreeStorage:
         return ({},), {}
 
     cpdef public void set(self, str key, object value) except *:
-        _key_validate(key.encode())
         self.map[key] = value
 
     cpdef public object get(self, str key):
@@ -206,7 +192,6 @@ cpdef object create_storage(dict value):
     cdef str k
     cdef object v
     for k, v in value.items():
-        _key_validate(k.encode())
         if isinstance(v, dict):
             _map[k] = create_storage(v)
         else:

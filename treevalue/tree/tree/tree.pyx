@@ -197,6 +197,132 @@ cdef class TreeValue:
             raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(item)))
 
     @cython.binding(True)
+    cpdef _getitem_extern(self, object key):
+        r"""
+        Overview:
+            External protected function for support the getitem operation. \
+            Default is raise a `KeyError`.
+
+        Arguments:
+            - key (:obj:`object`): Item object.
+
+        Returns:
+            - return (:obj:): Anything you like, \
+                and if it is not able to validly return anything, \
+                just raise an ``KeyError`` here.
+        """
+        raise KeyError(f'Key {key} not found.')
+
+    @cython.binding(True)
+    def __getitem__(self, object key):
+        """
+        Overview:
+            Get item from this tree value.
+
+        Arguments:
+            - key (:obj:`str`): Item object.
+
+        Returns:
+            - value (:obj:): Target object value.
+
+        Example:
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t['a']
+            1
+            >>> t['b']
+            2
+            >>> t['x']['c']
+            3
+        """
+        if isinstance(key, str) and self._st.contains(key):
+            return self._unraw(self._st.get(key))
+        else:
+            return self._getitem_extern(key)
+
+    @cython.binding(True)
+    cpdef _setitem_extern(self, object key, object value):
+        r"""
+        Overview:
+            External function for supporting ``__setitem__`` operation.
+        
+        Arguments:
+            - key (:obj:`object`): Key object.
+            - value (:obj:`object`): Value object.
+        
+        Raises:
+            - NotImplementError: Just raise this when not implemented.
+        """
+        raise NotImplementedError
+
+    @cython.binding(True)
+    def __setitem__(self, object key, object value):
+        """
+        Overview:
+            Set item to current :class:`TreeValue` object.
+
+        Arguments:
+            - key (:obj:`object`): Key object.
+            - value (:obj:`object`): Value object.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t['a'] = 11
+            >>> t['x']['c'] = 30
+            >>> t
+            <TreeValue 0x7f11704c5358>
+            ├── 'a' --> 11
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f11704c52e8>
+                ├── 'c' --> 30
+                └── 'd' --> 4
+        """
+        if isinstance(key, str):
+            self._st.set(key, self._raw(value))
+        else:
+            self._setitem_extern(key, value)
+
+    @cython.binding(True)
+    cpdef _delitem_extern(self, object key):
+        r"""
+        Overview:
+            External function for supporting ``__delitem__`` operation.
+        
+        Arguments:
+            - key (:obj:`object`): Key object.
+        
+        Raises:
+            - KeyError: Just raise this in default case.
+        """
+        raise KeyError(f'Key {key} not found.')
+
+    @cython.binding(True)
+    def __delitem__(self, object key):
+        """
+        Overview:
+            Delete item from current :class:`TreeValue`.
+
+        Arguments:
+            - key (:obj:`object`): Key object.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> del t['a']
+            >>> del t['x']['c']
+            >>> t
+            <TreeValue 0x7f11704c53c8>
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f11704c5438>
+                └── 'd' --> 4
+        """
+        if isinstance(key, str) and self._st.contains(key):
+            self._st.del_(key)
+        else:
+            self._delitem_extern(key)
+
+    @cython.binding(True)
     def __contains__(self, str item):
         """
         Overview:
@@ -285,13 +411,13 @@ cdef class TreeValue:
 
         Example:
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> repr(t)
-            <TreeValue 0x7f22681c69a0>
-            ├── a --> 1
-            ├── b --> 2
-            └── x --> <TreeValue 0x7f226629bc70>
-                ├── c --> 3
-                └── d --> 4
+            >>> t
+            <TreeValue 0x7f672fc53320>
+            ├── 'a' --> 1
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7f672fc53390>
+                ├── 'c' --> 3
+                └── 'd' --> 4
         """
         return format_tree(
             _build_tree(self._detach(), self._type, '', {}, ()),
@@ -442,7 +568,7 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
         for k, v in sorted(data.items()):
             v = _c_undelay_data(data, k, v)
             curpath = path + (k,)
-            _t_prefix = f'{k} --> '
+            _t_prefix = f'{repr(k)} --> '
             if isinstance(v, TreeStorage):
                 children.append(_build_tree(v, type_, _t_prefix, id_pool, curpath))
             else:
@@ -485,11 +611,10 @@ def delayed(func, *args, **kwargs):
 
     Examples::
         >>> from treevalue import TreeValue, delayed
-        >>>
         >>> def f(x):
-        >>>     print('f is called, x is', x)
-        >>>     return x ** x
-        >>>
+        ...     print('f is called, x is', x)
+        ...     return x ** x
+        ...
         >>> t = TreeValue({'a': delayed(f, 2), 'x': delayed(f, 3)})
         >>> t.a
         f is called, x is 2
@@ -505,12 +630,12 @@ def delayed(func, *args, **kwargs):
         >>> print(t)
         f is called, x is 2
         f is called, x is 3
-        <TreeValue 0x7f0fb7f03198>
-        ├── a --> 4
-        └── x --> 27
+        <TreeValue 0x7f672fc53550>
+        ├── 'a' --> 4
+        └── 'x' --> 27
         >>> print(t)
-        <TreeValue 0x7f0fb7f03198>
-        ├── a --> 4
-        └── x --> 27
+        <TreeValue 0x7f672fc53550>
+        ├── 'a' --> 4
+        └── 'x' --> 27
     """
     return DetachedDelayedProxy(_c_delayed_partial(func, args, kwargs))

@@ -14,6 +14,9 @@ cdef class TreeValue:
     cdef object _unraw(self, object obj)
     cdef object _raw(self, object obj)
     cpdef _attr_extern(self, str key)
+    cpdef _getitem_extern(self, object key)
+    cpdef _setitem_extern(self, object key, object value)
+    cpdef _delitem_extern(self, object key)
     cpdef get(self, str key, object default= *)
 
 cdef str _prefix_fix(object text, object prefix)

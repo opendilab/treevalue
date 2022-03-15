@@ -6,8 +6,6 @@ from libcpp cimport bool
 ctypedef unsigned char boolean
 ctypedef unsigned int uint
 
-cdef void _key_validate(const char *key) except *
-
 cdef class TreeStorage:
     cdef readonly dict map
 
