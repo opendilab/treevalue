@@ -322,6 +322,27 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
                                    'x': {'c': [23, 29, 31, 37], 'd': [41, 43, 47, 53]}})
 
             assert t2[t1 - 1] == tree_value_clazz({'a': 2, 'b': 13, 'x': {'c': 31, 'd': 53}})
+            assert t2['a'] == [2, 3, 5, 7]
+            assert t2['x'] == tree_value_clazz({'c': [23, 29, 31, 37], 'd': [41, 43, 47, 53]})
+            assert t2['x']['c'] == [23, 29, 31, 37]
+
+            m1 = np.random.random((3, 4))
+            m2 = np.random.random((3, 5))
+            a = tree_value_clazz({'a': m1, 'b': m2})
+            assert np.allclose(a['a'], m1)
+            assert np.allclose(a['b'], m2)
+
+            a0 = a[0]
+            assert np.allclose(a0['a'], m1[0])
+            assert np.allclose(a0['b'], m2[0])
+
+            a_35 = a[:, 3:5]
+            assert np.allclose(a_35['a'], m1[:, 3:5])
+            assert np.allclose(a_35['b'], m2[:, 3:5])
+
+            b = tree_value_clazz({'': m1, '1': m2})
+            assert np.allclose(b[''], m1)
+            assert np.allclose(b['1'], m2)
 
         def test_setitem(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -347,6 +368,18 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert t2 == tree_value_clazz(
                 {'a': Container(1), 'b': Container(2), 'x': {'c': Container(3), 'd': Container(4)}})
             assert t2.value == t1
+
+            assert t1.a == 1
+            assert t1.x == tree_value_clazz({'c': 3, 'd': 4})
+
+            m1 = np.random.random((3, 4))
+            m2 = np.random.random((3, 5))
+            a = tree_value_clazz({'a': m1, 'b': m2})
+            assert np.allclose(a.a, m1)
+            assert np.allclose(a.b, m2)
+            assert a.shape == tree_value_clazz({
+                'a': (3, 4), 'b': (3, 5),
+            })
 
         def test_call(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
