@@ -1050,10 +1050,52 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 Get item of tree values.
 
             Examples:
+                >>> from treevalue import FastTreeValue
                 >>> t1 = FastTreeValue({'a': [1, 2], 'b': [2, 3], 'x': {'c': [3, 4], 'd': [4, 5]}})
-                >>> t1[0]     # FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-                >>> t1[-1]    # FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
-                >>> t1[::-1]  # FastTreeValue({'a': [2, 1], 'b': [3, 2], 'x': {'c': [4, 3], 'd': [5, 4]}})
+                >>> t1['a']  # key access
+                [1, 2]
+                >>> t1[0]  # value access
+                <FastTreeValue 0x7fa9c8c36cf8>
+                ├── 'a' --> 1
+                ├── 'b' --> 2
+                └── 'x' --> <FastTreeValue 0x7fa9c8c369e8>
+                    ├── 'c' --> 3
+                    └── 'd' --> 4
+                >>> t1[-1]
+                <FastTreeValue 0x7fa9c8a72dd8>
+                ├── 'a' --> 2
+                ├── 'b' --> 3
+                └── 'x' --> <FastTreeValue 0x7fa9c8c36978>
+                    ├── 'c' --> 4
+                    └── 'd' --> 5
+                >>> t1[::-1]
+                <FastTreeValue 0x7fa9c8c36d30>
+                ├── 'a' --> [2, 1]
+                ├── 'b' --> [3, 2]
+                └── 'x' --> <FastTreeValue 0x7fa9c8c36cf8>
+                    ├── 'c' --> [4, 3]
+                    └── 'd' --> [5, 4]
+                >>> t1['x'][0]  # mixed access
+                <FastTreeValue 0x7fa9c8a7b0b8>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+
+            .. note::
+                If you need to get the string items from the node values, you can use double bracket. \
+                For example
+
+                >>> from treevalue import FastTreeValue, raw
+                >>> tv4 = FastTreeValue({
+                ...     'a': raw({'a': 1, 'y': 2}),
+                ...     'c': {'x': raw({'a': 3, 'y': 4})},
+                ... })
+                >>> tv4['a']  # key access
+                {'a': 1, 'y': 2}
+                >>> tv4[['a']]  # value access
+                <FastTreeValue 0x7fa9c8c36588>
+                ├── 'a' --> 1
+                └── 'c' --> <FastTreeValue 0x7fa9c8a7b0b8>
+                    └── 'x' --> 3
             """
             return TreeValue.__getitem__(self, item)
 
@@ -1067,10 +1109,54 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 Set item of tree values.
 
             Examples:
+                >>> from treevalue import FastTreeValue
                 >>> t1 = FastTreeValue({'a': [1, 2], 'b': [2, 3], 'x': {'c': [3, 4], 'd': [4, 5]}})
-                >>> t1[0] = -2  # FastTreeValue({'a': [-2, 2], 'b': [-2, 3], 'x': {'c': [-2, 4], 'd': [-2, 5]}})
+                >>> t1[0] = -2
+                >>> t1
+                <FastTreeValue 0x7fa9c8c36518>
+                ├── 'a' --> [-2, 2]
+                ├── 'b' --> [-2, 3]
+                └── 'x' --> <FastTreeValue 0x7fa9c8a72dd8>
+                    ├── 'c' --> [-2, 4]
+                    └── 'd' --> [-2, 5]
                 >>> t1[0] = FastTreeValue({'a': 2, 'b': 3, 'x': {'c': 4, 'd': 5}})
-                >>> # FastTreeValue({'a': [2, 2], 'b': [3, 3], 'x': {'c': [4, 4], 'd': [5, 5]}})
+                >>> t1
+                <FastTreeValue 0x7fa9c8c36518>
+                ├── 'a' --> [2, 2]
+                ├── 'b' --> [3, 3]
+                └── 'x' --> <FastTreeValue 0x7fa9c8a72dd8>
+                    ├── 'c' --> [4, 4]
+                    └── 'd' --> [5, 5]
+                >>> t1['b'] = [22, 33]
+                >>> t1
+                <FastTreeValue 0x7fa9c8c36518>
+                ├── 'a' --> [2, 2]
+                ├── 'b' --> [22, 33]
+                └── 'x' --> <FastTreeValue 0x7fa9c8a72dd8>
+                    ├── 'c' --> [4, 4]
+                    └── 'd' --> [5, 5]
+
+            .. note::
+                If you need to set the string items from the node values, you can use double bracket. \
+                For example
+
+                >>> from treevalue import FastTreeValue, raw
+                >>> tv4 = FastTreeValue({
+                ...     'a': raw({'a': 1, 'y': 2}),
+                ...     'c': {'x': raw({'a': 3, 'y': 4})},
+                ... })
+                >>> tv4['a'] = {'a': 11, 'y': 22}  # key access
+                >>> tv4
+                <FastTreeValue 0x7fa9c8c36588>
+                ├── 'a' --> {'a': 11, 'y': 22}
+                └── 'c' --> <FastTreeValue 0x7fa9c8c369e8>
+                    └── 'x' --> {'a': 3, 'y': 4}
+                >>> tv4[['a']] = -2  # value access
+                >>> tv4
+                <FastTreeValue 0x7fa9c8c36588>
+                ├── 'a' --> {'a': -2, 'y': 22}
+                └── 'c' --> <FastTreeValue 0x7fa9c8c369e8>
+                    └── 'x' --> {'a': -2, 'y': 4}
             """
             TreeValue.__setitem__(self, key, value)
 
@@ -1084,8 +1170,46 @@ def general_tree_value(base: Optional[Mapping[str, Any]] = None,
                 Delete item of tree values.
 
             Examples:
+                >>> from treevalue import FastTreeValue, raw
                 >>> t1 = FastTreeValue({'a': [1, 2], 'b': [2, 3], 'x': {'c': [3, 4], 'd': [4, 5]}})
-                >>> del t1[0]  # FastTreeValue({'a': [2], 'b': [3], 'x': {'c': [4], 'd': [5]}})
+                >>> del t1[0]
+                >>> t1
+                <FastTreeValue 0x7fa9c8c366a0>
+                ├── 'a' --> [2]
+                ├── 'b' --> [3]
+                └── 'x' --> <FastTreeValue 0x7fa9c8a7b0b8>
+                    ├── 'c' --> [4]
+                    └── 'd' --> [5]
+                >>> del t1['b']
+                >>> t1
+                <FastTreeValue 0x7fa9c8c366a0>
+                ├── 'a' --> [2]
+                └── 'x' --> <FastTreeValue 0x7fa9c8a7b0b8>
+                    ├── 'c' --> [4]
+                    └── 'd' --> [5]
+
+            .. note::
+                If you need to delete the string items from the node values, you can use double bracket. \
+                For example
+
+                >>> from treevalue import FastTreeValue, raw
+                >>> tv4 = FastTreeValue({
+                ...     'a': raw({'a': 1, 'y': 2}),
+                ...     'c': {'x': raw({'a': 3, 'y': 4})},
+                ...     'g': {'x': raw({'a': 31, 'y': 42})},
+                ... })
+                >>> del tv4['g']  # key delete
+                >>> tv4
+                <FastTreeValue 0x7fa9c8c36978>
+                ├── 'a' --> {'a': 1, 'y': 2}
+                └── 'c' --> <FastTreeValue 0x7fa9c8c36d30>
+                    └── 'x' --> {'a': 3, 'y': 4}
+                >>> del tv4[['a']]  # value delete
+                >>> tv4
+                <FastTreeValue 0x7fa9c8c36978>
+                ├── 'a' --> {'y': 2}
+                └── 'c' --> <FastTreeValue 0x7fa9c8c36d30>
+                    └── 'x' --> {'y': 4}
             """
             return TreeValue.__delitem__(self, key)
 

@@ -11,6 +11,12 @@ from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
 
+cdef inline object _item_unwrap(object v):
+    if isinstance(v, list) and len(v) == 1:
+        return v[0]
+    else:
+        return v
+
 _GET_NO_DEFAULT = SingletonMark('get_no_default')
 
 cdef inline TreeStorage _dict_unpack(dict d):
@@ -211,7 +217,7 @@ cdef class TreeValue:
                 and if it is not able to validly return anything, \
                 just raise an ``KeyError`` here.
         """
-        raise KeyError(f'Key {key} not found.')
+        raise KeyError(f'Key {repr(key)} not found.')
 
     @cython.binding(True)
     def __getitem__(self, object key):
@@ -235,10 +241,10 @@ cdef class TreeValue:
             >>> t['x']['c']
             3
         """
-        if isinstance(key, str) and self._st.contains(key):
+        if isinstance(key, str):
             return self._unraw(self._st.get(key))
         else:
-            return self._getitem_extern(key)
+            return self._getitem_extern(_item_unwrap(key))
 
     @cython.binding(True)
     cpdef _setitem_extern(self, object key, object value):
@@ -281,7 +287,7 @@ cdef class TreeValue:
         if isinstance(key, str):
             self._st.set(key, self._raw(value))
         else:
-            self._setitem_extern(key, value)
+            self._setitem_extern(_item_unwrap(key), value)
 
     @cython.binding(True)
     cpdef _delitem_extern(self, object key):
@@ -295,7 +301,7 @@ cdef class TreeValue:
         Raises:
             - KeyError: Just raise this in default case.
         """
-        raise KeyError(f'Key {key} not found.')
+        raise KeyError(f'Key {repr(key)} not found.')
 
     @cython.binding(True)
     def __delitem__(self, object key):
@@ -317,10 +323,10 @@ cdef class TreeValue:
             └── 'x' --> <TreeValue 0x7f11704c5438>
                 └── 'd' --> 4
         """
-        if isinstance(key, str) and self._st.contains(key):
+        if isinstance(key, str):
             self._st.del_(key)
         else:
-            self._delitem_extern(key)
+            self._delitem_extern(_item_unwrap(key))
 
     @cython.binding(True)
     def __contains__(self, str item):
