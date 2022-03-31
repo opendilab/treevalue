@@ -1,0 +1,1480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>treevalue.tree.general.general &mdash; treevalue 1.3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/plugins/index.html">Plugins</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../best_practice/sklearn/index.html">Apply into Scikit-Learn</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>treevalue.tree.general.general</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for treevalue.tree.general.general</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
+<span class="kn">from</span> <span class="nn">hbutils.reflection</span> <span class="kn">import</span> <span class="n">dynamic_call</span><span class="p">,</span> <span class="n">raising</span>
+
+<span class="kn">from</span> <span class="nn">..func</span> <span class="kn">import</span> <span class="n">method_treelize</span><span class="p">,</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span> <span class="n">func_treelize</span>
+<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">clone</span><span class="p">,</span> <span class="n">typetrans</span><span class="p">,</span> <span class="n">mapping</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">reduce_</span><span class="p">,</span> <span class="n">union</span><span class="p">,</span> <span class="n">graphics</span><span class="p">,</span> <span class="n">walk</span>
+<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">rise</span> <span class="k">as</span> <span class="n">rise_func</span>
+<span class="kn">from</span> <span class="nn">..tree</span> <span class="kn">import</span> <span class="n">subside</span> <span class="k">as</span> <span class="n">subside_func</span>
+
+<span class="n">_BASE_GENERATION_CONFIG</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="general_tree_value"><a class="viewcode-back" href="../../../../api_doc/tree/general.html#treevalue.tree.general.general_tree_value">[docs]</a><span class="k">def</span> <span class="nf">general_tree_value</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">methods</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Get general tree value class.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        - base (:obj:`Optional[Mapping[str, Any]]`): Base configuration of `func_treelize`.</span>
+<span class="sd">        - methods (:obj:`Optional[Mapping[str, Any]]`): Method configurations of `func_treelize`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        - clazz (:obj:`Type[TreeValue]`): General tree value class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">base</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="n">methods</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_dynamic_suffix_dec</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)(</span><span class="n">dynamic_call</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+    <span class="nd">@lru_cache</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_get_decorator</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">treelize</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">ext_cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">_item</span> <span class="o">=</span> <span class="n">methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">treelize</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_item</span> <span class="ow">or</span> <span class="p">{},</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">_config</span> <span class="o">=</span> <span class="n">_BASE_GENERATION_CONFIG</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+            <span class="n">_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_item</span> <span class="ow">or</span> <span class="p">{})</span>
+            <span class="n">_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">ext_cfg</span> <span class="ow">or</span> <span class="p">()))</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">func</span><span class="p">:</span> <span class="n">method_treelize</span><span class="p">(</span><span class="o">**</span><span class="n">_config</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_item</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">_item</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">_item</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">func</span><span class="p">:</span> <span class="n">_dynamic_suffix_dec</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">raising</span><span class="p">(</span><span class="n">_item</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_item</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">func</span><span class="p">:</span> <span class="n">_dynamic_suffix_dec</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">_item</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">methods</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">func</span><span class="p">:</span> <span class="n">_dynamic_suffix_dec</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">methods</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">func</span><span class="p">:</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="nf">_decorate</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">treelize</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">ext_cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_get_decorator</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">treelize</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">((</span><span class="n">ext_cfg</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">())))(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="n">_decorate_treelize</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_decorate</span><span class="p">,</span> <span class="n">treelize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_decorate_method</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_decorate</span><span class="p">,</span> <span class="n">treelize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_decorate_and_replace</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">_decorate</span><span class="p">,</span> <span class="n">treelize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ext_cfg</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">self_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="n">_TreeValue</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;_TreeValue&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">TreeValue</span><span class="p">)</span>
+
+    <span class="c1"># noinspection PyUnresolvedReferences,PyMethodFirstArgAssignment</span>
+    <span class="k">class</span> <span class="nc">_GeneralTreeValue</span><span class="p">(</span><span class="n">TreeValue</span><span class="p">):</span>
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_attr_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                External protected function for support the unfounded attributes. \</span>
+<span class="sd">                In `FastTreeValue` it is extended to support the access to values&#39; attribute.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - key (:obj:`str`): Attribute name.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - return (:obj:): TreeValue of the values&#39; attribute.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; class Container:</span>
+<span class="sd">                &gt;&gt;&gt;     def __init__(self, value):</span>
+<span class="sd">                &gt;&gt;&gt;         self.__value = value</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt;     @property</span>
+<span class="sd">                &gt;&gt;&gt;     def value(self):</span>
+<span class="sd">                &gt;&gt;&gt;         return self.__value</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt;     def append(self, v):</span>
+<span class="sd">                &gt;&gt;&gt;         return self.__value + v</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: Container(1), &#39;b&#39;: Container(2)})</span>
+<span class="sd">                &gt;&gt;&gt; t.value   # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2})</span>
+<span class="sd">                &gt;&gt;&gt; t.append  # FastTreeValue({&#39;a&#39;: &lt;method &#39;append&#39; of Container(1)&gt;, &#39;b&#39;: &lt;method &#39;append&#39; of Container(2)&gt;})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Dump current `TreeValue` object to json data.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - json (:obj:`dict`): Dumped json data.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.json()  # {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}}</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Create a fully clone of the current tree.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - tree (:obj:`_TreeValue`): Cloned tree value object.</span>
+<span class="sd">                - copy_value (:obj:`Union[None, bool, Callable, Any]`): Deep copy value or not, \</span>
+<span class="sd">                    default is `None` which means do not deep copy the values. \</span>
+<span class="sd">                    If deep copy is required, just set it to `True`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.x.clone()  # FastTreeValue({&#39;c&#39;: 3, &#39;d&#39;: 4})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy_value</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clazz</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">_TreeValue</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">_TreeValue</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Transform tree value object to another tree value type. \</span>
+<span class="sd">                Attention that in this function, no copy will be made, \</span>
+<span class="sd">                the original tree value and the transformed tree value are using the same space area.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - return_type (:obj:`Type[_TreeValue]`): Target tree value type</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - tree (:obj:`_TreeValue`): Transformed tree value object.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.type(TreeValue)  # TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">typetrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clazz</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Do mapping on every value in this tree.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - func (:obj:): Function for mapping</span>
+<span class="sd">                - delayed (:obj:`bool`): Enable delayed mode for this mapping.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - tree (:obj:`_TreeValue`): Mapped tree value object.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.map(lambda x: x + 2)  # FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4, &#39;x&#39;: {&#39;c&#39;: 5, &#39;d&#39;: 6}})</span>
+<span class="sd">                &gt;&gt;&gt; t.map(lambda: 1)        # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 1, &#39;d&#39;: 1}})</span>
+<span class="sd">                &gt;&gt;&gt; t.map(lambda x, p: p)   # FastTreeValue({&#39;a&#39;: (&#39;a&#39;,), &#39;b&#39;: (&#39;b&#39;,), &#39;x&#39;: {&#39;c&#39;: (&#39;x&#39;, &#39;c&#39;), &#39;d&#39;: (&#39;x&#39;, &#39;d&#39;)}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">delayed</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_</span><span class="p">:</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Filter the element in the tree with a mask</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - `mask_` (:obj:`TreeValue`): Tree value mask object</span>
+<span class="sd">                - `remove_empty` (:obj:`bool`): Remove empty tree node automatically, default is `True`.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - tree (:obj:`_TreeValue`): Filtered tree value object.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.mask(TreeValue({&#39;a&#39;: True, &#39;b&#39;: False, &#39;x&#39;: False}))                    # FastTreeValue({&#39;a&#39;: 1})</span>
+<span class="sd">                &gt;&gt;&gt; t.mask(TreeValue({&#39;a&#39;: True, &#39;b&#39;: False, &#39;x&#39;: {&#39;c&#39;: True, &#39;d&#39;: False}}))  # FastTreeValue({&#39;a&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 3}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Filter the element in the tree with a predict function.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - func (:obj:): Function for filtering</span>
+<span class="sd">                - remove_empty (:obj:`bool`): Remove empty tree node automatically, default is `True`.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - tree (:obj:`_TreeValue`): Filtered tree value object.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.filter(lambda x: x &lt; 3)                  # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2})</span>
+<span class="sd">                &gt;&gt;&gt; t.filter(lambda x: x &lt; 3, False)           # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {}})</span>
+<span class="sd">                &gt;&gt;&gt; t.filter(lambda x: x % 2 == 1)             # FastTreeValue({&#39;a&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 3}})</span>
+<span class="sd">                &gt;&gt;&gt; t.filter(lambda x, p: p[0] in {&#39;b&#39;, &#39;x&#39;})  # FastTreeValue({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">filter_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">remove_empty</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Walk the values and nodes in the tree.</span>
+<span class="sd">                The order of walk is not promised, if you need the ordered walking result, \</span>
+<span class="sd">                just use function ``sorted`` at the outer side of :func:`walk`.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \</span>
+<span class="sd">                    path of the node, the 2nd one is the value.</span>
+
+<span class="sd">            Examples::</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, walk</span>
+<span class="sd">                &gt;&gt;&gt; tv1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: {&#39;x&#39;: 2, &#39;y&#39;: 2}})</span>
+<span class="sd">                &gt;&gt;&gt; for k, v in tv1.walk():</span>
+<span class="sd">                ...     print(k, v)</span>
+<span class="sd">                () &lt;FastTreeValue 0x7f672fc533c8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="sd">                    ├── &#39;x&#39; --&gt; 2</span>
+<span class="sd">                    └── &#39;y&#39; --&gt; 2</span>
+<span class="sd">                (&#39;a&#39;,) 1</span>
+<span class="sd">                (&#39;b&#39;,) 2</span>
+<span class="sd">                (&#39;c&#39;,) &lt;FastTreeValue 0x7f672fc53438&gt;</span>
+<span class="sd">                ├── &#39;x&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;y&#39; --&gt; 2</span>
+<span class="sd">                (&#39;c&#39;, &#39;x&#39;) 2</span>
+<span class="sd">                (&#39;c&#39;, &#39;y&#39;) 2</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview</span>
+<span class="sd">                Reduce the tree to value.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - func (:obj:): Function for reducing</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - result (:obj:): Reduce result</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from functools import reduce</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t.reduce(lambda **kwargs: sum(kwargs.values()))  # 10, 1 + 2 + (3 + 4)</span>
+<span class="sd">                &gt;&gt;&gt; t.reduce(lambda **kwargs: reduce(lambda x, y: x * y, list(kwargs.values())))  # 24, 1 * 2 * (3 * 4)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">reduce_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">rise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Make the structure (dict, list, tuple) in value rise up to the top, above the tree value.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - `dict_` (:obj:`bool`): Enable dict rise, default is `True`.</span>
+<span class="sd">                - `list_` (:obj:`bool`): Enable list rise, default is `True`.</span>
+<span class="sd">                - `tuple_` (:obj:`bool`): Enable list rise, default is `True`.</span>
+<span class="sd">                - template (:obj:): Rising template, default is `None`, which means auto detect.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - risen (:obj:): Risen value.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;x&#39;: raw({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3]}), &#39;y&#39;: raw({&#39;a&#39;: [5, 6, 7], &#39;b&#39;: [7, 8]})})</span>
+<span class="sd">                &gt;&gt;&gt; dt = t.rise()</span>
+<span class="sd">                &gt;&gt;&gt; # dt will be {&#39;a&#39;: &lt;FastTreeValue 1&gt;, &#39;b&#39;: [&lt;FastTreeValue 2&gt;, &lt;FastTreeValue 3&gt;]}</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 1 will be FastTreeValue({&#39;x&#39;: [1, 2], &#39;y&#39;: [5, 6, 7]})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 2 will be FastTreeValue({&#39;x&#39;: 2, &#39;y&#39;: 7})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 3 will be FastTreeValue({&#39;x&#39;: 3, &#39;y&#39;: 8})</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;x&#39;: raw({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3]}), &#39;y&#39;: raw({&#39;a&#39;: [5, 6], &#39;b&#39;: [7, 8]})})</span>
+<span class="sd">                &gt;&gt;&gt; dt2 = t2.rise()</span>
+<span class="sd">                &gt;&gt;&gt; # dt2 will be {&#39;a&#39;: [&lt;FastTreeValue 1&gt;, &lt;FastTreeValue 2&gt;], &#39;b&#39;: [&lt;FastTreeValue 3&gt;, &lt;FastTreeValue 4&gt;]}</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 1 will be FastTreeValue({&#39;x&#39;: 1, &#39;y&#39;: 5})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 2 will be FastTreeValue({&#39;x&#39;: 2, &#39;y&#39;: 6})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 3 will be FastTreeValue({&#39;x&#39;: 2, &#39;y&#39;: 7})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 4 will be FastTreeValue({&#39;x&#39;: 3, &#39;y&#39;: 8})</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; dt3 = t2.rise(template={&#39;a&#39;: None, &#39;b&#39;: None})</span>
+<span class="sd">                &gt;&gt;&gt; # dt3 will be {&#39;a&#39;: &lt;FastTreeValue 1&gt;, &#39;b&#39;: &lt;FastTreeValue 2&gt;}</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 1 will be FastTreeValue({&#39;x&#39;: [1, 2], &#39;y&#39;: [5, 6]})</span>
+<span class="sd">                &gt;&gt;&gt; # FastTreeValue 2 will be FastTreeValue({&#39;x&#39;: [2, 3], &#39;y&#39;: [7, 8]})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">rise_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_</span><span class="p">,</span> <span class="n">list_</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">dup_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                  <span class="n">repr_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">node_cfg_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">edge_cfg_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Digraph</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Draw graph of this tree value.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                - root (:obj:`Optional[str]`): Root name of the graph, default is ``None``, \</span>
+<span class="sd">                    this name will be automatically generated.</span>
+<span class="sd">                - title (:obj:`Optional[str]`): Title of the graph, default is ``None``, \</span>
+<span class="sd">                    this title will be automatically generated from ``root`` argument.</span>
+<span class="sd">                - cfg (:obj:`Optional[dict]`): Configuration of the graph.</span>
+<span class="sd">                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \</span>
+<span class="sd">                    set `True` to make value with same id use the same node in graph, \</span>
+<span class="sd">                    you can also define your own node id algorithm by this argument. \</span>
+<span class="sd">                    Default is `False` which means do not use value duplicator.</span>
+<span class="sd">                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \</span>
+<span class="sd">                    default is `None` which means using `repr` function.</span>
+<span class="sd">                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \</span>
+<span class="sd">                    default is `None` which means no configuration.</span>
+<span class="sd">                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \</span>
+<span class="sd">                    default is `None` which means no configuration.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - graph (:obj:`Digraph`): Generated graph of tree values.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> #</span><span class="si">%x</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_detach</span><span class="p">())))</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;Graph of tree </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">root</span><span class="p">,))</span>
+            <span class="k">return</span> <span class="n">graphics</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dup_value</span><span class="o">=</span><span class="n">dup_value</span><span class="p">,</span>
+                <span class="n">repr_gen</span><span class="o">=</span><span class="n">repr_gen</span><span class="p">,</span> <span class="n">node_cfg_gen</span><span class="o">=</span><span class="n">node_cfg_gen</span><span class="p">,</span> <span class="n">edge_cfg_gen</span><span class="o">=</span><span class="n">edge_cfg_gen</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="n">inherit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">missing</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">MISSING_NOT_ALLOW</span><span class="p">,</span> <span class="n">delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">subside</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Wrap a common function to tree-supported function based on this type.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - mode (:obj:`str`): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">                - missing (:obj:`Union[Any, Callable]`): Missing value or lambda generator of when missing, \</span>
+<span class="sd">                    default is `MISSING_NOT_ALLOW`, which means raise `KeyError` when missing detected.</span>
+<span class="sd">                - delayed (:obj:`bool`): Enable delayed mode or not, the calculation will be delayed when enabled, \</span>
+<span class="sd">                    default is ``False``, which means to all the calculation at once.</span>
+<span class="sd">                - subside (:obj:`Union[Mapping, bool, None]`): Subside enabled to function&#39;s arguments or not, \</span>
+<span class="sd">                    and subside configuration, default is `None` which means do not use subside. \</span>
+<span class="sd">                    When subside is `True`, it will use all the default arguments in `subside` function.</span>
+<span class="sd">                - rise (:obj:`Union[Mapping, bool, None]`): Rise enabled to function&#39;s return value or not, \</span>
+<span class="sd">                    and rise configuration, default is `None` which means do not use rise. \</span>
+<span class="sd">                    When rise is `True`, it will use all the default arguments in `rise` function. \</span>
+<span class="sd">                    (Not recommend to use auto mode when your return structure is not so strict.)</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - decorator (:obj:`Callable`): Wrapper for tree-supported function.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; @FastTreeValue.func()</span>
+<span class="sd">                &gt;&gt;&gt; def ssum(a, b):</span>
+<span class="sd">                &gt;&gt;&gt;     return a + b  # the a and b will be integers, not TreeValue</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; t1 = TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = TreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; ssum(1, 2)    # 3</span>
+<span class="sd">                &gt;&gt;&gt; ssum(t1, t2)  # FastTreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 36, &#39;d&#39;: 9}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">func_treelize</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">inherit</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">subside</span><span class="p">,</span> <span class="n">rise</span><span class="p">)</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">trees</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Union tree values together.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - trees (:obj:`_TreeValue`): Tree value objects.</span>
+<span class="sd">                - mode (:obj:): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">                - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, default is `TreeValue`.</span>
+<span class="sd">                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">                - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \</span>
+<span class="sd">                    means raise `KeyError` when missing detected.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - result (:obj:`TreeValue`): Unionised tree value.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; tx = t.map(lambda v: v % 2 == 1)</span>
+<span class="sd">                &gt;&gt;&gt; FastTreeValue.union(t, tx)  # FastTreeValue({&#39;a&#39;: (1, True), &#39;b&#39;: (2, False), &#39;x&#39;: {&#39;c&#39;: (3, True), &#39;d&#39;: (4, False)}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">trees</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="n">return_type</span> <span class="ow">or</span> <span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">subside</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="n">return_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">_TreeValue</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Drift down the structures (list, tuple, dict) down to the tree&#39;s value.</span>
+
+<span class="sd">            Arguments:</span>
+<span class="sd">                - value (:obj:): Original value object, may be nested dict, list or tuple.</span>
+<span class="sd">                - `dict_` (:obj:`bool`): Enable dict subside, default is `True`.</span>
+<span class="sd">                - `list_` (:obj:`bool`): Enable list subside, default is `True`.</span>
+<span class="sd">                - `tuple_` (:obj:`bool`): Enable list subside, default is `True`.</span>
+<span class="sd">                - mode (:obj:): Mode of the wrapping, default is `strict`.</span>
+<span class="sd">                - return_type (:obj:`Optional[Type[_ClassType]]`): Return type of the wrapped function, \</span>
+<span class="sd">                    will be auto detected when there is exactly one tree value type in this original value, \</span>
+<span class="sd">                    otherwise the default will be `TreeValue`.</span>
+<span class="sd">                - inherit (:obj:`bool`): Allow inherit in wrapped function, default is `True`.</span>
+<span class="sd">                - missing (:obj:): Missing value or lambda generator of when missing, default is `MISSING_NOT_ALLOW`, which \</span>
+<span class="sd">                    means raise `KeyError` when missing detected.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - return (:obj:`_TreeValue`): Subsided tree value.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; data = {</span>
+<span class="sd">                &gt;&gt;&gt;     &#39;a&#39;: TreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2}),</span>
+<span class="sd">                &gt;&gt;&gt;     &#39;x&#39;: {</span>
+<span class="sd">                &gt;&gt;&gt;         &#39;c&#39;: TreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4}),</span>
+<span class="sd">                &gt;&gt;&gt;         &#39;d&#39;: [</span>
+<span class="sd">                &gt;&gt;&gt;             TreeValue({&#39;a&#39;: 5, &#39;b&#39;: 6}),</span>
+<span class="sd">                &gt;&gt;&gt;             TreeValue({&#39;a&#39;: 7, &#39;b&#39;: 8}),</span>
+<span class="sd">                &gt;&gt;&gt;         ]</span>
+<span class="sd">                &gt;&gt;&gt;     },</span>
+<span class="sd">                &gt;&gt;&gt;     &#39;k&#39;: &#39;233&#39;</span>
+<span class="sd">                &gt;&gt;&gt; }</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; tree = FastTreeValue.subside(data)</span>
+<span class="sd">                &gt;&gt;&gt; # tree should be --&gt; FastTreeValue({</span>
+<span class="sd">                &gt;&gt;&gt; #    &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;k&#39;: &#39;233&#39;, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: [5, 7]}}),</span>
+<span class="sd">                &gt;&gt;&gt; #    &#39;b&#39;: raw({&#39;a&#39;: 2, &#39;k&#39;: &#39;233&#39;, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: [6, 8]}}),</span>
+<span class="sd">                &gt;&gt;&gt; #}), all structures above the tree values are subsided to the bottom of the tree.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">subside_func</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dict_</span><span class="p">,</span> <span class="n">list_</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">,</span>
+                                <span class="n">return_type</span><span class="o">=</span><span class="n">return_type</span> <span class="ow">or</span> <span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="nd">@_decorate_method</span>
+        <span class="k">def</span> <span class="nf">graphics</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">trees</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">dup_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                     <span class="n">repr_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">node_cfg_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">edge_cfg_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Digraph</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Draw graph by tree values.</span>
+<span class="sd">                Multiple tree values is supported.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                - trees: Given tree values, tuples of `Tuple[TreeValue, str]` or tree values are both accepted.</span>
+<span class="sd">                - title (:obj:`Optional[str]`): Title of the graph.</span>
+<span class="sd">                - cfg (:obj:`Optional[dict]`): Configuration of the graph.</span>
+<span class="sd">                - dup_value (:obj:`Union[bool, Callable, type, Tuple[Type, ...]]`): Value duplicator, \</span>
+<span class="sd">                    set `True` to make value with same id use the same node in graph, \</span>
+<span class="sd">                    you can also define your own node id algorithm by this argument. \</span>
+<span class="sd">                    Default is `False` which means do not use value duplicator.</span>
+<span class="sd">                - repr_gen (:obj:`Optional[Callable]`): Representation format generator, \</span>
+<span class="sd">                    default is `None` which means using `repr` function.</span>
+<span class="sd">                - node_cfg_gen (:obj:`Optional[Callable]`): Node configuration generator, \</span>
+<span class="sd">                    default is `None` which means no configuration.</span>
+<span class="sd">                - edge_cfg_gen (:obj:`Optional[Callable]`): Edge configuration generator, \</span>
+<span class="sd">                    default is `None` which means no configuration.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                - graph (:obj:`Digraph`): Generated graph of tree values.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">graphics</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">trees</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">dup_value</span><span class="o">=</span><span class="n">dup_value</span><span class="p">,</span>
+                <span class="n">repr_gen</span><span class="o">=</span><span class="n">repr_gen</span><span class="p">,</span> <span class="n">node_cfg_gen</span><span class="o">=</span><span class="n">node_cfg_gen</span><span class="p">,</span> <span class="n">edge_cfg_gen</span><span class="o">=</span><span class="n">edge_cfg_gen</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Add tree values together.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 + t2  # FastTreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 44}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__add__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 1 + t1  # FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">+</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__add__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 += t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 44}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">+=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Substract tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 - t2  # FastTreeValue({&#39;a&#39;: -10, &#39;b&#39;: -20, &#39;x&#39;: {&#39;c&#39;: -27, &#39;d&#39;: -36}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">-</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__sub__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 1 - t1  # FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: -1, &#39;x&#39;: {&#39;c&#39;: -2, &#39;d&#39;: -3}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">-</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__isub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__sub__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 -= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: -10, &#39;b&#39;: -20, &#39;x&#39;: {&#39;c&#39;: -27, &#39;d&#39;: -36}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">-=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Multiply tree values together.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 * t2  # FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 44, &#39;x&#39;: {&#39;c&#39;: 90, &#39;d&#39;: 160}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__mul__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 2 * t1  # FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 4, &#39;x&#39;: {&#39;c&#39;: 6, &#39;d&#39;: 8}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">*</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__mul__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 *= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 44, &#39;x&#39;: {&#39;c&#39;: 90, &#39;d&#39;: 160}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">*=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Matrix tree values together, can be used in numpy or torch.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">@</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rmatmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__matmul__`.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">@</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__imatmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__matmul__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">@=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                True divide tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 / t2  # FastTreeValue({&#39;a&#39;: 0.1, &#39;b&#39;: 0.08, &#39;x&#39;: {&#39;c&#39;: 0.1, &#39;d&#39;: 0.1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">/</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rtruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__truediv__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 6 / t1  # FastTreeValue({&#39;a&#39;: 6, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 2, &#39;d&#39;: 1.5}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">/</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__itruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__truediv__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 /= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 0.1, &#39;b&#39;: 0.08, &#39;x&#39;: {&#39;c&#39;: 0.1, &#39;d&#39;: 0.1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">/=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__floordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Floor divide tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 // t1  # FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 12, &#39;x&#39;: {&#39;c&#39;: 10, &#39;d&#39;: 10}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">//</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rfloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__floordiv__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 6 // t1  # FastTreeValue({&#39;a&#39;: 6, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 2, &#39;d&#39;: 1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">//</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__ifloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__floordiv__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 //= t1</span>
+<span class="sd">                &gt;&gt;&gt; t2 # t2&#39;s id will not change, FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 12, &#39;x&#39;: {&#39;c&#39;: 10, &#39;d&#39;: 10}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">//=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Mod tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 % t1  # FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 0, &#39;d&#39;: 0}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">%</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__mod__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 6 % t1  # FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: 0, &#39;x&#39;: {&#39;c&#39;: 0, &#39;d&#39;: 2}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">%</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__imod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__mod__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 25, &#39;x&#39;: {&#39;c&#39;: 30, &#39;d&#39;: 40}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 %= t1</span>
+<span class="sd">                &gt;&gt;&gt; t2 # t2&#39;s id will not change, FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 0, &#39;d&#39;: 0}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">%=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Mod tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 ** t2  # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 8, &#39;x&#39;: {&#39;c&#39;: 81, &#39;d&#39;: 1024}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">**</span> <span class="n">power</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rpow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__pow__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 2 ** t1  # FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 4, &#39;x&#39;: {&#39;c&#39;: 8, &#39;d&#39;: 16}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">**</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__ipow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__pow__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 **= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 8, &#39;x&#39;: {&#39;c&#39;: 81, &#39;d&#39;: 1024}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">**=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Bitwise and tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 &amp; t2  # FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 0, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">&amp;</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__and__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 5 &amp; t1  # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 0, &#39;x&#39;: {&#39;c&#39;: 1, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">&amp;</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__iand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__and__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 &amp;= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 0, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 0, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">&amp;=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Bitwise or tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 | t2  # FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 7, &#39;d&#39;: 5}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">|</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__or__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 5 | t1  # FastTreeValue({&#39;a&#39;: 5, &#39;b&#39;: 7, &#39;x&#39;: {&#39;c&#39;: 7, &#39;d&#39;: 5}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">|</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__or__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 |= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 7, &#39;d&#39;: 5}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">|=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Bitwise or tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 ^ t2  # FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 7, &#39;d&#39;: 1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">^</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__xor__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 5 ^ t1  # FastTreeValue({&#39;a&#39;: 4, &#39;b&#39;: 7, &#39;x&#39;: {&#39;c&#39;: 6, &#39;d&#39;: 1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">^</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__ixor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__xor__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 ^= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: 7, &#39;d&#39;: 1}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">^=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Left shift tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 &lt;&lt; t2  # FastTreeValue({&#39;a&#39;: 4, &#39;b&#39;: 16, &#39;x&#39;: {&#39;c&#39;: 48, &#39;d&#39;: 128}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">&lt;&lt;</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rlshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__lshift__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 3 &lt;&lt; t1  # FastTreeValue({&#39;a&#39;: 6, &#39;b&#39;: 12, &#39;x&#39;: {&#39;c&#39;: 24, &#39;d&#39;: 48}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__ilshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__xor__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1 &lt;&lt;= t2</span>
+<span class="sd">                &gt;&gt;&gt; t1 # t1&#39;s id will not change, FastTreeValue({&#39;a&#39;: 4, &#39;b&#39;: 16, &#39;x&#39;: {&#39;c&#39;: 48, &#39;d&#39;: 128}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">&lt;&lt;=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Left shift tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 20, &#39;b&#39;: 30, &#39;x&#39;: {&#39;c&#39;: 40, &#39;d&#39;: 50}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 &gt;&gt; t1  # FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 7, &#39;x&#39;: {&#39;c&#39;: 5, &#39;d&#39;: 3}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span> <span class="o">&gt;&gt;</span> <span class="n">other</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__rrshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Right version of `__rshift__`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; 64 &gt;&gt; t1  # FastTreeValue({&#39;a&#39;: 32, &#39;b&#39;: 16, &#39;x&#39;: {&#39;c&#39;: 8, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_and_replace</span>
+        <span class="k">def</span> <span class="fm">__irshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Self version of `__xor__`.</span>
+<span class="sd">                Original id of self will be kept.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 = FastTreeValue({&#39;a&#39;: 20, &#39;b&#39;: 30, &#39;x&#39;: {&#39;c&#39;: 40, &#39;d&#39;: 50}})</span>
+<span class="sd">                &gt;&gt;&gt; t2 &gt;&gt;= t1</span>
+<span class="sd">                &gt;&gt;&gt; t2 # t2&#39;s id will not change, FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 7, &#39;x&#39;: {&#39;c&#39;: 5, &#39;d&#39;: 3}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span> <span class="o">&gt;&gt;=</span> <span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Positive tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; +t1  # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="o">+</span><span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Negative tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+<span class="sd">                &gt;&gt;&gt; -t1  # FastTreeValue({&#39;a&#39;: -1, &#39;b&#39;: -2, &#39;x&#39;: {&#39;c&#39;: -3, &#39;d&#39;: -4}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="o">-</span><span class="bp">self</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__invert__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Bitwise invert tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: -2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: -4}})</span>
+<span class="sd">                &gt;&gt;&gt; ~t1  # FastTreeValue({&#39;a&#39;: -2, &#39;b&#39;: 1, &#39;x&#39;: {&#39;c&#39;: -4, &#39;d&#39;: 3}})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="o">~</span><span class="bp">self</span>
+
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_getitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Get item of tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;a&#39;]  # key access</span>
+<span class="sd">                [1, 2]</span>
+<span class="sd">                &gt;&gt;&gt; t1[0]  # value access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36cf8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; 3</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; 4</span>
+<span class="sd">                &gt;&gt;&gt; t1[-1]</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 2</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 3</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; 4</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; 5</span>
+<span class="sd">                &gt;&gt;&gt; t1[::-1]</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 1]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3, 2]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36cf8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 3]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 4]</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;x&#39;][0]  # mixed access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                ├── &#39;c&#39; --&gt; 3</span>
+<span class="sd">                └── &#39;d&#39; --&gt; 4</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to get the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; tv4[&#39;a&#39;]  # key access</span>
+<span class="sd">                {&#39;a&#39;: 1, &#39;y&#39;: 2}</span>
+<span class="sd">                &gt;&gt;&gt; tv4[[&#39;a&#39;]]  # value access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; 3</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_setitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Set item of tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
+<span class="sd">                &gt;&gt;&gt; t1[0] = -2</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [-2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [-2, 3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [-2, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [-2, 5]</span>
+<span class="sd">                &gt;&gt;&gt; t1[0] = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3, 3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 5]</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;b&#39;] = [22, 33]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [22, 33]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 5]</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to set the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; tv4[&#39;a&#39;] = {&#39;a&#39;: 11, &#39;y&#39;: 22}  # key access</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: 11, &#39;y&#39;: 22}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: 3, &#39;y&#39;: 4}</span>
+<span class="sd">                &gt;&gt;&gt; tv4[[&#39;a&#39;]] = -2  # value access</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: -2, &#39;y&#39;: 22}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: -2, &#39;y&#39;: 4}</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="nd">@method_treelize</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_delitem_extern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Delete item of tree values.</span>
+
+<span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
+<span class="sd">                &gt;&gt;&gt; del t1[0]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c366a0&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5]</span>
+<span class="sd">                &gt;&gt;&gt; del t1[&#39;b&#39;]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c366a0&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5]</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to delete the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ...     &#39;g&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 31, &#39;y&#39;: 42})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; del tv4[&#39;g&#39;]  # key delete</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: 1, &#39;y&#39;: 2}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: 3, &#39;y&#39;: 4}</span>
+<span class="sd">                &gt;&gt;&gt; del tv4[[&#39;a&#39;]]  # value delete</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;y&#39;: 2}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;y&#39;: 4}</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+        <span class="nd">@_decorate_treelize</span>
+        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview:</span>
+<span class="sd">                Call of tree values.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                &gt;&gt;&gt; class Container:</span>
+<span class="sd">                &gt;&gt;&gt;     def __init__(self, value):</span>
+<span class="sd">                &gt;&gt;&gt;         self.__value = value</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt;     def append(self, v):</span>
+<span class="sd">                &gt;&gt;&gt;         return self.__value + v</span>
+<span class="sd">                &gt;&gt;&gt;</span>
+<span class="sd">                &gt;&gt;&gt; t = FastTreeValue({&#39;a&#39;: Container(1), &#39;b&#39;: Container(2)})</span>
+<span class="sd">                &gt;&gt;&gt; t.append(2)  # FastTreeValue({&#39;a&#39;: 3, &#39;b&#39;: 4})</span>
+<span class="sd">                &gt;&gt;&gt; t.append(FastTreeValue({&#39;a&#39;: 10, &#39;b&#39;: 20}))  # FastTreeValue({&#39;a&#39;: 11, &#39;b&#39;: 22})</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_GeneralTreeValue</span></div>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/getitem
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../../../v0.0.1/index.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                        <dd><a href="../../../../../../v1.2.0/index.html">v1.2.0</a></dd>
+                        <dd><a href="../../../../../../v1.2.1/index.html">v1.2.1</a></dd>
+                        <dd><a href="../../../../../../v1.2.2/index.html">v1.2.2</a></dd>
+                        <dd><a href="../../../../../../v1.3.0/index.html">v1.3.0</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="general.html">dev/getitem</a></dd>
+                        <dd><a href="../../../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../../../refactor/color/index.html">refactor/color</a></dd>
+                        <dd><a href="../../../../../../run/paper/index.html">run/paper</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
