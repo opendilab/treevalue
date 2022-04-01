@@ -1225,10 +1225,52 @@
 <span class="sd">                Get item of tree values.</span>
 
 <span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue</span>
 <span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
-<span class="sd">                &gt;&gt;&gt; t1[0]     # FastTreeValue({&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
-<span class="sd">                &gt;&gt;&gt; t1[-1]    # FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
-<span class="sd">                &gt;&gt;&gt; t1[::-1]  # FastTreeValue({&#39;a&#39;: [2, 1], &#39;b&#39;: [3, 2], &#39;x&#39;: {&#39;c&#39;: [4, 3], &#39;d&#39;: [5, 4]}})</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;a&#39;]  # key access</span>
+<span class="sd">                [1, 2]</span>
+<span class="sd">                &gt;&gt;&gt; t1[0]  # value access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36cf8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 2</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; 3</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; 4</span>
+<span class="sd">                &gt;&gt;&gt; t1[-1]</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 2</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; 3</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; 4</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; 5</span>
+<span class="sd">                &gt;&gt;&gt; t1[::-1]</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 1]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3, 2]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36cf8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 3]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 4]</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;x&#39;][0]  # mixed access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                ├── &#39;c&#39; --&gt; 3</span>
+<span class="sd">                └── &#39;d&#39; --&gt; 4</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to get the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; tv4[&#39;a&#39;]  # key access</span>
+<span class="sd">                {&#39;a&#39;: 1, &#39;y&#39;: 2}</span>
+<span class="sd">                &gt;&gt;&gt; tv4[[&#39;a&#39;]]  # value access</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; 1</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; 3</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 
@@ -1242,10 +1284,54 @@
 <span class="sd">                Set item of tree values.</span>
 
 <span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue</span>
 <span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
-<span class="sd">                &gt;&gt;&gt; t1[0] = -2  # FastTreeValue({&#39;a&#39;: [-2, 2], &#39;b&#39;: [-2, 3], &#39;x&#39;: {&#39;c&#39;: [-2, 4], &#39;d&#39;: [-2, 5]}})</span>
+<span class="sd">                &gt;&gt;&gt; t1[0] = -2</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [-2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [-2, 3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [-2, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [-2, 5]</span>
 <span class="sd">                &gt;&gt;&gt; t1[0] = FastTreeValue({&#39;a&#39;: 2, &#39;b&#39;: 3, &#39;x&#39;: {&#39;c&#39;: 4, &#39;d&#39;: 5}})</span>
-<span class="sd">                &gt;&gt;&gt; # FastTreeValue({&#39;a&#39;: [2, 2], &#39;b&#39;: [3, 3], &#39;x&#39;: {&#39;c&#39;: [4, 4], &#39;d&#39;: [5, 5]}})</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3, 3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 5]</span>
+<span class="sd">                &gt;&gt;&gt; t1[&#39;b&#39;] = [22, 33]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36518&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2, 2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [22, 33]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a72dd8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4, 4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5, 5]</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to set the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; tv4[&#39;a&#39;] = {&#39;a&#39;: 11, &#39;y&#39;: 22}  # key access</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: 11, &#39;y&#39;: 22}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: 3, &#39;y&#39;: 4}</span>
+<span class="sd">                &gt;&gt;&gt; tv4[[&#39;a&#39;]] = -2  # value access</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36588&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: -2, &#39;y&#39;: 22}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c369e8&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: -2, &#39;y&#39;: 4}</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
@@ -1259,8 +1345,46 @@
 <span class="sd">                Delete item of tree values.</span>
 
 <span class="sd">            Examples:</span>
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
 <span class="sd">                &gt;&gt;&gt; t1 = FastTreeValue({&#39;a&#39;: [1, 2], &#39;b&#39;: [2, 3], &#39;x&#39;: {&#39;c&#39;: [3, 4], &#39;d&#39;: [4, 5]}})</span>
-<span class="sd">                &gt;&gt;&gt; del t1[0]  # FastTreeValue({&#39;a&#39;: [2], &#39;b&#39;: [3], &#39;x&#39;: {&#39;c&#39;: [4], &#39;d&#39;: [5]}})</span>
+<span class="sd">                &gt;&gt;&gt; del t1[0]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c366a0&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2]</span>
+<span class="sd">                ├── &#39;b&#39; --&gt; [3]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5]</span>
+<span class="sd">                &gt;&gt;&gt; del t1[&#39;b&#39;]</span>
+<span class="sd">                &gt;&gt;&gt; t1</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c366a0&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; [2]</span>
+<span class="sd">                └── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9c8a7b0b8&gt;</span>
+<span class="sd">                    ├── &#39;c&#39; --&gt; [4]</span>
+<span class="sd">                    └── &#39;d&#39; --&gt; [5]</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                If you need to delete the string items from the node values, you can use double bracket. \</span>
+<span class="sd">                For example</span>
+
+<span class="sd">                &gt;&gt;&gt; from treevalue import FastTreeValue, raw</span>
+<span class="sd">                &gt;&gt;&gt; tv4 = FastTreeValue({</span>
+<span class="sd">                ...     &#39;a&#39;: raw({&#39;a&#39;: 1, &#39;y&#39;: 2}),</span>
+<span class="sd">                ...     &#39;c&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 3, &#39;y&#39;: 4})},</span>
+<span class="sd">                ...     &#39;g&#39;: {&#39;x&#39;: raw({&#39;a&#39;: 31, &#39;y&#39;: 42})},</span>
+<span class="sd">                ... })</span>
+<span class="sd">                &gt;&gt;&gt; del tv4[&#39;g&#39;]  # key delete</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;a&#39;: 1, &#39;y&#39;: 2}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;a&#39;: 3, &#39;y&#39;: 4}</span>
+<span class="sd">                &gt;&gt;&gt; del tv4[[&#39;a&#39;]]  # value delete</span>
+<span class="sd">                &gt;&gt;&gt; tv4</span>
+<span class="sd">                &lt;FastTreeValue 0x7fa9c8c36978&gt;</span>
+<span class="sd">                ├── &#39;a&#39; --&gt; {&#39;y&#39;: 2}</span>
+<span class="sd">                └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fa9c8c36d30&gt;</span>
+<span class="sd">                    └── &#39;x&#39; --&gt; {&#39;y&#39;: 4}</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">TreeValue</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 
@@ -1333,7 +1457,6 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../../dev/getitem/index.html">dev/getitem</a></dd>
                         <dd><a href="general.html">main</a></dd>
                         <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../../../run/paper/index.html">run/paper</a></dd>
