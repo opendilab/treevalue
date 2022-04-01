@@ -122,6 +122,7 @@ class TestTreeTreeTree:
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2 = TreeValue(tv1)
         tv3 = TreeValue({'a': tv1, 'b': tv2, 'c': tv1})
+        tv4 = TreeValue({'a': raw({'a': 1, 'y': 2}), 'c': {'x': raw({'a': 3, 'y': 4}), }})
 
         tv1['a'] = 3
         assert tv1.a == 3
@@ -130,6 +131,13 @@ class TestTreeTreeTree:
         assert tv3.b.a == 3
         assert tv3.c.a == 3
 
+        assert tv4['a'] == {'a': 1, 'y': 2}
+        assert tv4['c'] == TreeValue({'x': raw({'a': 3, 'y': 4})})
+        with pytest.raises(KeyError):
+            _ = tv4['y']
+        with pytest.raises(KeyError):
+            _ = tv4[['c']]
+
         tv1['f'] = 333
         assert tv1.f == 333
         assert tv1['f'] == 333
@@ -137,6 +145,8 @@ class TestTreeTreeTree:
 
         with pytest.raises(NotImplementedError):
             tv1[0] = 3
+        with pytest.raises(NotImplementedError):
+            tv1[['c']] = 3
 
         del tv1['b']
         assert 'b' not in tv1
@@ -147,6 +157,8 @@ class TestTreeTreeTree:
 
         with pytest.raises(KeyError):
             del tv1['g']
+        with pytest.raises(KeyError):
+            del tv1[['c']]
         with pytest.raises(KeyError):
             del tv1[0]
 

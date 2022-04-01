@@ -344,6 +344,19 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert np.allclose(b[''], m1)
             assert np.allclose(b['1'], m2)
 
+            t3 = tree_value_clazz({
+                'a': raw({'a': 1, 'y': 2}),
+                'c': {'x': raw({'a': 3, 'y': 4})},
+            })
+            assert t3['a'] == {'a': 1, 'y': 2}
+            assert t3['c'] == tree_value_clazz({'x': raw({'a': 3, 'y': 4})})
+            assert t3['c']['x'] == {'a': 3, 'y': 4}
+            with pytest.raises(KeyError):
+                _ = t3['y']
+
+            assert t3[['a']] == tree_value_clazz({'a': 1, 'c': {'x': 3}})
+            assert t3[['y']] == tree_value_clazz({'a': 2, 'c': {'x': 4}})
+
         def test_setitem(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             t2 = tree_value_clazz({'a': [2, 3, 5, 7], 'b': [11, 13, 17, 19],
@@ -353,6 +366,26 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             assert t2 == tree_value_clazz({'a': [1, 3, 5, 7], 'b': [11, 2, 17, 19],
                                            'x': {'c': [23, 29, 3, 37], 'd': [41, 43, 47, 4]}})
 
+            t3 = tree_value_clazz({
+                'a': raw({'a': 1, 'y': 2}),
+                'c': {'x': raw({'a': 3, 'y': 4})},
+            })
+            t3['a'] = {'a': 11, 'y': 22}
+            assert t3 == tree_value_clazz({
+                'a': raw({'a': 11, 'y': 22}),
+                'c': {'x': raw({'a': 3, 'y': 4})},
+            })
+            t3[['a']] = 33
+            assert t3 == tree_value_clazz({
+                'a': raw({'a': 33, 'y': 22}),
+                'c': {'x': raw({'a': 33, 'y': 4})},
+            })
+            t3[['y']] = 55
+            assert t3 == tree_value_clazz({
+                'a': raw({'a': 33, 'y': 55}),
+                'c': {'x': raw({'a': 33, 'y': 55})},
+            })
+
         def test_delitem(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             t2 = tree_value_clazz({'a': [2, 3, 5, 7], 'b': [11, 13, 17, 19],
@@ -361,6 +394,31 @@ def get_tree_test(tree_value_clazz: Type[TreeValue]):
             del t2[t1 - 1]
             assert t2 == tree_value_clazz({'a': [3, 5, 7], 'b': [11, 17, 19],
                                            'x': {'c': [23, 29, 37], 'd': [41, 43, 47]}})
+
+            t3 = tree_value_clazz({
+                'a': raw({'a': 1, 'y': 2}),
+                'c': {'x': raw({'a': 3, 'y': 4})},
+                'g': 2,
+            })
+            del t3['g']
+            assert t3 == tree_value_clazz({
+                'a': raw({'a': 1, 'y': 2}),
+                'c': {'x': raw({'a': 3, 'y': 4})},
+            })
+
+            with pytest.raises(KeyError):
+                del t3[['g']]
+
+            del t3[['a']]
+            assert t3 == tree_value_clazz({
+                'a': raw({'y': 2}),
+                'c': {'x': raw({'y': 4})},
+            })
+
+            del t3['a']
+            assert t3 == tree_value_clazz({
+                'c': {'x': raw({'y': 4})},
+            })
 
         def test_attr(self):
             t1 = tree_value_clazz({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
