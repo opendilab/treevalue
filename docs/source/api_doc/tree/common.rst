@@ -9,7 +9,7 @@ TreeStorage
 -----------
 
 .. autoclass:: TreeStorage
-    :members: get, set, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach
+    :members: get, get_or_default, pop, pop_or_default, set, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach
 
 
 .. _apidoc_tree_common_raw:
