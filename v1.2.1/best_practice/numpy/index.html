@@ -183,7 +183,7 @@
 get some statistics such as mean value and task some slices.</p>
 <p>In normal cases, we need to unroll multiple <code class="docutils literal notranslate"><span class="pre">for-loop</span></code> and <code class="docutils literal notranslate"><span class="pre">if-else</span></code> to implement cooresponding operations on each values, and declare additional
 temporal variables to save result. All the mentioned contents are executed serially, like the next code examples:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -215,7 +215,7 @@ temporal variables to save result. All the mentioned contents are executed seria
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">T</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span>
 
@@ -248,11 +248,11 @@ temporal variables to save result. All the mentioned contents are executed seria
     <span class="n">mean_b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">mean_b_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">mean_b_list</span><span class="p">)</span>
     <span class="n">even_index_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">even_index_a_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">batch_</span><span class="p">,</span> <span class="n">mean_b</span><span class="p">,</span> <span class="n">even_index_a</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>However, with the help of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, all the contents mentioned above can be implemented gracefully and efficiently. Users only need to <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> the primitive
 numpy functions and pack data with <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>, then execute desired operations just like using standard numpy array.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -271,7 +271,7 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
 
@@ -291,10 +291,10 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
     <span class="n">even_index_a</span> <span class="o">=</span> <span class="n">batch_</span><span class="o">.</span><span class="n">a</span><span class="p">[:,</span> <span class="p">::</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">batch_</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">batch_</span><span class="p">,</span> <span class="n">indices_or_sections</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">batch_</span><span class="p">,</span> <span class="n">mean_b</span><span class="p">,</span> <span class="n">even_index_a</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>And we can run these two demos for comparison:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -327,7 +327,7 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 <span class="normal">31</span>
 <span class="normal">32</span>
 <span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">with_treevalue</span> <span class="kn">import</span> <span class="n">with_treevalue</span>
@@ -361,10 +361,10 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch0</span><span class="p">)</span> <span class="o">==</span> <span class="n">B</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch1</span><span class="p">)</span> <span class="o">==</span> <span class="n">B</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The final output should be the text below, and all the assertions can be passed.</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -404,49 +404,49 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>mean0 &amp; mean1: 1.3000759780406952 1.300076
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span>mean0 &amp; mean1: 1.3749575912952423 1.3749577
 
 
-even_index_a0: [[[0.01664986 0.86580557 0.02083231 0.548047   0.11221305 0.74150515
-   0.6917272  0.52585644]
-  [0.63182527 0.67984724 0.3102007  0.6977735  0.80581063 0.6878335
-   0.6128324  0.8817622 ]]
+even_index_a0: [[[0.91859746 0.5193621  0.9166712  0.50432026 0.7664482  0.08766949
+   0.99957067 0.64719886]
+  [0.4878004  0.48319244 0.6735485  0.8321814  0.08767352 0.4833665
+   0.6371045  0.5770782 ]]
 
- [[0.8885094  0.30445105 0.96288806 0.39761975 0.6153225  0.27661413
-   0.45313078 0.5300882 ]
-  [0.43952754 0.04534067 0.6018321  0.8436016  0.18021451 0.75882006
-   0.629976   0.32752392]]
+ [[0.29370287 0.8310116  0.3619449  0.62086767 0.19906959 0.1210136
+   0.40176138 0.32360566]
+  [0.04963335 0.3909918  0.97658455 0.7171313  0.984041   0.30505016
+   0.19913244 0.585037  ]]
 
- [[0.82807684 0.3617238  0.11952367 0.22972183 0.5138941  0.23906143
-   0.7579688  0.8772352 ]
-  [0.8098616  0.95601314 0.5368348  0.6522876  0.8437023  0.28537473
-   0.00156436 0.7185855 ]]
+ [[0.9087758  0.8628746  0.08434802 0.13287257 0.9729557  0.8540243
+   0.37047246 0.15367506]
+  [0.9581746  0.6258245  0.05874652 0.29459333 0.59170437 0.3841556
+   0.31722888 0.47917533]]
 
- [[0.9644147  0.1019159  0.16138785 0.10285195 0.83995605 0.47385508
-   0.7477331  0.2803888 ]
-  [0.8155898  0.8317386  0.97603166 0.10023152 0.34617954 0.5389276
-   0.31769982 0.76351595]]]
-even_index_a1: [[[0.01664986 0.86580557 0.02083231 0.548047   0.11221305 0.74150515
-   0.6917272  0.52585644]
-  [0.63182527 0.67984724 0.3102007  0.6977735  0.80581063 0.6878335
-   0.6128324  0.8817622 ]]
+ [[0.29959762 0.24575894 0.7749793  0.99013495 0.20292777 0.9037616
+   0.56697863 0.8290267 ]
+  [0.58688146 0.98803914 0.97570276 0.56305563 0.07109214 0.0816412
+   0.04029019 0.03075842]]]
+even_index_a1: [[[0.91859746 0.5193621  0.9166712  0.50432026 0.7664482  0.08766949
+   0.99957067 0.64719886]
+  [0.4878004  0.48319244 0.6735485  0.8321814  0.08767352 0.4833665
+   0.6371045  0.5770782 ]]
 
- [[0.8885094  0.30445105 0.96288806 0.39761975 0.6153225  0.27661413
-   0.45313078 0.5300882 ]
-  [0.43952754 0.04534067 0.6018321  0.8436016  0.18021451 0.75882006
-   0.629976   0.32752392]]
+ [[0.29370287 0.8310116  0.3619449  0.62086767 0.19906959 0.1210136
+   0.40176138 0.32360566]
+  [0.04963335 0.3909918  0.97658455 0.7171313  0.984041   0.30505016
+   0.19913244 0.585037  ]]
 
- [[0.82807684 0.3617238  0.11952367 0.22972183 0.5138941  0.23906143
-   0.7579688  0.8772352 ]
-  [0.8098616  0.95601314 0.5368348  0.6522876  0.8437023  0.28537473
-   0.00156436 0.7185855 ]]
+ [[0.9087758  0.8628746  0.08434802 0.13287257 0.9729557  0.8540243
+   0.37047246 0.15367506]
+  [0.9581746  0.6258245  0.05874652 0.29459333 0.59170437 0.3841556
+   0.31722888 0.47917533]]
 
- [[0.9644147  0.1019159  0.16138785 0.10285195 0.83995605 0.47385508
-   0.7477331  0.2803888 ]
-  [0.8155898  0.8317386  0.97603166 0.10023152 0.34617954 0.5389276
-   0.31769982 0.76351595]]]
-</pre></div>
-</td></tr></table></div>
+ [[0.29959762 0.24575894 0.7749793  0.99013495 0.20292777 0.9037616
+   0.56697863 0.8290267 ]
+  [0.58688146 0.98803914 0.97570276 0.56305563 0.07109214 0.0816412
+   0.04029019 0.03075842]]]
+</pre></div></td></tr></table></div>
+</div>
 <p>In this case, we can see that the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be properly applied into the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library.
 The tree-structured matrix calculation can be easily built with <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> like using standard numpy array.</p>
 <p>Both the simplicity of logic structure and execution efficiency can be improve a lot.</p>
@@ -509,9 +509,11 @@ The tree-structured matrix calculation can be easily built with <code class="doc
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/pop/best_practice/numpy/index.html">dev/pop</a></dd>
                         <dd><a href="../../../main/best_practice/numpy/index.html">main</a></dd>
                         <dd><a href="../../../refactor/color/best_practice/numpy/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/best_practice/numpy/index.html">run/paper</a></dd>
+                        <dd><a href="../../../test/raw/best_practice/numpy/index.html">test/raw</a></dd>
                 </dl>
         </div>
     </div>

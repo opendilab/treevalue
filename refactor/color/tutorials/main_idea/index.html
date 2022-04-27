@@ -195,7 +195,7 @@ is more impossible.</p>
 <p>In fact, the root reason of this problem is that the native python dictionary data type is a basic data structure which is biased towards functional generalization, and it does not fully meet the various data processing and operations based on the tree data structure.</p>
 <p>Therefore, we need a kind of more proper data container —— <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>.</p>
 <p>For example, if we need to add all the integers of the 2 dictionaries together with native python, the code will be like below,</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -212,7 +212,7 @@ is more impossible.</p>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># native plus between dictionaries</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><span class="c1"># native plus between dictionaries</span>
 <span class="k">def</span> <span class="nf">plus</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="n">_result</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
@@ -230,14 +230,14 @@ is more impossible.</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;plus(d1, d2):&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">plus</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>with the following output.</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>plus(d1, d2):
-{&#39;b&#39;: 24, &#39;x&#39;: {&#39;d&#39;: 51, &#39;c&#39;: 33}, &#39;a&#39;: 12}
-</pre></div>
-</td></tr></table></div>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
+{&#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 51}, &#39;a&#39;: 12}
+</pre></div></td></tr></table></div>
+</div>
 <p>Although in fact, as python coders, we may have been accustomed to such a native recursive writing method, but from the perspective of actual engineering construction, such a writing method is not intuitive enough:</p>
 <ul class="simple">
 <li><p><strong>Ease of Use</strong>: First of all, this way of writing has been quite different from the original simple addition in terms of look and feel and engineering structure. In order to support dictionary-based operations, the original simple addition operations have become completely unrecognizable.</p></li>
@@ -246,7 +246,7 @@ is more impossible.</p>
 </ul>
 <p>So the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> is designed to solve the above problems and provided sufficient secondary development support for developers, and some more complex and comprehensive applications can be developed based on this framework.</p>
 <p>This is the example code to implement the functions of the code above.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -259,7 +259,7 @@ is more impossible.</p>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">func_treelize</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">func_treelize</span>
 
 
 <span class="nd">@func_treelize</span><span class="p">()</span>
@@ -273,33 +273,33 @@ is more impossible.</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;plus(d1, d2):&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">plus</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be like below.</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>plus(d1, d2):
-&lt;TreeValue 0x7f53165644d0&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
+&lt;TreeValue 0x7fee650d93d0&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f5316564490&gt;
+└── x --&gt; &lt;TreeValue 0x7fee6503d550&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>Besides, based on the framework provided by us, another way of code building can be like the following code.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">d1</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
@@ -307,24 +307,24 @@ is more impossible.</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;d1 + d2:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>This code will have the same function with the codes above.</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>d1 + d2:
-&lt;FastTreeValue 0x7f444703a590&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>d1 + d2:
+&lt;FastTreeValue 0x7f1b8b84d450&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;FastTreeValue 0x7f444703a690&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f1b8b7b0650&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 </div>
 <div class="section" id="definitions-for-key-conceptions">
 <span id="tutorials-mainidea-definition"></span><h2>Definitions for Key Conceptions<a class="headerlink" href="#definitions-for-key-conceptions" title="Permalink to this headline">¶</a></h2>
@@ -424,9 +424,11 @@ is more impossible.</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../../dev/pop/tutorials/main_idea/index.html">dev/pop</a></dd>
                         <dd><a href="../../../../main/tutorials/main_idea/index.html">main</a></dd>
                         <dd><a href="index.html">refactor/color</a></dd>
                         <dd><a href="../../../../run/paper/tutorials/main_idea/index.html">run/paper</a></dd>
+                        <dd><a href="../../../../test/raw/tutorials/main_idea/index.html">test/raw</a></dd>
                 </dl>
         </div>
     </div>

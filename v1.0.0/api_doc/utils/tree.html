@@ -215,14 +215,14 @@
 </dd></dl>
 
 <p>Here is an example of <code class="docutils literal notranslate"><span class="pre">build_graph</span></code> function. The source code is</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue.utils</span> <span class="kn">import</span> <span class="n">build_graph</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue.utils</span> <span class="kn">import</span> <span class="n">build_graph</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">t</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}</span>
@@ -230,10 +230,10 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;build_graph_demo.dat.gv&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The generated graphviz source code should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -247,27 +247,27 @@
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>// Demo of build_graph.
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>// Demo of build_graph.
 digraph demo_of_build_graph {
 	graph [label=&quot;Demo of build_graph.&quot;]
-	node_7fda8449e460 [label=t]
-	node_7fda8449e460__a [label=1]
-	node_7fda8449e460 -&gt; node_7fda8449e460__a [label=a]
-	node_7fda8449e460__b [label=2]
-	node_7fda8449e460 -&gt; node_7fda8449e460__b [label=b]
-	node_7fda8449e230 [label=&quot;t.x&quot;]
-	node_7fda8449e460 -&gt; node_7fda8449e230 [label=x]
-	node_7fda8449e230__c [label=3]
-	node_7fda8449e230 -&gt; node_7fda8449e230__c [label=c]
-	node_7fda8449e230__d [label=4]
-	node_7fda8449e230 -&gt; node_7fda8449e230__d [label=d]
+	node_7f2856acd3c0 [label=t]
+	node_7f2856acd3c0__a [label=1]
+	node_7f2856acd3c0 -&gt; node_7f2856acd3c0__a [label=a]
+	node_7f2856acd3c0__b [label=2]
+	node_7f2856acd3c0 -&gt; node_7f2856acd3c0__b [label=b]
+	node_7f2856acd190 [label=&quot;t.x&quot;]
+	node_7f2856acd3c0 -&gt; node_7f2856acd190 [label=x]
+	node_7f2856acd190__c [label=3]
+	node_7f2856acd190 -&gt; node_7f2856acd190__c [label=c]
+	node_7f2856acd190__d [label=4]
+	node_7f2856acd190 -&gt; node_7f2856acd190__d [label=d]
 }
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The graph should be</p>
 <img alt="../../_images/build_graph_demo.dat.gv.svg" class="align-center" src="../../_images/build_graph_demo.dat.gv.svg" /><p>Also, multiple rooted graph is supported, this function will detect
 the pointer of the objects. Just like another complex source code below.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
@@ -275,7 +275,7 @@ the pointer of the objects. Just like another complex source code below.</p>
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue.utils</span> <span class="kn">import</span> <span class="n">build_graph</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue.utils</span> <span class="kn">import</span> <span class="n">build_graph</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">t1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}</span>
@@ -284,8 +284,8 @@ the pointer of the objects. Just like another complex source code below.</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;build_graph_complex_demo.dat.gv&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The exported graph should be</p>
 <img alt="../../_images/build_graph_complex_demo.dat.gv.svg" class="align-center" src="../../_images/build_graph_complex_demo.dat.gv.svg" /><p>The return value’s type of function <code class="docutils literal notranslate"><span class="pre">graphics</span></code> is class <code class="docutils literal notranslate"><span class="pre">graphviz.dot.Digraph</span></code>, from the opensource library <code class="docutils literal notranslate"><span class="pre">graphviz</span></code>, for further information of this project and <code class="docutils literal notranslate"><span class="pre">graphviz.dot.Digraph</span></code>’s usage, take a look at:</p>
 <ul class="simple">
@@ -352,9 +352,11 @@ the pointer of the objects. Just like another complex source code below.</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/pop/api_doc/utils/tree.html">dev/pop</a></dd>
                         <dd><a href="../../../main/api_doc/utils/tree.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/utils/tree.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/utils/tree.html">run/paper</a></dd>
+                        <dd><a href="../../../test/raw/api_doc/utils/tree.html">test/raw</a></dd>
                 </dl>
         </div>
     </div>

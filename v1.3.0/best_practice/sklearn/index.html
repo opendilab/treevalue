@@ -191,7 +191,7 @@ of the input data and improve machine learning’s efficiency and quality. Just 
 can be used to simplify the data. For a set of <code class="docutils literal notranslate"><span class="pre">np.array</span></code> format data that presents a tree structure,
 we can implement the operation support for the tree structure by quickly wrapping the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>.
 The specific code is as follows</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -210,7 +210,7 @@ The specific code is as follows</p>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
@@ -230,10 +230,10 @@ The specific code is as follows</p>
     <span class="n">pdata</span> <span class="o">=</span> <span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit transformed data:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pdata</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The output should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -257,33 +257,43 @@ The specific code is as follows</p>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7f216cdae690&gt;
-├── &#39;a&#39; --&gt; array([[-4, 14,  6],
-│                  [-1, -1,  6],
-│                  [ 6, -2,  6],
-│                  [ 6,  4, -1]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f216cdae650&gt;
-    └── &#39;c&#39; --&gt; array([[  1,   2,  -6,   3],
-                       [  3,  -1, -11,   4],
-                       [-11,  -3,  -6,  -3],
-                       [ -5,  -3, -15,  -3],
-                       [  3,   3, -10,  -8]])
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span>Original int data:
+&lt;FastTreeValue 0x7f5bf8ce8e90&gt;
+├── &#39;a&#39; --&gt; array([[ 4, -2,  6],
+│                  [12,  4,  4],
+│                  [ 5,  0,  8],
+│                  [ 4,  0, 11]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5bf8deb910&gt;
+    └── &#39;c&#39; --&gt; array([[ -4,  -3,  -3,   3],
+                       [ -5, -11, -10,   3],
+                       [  4,   4, -14,   3],
+                       [ -9,  -3, -12, -12],
+                       [-14,   0,  -2, -10]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7f2157ec6dd0&gt;
-├── &#39;a&#39; --&gt; array([[11.85493453, -0.41683818,  0.68867504],
-│                  [-2.57412283, -4.79772842, -1.88233729],
-│                  [-6.94028838, -1.04276233,  2.22093312],
-│                  [-2.34052331,  6.25732892, -1.02727086]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f2157c5cbd0&gt;
-    └── &#39;c&#39; --&gt; array([[-4.32891997, -4.17392499, -3.04796231,  0.68463701],
-                       [-5.70354532, -3.6489422 ,  2.86891798, -0.66640921],
-                       [ 9.77322365, -1.94369405, -2.73988031, -0.34526631],
-                       [ 3.91401818,  2.08887435,  5.36599295,  0.49313812],
-                       [-3.65477654,  7.67768689, -2.44706831, -0.16609961]])
-</pre></div>
-</td></tr></table></div>
+&lt;FastTreeValue 0x7f5bf89f8890&gt;
+├── &#39;a&#39; --&gt; array([[-2.22691718,  2.81263576, -0.07014221],
+│                  [ 7.46645627, -0.35542501, -0.02652975],
+│                  [-1.5272845 , -0.09360297,  0.18341359],
+│                  [-3.71225459, -2.36360778, -0.08674164]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5c036e83d0&gt;
+    └── &#39;c&#39; --&gt; array([[-3.61662586e+00, -4.76228857e+00, -4.97447442e+00,
+                         7.84365484e-01],
+                       [-4.66322281e+00, -7.50749932e+00,  5.21698567e+00,
+                        -4.41437967e-01],
+                       [-1.19246541e+01,  7.51874331e+00, -1.37597210e+00,
+                        -3.12768812e-01],
+                       [ 7.88466435e+00,  4.75883159e+00,  5.41915417e+00,
+                         5.81685540e-01],
+                       [ 1.23198384e+01, -7.78700126e-03, -4.28569332e+00,
+                        -6.11844245e-01]])
+</pre></div></td></tr></table></div>
+</div>
 <p>For further information, see the links below:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA">Official documentation of PCA in scikit-learn</a></p></li>
@@ -347,9 +357,11 @@ Fit transformed data:
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/pop/best_practice/sklearn/index.html">dev/pop</a></dd>
                         <dd><a href="../../../main/best_practice/sklearn/index.html">main</a></dd>
                         <dd><a href="../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/best_practice/sklearn/index.html">run/paper</a></dd>
+                        <dd><a href="../../../test/raw/best_practice/sklearn/index.html">test/raw</a></dd>
                 </dl>
         </div>
     </div>

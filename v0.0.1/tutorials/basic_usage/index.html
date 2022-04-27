@@ -186,37 +186,37 @@
 <div class="section" id="create-a-tree">
 <h2>Create a tree<a class="headerlink" href="#create-a-tree" title="Permalink to this headline">¶</a></h2>
 <p>You can easily create a tree value object based on <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>&lt;FastTreeValue 0x7f56052f6450 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span>&lt;FastTreeValue 0x7f4b64da8890 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f56052f6190 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f4b654556d0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>A simple tree value structure is created successfully with the structure below.</p>
 <img alt="../../_images/create_a_tree.gv.svg" class="align-center" src="../../_images/create_a_tree.gv.svg" /></div>
 <div class="section" id="edit-the-tree">
 <h2>Edit the tree<a class="headerlink" href="#edit-the-tree" title="Permalink to this headline">¶</a></h2>
 <p>After the tree is created, you can access and edit it with <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code>, <code class="docutils literal notranslate"><span class="pre">__setattr__</span></code> and <code class="docutils literal notranslate"><span class="pre">__delattr__</span></code>.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -241,7 +241,7 @@
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">raw</span>
 
@@ -267,10 +267,10 @@
     <span class="c1"># Delete values</span>
     <span class="k">del</span> <span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">g</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Value after del t.x.g:&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -324,70 +324,70 @@
 <span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span>
-<span class="normal">55</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Original tree:
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+<span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span>Original tree:
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb143c350 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f983b8510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 Value of t.a:  1
 Value of t.x.c: 3
 Value of t.x:
-&lt;FastTreeValue 0x7fbbb143c350 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
 ├── &#39;c&#39; --&gt; 3
 └── &#39;d&#39; --&gt; 4
 
 Value after t.a = 233:
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb143c350 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f983b8510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 Value after t.x.d = -1:
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb143c350 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f983b8510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; -1
 
 Value after t.x = {&#39;e&#39;: 5, &#39;f&#39;: 6}:
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb10a6950 keys: [&#39;e&#39;, &#39;f&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f982138d0 keys: [&#39;e&#39;, &#39;f&#39;]&gt;
     ├── &#39;e&#39; --&gt; 5
     └── &#39;f&#39; --&gt; 6
 
 Value after t.x.g = raw({&#39;e&#39;: 5, &#39;f&#39;: 6}):
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb10a6950 keys: [&#39;e&#39;, &#39;f&#39;, &#39;g&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f982138d0 keys: [&#39;e&#39;, &#39;f&#39;, &#39;g&#39;]&gt;
     ├── &#39;e&#39; --&gt; 5
     ├── &#39;f&#39; --&gt; 6
     └── &#39;g&#39; --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
 Value after del t.x.g:
-&lt;FastTreeValue 0x7fbbb143c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f8f983b8710 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbbb10a6950 keys: [&#39;e&#39;, &#39;f&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8f982138d0 keys: [&#39;e&#39;, &#39;f&#39;]&gt;
     ├── &#39;e&#39; --&gt; 5
     └── &#39;f&#39; --&gt; 6
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The values on the tree has been changed or deleted properly.
 And the full life circle of the tree <code class="docutils literal notranslate"><span class="pre">t</span></code> is like below.</p>
 <img alt="../../_images/edit_tree_1.gv.svg" class="align-center" src="../../_images/edit_tree_1.gv.svg" /><img alt="../../_images/edit_tree_2.gv.svg" class="align-center" src="../../_images/edit_tree_2.gv.svg" /></div>
 <div class="section" id="do-index-or-slice-calculation-on-the-tree">
 <h2>Do index or slice calculation on the tree<a class="headerlink" href="#do-index-or-slice-calculation-on-the-tree" title="Permalink to this headline">¶</a></h2>
 <p>Index and slice index operation can be applied all once, like the example below.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -402,7 +402,7 @@ And the full life circle of the tree <code class="docutils literal notranslate">
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
 
@@ -418,10 +418,10 @@ And the full life circle of the tree <code class="docutils literal notranslate">
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t[0]:&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>  <span class="c1"># __getitem__ operator</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t[::-1]:&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t.x[1:]:&quot;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -440,34 +440,34 @@ And the full life circle of the tree <code class="docutils literal notranslate">
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Result of t[0]:
-&lt;FastTreeValue 0x7fe5584e2ed0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span>Result of t[0]:
+&lt;FastTreeValue 0x7f7584669690 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 4
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe5584ea290 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f75846695d0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 11
     └── &#39;d&#39; --&gt; -2
 
 Result of t[::-1]:
-&lt;FastTreeValue 0x7fe55850a550 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f75846698d0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; [3, 2, 1]
 ├── &#39;b&#39; --&gt; [16, 9, 4]
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe55850a7d0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f7584679250 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; [17, 13, 11]
     └── &#39;d&#39; --&gt; [-8, -4, -2]
 
 Result of t.x[1:]:
-&lt;FastTreeValue 0x7fe5584c1090 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+&lt;FastTreeValue 0x7f7584679990 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
 ├── &#39;c&#39; --&gt; [13, 17]
 └── &#39;d&#39; --&gt; [-4, -8]
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The structures oof the trees is like the graph below.</p>
 <img alt="../../_images/index_operation.gv.svg" class="align-center" src="../../_images/index_operation.gv.svg" /><img alt="../../_images/slice_index_operation.gv.svg" class="align-center" src="../../_images/slice_index_operation.gv.svg" /></div>
 <div class="section" id="do-calculation-on-the-tree">
 <h2>Do calculation on the tree<a class="headerlink" href="#do-calculation-on-the-tree" title="Permalink to this headline">¶</a></h2>
 <p>Common calculation is supported in treevalue.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -478,7 +478,7 @@ Result of t.x[1:]:
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span>
 
@@ -490,10 +490,10 @@ Result of t.x[1:]:
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t1 - t2:&quot;</span><span class="p">,</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t2</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>  <span class="c1"># __sub__ operator</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t1 ^ t2:&quot;</span><span class="p">,</span> <span class="n">t1</span> <span class="o">^</span> <span class="n">t2</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>  <span class="c1"># __xor__ operator</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of t1 + t2 * (-4 + t1 ** t2)&quot;</span><span class="p">,</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">4</span> <span class="o">+</span> <span class="n">t1</span> <span class="o">**</span> <span class="o">-</span><span class="n">t2</span><span class="p">))</span>  <span class="c1"># mathematics calculation</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -522,38 +522,38 @@ Result of t.x[1:]:
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Result of t1 + t2:
-&lt;FastTreeValue 0x7febe4f703d0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span>Result of t1 + t2:
+&lt;FastTreeValue 0x7f02b1c6fc90 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 4
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7febe4f70150 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f02b1c6f510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 17
     └── &#39;d&#39; --&gt; -1
 
 Result of t1 - t2:
-&lt;FastTreeValue 0x7febe4f70410 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f02b1c71090 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; -2
 ├── &#39;b&#39; --&gt; -5
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7febe4f70710 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f02b1c71510 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; -11
     └── &#39;d&#39; --&gt; 9
 
 Result of t1 ^ t2:
-&lt;FastTreeValue 0x7febe4f91210 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7f02b1c717d0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 5
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7febe4f91350 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f02b1c71d10 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 13
     └── &#39;d&#39; --&gt; -1
 
-Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7febe4f91050 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7f02b1c0f4d0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; -8.0
 ├── &#39;b&#39; --&gt; -25.9453125
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7febe4f91ed0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f02b1c0f250 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; -52.999997072947785
     └── &#39;d&#39; --&gt; -5096
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The values is processed one to one between the tree.
 The structures of the trees involved in <code class="docutils literal notranslate"><span class="pre">__add__</span></code> calculation is like below.</p>
 <img alt="../../_images/calculation_add.gv.svg" class="align-center" src="../../_images/calculation_add.gv.svg" /><img alt="../../_images/calculation_sub_and_xor.gv.svg" class="align-center" src="../../_images/calculation_sub_and_xor.gv.svg" /><p>Actually, More common operators are supported in treevalue.</p>
@@ -562,7 +562,7 @@ The structures of the trees involved in <code class="docutils literal notranslat
 <span id="tutorials-basicusage-func"></span><h2>Make function tree supported<a class="headerlink" href="#make-function-tree-supported" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes we need to do some complex calculation which are not able to be represented by raw operators.</p>
 <p>In this situation, we can wrap the common function to tree supported function like the code below.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -583,7 +583,7 @@ The structures of the trees involved in <code class="docutils literal notranslat
 <span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">func_treelize</span>
 
@@ -605,10 +605,10 @@ The structures of the trees involved in <code class="docutils literal notranslat
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of gcd(t1, t2):&quot;</span><span class="p">,</span> <span class="n">gcd</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result of gcd(12, 9):&quot;</span><span class="p">,</span> <span class="n">gcd</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The result should be</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
@@ -616,21 +616,21 @@ The structures of the trees involved in <code class="docutils literal notranslat
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>Result of gcd(t1, t2):
-&lt;TreeValue 0x7fdcd3562190 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span>Result of gcd(t1, t2):
+&lt;TreeValue 0x7fc3d19169d0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 6
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fdcd35620d0 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fc3d1916210 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 2
     └── &#39;d&#39; --&gt; 9
 
 Result of gcd(12, 9): 3
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>Luckily, the wrapped function can still used as the original function as well.</p>
 <p>The structure of the trees in this part is like below.</p>
 <img alt="../../_images/tree_support_1.gv.svg" class="align-center" src="../../_images/tree_support_1.gv.svg" /><img alt="../../_images/tree_support_2.gv.svg" class="align-center" src="../../_images/tree_support_2.gv.svg" /><p>Besides, the <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> function will never change the original logical properties of the original function. In the example below, the calculation with original values instead of usage of the trees can be processed properly with the result of the primitive value.</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -646,7 +646,7 @@ Result of gcd(12, 9): 3
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">func_treelize</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">func_treelize</span>
 
 
 <span class="nd">@func_treelize</span><span class="p">()</span>
@@ -663,14 +663,14 @@ Result of gcd(12, 9): 3
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gcd(6, 8):&quot;</span><span class="p">,</span> <span class="n">gcd</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gcd(900, 768):&quot;</span><span class="p">,</span> <span class="n">gcd</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span>
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>The output should be like below, the <code class="docutils literal notranslate"><span class="pre">gcd</span></code> <strong>function can still support the greatest common divisor of the primitive integers</strong>.</p>
-<div class="highlight-text notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span>gcd(6, 8): 2
+<div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span>gcd(6, 8): 2
 gcd(900, 768): 12
-</pre></div>
-</td></tr></table></div>
+</pre></div></td></tr></table></div>
+</div>
 <p>For further information of how the tree-supported function works, take a look at <a class="reference internal" href="../advanced_usage/index.html#tutorials-advancedusage-how-works"><span class="std std-ref">How the treelized function works</span></a> , this note may give you more information.</p>
 </div>
 </div>
@@ -731,9 +731,11 @@ gcd(900, 768): 12
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/pop/tutorials/basic_usage/index.html">dev/pop</a></dd>
                         <dd><a href="../../../main/tutorials/basic_usage/index.html">main</a></dd>
                         <dd><a href="../../../refactor/color/tutorials/basic_usage/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/tutorials/basic_usage/index.html">run/paper</a></dd>
+                        <dd><a href="../../../test/raw/tutorials/basic_usage/index.html">test/raw</a></dd>
                 </dl>
         </div>
     </div>
