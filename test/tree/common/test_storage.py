@@ -97,6 +97,110 @@ class TestTreeStorage:
         assert t1.get_or_default('fff', delayed_partial(lambda: 2345)) == 2345
         assert not t1.contains('fff')
 
+    def test_pop(self):
+        t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
+        assert t.pop('a') == 1
+        with pytest.raises(KeyError):
+            t.pop('a')
+
+        assert t.pop('b') == 2
+        assert t.pop('c') == {'x': 3, 'y': 4}
+
+        td = t.pop('d')
+        assert isinstance(td, TreeStorage)
+        assert td.get('x') == 3
+        assert td.get('y') == 4
+
+        with pytest.raises(KeyError):
+            t.pop('aksjdlasdkjf')
+
+        cnt1, cnt2, cnt3 = 0, 0, 0
+
+        def f1():
+            nonlocal cnt1
+            cnt1 += 1
+            return 2
+
+        def f2(x, y):
+            nonlocal cnt2
+            cnt2 += 1
+            return {'x': x, 'y': y}
+
+        def f3(x, y):
+            nonlocal cnt3
+            cnt3 += 1
+            return create_storage({'x': x, 'y': raw(y)})
+
+        t2 = create_storage({
+            'a': 1,
+            'b': delayed_partial(f1),
+            'c': delayed_partial(f2, delayed_partial(f1), 3),
+            'd': delayed_partial(f3, 3, delayed_partial(f2, 3, 4))
+        })
+
+        assert t2.pop('a') == 1
+
+        assert cnt1 == 0
+        assert t2.pop('b') == 2
+        assert cnt1 == 1
+        with pytest.raises(KeyError):
+            t2.pop('b')
+        assert cnt1 == 1
+
+        assert (cnt1, cnt2) == (1, 0)
+        assert t2.pop('c') == {'x': 2, 'y': 3}
+        assert (cnt1, cnt2) == (2, 1)
+        with pytest.raises(KeyError):
+            t2.pop('c')
+        assert (cnt1, cnt2) == (2, 1)
+
+        assert (cnt1, cnt2, cnt3) == (2, 1, 0)
+        assert t2.get('d').pop('x') == 3
+        assert t2.get('d').pop('y') == {'x': 3, 'y': 4}
+        assert (cnt1, cnt2, cnt3) == (2, 2, 1)
+        with pytest.raises(KeyError):
+            t2.get('d').pop('x')
+        with pytest.raises(KeyError):
+            t2.get('d').pop('y')
+        assert (cnt1, cnt2, cnt3) == (2, 2, 1)
+
+    def test_pop_or_default(self):
+        t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
+        assert t.pop_or_default('a', 233) == 1
+        with pytest.raises(KeyError):
+            t.pop('a')
+        assert t.pop_or_default('a', 233) == 233
+
+        assert t.pop_or_default('b', 233) == 2
+        assert t.pop_or_default('c', 233) == {'x': 3, 'y': 4}
+
+        td = t.pop_or_default('d', 233)
+        assert isinstance(td, TreeStorage)
+        assert td.pop_or_default('x', 233) == 3
+        assert td.pop_or_default('y', 233) == 4
+
+        assert t.pop_or_default('fff', 233) == 233
+
+        t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
+        t1 = create_storage({
+            'a': delayed_partial(lambda: t.get('a')),
+            'b': delayed_partial(lambda: t.get('b')),
+            'c': delayed_partial(lambda: t.get('c')),
+            'd': delayed_partial(lambda: t.get('d')),
+        })
+        assert t1.pop_or_default('a', 233) == 1
+        assert t1.pop_or_default('b', 233) == 2
+        assert t1.pop_or_default('c', 233) == {'x': 3, 'y': 4}
+
+        t1d = t1.pop_or_default('d', 233)
+        assert isinstance(t1d, TreeStorage)
+        assert t1d.pop_or_default('x', 233) == 3
+        assert t1d.pop_or_default('y', 233) == 4
+
+        assert t1.pop_or_default('fff', 233) == 233
+        assert t1.pop_or_default('fff', delayed_partial(lambda: 2345)) == 2345
+        assert not t1.contains('fff')
+
     def test_set(self):
         t = create_storage({})
         t.set('a', 1)

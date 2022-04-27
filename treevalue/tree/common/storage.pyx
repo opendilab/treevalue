@@ -35,6 +35,24 @@ cdef class TreeStorage:
         v = self.map.get(key, default)
         return _c_undelay_check_data(self.map, key, v)
 
+    cpdef public object pop(self, str key):
+        cdef object v, nv, res
+        try:
+            v = self.map[key]
+            res = _c_undelay_data(self.map, key, v)
+            del self.map[key]
+            return res
+        except KeyError:
+            raise KeyError(f"Key {repr(key)} not found in this tree.")
+
+    cpdef public object pop_or_default(self, str key, object default):
+        cdef object v, nv, res
+        v = self.map.get(key, default)
+        res = _c_undelay_data(self.map, key, v)
+        if key in self.map:
+            del self.map[key]
+        return res
+
     cpdef public void del_(self, str key) except *:
         try:
             del self.map[key]

@@ -120,6 +120,28 @@ cdef class TreeValue:
         return self._unraw(value)
 
     @cython.binding(True)
+    cpdef pop(self, str key, object default=_GET_NO_DEFAULT):
+        """
+        Overview:
+            Pop item from the tree node.
+
+        Arguments:
+            - key (:obj:`str`): Item's name.
+            - default (:obj:`default`): Default value when this item is not found, default is \
+                `_GET_NO_DEFAULT` which means just raise `KeyError` when not found.
+
+        Returns:
+            - value: Item's value.
+        """
+        cdef object value
+        if default is _GET_NO_DEFAULT:
+            value = self._st.pop(key)
+        else:
+            value = self._st.pop_or_default(key, default)
+
+        return self._unraw(value)
+
+    @cython.binding(True)
     cpdef _attr_extern(self, str key):
         r"""
         Overview:
