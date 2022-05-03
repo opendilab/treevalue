@@ -36,6 +36,7 @@ class TestTreeTreeTree:
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         assert tv1.a == 1
         assert tv1.b == 2
+        assert tv1.c == TreeValue({'x': 2, 'y': 3})
 
         tv2 = TreeValue(tv1)
         assert tv2.a == 1
@@ -45,6 +46,19 @@ class TestTreeTreeTree:
         assert tv3.a.a == 1
         assert tv3.b.a == 1
         assert tv3.c.a == 1
+
+        # with usage of raw function
+        tv4 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert tv4.a == 1
+        assert tv4.b == 2
+        assert tv4.c == TreeValue({'x': 2, 'y': 3})
+        assert tv4.c.x == 2
+        assert tv4.c.y == 3
+        assert tv4.d == {'x': 2, 'y': 3}
+        with pytest.raises(AttributeError):  # error, tv4.d is a dict
+            _ = tv4.d.x
+        with pytest.raises(AttributeError):  # error, tv4.d is a dict
+            _ = tv4.d.y
 
         with pytest.raises(TypeError):
             TreeValue(1)
