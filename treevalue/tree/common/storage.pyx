@@ -22,6 +22,7 @@ cdef class TreeStorage:
     cpdef public void set(self, str key, object value) except *:
         self.map[key] = value
 
+    # get and get_or_default is designed separately due to the consideration of performance
     cpdef public object get(self, str key):
         cdef object v, nv
         try:
@@ -35,6 +36,7 @@ cdef class TreeStorage:
         v = self.map.get(key, default)
         return _c_undelay_check_data(self.map, key, v)
 
+    # pop and pop_or_default is designed separately due to the consideration of performance
     cpdef public object pop(self, str key):
         cdef object v, nv, res
         try:
