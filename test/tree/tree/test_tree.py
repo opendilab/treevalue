@@ -282,6 +282,52 @@ class TestTreeTreeTree:
             _ = tv1.get('e')
         assert tv1.get('e', 233) == 233
 
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv2 = TreeValue({
+            'a': delayed(lambda: tv1.a),
+            'b': delayed(lambda: tv1.b),
+            'c': delayed(lambda: tv1.c),
+        })
+        assert tv2.get('a') == 1
+        assert tv2.get('b') == 2
+        assert tv2.get('c') == TreeValue({'x': 2, 'y': 3})
+
+    def test_pop(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+
+        assert tv1.pop('a') == 1
+        with pytest.raises(KeyError):
+            _ = tv1.pop('a')
+        assert tv1.pop('a', 233) == 233
+
+        assert tv1.pop('b') == 2
+        assert tv1.pop('c') == TreeValue({'x': 2, 'y': 3})
+        assert tv1.pop('d') == {'x': 2, 'y': 3}
+        with pytest.raises(KeyError):
+            _ = tv1.pop('e')
+        assert tv1.pop('e', 233) == 233
+
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv2 = TreeValue({
+            'a': delayed(lambda: tv1.a),
+            'b': delayed(lambda: tv1.b),
+            'c': delayed(lambda: tv1.c),
+        })
+        assert tv2.pop('a') == 1
+        assert tv2.pop('b') == 2
+        assert tv2.pop('c') == TreeValue({'x': 2, 'y': 3})
+
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv3 = TreeValue({'a': 233, 'b': tv1, 'c': tv1})
+        assert tv3.pop('b') == tv1
+        assert tv3.pop('c') == tv1
+        with pytest.raises(KeyError):
+            tv3.pop('b')
+        with pytest.raises(KeyError):
+            tv3.pop('c')
+        assert tv3.pop('b', 345) == 345
+        assert tv3.pop('c', 345) == 345
+
     def test_keys(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
         assert set(tv1.keys()) == {'a', 'b', 'c', 'd'}

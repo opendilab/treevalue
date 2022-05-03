@@ -18,6 +18,7 @@ cdef class TreeValue:
     cpdef _setitem_extern(self, object key, object value)
     cpdef _delitem_extern(self, object key)
     cpdef get(self, str key, object default= *)
+    cpdef pop(self, str key, object default= *)
 
 cdef str _prefix_fix(object text, object prefix)
 cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, tuple path)
