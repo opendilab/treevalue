@@ -1,4 +1,4 @@
-.PHONY: docs test unittest build clean
+.PHONY: docs test unittest build clean benchmark
 
 PYTHON := $(shell which python)
 
@@ -6,12 +6,14 @@ DOC_DIR        := ./docs
 DIST_DIR       := ./dist
 WHEELHOUSE_DIR := ./wheelhouse
 TEST_DIR       := ./test
+BENCHMARK_DIR  := ./benchmark
 SRC_DIR        := ./treevalue
 RUNS_DIR       := ./runs
 
-RANGE_DIR      ?= .
-RANGE_TEST_DIR := ${TEST_DIR}/${RANGE_DIR}
-RANGE_SRC_DIR  := ${SRC_DIR}/${RANGE_DIR}
+RANGE_DIR       ?= .
+RANGE_TEST_DIR  := ${TEST_DIR}/${RANGE_DIR}
+RANGE_BENCH_DIR := ${BENCHMARK_DIR}/${RANGE_DIR}
+RANGE_SRC_DIR   := ${SRC_DIR}/${RANGE_DIR}
 
 CYTHON_FILES := $(shell find ${SRC_DIR} -name '*.pyx')
 
@@ -49,6 +51,14 @@ unittest:
 
 benchmark:
 	pytest "${RANGE_TEST_DIR}" \
+		-sv -m benchmark \
+		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
+		--benchmark-disable-gc \
+		--benchmark-sort=mean \
+		$(if ${WORKERS},-n ${WORKERS},)
+
+compare:
+	pytest "${RANGE_BENCH_DIR}" \
 		-sv -m benchmark \
 		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
 		--benchmark-disable-gc \
