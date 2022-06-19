@@ -1,10 +1,14 @@
-# treevalue
+<div align="center">
+    <a href="https://opendilab.github.io/treevalue/"><img width="1000px" height="auto" src="./docs/source/_static/title-banner.png"></a>
+</div>
 
+---
+
+[![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fopendilab)](https://twitter.com/opendilab)
 [![PyPI](https://img.shields.io/pypi/v/treevalue)](https://pypi.org/project/treevalue/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/treevalue)
 ![Loc](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/loc.json)
 ![Comments](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HansBug/ff0bc026423888cd7c4f287eaed4b3f5/raw/comments.json)
-
 
 [![Docs Deploy](https://github.com/opendilab/treevalue/workflows/Docs%20Deploy/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Docs+Deploy%22)
 [![Code Test](https://github.com/opendilab/treevalue/workflows/Code%20Test/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Code+Test%22)
@@ -12,6 +16,7 @@
 [![Package Release](https://github.com/opendilab/treevalue/workflows/Package%20Release/badge.svg)](https://github.com/opendilab/treevalue/actions?query=workflow%3A%22Package+Release%22)
 [![codecov](https://codecov.io/gh/opendilab/treevalue/branch/main/graph/badge.svg?token=XJVDP4EFAT)](https://codecov.io/gh/opendilab/treevalue)
 
+![GitHub Org's stars](https://img.shields.io/github/stars/opendilab)
 [![GitHub stars](https://img.shields.io/github/stars/opendilab/treevalue)](https://github.com/opendilab/treevalue/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/opendilab/treevalue)](https://github.com/opendilab/treevalue/network)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/opendilab/treevalue)
@@ -24,7 +29,34 @@
 
 Almost all the operation can be supported in form of trees in a convenient way to simplify the structure processing when the calculation is tree-based.
 
-## Installation
+
+
+## Outline
+
+* Overview
+* Getting Started
+    * Prerequisite
+    * Installation
+    * Quick Usage
+    * Tutorials
+* Change Log
+* Join and Contribute
+* Citation
+* License
+
+## Overview
+
+
+
+## Getting Started
+
+### Prerequisite
+
+`treevalue` has been tested in the Linux environment and with multiple Python versions, and it works properly on both macOS and Windows platforms (unit testing has not been carried out).
+
+However, **`treevalue` currently does not support PyPy**, so just pay attention to this when using.
+
+### Installation
 
 You can simply install it with `pip` command line from the official PyPI site.
 
@@ -32,15 +64,22 @@ You can simply install it with `pip` command line from the official PyPI site.
 pip install treevalue
 ```
 
+Or just from the source code on github
+
+```shell
+pip install git+https://github.com/opendilab/treevalue.git@main
+```
+
 For more information about installation, you can refer to the [installation guide](https://opendilab.github.io/treevalue/main/tutorials/installation/index.html).
 
-## Documentation
+After this, you can check if the installation is processed properly with the following code
 
-The detailed documentation are hosted on [https://opendilab.github.io/treevalue](https://opendilab.github.io/treevalue/).
+```python
+from treevalue import __version__
+print('TreeValue version is', __version__)
+```
 
-Only english version is provided now, the chinese documentation is still under development.
-
-## Quick Start
+### Quick Usage
 
 You can easily create a tree value object based on `FastTreeValue`.
 
@@ -140,11 +179,35 @@ print(1 + (t - 0.8) ** 2 * 1.5)  # math operators
 #                       [1.0782, 1.0037, 1.5075, 1.0658]])
 ```
 
-For more quick start explanation and further usage, take a look at:
+
+
+### Tutorials
+
+For more examples, explanations and further usages, take a look at:
 
 * [Quick Start](https://opendilab.github.io/treevalue/main/tutorials/quick_start/index.html)
+    * [Create a Simplest Tree](https://opendilab.github.io/treevalue/main/tutorials/quick_start/index.html#create-a-simplest-tree)
+    * [Create a Slightly Complex Tree](https://opendilab.github.io/treevalue/main/tutorials/quick_start/index.html#create-a-slightly-complex-tree)
 * [Basic Usage](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html)
+    * [Create a Tree](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html#create-a-tree)
+    * [Edit a Tree](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html#edit-the-tree)
+    * [Do Index or Slice Calculation on The Tree](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html#do-index-or-slice-calculation-on-the-tree)
+    * [Do Math Calculation on The Tree](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html#do-calculation-on-the-tree)
+    * [Make Function Tree-Supported](https://opendilab.github.io/treevalue/main/tutorials/basic_usage/index.html#make-function-tree-supported)
 * [Advanced Usage](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html)
+    * [Function Modes](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#function-modes)
+    * [Inheriting on Trees](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#inheriting-on-trees)
+    * [Process Missing Values](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#process-missing-values)
+    * [Functional Utilities](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#functional-utilities)
+    * [Structural Utilities](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#structural-utilities)
+    * [Tree Utilities](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#tree-utilities)
+    * [Flatten Utilities](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#flatten-utilities)
+    * [IO Utilities](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#io-utilities)
+    * [Object Oriented Usage](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#object-oriented-usage)
+    * [Costumize My TreeValue Class](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#diy-treevalue-class)
+    * [Visualization of TreeValue](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#draw-graph-for-treevalue)
+
+
 
 ## Speed Performance
 
@@ -197,36 +260,62 @@ Test benchmark code can be found here:
 * [Comparison with jax-libtree](https://github.com/opendilab/treevalue/blob/main/test/compare/jax/test_jax.py)
 * [Comparison with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/tianshou/test_tianshou_batch.py)
 
-## Extension
 
-If you need to translate `treevalue` object to runnable source code, you may use the [potc-treevalue](https://github.com/potc-dev/potc-treevalue) plugin with the installation command below
 
-```shell
-pip install potc-treevalue
+## Change Log
+
+<details><summary><b>Version History</b> <i>[click to expand]</i></summary>
+<div>
+
+* 2022-05-03
+        1.3.1: Change definition of getitem, setitem and delitem; add pop method for TreeValue class.
+* 2022-03-15
+        1.3.0: Add getitem, setitem and delitem for adding, editing and removing items in TreeValue class.
+* 2022-02-22
+  	1.2.2: Optimize union function; add walk utility method.
+* 2022-01-26
+        1.2.1: Update tree printing; add keys, values, items on TreeValue; add comparision to facebook nest library.
+* 2022-01-04
+        1.2.0: Add flatten_values and flatten_keys; fix problem in mapping function; add support for potc.
+* 2021-12-03
+        1.1.0: Add version information; fix bug of default value; add flatten and unflatten; optimization speed performance.
+* 2021-10-24
+        1.0.0: Greatly optimize the speed performance using cython, overhead has been reduced to a negligible level.
+</div>
+</details>
+
+
+## Join and Contribute
+
+Welcome to **OpenDILab** community - treevalue!
+
+<b>Scan the QR code and add us on Wechat:</b>
+<div align="center">
+<img src='https://github.com/opendilab/DI-engine/raw/main/assets/wechat.png' width="25%" />
+</div>
+
+Or contact us on [our slack channel](https://opendilab.slack.com/join/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ#/shared-invite/email):（这里我不知道该咋弄，github上我没见过搞出文档卡片的）
+
+Please check [Contributing Guidances](https://github.com/opendilab/treevalue/blob/main/CONTRIBUTING.md).
+
+Thanks to the following contributors! 
+
+<a href="https://github.com/opendilab/treevalue/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=opendilab/treevalue" />
+</a>
+
+## Citation
+
 ```
-
-Or just install it with `treevalue` itself
-
-```shell
-pip install treevalue[potc]
+@misc{treevalue,
+    title={{TreeValue} - Tree-Structure Computing Solution},
+    author={TreeValue Contributors},
+    publisher = {GitHub},
+    howpublished = {\url{https://github.com/opendilab/treevalue}},
+    year={2021},
+}
 ```
-
-In potc, you can translate the objects to runnable python source code, which can be loaded to objects afterwards by the python interpreter, like the following graph
-
-![potc system](docs/source/_static/potc-doing.svg)
-
-For more information, you can refer to
-
-* [potc-dev/potc](https://github.com/potc-dev/potc)
-* [potc-dev/potc-treevalue](https://github.com/potc-dev/potc-treevalue)
-* [Potc Plugin Installation](https://opendilab.github.io/treevalue/main/tutorials/plugins/index.html#potc-support)
-
-## Contribution
-
-We appreciate all contributions to improve treevalue, both logic and system designs. Please refer to CONTRIBUTING.md for more guides.
-
-And users can join our [slack communication channel](https://join.slack.com/t/opendilab/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ), or contact the core developer [HansBug](https://github.com/HansBug) for more detailed discussion.
 
 ## License
 
-`treevalue` released under the Apache 2.0 license.
+`treevalue` released under the Apache 2.0 license. See the [LICENSE](./LICENSE) file for details.
