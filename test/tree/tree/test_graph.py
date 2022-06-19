@@ -37,7 +37,7 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert 4910 <= len(graph_1.source) <= 4960
+        assert len(graph_1.source) <= 4960
 
         graph_2 = graphics(
             (t, 't'), (t1, 't1'),
@@ -46,7 +46,7 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert 5420 <= len(graph_2.source) <= 5480
+        assert len(graph_2.source) <= 5480
 
         graph_3 = graphics(
             (t, 't'), (t1, 't1'),
@@ -55,7 +55,7 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert 4700 <= len(graph_3.source) <= 4760
+        assert len(graph_3.source) <= 4760
 
         graph_4 = graphics(
             (t, 't'), (t1, 't1'),
@@ -64,7 +64,7 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert 3720 <= len(graph_4.source) <= 3780
+        assert len(graph_4.source) <= 3780
 
         graph_6 = graphics(
             (t, 't'), (t1, 't1'),
@@ -73,4 +73,4 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert 4700 <= len(graph_6.source) <= 4760
+        assert len(graph_6.source) <= 4760
