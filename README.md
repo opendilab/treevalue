@@ -1,5 +1,5 @@
 <div align="center">
-    <a href="https://opendilab.github.io/treevalue/"><img width="1000px" height="auto" src="./docs/source/_static/title-banner.png"></a>
+    <a href="https://opendilab.github.io/treevalue/"><img width="1000px" height="auto" src="https://github.com/opendilab/treevalue/blob/main/docs/source/_static/title-banner.png"></a>
 </div>
 
 ---
@@ -29,8 +29,6 @@
 
 Almost all the operation can be supported in form of trees in a convenient way to simplify the structure processing when the calculation is tree-based.
 
-
-
 ## Outline
 
 * Overview
@@ -46,7 +44,13 @@ Almost all the operation can be supported in form of trees in a convenient way t
 
 ## Overview
 
+When we build a complex nested structure, we need to model it as a tree structure, and the native list and dict in Python are often used to solve this problem. However, it takes a lot of codes and some complex and non-intuitive calculation logics, which is not easy to modify and extend related code and data, and parallelization is more impossible.
 
+Therefore, we need a kind of more proper data container, named `TreeValue`. It is designed for solving the follow problems:
+
+- **Ease of Use**: When the existing operations are applied to tree structures such as dict, they will become completely unrecognizable, with really low readability and maintainability.
+- **Diversity of Data**: In the tree structure operation, various abnormal conditions (structure mismatch, missing key value, type mismatch, etc.) occur from time to time, and the code will be more complicated if it needs to be handled properly.
+- **Scalability and Parallelization**: When any multivariate operation is performed, the calculation logic needs to be redesigned under the native Python code implementation, and the processing will be more complicated and confusing, and the code quality is difficult to control.
 
 ## Getting Started
 
@@ -207,8 +211,6 @@ For more examples, explanations and further usages, take a look at:
     * [Costumize My TreeValue Class](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#diy-treevalue-class)
     * [Visualization of TreeValue](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#draw-graph-for-treevalue)
 
-
-
 ## Speed Performance
 
 Here is the speed performance of all the operations in `FastTreeValue`, the following table is the performance comparison result with [dm-tree](https://github.com/deepmind/tree).
@@ -259,8 +261,6 @@ Test benchmark code can be found here:
 * [Comparison with dm-tree](https://github.com/opendilab/treevalue/blob/main/test/compare/deepmind/test_dm_tree.py)
 * [Comparison with jax-libtree](https://github.com/opendilab/treevalue/blob/main/test/compare/jax/test_jax.py)
 * [Comparison with tianshou Batch](https://github.com/opendilab/treevalue/blob/main/test/compare/tianshou/test_tianshou_batch.py)
-
-
 
 ## Change Log
 
