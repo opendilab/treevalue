@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Main Idea &mdash; treevalue 1.2.2 documentation</title>
@@ -86,7 +87,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <p><span class="caption-text">Tutorials</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Quick Start</a></li>
@@ -104,18 +105,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../cli_usage/index.html">CLI Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Plugins</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Best Practice</span></p>
+<p><span class="caption-text">Best Practice</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../best_practice/sklearn/index.html">Apply into Scikit-Learn</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">treevalue.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/tree/index.html">treevalue.tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/utils/index.html">treevalue.utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<p><span class="caption-text">Contributor Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
 </ul>
@@ -184,9 +185,9 @@
             
     
     
-  <div class="section" id="main-idea">
+  <section id="main-idea">
 <h1>Main Idea<a class="headerlink" href="#main-idea" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="why-treevalue-is-designed">
+<section id="why-treevalue-is-designed">
 <span id="tutorials-mainidea-why"></span><h2>Why TreeValue is designed?<a class="headerlink" href="#why-treevalue-is-designed" title="Permalink to this headline">¶</a></h2>
 <p>When we build programs, we often encounter some structured data with complicated nested
 components, and the usual practice is to model them with tree-like data structures.
@@ -237,7 +238,7 @@ is more impossible.</p>
 <p>with the following output.</p>
 <div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
-{&#39;b&#39;: 24, &#39;a&#39;: 12, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 51}}
+{&#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 51}, &#39;a&#39;: 12}
 </pre></div></td></tr></table></div>
 </div>
 <p>Although in fact, as python coders, we may have been accustomed to such a native recursive writing method, but from the perspective of actual engineering construction, such a writing method is not intuitive enough:</p>
@@ -285,10 +286,10 @@ is more impossible.</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
-&lt;TreeValue 0x7fefaea6e710&gt;
+&lt;TreeValue 0x7f065e3e6610&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7fefaea6e7d0&gt;
+└── x --&gt; &lt;TreeValue 0x7f065e3e66d0&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
 </pre></div></td></tr></table></div>
@@ -319,16 +320,16 @@ is more impossible.</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>d1 + d2:
-&lt;FastTreeValue 0x7fe16849e590&gt;
+&lt;FastTreeValue 0x7fa5d613f490&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;FastTreeValue 0x7fe16849e710&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fa5d613f610&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
 </pre></div></td></tr></table></div>
 </div>
-</div>
-<div class="section" id="definitions-for-key-conceptions">
+</section>
+<section id="definitions-for-key-conceptions">
 <span id="tutorials-mainidea-definition"></span><h2>Definitions for Key Conceptions<a class="headerlink" href="#definitions-for-key-conceptions" title="Permalink to this headline">¶</a></h2>
 <p>In this section, the following key conceptions will be introduced:</p>
 <ul class="simple">
@@ -336,7 +337,7 @@ is more impossible.</p>
 <li><p>Tree Calculation</p></li>
 <li><p>Tree Function Wrapper</p></li>
 </ul>
-<div class="section" id="treevalue">
+<section id="treevalue">
 <span id="tutorials-mainidea-definition-treevalue"></span><h3>TreeValue<a class="headerlink" href="#treevalue" title="Permalink to this headline">¶</a></h3>
 <p>TreeValue is a data structure which is based on tree structure. Nested features of tree structure are natively supported in TreeValue. In this project, <strong>TreeValue is the basic calculation unit of any operations</strong>.</p>
 <p>From a data structure perspective, TreeValue is a rooted, directed tree, and their nodes can be divided into two categories:</p>
@@ -345,8 +346,8 @@ is more impossible.</p>
 <li><p>Leaf node, which stores the value.</p></li>
 </ul>
 <p>Also, each edge of the tree has one string key which length is no less than <code class="docutils literal notranslate"><span class="pre">1</span></code>, and all edges from the same parent node have different keys with each other. The following graph shows a simple example, the TreeValue <code class="docutils literal notranslate"><span class="pre">t</span></code> is a TreeValue instance, for the diamond-shaped node is the root node, the circle-shaped node is the non-leaf nodes and the rectangle-shaped node is the leaf nodes with their values.</p>
-<img alt="../../_images/treevalue_demo.gv.svg" class="align-center" src="../../_images/treevalue_demo.gv.svg" /></div>
-<div class="section" id="treelize">
+<img alt="../../_images/treevalue_demo.gv.svg" class="align-center" src="../../_images/treevalue_demo.gv.svg" /></section>
+<section id="treelize">
 <span id="tutorials-mainidea-definition-treelize"></span><h3>Treelize<a class="headerlink" href="#treelize" title="Permalink to this headline">¶</a></h3>
 <p>Base on the definition of TreeValue, the calculation based on it is named <cite>Tree Calculation</cite>.</p>
 <p>Usually, the native calculation, operations in python are all able to be abstracted to functions, for the values can be mapped as the arguments of the function, and the function’s return value is the calculation’s result. For example, native <code class="docutils literal notranslate"><span class="pre">+</span></code> operator can be transformed to <code class="docutils literal notranslate"><span class="pre">__add__</span></code> function (actually it has already been define in <code class="docutils literal notranslate"><span class="pre">operators</span></code> module and can be imported in your code), the expression <span class="math notranslate nohighlight">\(1 + 2 = 3\)</span> can be transformed to function-based expression of <span class="math notranslate nohighlight">\(\_\_add\_\_(1, 2) = 3\)</span>. In mathematical form, the transformed functions can be tagged as <span class="math notranslate nohighlight">\(f\)</span>.</p>
@@ -366,9 +367,9 @@ is more impossible.</p>
 \[f_T\left(a_0, a_1, \cdots, a_n\right) \
 = T\left(f\right)\left(a_0, a_1, \cdots, a_n\right)\]</div>
 <p>The TreeValue and treelize functions are the core features that supported this project, and all of the calculation. The TreeValue is implemented as class <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> in this project (the extended one is called <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>), and treelize is implemented as function <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> in this project (the treelize function for instance methods and class methods are called <code class="docutils literal notranslate"><span class="pre">method_treelize</span></code> and <code class="docutils literal notranslate"><span class="pre">classmethod_treelize</span></code>.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
 

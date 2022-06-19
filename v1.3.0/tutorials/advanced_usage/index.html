@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Advanced Usage &mdash; treevalue 1.3.0 documentation</title>
@@ -86,7 +87,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <p><span class="caption-text">Tutorials</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Quick Start</a></li>
@@ -141,18 +142,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../cli_usage/index.html">CLI Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Plugins</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Best Practice</span></p>
+<p><span class="caption-text">Best Practice</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../best_practice/sklearn/index.html">Apply into Scikit-Learn</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">treevalue.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/tree/index.html">treevalue.tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/utils/index.html">treevalue.utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<p><span class="caption-text">Contributor Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
 </ul>
@@ -221,7 +222,7 @@
             
     
     
-  <div class="section" id="advanced-usage">
+  <section id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h1>
 <p>In this part, Some of the advanced usages of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> will be introduced one by one with sample code and graph to explain them.</p>
 <p>For further information or usage of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> and <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>, you may take a look at the following pages:</p>
@@ -230,7 +231,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> and other wrappers: <a class="reference internal" href="../../api_doc/tree/func.html"><span class="doc">treevalue.tree.func</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> and its operators, methods: <a class="reference internal" href="../../api_doc/tree/general.html"><span class="doc">treevalue.tree.general</span></a>.</p></li>
 </ul>
-<div class="section" id="function-modes">
+<section id="function-modes">
 <span id="tutorials-advancedusage-modes"></span><h2>Function Modes<a class="headerlink" href="#function-modes" title="Permalink to this headline">¶</a></h2>
 <p>In the basic usage description in <a class="reference internal" href="../basic_usage/index.html#tutorials-basicusage-func"><span class="std std-ref">Make function tree supported</span></a>, we can see that a common function which only support the calculation of the common values can be wrapped to support the tree-based calculation painlessly.</p>
 <p>Here is the documentation of function <cite>treevalue.tree.func.func_treelize</cite>.</p>
@@ -283,7 +284,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">left</span></code> mode, means only the keys involved in the leftest tree will be processed.</p></li>
 </ul>
 <p>In this part, all of the 4 modes will be introduced with details and samples one by one.</p>
-<div class="section" id="strict-mode">
+<section id="strict-mode">
 <h3>Strict Mode<a class="headerlink" href="#strict-mode" title="Permalink to this headline">¶</a></h3>
 <p>Strict mode is the most frequently-used mode in real cases. It is also the default value of the <code class="docutils literal notranslate"><span class="pre">mode</span></code> argument in the treelize functions.</p>
 <p>To be simple, strict mode need the keys of a node in the tree be strictly mapped one by one, missing or overage of the keys are both forbidden in strict mode, which means <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> will be raised.</p>
@@ -328,10 +329,10 @@
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f5e3de85990&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f96bcc20a10&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5e3de85ed0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f96bcb78d50&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52
     └── &#39;e&#39; --&gt; 59
@@ -347,15 +348,15 @@
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo.demox.py&quot;, line 15, in &lt;module&gt;
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo.demox.py&quot;, line 15, in &lt;module&gt;
     print(&#39;plus(t4, t2):&#39;, plus(t4, t2))
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 84, in treevalue.tree.func.cfunc._c_func_treelize_run
   File &quot;treevalue/tree/func/modes.pyx&quot;, line 132, in treevalue.tree.func.modes._c_keyset
   File &quot;treevalue/tree/func/modes.pyx&quot;, line 54, in treevalue.tree.func.modes._c_strict_keyset
-KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is {&#39;b&#39;, &#39;x&#39;} but 1 in {&#39;a&#39;, &#39;x&#39;, &#39;b&#39;}.&quot;
+KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is {&#39;b&#39;, &#39;x&#39;} but 1 in {&#39;b&#39;, &#39;x&#39;, &#39;a&#39;}.&quot;
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note" id="tutorials-advancedusage-how-works">
@@ -455,22 +456,24 @@ KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span>Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;numpy.ndarray&#39;&gt; [ 2  5  8 11]
-Current a and b: &lt;class &#39;int&#39;&gt; 11 &lt;class &#39;numpy.ndarray&#39;&gt; [1 3 5 7]
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span>Current a and b: &lt;class &#39;int&#39;&gt; 11 &lt;class &#39;numpy.ndarray&#39;&gt; [1 3 5 7]
+Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;numpy.ndarray&#39;&gt; [ 2  5  8 11]
+Current a and b: &lt;class &#39;int&#39;&gt; 48 &lt;class &#39;float&#39;&gt; 4.8
 Current a and b: &lt;class &#39;int&#39;&gt; 54 &lt;class &#39;numpy.ndarray&#39;&gt; [[2 3]
  [5 6]]
-Current a and b: &lt;class &#39;int&#39;&gt; 48 &lt;class &#39;float&#39;&gt; 4.8
 Current a and b: &lt;class &#39;int&#39;&gt; 30 &lt;class &#39;int&#39;&gt; 3
-plus(t1, t2): &lt;TreeValue 0x7ff505742490&gt;
+plus(t1, t2): &lt;TreeValue 0x7f17fcde6450&gt;
 ├── &#39;a&#39; --&gt; array([12, 14, 16, 18])
 ├── &#39;b&#39; --&gt; array([24, 27, 30, 33])
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7ff505742b10&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f17fcde6ad0&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52.8
     └── &#39;e&#39; --&gt; array([[56, 57],
                        [59, 60]])
 
 
+Current a and b: &lt;class &#39;int&#39;&gt; 11 &lt;class &#39;numpy.ndarray&#39;&gt; [1 3 5 7]
 Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;list&#39;&gt; [2, 5, 8, 11]
 </pre></div></td></tr></table></div>
 </div>
@@ -485,22 +488,22 @@ Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;list&#39;&gt; [2,
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 35, in &lt;module&gt;
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 35, in &lt;module&gt;
     print(&#39;plus(t1, t3):&#39;, plus(t1, t3))
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 75, in treevalue.tree.func.cfunc._c_func_treelize_run
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 9, in plus
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 9, in plus
     return a + b
 TypeError: unsupported operand type(s) for +: &#39;int&#39; and &#39;list&#39;
 </pre></div></td></tr></table></div>
 </div>
 </div>
 <p>In strict mode, missing or overage of keys are not tolerated at all. So in some of the cases, especially when you can not suppose that all the trees involved in calculation has exactly the same structure. Based on this demand, left mode, inner mode and outer mode is designed, and they will be introduced with details and examples in the next 3 sections.</p>
-</div>
-<div class="section" id="left-mode">
+</section>
+<section id="left-mode">
 <h3>Left Mode<a class="headerlink" href="#left-mode" title="Permalink to this headline">¶</a></h3>
 <p>In left mode, the result tree’s key set will be aligned to the first tree from the left.</p>
 <p>In the trees in <code class="docutils literal notranslate"><span class="pre">left_demo_1</span></code>, <code class="docutils literal notranslate"><span class="pre">t3</span></code> is the plus result of <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code>. We can see that <cite>t2.a</cite> is ignored because of <cite>t1.a</cite> ‘s non-existence. Finally no error will be raised, the calculation will be processed properly with the tree structure of <code class="docutils literal notranslate"><span class="pre">t1</span></code>.</p>
@@ -545,9 +548,9 @@ TypeError: unsupported operand type(s) for +: &#39;int&#39; and &#39;list&#39;
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f45b584afd0&gt;
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f9c053e0f50&gt;
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f45b584aad0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f9c053e0a10&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52
     └── &#39;e&#39; --&gt; 59
@@ -574,9 +577,9 @@ KeyError: &#39;f&#39;
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/left_demo.demox.py&quot;, line 15, in &lt;module&gt;
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/left_demo.demox.py&quot;, line 15, in &lt;module&gt;
     print(&#39;plus(t4, t2):&#39;, plus(t4, t2))
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
@@ -585,8 +588,8 @@ KeyError: &quot;Missing is off, key &#39;f&#39; not found in {&#39;c&#39;: 30, &
 </pre></div></td></tr></table></div>
 </div>
 <p>In the code example above, the result is aligned to tree <code class="docutils literal notranslate"><span class="pre">a</span></code> in wrapped function <code class="docutils literal notranslate"><span class="pre">plus</span></code>. So the first plus calculation will get the proper result, but the second one will fail.</p>
-</div>
-<div class="section" id="inner-mode">
+</section>
+<section id="inner-mode">
 <h3>Inner Mode<a class="headerlink" href="#inner-mode" title="Permalink to this headline">¶</a></h3>
 <p>In inner mode, the result tree’s key set will be aligned to the intersection set of all the tree’s key set in arguments.</p>
 <p>In the trees in <code class="docutils literal notranslate"><span class="pre">inner_demo_1</span></code>, <code class="docutils literal notranslate"><span class="pre">t3</span></code> is the plus result of <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code>. We can see that <code class="docutils literal notranslate"><span class="pre">t2.a</span></code> and <code class="docutils literal notranslate"><span class="pre">t1.x.f</span></code> is ignored because of <code class="docutils literal notranslate"><span class="pre">t1.a</span></code>  and <code class="docutils literal notranslate"><span class="pre">t2.x.f</span></code>’s non-existence. Finally no error will be raised, the calculation will be processed properly with the tree structure of the intersection between tree <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code>.</p>
@@ -641,24 +644,24 @@ KeyError: &quot;Missing is off, key &#39;f&#39; not found in {&#39;c&#39;: 30, &
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f7dd00b6a10&gt;
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f65b02bca10&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7dd00b6f50&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f65b02bcf50&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52
     └── &#39;e&#39; --&gt; 59
 
-plus(t4, t2): &lt;TreeValue 0x7f7dd00c05d0&gt;
+plus(t4, t2): &lt;TreeValue 0x7f65b02c95d0&gt;
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7dd00041d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f65b0212610&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52
     └── &#39;e&#39; --&gt; 59
 </pre></div></td></tr></table></div>
 </div>
-</div>
-<div class="section" id="outer-mode">
+</section>
+<section id="outer-mode">
 <h3>Outer Mode<a class="headerlink" href="#outer-mode" title="Permalink to this headline">¶</a></h3>
 <p>In outer mode, the result tree’s key set will be aligned to the union set of the tree’s key set in arguments.</p>
 <p>In the trees in <code class="docutils literal notranslate"><span class="pre">outer_demo_1</span></code>, <code class="docutils literal notranslate"><span class="pre">t3</span></code> is the plus result of <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code>, with the missing value of <code class="docutils literal notranslate"><span class="pre">0</span></code>. We can see that all the values in tree <code class="docutils literal notranslate"><span class="pre">t1</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> are involved in this calculation, and because of the missing of <code class="docutils literal notranslate"><span class="pre">t1.a</span></code> and <code class="docutils literal notranslate"><span class="pre">t2.x.f</span></code> they will be actually treated as <code class="docutils literal notranslate"><span class="pre">0</span></code> in calculation process. Finally no error will be raised, and sum of the tree nodes’ value will form the result tree <code class="docutils literal notranslate"><span class="pre">t3</span></code>.</p>
@@ -707,19 +710,19 @@ due to this missing and value of <code class="docutils literal notranslate"><spa
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7fe3aae9e790&gt;
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7fa2908a0790&gt;
 ├── &#39;a&#39; --&gt; 11
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fe3aae9e850&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fa2908a0850&gt;
     ├── &#39;c&#39; --&gt; 33
     ├── &#39;d&#39; --&gt; 52
     ├── &#39;e&#39; --&gt; 59
     └── &#39;f&#39; --&gt; 6
 </pre></div></td></tr></table></div>
 </div>
-</div>
-</div>
-<div class="section" id="inheriting-on-trees">
+</section>
+</section>
+<section id="inheriting-on-trees">
 <span id="tutorials-advancedusage-inherit"></span><h2>Inheriting on Trees<a class="headerlink" href="#inheriting-on-trees" title="Permalink to this headline">¶</a></h2>
 <p>Inheriting is another important feature of treelize functions. It will be introduced in this section with necessary examples.</p>
 <p>In some cases, we need to calculation between values with different dimensions, such as in <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, you can add primitive integer with a <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> object, like this</p>
@@ -814,18 +817,18 @@ due to this missing and value of <code class="docutils literal notranslate"><spa
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f25f20d1810&gt;
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f411707e810&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f25f20d1910&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f411707e910&gt;
     ├── &#39;c&#39; --&gt; 39
     ├── &#39;d&#39; --&gt; 57
     └── &#39;e&#39; --&gt; 63
 
-plus(t2, 5): &lt;TreeValue 0x7f25f20d1810&gt;
+plus(t2, 5): &lt;TreeValue 0x7f4117760fd0&gt;
 ├── &#39;a&#39; --&gt; 16
 ├── &#39;b&#39; --&gt; 27
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f25f20d1910&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f4116fd3710&gt;
     ├── &#39;c&#39; --&gt; 35
     ├── &#39;d&#39; --&gt; 53
     └── &#39;e&#39; --&gt; 59
@@ -840,9 +843,9 @@ plus(t2, 5): &lt;TreeValue 0x7f25f20d1810&gt;
 <span class="normal">7</span>
 <span class="normal">8</span>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/inherit_demo.demox.py&quot;, line 22, in &lt;module&gt;
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/docs/source/tutorials/advanced_usage/inherit_demo.demox.py&quot;, line 22, in &lt;module&gt;
     print(&#39;plusx(t1, t2):&#39;, plusx(t1, t2))
-  File &quot;/tmp/tmpddsbhh_b/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmp59evz2xk/2c797be5d649742d3b9ae5250fbd17bf3e2053bf/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
@@ -855,8 +858,8 @@ TypeError: Inherit is off, tree value expected but &#39;int&#39; found in args 0
 <p>In most cases, disablement of inheriting is not recommended because it will cause some errors. Disable inheriting can increase the structural strictness of calculation, but all the cross-dimensional tree operation will be forbidden as well.</p>
 <p>So before disabling inheriting, make sure you know well about what you are going to do.</p>
 </div>
-</div>
-<div class="section" id="process-missing-values">
+</section>
+<section id="process-missing-values">
 <span id="tutorials-advancedusage-missing"></span><h2>Process Missing Values<a class="headerlink" href="#process-missing-values" title="Permalink to this headline">¶</a></h2>
 <p>In some cases of left mode and outer mode, some of keys in result tree can not find the node nor value at the corresponding path position in some of the argument trees. In order the make these cases be processable, missing value can be used by setting value or lambda expression in <code class="docutils literal notranslate"><span class="pre">missing</span></code> argument.</p>
 <p>Just like the example <code class="docutils literal notranslate"><span class="pre">outer_demo_1</span></code> mentioned forwards, when <code class="docutils literal notranslate"><span class="pre">t1.a</span></code> and <code class="docutils literal notranslate"><span class="pre">t2.x.f</span></code> not found in trees, the given missing value <code class="docutils literal notranslate"><span class="pre">0</span></code> will be used instead.</p>
@@ -937,10 +940,10 @@ TypeError: Inherit is off, tree value expected but &#39;int&#39; found in args 0
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2):
-&lt;TreeValue 0x7ff1242a7790&gt;
+&lt;TreeValue 0x7f63a705c6d0&gt;
 ├── &#39;a&#39; --&gt; [23]
 ├── &#39;b&#39; --&gt; [2, 3, 29, 31]
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7ff1242a7850&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f63a705c790&gt;
     ├── &#39;c&#39; --&gt; [5, 37]
     ├── &#39;d&#39; --&gt; [7, 11, 13, 41, 43]
     └── &#39;e&#39; --&gt; [17, 19]
@@ -952,8 +955,8 @@ TypeError: Inherit is off, tree value expected but &#39;int&#39; found in args 0
 <p>In strict mode, missing or overage of keys are absolutely not tolerated, missing value will make no sense and a <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code> will be logged.</p>
 <p>In inner mode, missing value will never be actually in use because all the key sets of final result are intersection set of argument trees. There will never be any key missing cases at all when inner mode is used, a <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code> will be logged with the usage of missing value in inner mode.</p>
 </div>
-</div>
-<div class="section" id="functional-utilities">
+</section>
+<section id="functional-utilities">
 <h2>Functional Utilities<a class="headerlink" href="#functional-utilities" title="Permalink to this headline">¶</a></h2>
 <p>In the primitive python, some convenient functional operations are supported, such as</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
@@ -976,7 +979,7 @@ Result of filter: [3, 7]
 </pre></div></td></tr></table></div>
 </div>
 <p>Actually, functional operations are supported in tree values as well, and they will be introduced in this section.</p>
-<div class="section" id="mapping">
+<section id="mapping">
 <h3>Mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h3>
 <p>Mapping function is similar to the primitive <code class="docutils literal notranslate"><span class="pre">map</span></code> function. The relation between <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> and <code class="docutils literal notranslate"><span class="pre">mapping</span></code> function is like that between <code class="docutils literal notranslate"><span class="pre">list</span></code> and <code class="docutils literal notranslate"><span class="pre">map</span></code> function.</p>
 <p>Here is a simple real code example</p>
@@ -1003,17 +1006,17 @@ Result of filter: [3, 7]
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>mapping(t, lambda x: x ** x + 2):
-&lt;FastTreeValue 0x7f8906a40910&gt;
+&lt;FastTreeValue 0x7fdd381a7bd0&gt;
 ├── &#39;a&#39; --&gt; 3
 ├── &#39;b&#39; --&gt; 6
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8906360d90&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fdd381a79d0&gt;
     ├── &#39;c&#39; --&gt; 29
     └── &#39;d&#39; --&gt; 258
 </pre></div></td></tr></table></div>
 </div>
 <p>For further definition or source code implement of function <code class="docutils literal notranslate"><span class="pre">mapping</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-mapping"><span class="std std-ref">mapping</span></a>.</p>
-</div>
-<div class="section" id="filter">
+</section>
+<section id="filter">
 <h3>Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h3>
 <p>Filter function is similar to the primitive <code class="docutils literal notranslate"><span class="pre">filter</span></code> function. The relation between <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> and <code class="docutils literal notranslate"><span class="pre">filter_</span></code> function is like that between <code class="docutils literal notranslate"><span class="pre">list</span></code> and <code class="docutils literal notranslate"><span class="pre">filter</span></code> function .</p>
 <p>Here is a simple real code example</p>
@@ -1051,17 +1054,17 @@ Result of filter: [3, 7]
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span>filter_(t, lambda x: x % 2 == 1):
-&lt;FastTreeValue 0x7f90cefb0650&gt;
+&lt;FastTreeValue 0x7f31bf44f750&gt;
 ├── &#39;a&#39; --&gt; 1
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f90cef8cd10&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f31bf42f7d0&gt;
     └── &#39;c&#39; --&gt; 3
 
 filter_(t, lambda x: x % 2 == 1, remove_empty=False):
-&lt;FastTreeValue 0x7f90cefb0b90&gt;
+&lt;FastTreeValue 0x7f31bf44fc90&gt;
 ├── &#39;a&#39; --&gt; 1
-├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f90cefb0650&gt;
+├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f31bf44f750&gt;
 │   └── &#39;c&#39; --&gt; 3
-└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f90cefb04d0&gt;
+└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f31bf44f690&gt;
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note">
@@ -1101,24 +1104,24 @@ filter_(t, lambda x: x % 2 == 1, remove_empty=False):
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span>mask(t, mapping(t, lambda x: x % 2 == 1)):
-&lt;FastTreeValue 0x7f83f315df50&gt;
+&lt;FastTreeValue 0x7f004e692c10&gt;
 ├── &#39;a&#39; --&gt; 1
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f83f315d910&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f004e6926d0&gt;
     └── &#39;c&#39; --&gt; 3
 
 mask(t, mapping(t, lambda x: x % 2 == 1), remove_empty=False):
-&lt;FastTreeValue 0x7f83f315de50&gt;
+&lt;FastTreeValue 0x7f004e692e90&gt;
 ├── &#39;a&#39; --&gt; 1
-├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f83f315dcd0&gt;
+├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f004e6926d0&gt;
 │   └── &#39;c&#39; --&gt; 3
-└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f83f315de10&gt;
+└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f004e692850&gt;
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information about <code class="docutils literal notranslate"><span class="pre">mask</span></code> function, take a look at <a class="reference internal" href="#tutorials-advancedusage-functional-mask"><span class="std std-ref">Mask</span></a>.</p>
 </div>
 <p>For further definition or source code implement of function <code class="docutils literal notranslate"><span class="pre">filter_</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-filter"><span class="std std-ref">filter_</span></a>.</p>
-</div>
-<div class="section" id="mask">
+</section>
+<section id="mask">
 <span id="tutorials-advancedusage-functional-mask"></span><h3>Mask<a class="headerlink" href="#mask" title="Permalink to this headline">¶</a></h3>
 <p>Mask function allow your choice in one tree, by another tree of true-or-false flags. A simple code example is</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1159,24 +1162,24 @@ mask(t, mapping(t, lambda x: x % 2 == 1), remove_empty=False):
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>mask(t, m):
-&lt;FastTreeValue 0x7f38e72f0f10&gt;
+&lt;FastTreeValue 0x7fa9860d6e90&gt;
 ├── &#39;a&#39; --&gt; 1
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f38e72f08d0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9860d6850&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 mask(t, m, remove_empty=False):
-&lt;FastTreeValue 0x7f38e72f0dd0&gt;
+&lt;FastTreeValue 0x7fa9860d6d50&gt;
 ├── &#39;a&#39; --&gt; 1
-├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f38e72f0f10&gt;
+├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa9860d6e90&gt;
 │   ├── &#39;c&#39; --&gt; 3
 │   └── &#39;d&#39; --&gt; 4
-└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f38e72f08d0&gt;
+└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7fa9860d6850&gt;
 </pre></div></td></tr></table></div>
 </div>
 <p>For further definition or source code implement of function <code class="docutils literal notranslate"><span class="pre">mask</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-mask"><span class="std std-ref">mask</span></a>.</p>
-</div>
-<div class="section" id="reduce">
+</section>
+<section id="reduce">
 <h3>Reduce<a class="headerlink" href="#reduce" title="Permalink to this headline">¶</a></h3>
 <p>By using <code class="docutils literal notranslate"><span class="pre">reduce_</span></code> function, you can get some calculation result based on the tree structure. Its meaning is similar to primitive <code class="docutils literal notranslate"><span class="pre">reduce_</span></code> function, but its base structure is <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> instead of sequence or iterator. For example, we can get the sum and multiply accumulation of the values in the tree.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1247,13 +1250,13 @@ Multiply of t: 1152
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Weight tree: &lt;FastTreeValue 0x7f1c4a111750&gt;
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Weight tree: &lt;FastTreeValue 0x7fc2192c9690&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f1c4a0f1e10&gt;
+├── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fc2192a6d50&gt;
 │   ├── &#39;c&#39; --&gt; 6
 │   └── &#39;d&#39; --&gt; 8
-└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7f1c4a1115d0&gt;
+└── &#39;y&#39; --&gt; &lt;FastTreeValue 0x7fc2192c9510&gt;
     ├── &#39;e&#39; --&gt; 12
     └── &#39;f&#39; --&gt; 16
 
@@ -1304,10 +1307,10 @@ Huffman weight sum of t: 45
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>Size tree: &lt;FastTreeValue 0x7f68fdd1bc10&gt;
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>Size tree: &lt;FastTreeValue 0x7f2175f84bd0&gt;
 ├── &#39;a&#39; --&gt; 72
 ├── &#39;b&#39; --&gt; 32
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f68fdd1bb90&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f2175f84b50&gt;
     ├── &#39;c&#39; --&gt; 32
     └── &#39;d&#39; --&gt; 48
 
@@ -1315,12 +1318,12 @@ Total bytes of arrays in t: 184
 </pre></div></td></tr></table></div>
 </div>
 <p>For further definition or source code implement of function <code class="docutils literal notranslate"><span class="pre">reduce_</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-reduce"><span class="std std-ref">reduce_</span></a>.</p>
-</div>
-</div>
-<div class="section" id="structural-utilities">
+</section>
+</section>
+<section id="structural-utilities">
 <h2>Structural Utilities<a class="headerlink" href="#structural-utilities" title="Permalink to this headline">¶</a></h2>
 <p>In order to process some structured data, especially when you need to process a sort of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects which is in the primitive collections or mappings, the structural utilities are designed, and they will be introduced in this section with examples.</p>
-<div class="section" id="union">
+<section id="union">
 <h3>Union<a class="headerlink" href="#union" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">union</span></code> function is similar to the primitive <code class="docutils literal notranslate"><span class="pre">zip</span></code> function some ways, it can combine a list of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects as one <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> object which leaf values are tuples, like the simple example below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1383,28 +1386,28 @@ Total bytes of arrays in t: 184
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span>union(t1, t2):
-&lt;FastTreeValue 0x7f184e5d7fd0&gt;
+&lt;FastTreeValue 0x7fbb1685ef90&gt;
 ├── &#39;a&#39; --&gt; (1, 11)
 ├── &#39;b&#39; --&gt; (2, 22)
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f184e5d7d50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbb1685ed10&gt;
     ├── &#39;c&#39; --&gt; (3, 30)
     ├── &#39;d&#39; --&gt; (4, 48)
     └── &#39;e&#39; --&gt; (5, 54)
 
 union(t1, t2, t3):
-&lt;FastTreeValue 0x7f184e5df590&gt;
+&lt;FastTreeValue 0x7fbb16867fd0&gt;
 ├── &#39;a&#39; --&gt; (1, 11, -13)
 ├── &#39;b&#39; --&gt; (2, 22, -7)
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f184e5e3c50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbb16867d10&gt;
     ├── &#39;c&#39; --&gt; (3, 30, -5)
     ├── &#39;d&#39; --&gt; (4, 48, -3)
     └── &#39;e&#39; --&gt; (5, 54, -2)
 
 union(t1, t2, t3, t4):
-&lt;FastTreeValue 0x7f184e5dffd0&gt;
+&lt;FastTreeValue 0x7fbb16867d10&gt;
 ├── &#39;a&#39; --&gt; (1, 11, -13, -13)
 ├── &#39;b&#39; --&gt; (2, 22, -7, -7)
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f184e5e3c50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fbb167af510&gt;
     ├── &#39;c&#39; --&gt; (3, 30, -5, 8)
     ├── &#39;d&#39; --&gt; (4, 48, -3, 8)
     └── &#39;e&#39; --&gt; (5, 54, -2, 8)
@@ -1415,8 +1418,8 @@ union(t1, t2, t3, t4):
 <p>In <code class="docutils literal notranslate"><span class="pre">union</span></code> function (actually <code class="docutils literal notranslate"><span class="pre">subside</span></code> function has the same property), all the trees to be unionised need to have the same structure. You can just consider it as strict mode with inheriting is enabled.</p>
 </div>
 <p>For further information and arguments of function <code class="docutils literal notranslate"><span class="pre">union</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-union"><span class="std std-ref">union</span></a>.</p>
-</div>
-<div class="section" id="subside">
+</section>
+<section id="subside">
 <h3>Subside<a class="headerlink" href="#subside" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">subside</span></code> function can transform the collections or mapping nested <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects into one <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> object which leaf values has the dispatch’s structure. The <code class="docutils literal notranslate"><span class="pre">union</span></code> function mentioned above is also based on the <code class="docutils literal notranslate"><span class="pre">subside</span></code> function. Function <code class="docutils literal notranslate"><span class="pre">subside</span></code> will greatly simplify the code when the structured data need to be calculated. Just like this following example code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1452,10 +1455,10 @@ union(t1, t2, t3, t4):
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>subside(st):
-&lt;TreeValue 0x7f1de56a08d0&gt;
+&lt;TreeValue 0x7f16e36ca890&gt;
 ├── &#39;a&#39; --&gt; {&#39;first&#39;: (1, -14), &#39;second&#39;: [6, {&#39;x&#39;: 0, &#39;y&#39;: 3}]}
 ├── &#39;b&#39; --&gt; {&#39;first&#39;: (2, 9), &#39;second&#39;: [0, {&#39;x&#39;: -17, &#39;y&#39;: 9}]}
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f1de56a0850&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f16e36ca810&gt;
     ├── &#39;c&#39; --&gt; {&#39;first&#39;: (3, 3), &#39;second&#39;: [-5, {&#39;x&#39;: -8, &#39;y&#39;: 11}]}
     └── &#39;d&#39; --&gt; {&#39;first&#39;: (4, 8), &#39;second&#39;: [17, {&#39;x&#39;: 15, &#39;y&#39;: -17}]}
 </pre></div></td></tr></table></div>
@@ -1465,8 +1468,8 @@ union(t1, t2, t3, t4):
 <p>In function <code class="docutils literal notranslate"><span class="pre">subside</span></code>, only primitive list, tuple and dict (or subclasses) objects will be subsided to leaf values.</p>
 </div>
 <p>For further information and arguments of function <code class="docutils literal notranslate"><span class="pre">subside</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-subside"><span class="std std-ref">subside</span></a>.</p>
-</div>
-<div class="section" id="rise">
+</section>
+<section id="rise">
 <h3>Rise<a class="headerlink" href="#rise" title="Permalink to this headline">¶</a></h3>
 <p>Function <code class="docutils literal notranslate"><span class="pre">rise</span></code> can be seen as the inverse operation of function <code class="docutils literal notranslate"><span class="pre">subside</span></code>, it will try to extract the greatest common structure of the leaf values, and rise them up to the dispatch above the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects. Like the following example code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -1602,74 +1605,74 @@ union(t1, t2, t3, t4):
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
-<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: (&lt;TreeValue 0x7f3730fe0750&gt;
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: (&lt;TreeValue 0x7f5f85300650&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0150&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f853002d0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
-, &lt;TreeValue 0x7f3730fe0c90&gt;
+, &lt;TreeValue 0x7f5f85300bd0&gt;
 ├── &#39;a&#39; --&gt; -14
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe06d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300850&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 8
-), &#39;second&#39;: (&lt;TreeValue 0x7f3730fe02d0&gt;
+), &#39;second&#39;: (&lt;TreeValue 0x7f5f85300450&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 0
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0350&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300250&gt;
     ├── &#39;c&#39; --&gt; -5
     └── &#39;d&#39; --&gt; 17
-, {&#39;y&#39;: &lt;TreeValue 0x7f3730fe0dd0&gt;
-├── &#39;a&#39; --&gt; 3
-├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0ad0&gt;
-    ├── &#39;c&#39; --&gt; 11
-    └── &#39;d&#39; --&gt; -17
-, &#39;x&#39;: &lt;TreeValue 0x7f3730fe0410&gt;
+, {&#39;x&#39;: &lt;TreeValue 0x7f5f85300d10&gt;
 ├── &#39;a&#39; --&gt; 0
 ├── &#39;b&#39; --&gt; -17
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe09d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300c50&gt;
     ├── &#39;c&#39; --&gt; -8
     └── &#39;d&#39; --&gt; 15
+, &#39;y&#39;: &lt;TreeValue 0x7f5f85300590&gt;
+├── &#39;a&#39; --&gt; 3
+├── &#39;b&#39; --&gt; 9
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300910&gt;
+    ├── &#39;c&#39; --&gt; 11
+    └── &#39;d&#39; --&gt; -17
 })}
 st2[&#39;first&#39;][0]:
-&lt;TreeValue 0x7f3730fe0750&gt;
+&lt;TreeValue 0x7f5f85300650&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0150&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f853002d0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 st2[&#39;first&#39;][1]:
-&lt;TreeValue 0x7f3730fe0c90&gt;
+&lt;TreeValue 0x7f5f85300bd0&gt;
 ├── &#39;a&#39; --&gt; -14
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe06d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300850&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 8
 
 st2[&#39;second&#39;][0]:
-&lt;TreeValue 0x7f3730fe02d0&gt;
+&lt;TreeValue 0x7f5f85300450&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 0
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0350&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300250&gt;
     ├── &#39;c&#39; --&gt; -5
     └── &#39;d&#39; --&gt; 17
 
 st2[&#39;second&#39;][1][&#39;x&#39;]:
-&lt;TreeValue 0x7f3730fe0410&gt;
+&lt;TreeValue 0x7f5f85300d10&gt;
 ├── &#39;a&#39; --&gt; 0
 ├── &#39;b&#39; --&gt; -17
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe09d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300c50&gt;
     ├── &#39;c&#39; --&gt; -8
     └── &#39;d&#39; --&gt; 15
 
 st2[&#39;second&#39;][1][&#39;y&#39;]:
-&lt;TreeValue 0x7f3730fe0dd0&gt;
+&lt;TreeValue 0x7f5f85300590&gt;
 ├── &#39;a&#39; --&gt; 3
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3730fe0ad0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f5f85300910&gt;
     ├── &#39;c&#39; --&gt; 11
     └── &#39;d&#39; --&gt; -17
 </pre></div></td></tr></table></div>
@@ -1806,72 +1809,72 @@ st2[&#39;second&#39;][1][&#39;y&#39;]:
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
-<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: [&lt;TreeValue 0x7f3869b14790&gt;
+<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: [&lt;TreeValue 0x7f086c812850&gt;
 ├── &#39;a&#39; --&gt; (1, -14)
 ├── &#39;b&#39; --&gt; (2, 9)
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14450&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812550&gt;
     ├── &#39;c&#39; --&gt; (3, 3)
     └── &#39;d&#39; --&gt; (4, 8)
-, &lt;TreeValue 0x7f3869b14650&gt;
+, &lt;TreeValue 0x7f086c812710&gt;
 ├── &#39;a&#39; --&gt; (3, -31)
 ├── &#39;b&#39; --&gt; (9, 82)
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b145d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812690&gt;
     ├── &#39;c&#39; --&gt; (15, 47)
     └── &#39;d&#39; --&gt; (41, 32)
-], &#39;second&#39;: (&lt;TreeValue 0x7f3869b144d0&gt;
+], &#39;second&#39;: (&lt;TreeValue 0x7f086c8125d0&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 0
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14710&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812290&gt;
     ├── &#39;c&#39; --&gt; -5
     └── &#39;d&#39; --&gt; 17
-, &lt;TreeValue 0x7f3869b14310&gt;
+, &lt;TreeValue 0x7f086c812fd0&gt;
 ├── &#39;a&#39; --&gt; {&#39;x&#39;: 0, &#39;y&#39;: 3}
 ├── &#39;b&#39; --&gt; {&#39;x&#39;: -17, &#39;y&#39;: 9}
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14b90&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c8123d0&gt;
     ├── &#39;c&#39; --&gt; {&#39;x&#39;: -8, &#39;y&#39;: 11}
     └── &#39;d&#39; --&gt; {&#39;x&#39;: 15, &#39;y&#39;: -17}
 )}
 st2[&#39;first&#39;][0]:
-&lt;TreeValue 0x7f3869b14790&gt;
+&lt;TreeValue 0x7f086c812850&gt;
 ├── &#39;a&#39; --&gt; (1, -14)
 ├── &#39;b&#39; --&gt; (2, 9)
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14450&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812550&gt;
     ├── &#39;c&#39; --&gt; (3, 3)
     └── &#39;d&#39; --&gt; (4, 8)
 
 st2[&#39;first&#39;][1]:
-&lt;TreeValue 0x7f3869b14650&gt;
+&lt;TreeValue 0x7f086c812710&gt;
 ├── &#39;a&#39; --&gt; (3, -31)
 ├── &#39;b&#39; --&gt; (9, 82)
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b145d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812690&gt;
     ├── &#39;c&#39; --&gt; (15, 47)
     └── &#39;d&#39; --&gt; (41, 32)
 
 st2[&#39;second&#39;][0]:
-&lt;TreeValue 0x7f3869b144d0&gt;
+&lt;TreeValue 0x7f086c8125d0&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 0
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14710&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c812290&gt;
     ├── &#39;c&#39; --&gt; -5
     └── &#39;d&#39; --&gt; 17
 
 st2[&#39;second&#39;][1]:
-&lt;TreeValue 0x7f3869b14310&gt;
+&lt;TreeValue 0x7f086c812fd0&gt;
 ├── &#39;a&#39; --&gt; {&#39;x&#39;: 0, &#39;y&#39;: 3}
 ├── &#39;b&#39; --&gt; {&#39;x&#39;: -17, &#39;y&#39;: 9}
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3869b14b90&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f086c8123d0&gt;
     ├── &#39;c&#39; --&gt; {&#39;x&#39;: -8, &#39;y&#39;: 11}
     └── &#39;d&#39; --&gt; {&#39;x&#39;: 15, &#39;y&#39;: -17}
 </pre></div></td></tr></table></div>
 </div>
 </div>
 <p>For further information and arguments of function <code class="docutils literal notranslate"><span class="pre">rise</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-rise"><span class="std std-ref">rise</span></a>.</p>
-</div>
-</div>
-<div class="section" id="tree-utilities">
+</section>
+</section>
+<section id="tree-utilities">
 <h2>Tree Utilities<a class="headerlink" href="#tree-utilities" title="Permalink to this headline">¶</a></h2>
 <p>In this section, utilities with <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> class and its objects themselves will be introduced with examples.</p>
-<div class="section" id="jsonify">
+<section id="jsonify">
 <h3>Jsonify<a class="headerlink" href="#jsonify" title="Permalink to this headline">¶</a></h3>
 <p>With the usage of <code class="docutils literal notranslate"><span class="pre">jsonify</span></code> function, you can transform a <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> object to json-formatted data.</p>
 <p>For example, the following real code</p>
@@ -1924,10 +1927,10 @@ st2[&#39;second&#39;][1]:
 <span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span>Tree t:
-&lt;TreeValue 0x7f8fc3866310&gt;
+&lt;TreeValue 0x7f32273ae250&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; [2, 3]
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f8fc385df10&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f3227c28910&gt;
     ├── &#39;c&#39; --&gt; {&#39;x&#39;: 1, &#39;y&#39;: 2}
     └── &#39;d&#39; --&gt; &#39;this is a string&#39;
 
@@ -1954,8 +1957,8 @@ Json data of t:
 <p>For further information of function <code class="docutils literal notranslate"><span class="pre">raw</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/common.html#apidoc-tree-common-raw"><span class="std std-ref">raw</span></a>.</p>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">jsonify</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-jsonify"><span class="std std-ref">jsonify</span></a>.</p>
-</div>
-<div class="section" id="clone">
+</section>
+<section id="clone">
 <h3>Clone<a class="headerlink" href="#clone" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects can be cloned deeply by <code class="docutils literal notranslate"><span class="pre">clone</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2038,39 +2041,39 @@ Json data of t:
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span>Tree t:
-&lt;TreeValue 0x7f900f5ba6d0&gt;
+&lt;TreeValue 0x7febfbd0b610&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f900f5ba610&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7febfbd0b550&gt;
     ├── &#39;c&#39; --&gt; 3
     ├── &#39;d&#39; --&gt; 4
     └── &#39;y&#39; --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of t.x.y: 7f900fe9fdc0
+Id of t.x.y: 7febfc5dfc30
 
 
 clone(t):
-&lt;TreeValue 0x7f900f5ba9d0&gt;
+&lt;TreeValue 0x7febfbd0b910&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f900f5ba850&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7febfbd0b790&gt;
     ├── &#39;c&#39; --&gt; 3
     ├── &#39;d&#39; --&gt; 4
     └── &#39;y&#39; --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of clone(t).x.y: 7f900fe9fdc0
+Id of clone(t).x.y: 7febfc5dfc30
 
 
 clone(t, copy_value=True):
-&lt;TreeValue 0x7f900f5baf10&gt;
+&lt;TreeValue 0x7febfbd0be50&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f900f5ba850&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7febfbd0b790&gt;
     ├── &#39;c&#39; --&gt; 3
     ├── &#39;d&#39; --&gt; 4
     └── &#39;y&#39; --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of clone(t, copy_value=True).x.y: 7f900effa3c0
+Id of clone(t, copy_value=True).x.y: 7febfb7676e0
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note">
@@ -2079,8 +2082,8 @@ Id of clone(t, copy_value=True).x.y: 7f900effa3c0
 <p>If deep copy of values is required when using <code class="docutils literal notranslate"><span class="pre">clone</span></code>, <code class="docutils literal notranslate"><span class="pre">copy_value</span></code> argument need to be assigned as <code class="docutils literal notranslate"><span class="pre">True</span></code>. And then a <code class="docutils literal notranslate"><span class="pre">copy.deepcopy</span></code> will be performed in <code class="docutils literal notranslate"><span class="pre">clone</span></code> function in order to do the deep copy. Also, you can define your own copy function in <code class="docutils literal notranslate"><span class="pre">copy_value</span></code> argument by just assign it as a lambda expression like <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">pickle.loads(pickle.dumps(x))</span></code>.</p>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">clone</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-clone"><span class="std std-ref">clone</span></a>.</p>
-</div>
-<div class="section" id="typetrans">
+</section>
+<section id="typetrans">
 <h3>Typetrans<a class="headerlink" href="#typetrans" title="Permalink to this headline">¶</a></h3>
 <p>You can use function <code class="docutils literal notranslate"><span class="pre">typetrans</span></code> to change the type of tree value object, just like the example below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2167,35 +2170,35 @@ Id of clone(t, copy_value=True).x.y: 7f900effa3c0
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span>t1:
-&lt;FastTreeValue 0x7f5138f7e690&gt;
+&lt;FastTreeValue 0x7f643f9cb690&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5138ecf050&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f643f91f710&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 t1 ** 2:
-&lt;FastTreeValue 0x7f5138f7e710&gt;
+&lt;FastTreeValue 0x7f643f9cb710&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 4
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5138f7e990&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f643f9cb950&gt;
     ├── &#39;c&#39; --&gt; 9
     └── &#39;d&#39; --&gt; 16
 
 
 t2:
-&lt;MyTreeValue 0x7f5138f7e690&gt;
+&lt;MyTreeValue 0x7f643f9cb690&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f5138ecf050&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f643f91f710&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 t2.pw():
-&lt;MyTreeValue 0x7f5138f7e810&gt;
+&lt;MyTreeValue 0x7f643f9cb810&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 12
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f5138f7efd0&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f643f9cbf50&gt;
     ├── &#39;c&#39; --&gt; 20
     └── &#39;d&#39; --&gt; 30
 </pre></div></td></tr></table></div>
@@ -2212,8 +2215,8 @@ t2.pw():
 </ul>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">typetrans</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-typetrans"><span class="std std-ref">typetrans</span></a>.</p>
-</div>
-<div class="section" id="walk">
+</section>
+<section id="walk">
 <h3>Walk<a class="headerlink" href="#walk" title="Permalink to this headline">¶</a></h3>
 <p>You can use function <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.walk" title="treevalue.tree.tree.walk"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.walk()</span></code></a> to iterate all the nodes in the tree, like the example below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2264,18 +2267,18 @@ t2.pw():
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span>() --&gt; &lt;TreeValue 0x7facd5064150&gt;
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span>() --&gt; &lt;TreeValue 0x7fd4b07221d0&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
 ├── &#39;c&#39; --&gt; {&#39;x&#39;: 3, &#39;y&#39;: 4}
-└── &#39;d&#39; --&gt; &lt;TreeValue 0x7facd573b950&gt;
+└── &#39;d&#39; --&gt; &lt;TreeValue 0x7fd4b0dec8d0&gt;
     ├── &#39;x&#39; --&gt; 3
     └── &#39;y&#39; --&gt; 4
 
 (&#39;a&#39;,) --&gt; 1
 (&#39;b&#39;,) --&gt; 2
 (&#39;c&#39;,) --&gt; {&#39;x&#39;: 3, &#39;y&#39;: 4}
-(&#39;d&#39;,) --&gt; &lt;TreeValue 0x7facd573b950&gt;
+(&#39;d&#39;,) --&gt; &lt;TreeValue 0x7fd4b0dec8d0&gt;
 ├── &#39;x&#39; --&gt; 3
 └── &#39;y&#39; --&gt; 4
 
@@ -2284,12 +2287,12 @@ t2.pw():
 </pre></div></td></tr></table></div>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">walk</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-walk"><span class="std std-ref">walk</span></a>.</p>
-</div>
-</div>
-<div class="section" id="flatten-utilities">
+</section>
+</section>
+<section id="flatten-utilities">
 <h2>Flatten Utilities<a class="headerlink" href="#flatten-utilities" title="Permalink to this headline">¶</a></h2>
 <p>In order to support the parallel calculation in values of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> object, <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.flatten()</span></code></a> and <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.unflatten" title="treevalue.tree.tree.unflatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.unflatten()</span></code></a> is provided to dump a sequence of nodes’ information and value, and recover it to original tree structure when calculation is completed.</p>
-<div class="section" id="flatten">
+<section id="flatten">
 <h3>Flatten<a class="headerlink" href="#flatten" title="Permalink to this headline">¶</a></h3>
 <p>The values and node structures can be dumped by function <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.flatten()</span></code></a> as a list, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2335,8 +2338,8 @@ t2.pw():
 <p>So when you need to do parallel calculation, please use <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.flatten()</span></code></a> to dump the values to ensure the speed performance.</p>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">flatten</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-flatten"><span class="std std-ref">flatten</span></a>.</p>
-</div>
-<div class="section" id="unflatten">
+</section>
+<section id="unflatten">
 <h3>Unflatten<a class="headerlink" href="#unflatten" title="Permalink to this headline">¶</a></h3>
 <p>The dumped nodes’ information and value can be recovered to a <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> object by function <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.unflatten" title="treevalue.tree.tree.unflatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.unflatten()</span></code></a>, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2375,11 +2378,11 @@ t2.pw():
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>unflatten(flatted):
-&lt;TreeValue 0x7f5f6efc9a90&gt;
+&lt;TreeValue 0x7f3c7992c890&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
 ├── &#39;c&#39; --&gt; {&#39;x&#39;: 3, &#39;y&#39;: 4}
-└── &#39;d&#39; --&gt; &lt;TreeValue 0x7f5f6e777310&gt;
+└── &#39;d&#39; --&gt; &lt;TreeValue 0x7f3c79262190&gt;
     ├── &#39;x&#39; --&gt; 3
     └── &#39;y&#39; --&gt; 4
 </pre></div></td></tr></table></div>
@@ -2390,11 +2393,11 @@ t2.pw():
 <p>Because of this, it is a good idea to keep the <a class="reference internal" href="../../api_doc/tree/tree.html#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">treevalue.tree.tree.flatten()</span></code></a>’s result’s order when executing your own parallel processing logic.</p>
 </div>
 <p>For further informaon of function <code class="docutils literal notranslate"><span class="pre">unflatten</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-unflatten"><span class="std std-ref">unflatten</span></a>.</p>
-</div>
-</div>
-<div class="section" id="io-utilities">
+</section>
+</section>
+<section id="io-utilities">
 <h2>IO Utilities<a class="headerlink" href="#io-utilities" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="simple-serialize-and-deserialize">
+<section id="simple-serialize-and-deserialize">
 <h3>Simple Serialize and Deserialize<a class="headerlink" href="#simple-serialize-and-deserialize" title="Permalink to this headline">¶</a></h3>
 <p>In this version, <code class="docutils literal notranslate"><span class="pre">pickle.dumps</span></code> and <code class="docutils literal notranslate"><span class="pre">pickle.loads</span></code> operations are supported, just like the code below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -2414,24 +2417,24 @@ t2.pw():
 </div>
 <p>The output is</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;TreeValue 0x7f531d34c1d0&gt;
+&lt;TreeValue 0x7f6591e1bf50&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f531d344dd0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f6591e1b750&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; [3, 4]
 
 tx:
-&lt;TreeValue 0x7f531d3635d0&gt;
+&lt;TreeValue 0x7f6591e231d0&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f531d3636d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f6591e3a5d0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; [3, 4]
 </pre></div>
 </div>
-</div>
-<div class="section" id="advanced-dump-and-load">
+</section>
+<section id="advanced-dump-and-load">
 <h3>Advanced Dump and Load<a class="headerlink" href="#advanced-dump-and-load" title="Permalink to this headline">¶</a></h3>
 <p>In this project, we implemented our <code class="docutils literal notranslate"><span class="pre">load</span></code> and <code class="docutils literal notranslate"><span class="pre">dump</span></code> function which can be used like this</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -2456,18 +2459,18 @@ tx:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;TreeValue 0x7f8f28a65810&gt;
+&lt;TreeValue 0x7f481272f790&gt;
 ├── &#39;a&#39; --&gt; &#39;ab&#39;
 ├── &#39;b&#39; --&gt; &#39;Cd&#39;
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f8f28a657d0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f481272f750&gt;
     ├── &#39;c&#39; --&gt; &#39;eF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 
 dt:
-&lt;TreeValue 0x7f8f28a70110&gt;
+&lt;TreeValue 0x7f481273a090&gt;
 ├── &#39;a&#39; --&gt; &#39;ab&#39;
 ├── &#39;b&#39; --&gt; &#39;Cd&#39;
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f8f28a70250&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f481273ce50&gt;
     ├── &#39;c&#39; --&gt; &#39;eF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 </pre></div>
@@ -2494,18 +2497,18 @@ dt:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;FastTreeValue 0x7f30b0d08690&gt;
+&lt;FastTreeValue 0x7fe97ffee710&gt;
 ├── &#39;a&#39; --&gt; &#39;ab&#39;
 ├── &#39;b&#39; --&gt; &#39;Cd&#39;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f30b0d08650&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe97ffee6d0&gt;
     ├── &#39;c&#39; --&gt; &#39;eF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 
 dt:
-&lt;FastTreeValue 0x7f30b0d08f90&gt;
+&lt;FastTreeValue 0x7fe97ffee890&gt;
 ├── &#39;a&#39; --&gt; &#39;ab&#39;
 ├── &#39;b&#39; --&gt; &#39;Cd&#39;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f30b0d08fd0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe97ff44b90&gt;
     ├── &#39;c&#39; --&gt; &#39;eF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 </pre></div>
@@ -2542,44 +2545,44 @@ dt:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>st:
-&lt;FastTreeValue 0x7fc661ce78d0&gt;
-├── &#39;a&#39; --&gt; &lt;built-in method upper of str object at 0x7fc6623445f0&gt;
-├── &#39;b&#39; --&gt; &lt;built-in method upper of str object at 0x7fc6625140b0&gt;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fc661cdc810&gt;
-    ├── &#39;c&#39; --&gt; &lt;built-in method upper of str object at 0x7fc6624fa530&gt;
-    └── &#39;d&#39; --&gt; &lt;built-in method upper of str object at 0x7fc66239f930&gt;
+&lt;FastTreeValue 0x7f00a9848750&gt;
+├── &#39;a&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a9e97530&gt;
+├── &#39;b&#39; --&gt; &lt;built-in method upper of str object at 0x7f00aa067030&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f00a9842690&gt;
+    ├── &#39;c&#39; --&gt; &lt;built-in method upper of str object at 0x7f00aa04d4b0&gt;
+    └── &#39;d&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a9ef2870&gt;
 
 st():
-&lt;FastTreeValue 0x7fc661c728d0&gt;
+&lt;FastTreeValue 0x7f00a9848810&gt;
 ├── &#39;a&#39; --&gt; &#39;AB&#39;
 ├── &#39;b&#39; --&gt; &#39;CD&#39;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fc661ce7bd0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f00a9848e10&gt;
     ├── &#39;c&#39; --&gt; &#39;EF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 
 
-Length of binary: 242
+Length of binary: 240
 dst:
-&lt;FastTreeValue 0x7fc661ce7a50&gt;
-├── &#39;a&#39; --&gt; &lt;built-in method upper of str object at 0x7fc661719ab0&gt;
-├── &#39;b&#39; --&gt; &lt;built-in method upper of str object at 0x7fc661719730&gt;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fc661719a10&gt;
-    ├── &#39;c&#39; --&gt; &lt;built-in method upper of str object at 0x7fc661c700f0&gt;
-    └── &#39;d&#39; --&gt; &lt;built-in method upper of str object at 0x7fc661719870&gt;
+&lt;FastTreeValue 0x7f00a98488d0&gt;
+├── &#39;a&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a984f630&gt;
+├── &#39;b&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a92eab70&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f00a984f0d0&gt;
+    ├── &#39;c&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a92ea8b0&gt;
+    └── &#39;d&#39; --&gt; &lt;built-in method upper of str object at 0x7f00a92ea9f0&gt;
 
 dst():
-&lt;FastTreeValue 0x7fc661719350&gt;
+&lt;FastTreeValue 0x7f00a92ea590&gt;
 ├── &#39;a&#39; --&gt; &#39;AB&#39;
 ├── &#39;b&#39; --&gt; &#39;CD&#39;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fc661719490&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f00a92ea790&gt;
     ├── &#39;c&#39; --&gt; &#39;EF&#39;
     └── &#39;d&#39; --&gt; &#39;GH&#39;
 </pre></div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="object-oriented-usage">
+</section>
+</section>
+<section id="object-oriented-usage">
 <h2>Object Oriented Usage<a class="headerlink" href="#object-oriented-usage" title="Permalink to this headline">¶</a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> class, plenty of object-oriented operators, methods and classmethods are supported in order to simplify the actual usage. Here is a simple code example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2692,27 +2695,27 @@ dst():
 <span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;FastTreeValue 0x7fcb5b362650&gt;
+&lt;FastTreeValue 0x7f515d525890&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 8
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fcb5b367d50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f515d525950&gt;
     ├── &#39;c&#39; --&gt; 10
     └── &#39;d&#39; --&gt; 12
 
 t2 ** t1:
-&lt;FastTreeValue 0x7fcb5b362650&gt;
+&lt;FastTreeValue 0x7f515d525890&gt;
 ├── &#39;a&#39; --&gt; 5
 ├── &#39;b&#39; --&gt; 36
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fcb5b362e90&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f515d525950&gt;
     ├── &#39;c&#39; --&gt; 343
     └── &#39;d&#39; --&gt; 4096
 
 
 t1.map(lambda x: (x + 1) * (x + 2)):
-&lt;FastTreeValue 0x7fcb5b362650&gt;
+&lt;FastTreeValue 0x7f515d525890&gt;
 ├── &#39;a&#39; --&gt; 6
 ├── &#39;b&#39; --&gt; 12
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fcb5b367d50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f515d47b890&gt;
     ├── &#39;c&#39; --&gt; 20
     └── &#39;d&#39; --&gt; 30
 
@@ -2720,24 +2723,24 @@ t1.reduce(lambda **kwargs: sum(kwargs.values())): 10
 
 
 t1.map(lambda x: (x + 1) * (x + 2)).filter(lambda x: x % 4 == 0):
-&lt;FastTreeValue 0x7fcb5b362e90&gt;
+&lt;FastTreeValue 0x7f515d525950&gt;
 ├── &#39;b&#39; --&gt; 12
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fcb5b362710&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f515d525ad0&gt;
     └── &#39;c&#39; --&gt; 20
 
 
 Union result:
-&lt;FastTreeValue 0x7fcb5b362e90&gt;
+&lt;FastTreeValue 0x7f515d525950&gt;
 ├── &#39;a&#39; --&gt; &#39;first: 6, second: 81, which sum is 87&#39;
 ├── &#39;b&#39; --&gt; &#39;first: 12, second: 1024, which sum is 1036&#39;
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fcb5b367d50&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f515d47b890&gt;
     ├── &#39;c&#39; --&gt; &#39;first: 20, second: 15625, which sum is 15645&#39;
     └── &#39;d&#39; --&gt; &#39;first: 30, second: 279936, which sum is 279966&#39;
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information of <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> class, take a look at <a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-fasttreevalue"><span class="std std-ref">FastTreeValue</span></a>, all the supported methods and operators are listed here.</p>
-</div>
-<div class="section" id="diy-treevalue-class">
+</section>
+<section id="diy-treevalue-class">
 <span id="tutorials-advancedusage-diy"></span><h2>DIY TreeValue Class<a class="headerlink" href="#diy-treevalue-class" title="Permalink to this headline">¶</a></h2>
 <p>You can define your own <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> class with your own method and class methods. Like the example code below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2828,31 +2831,31 @@ Union result:
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span>Append arguments: 3 3
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span>Append arguments: 2 9
+Append arguments: 3 3
 Append arguments: 4 8
 Append arguments: 1 -14
-Append arguments: 2 9
 Append arguments: 11 0
-Append arguments: -13 6
 Append arguments: 6 -5
 Append arguments: 12 17
+Append arguments: -13 6
 t1.append(t2).append(t3):
-&lt;MyTreeValue 0x7f48051c6fd0&gt;
+&lt;MyTreeValue 0x7faa9c593d10&gt;
 ├── &#39;a&#39; --&gt; -7
 ├── &#39;b&#39; --&gt; 11
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f48051c6f50&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7faa9c593dd0&gt;
     ├── &#39;c&#39; --&gt; 1
     └── &#39;d&#39; --&gt; 29
 
+Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 2 9 0
 Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 3 3 -5
 Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 4 8 17
 Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 1 -14 6
-Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 2 9 0
 MyTreeValue.sum(t1, t2, t3):
-&lt;MyTreeValue 0x7f48051c6a90&gt;
+&lt;MyTreeValue 0x7faa9c593a50&gt;
 ├── &#39;a&#39; --&gt; -7
 ├── &#39;b&#39; --&gt; 11
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f48051c6f50&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7faa9c593b50&gt;
     ├── &#39;c&#39; --&gt; 1
     └── &#39;d&#39; --&gt; 29
 </pre></div></td></tr></table></div>
@@ -2887,18 +2890,18 @@ MyTreeValue.sum(t1, t2, t3):
 </div>
 <p>The result should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t1:
-&lt;MyTreeValue 0x7f3ab2a77690&gt;
+&lt;MyTreeValue 0x7fa3e4b2f690&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f3ab2a77650&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7fa3e5211f90&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 t1.append(t2).append(t3):
-&lt;MyTreeValue 0x7f3ab2a77690&gt;
+&lt;MyTreeValue 0x7fa3e4b2f690&gt;
 ├── &#39;a&#39; --&gt; -7
 ├── &#39;b&#39; --&gt; 11
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f3ab2a77650&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7fa3e5211f90&gt;
     ├── &#39;c&#39; --&gt; 1
     └── &#39;d&#39; --&gt; 29
 </pre></div>
@@ -2910,8 +2913,8 @@ t1.append(t2).append(t3):
 <li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-methodtreelize"><span class="std std-ref">method_treelize</span></a></p></li>
 <li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-classmethodtreelize"><span class="std std-ref">classmethod_treelize</span></a></p></li>
 </ul>
-</div>
-<div class="section" id="more-flexible-ways-to-diy-class">
+</section>
+<section id="more-flexible-ways-to-diy-class">
 <h2>More Flexible Ways to DIY Class<a class="headerlink" href="#more-flexible-ways-to-diy-class" title="Permalink to this headline">¶</a></h2>
 <p>When you implement <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> class like the section above (take a look at here <a class="reference internal" href="#tutorials-advancedusage-diy"><span class="std std-ref">DIY TreeValue Class</span></a>), you have to define your own methods and operators one by one, because in class <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, only the minimum necessary methods and operators are provided. But when you use <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> class, operators like <code class="docutils literal notranslate"><span class="pre">+</span></code> and methods like <code class="docutils literal notranslate"><span class="pre">map</span></code> can be used directly. Let’s see how <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code> is defined in source code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -2976,10 +2979,10 @@ t1.append(t2).append(t3):
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;MyTreeValue 0x7f5f85346e50&gt;
+&lt;MyTreeValue 0x7f63092decd0&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 26
-└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f5f85346c90&gt;
+└── &#39;x&#39; --&gt; &lt;MyTreeValue 0x7f63092ded90&gt;
     ├── &#39;c&#39; --&gt; 33
     └── &#39;d&#39; --&gt; 51
 </pre></div></td></tr></table></div>
@@ -3070,18 +3073,18 @@ t1.append(t2).append(t3):
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>at1 + at2:
-&lt;AddZeroTreeValue 0x7f01d1131e10&gt;
+&lt;AddZeroTreeValue 0x7f04aca6fcd0&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;AddZeroTreeValue 0x7f01d1131c50&gt;
+└── &#39;x&#39; --&gt; &lt;AddZeroTreeValue 0x7f04aca6fd90&gt;
     ├── &#39;c&#39; --&gt; 33
     └── &#39;d&#39; --&gt; 47
 
 mt1 * mt2:
-&lt;MulOneTreeValue 0x7f01d1131e10&gt;
+&lt;MulOneTreeValue 0x7f04aca6fcd0&gt;
 ├── &#39;a&#39; --&gt; 11
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;MulOneTreeValue 0x7f01d1131c50&gt;
+└── &#39;x&#39; --&gt; &lt;MulOneTreeValue 0x7f04aca6fd90&gt;
     ├── &#39;c&#39; --&gt; 90
     └── &#39;d&#39; --&gt; 47
 </pre></div></td></tr></table></div>
@@ -3208,10 +3211,10 @@ mt1 * mt2:
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;DemoTreeValue 0x7f8d96052d10&gt;
+&lt;DemoTreeValue 0x7f9a7ce15d10&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 26
-└── &#39;x&#39; --&gt; &lt;DemoTreeValue 0x7f8d96052dd0&gt;
+└── &#39;x&#39; --&gt; &lt;DemoTreeValue 0x7f9a7ce15b50&gt;
     ├── &#39;c&#39; --&gt; 33
     └── &#39;d&#39; --&gt; 51
 
@@ -3220,17 +3223,17 @@ unsupported operand type(s) for -: &#39;DemoTreeValue&#39; and &#39;DemoTreeValu
 t1 / t2:
 True div is not supported
 +t1:
-&lt;DemoTreeValue 0x7f8d96052d10&gt;
+&lt;DemoTreeValue 0x7f9a7ce15b50&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 4
-└── &#39;x&#39; --&gt; &lt;DemoTreeValue 0x7f8d96052dd0&gt;
+└── &#39;x&#39; --&gt; &lt;DemoTreeValue 0x7f9a7ce15850&gt;
     ├── &#39;c&#39; --&gt; 6
     └── &#39;d&#39; --&gt; 8
 </pre></div></td></tr></table></div>
 </div>
 <p>For more details about <code class="docutils literal notranslate"><span class="pre">general_tree_value</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-generaltreevalue"><span class="std std-ref">general_tree_value</span></a> and its source code to find out all the implemented operators and methods.</p>
-</div>
-<div class="section" id="draw-graph-for-treevalue">
+</section>
+<section id="draw-graph-for-treevalue">
 <h2>Draw Graph For TreeValue<a class="headerlink" href="#draw-graph-for-treevalue" title="Permalink to this headline">¶</a></h2>
 <p>You can easily draw a graph of the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> objects with function <code class="docutils literal notranslate"><span class="pre">graphics</span></code>. Like the following example code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
@@ -3316,27 +3319,27 @@ True div is not supported
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f7ffa08b710 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f7ffa08bc50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f7ffa08b710__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f7ffa08b710 -&gt; value__node_7f7ffa08b710__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f7ffa08b710__b [label=&quot;array([[5, 6],
+	node_7f774b505790 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7f774b505cd0 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7f774b505790__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f774b505790 -&gt; value__node_7f774b505790__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f774b505790__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f7ffa08b710 -&gt; value__node_7f7ffa08b710__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f7ffa08b6d0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f7ffa08b710 -&gt; node_7f7ffa08b6d0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f7ffa08bc50 -&gt; node_7f7ffa08b6d0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f7ffa08bc90 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f7ffa08bc50 -&gt; node_7f7ffa08bc90 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f7ffa08b6d0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f7ffa08b6d0 -&gt; value__node_7f7ffa08b6d0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f7ffa08b6d0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f7ffa08b6d0 -&gt; value__node_7f7ffa08b6d0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f7ffa08b6d0__e [label=&quot;array([[1, 2],
+	node_7f774b505790 -&gt; value__node_7f774b505790__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505750 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f774b505790 -&gt; node_7f774b505750 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505cd0 -&gt; node_7f774b505750 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505d10 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f774b505cd0 -&gt; node_7f774b505d10 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f774b505750__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f774b505750 -&gt; value__node_7f774b505750__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f774b505750__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f774b505750 -&gt; value__node_7f774b505750__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f774b505750__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f7ffa08b6d0 -&gt; value__node_7f7ffa08b6d0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f7ffa08bc90 -&gt; node_7f7ffa08b710 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f7ffa08bc90 -&gt; node_7f7ffa08b6d0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505750 -&gt; value__node_7f774b505750__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505d10 -&gt; node_7f774b505790 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f774b505d10 -&gt; node_7f774b505750 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -3353,8 +3356,8 @@ digraph this_is_a_demo_of_2_trees {
 <ul class="simple">
 <li><p><a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-graphics"><span class="std std-ref">graphics</span></a>.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
 

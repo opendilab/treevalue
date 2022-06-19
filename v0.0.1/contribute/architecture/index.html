@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Architecture &mdash; treevalue 0.0.1 documentation</title>
@@ -85,7 +86,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <p><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
@@ -93,17 +94,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/basic_usage/index.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Best Practice</span></p>
+<p><span class="caption-text">Best Practice</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../best_practice/numpy/index.html">Apply into Numpy</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">treevalue.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/tree/index.html">treevalue.tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/utils/index.html">treevalue.utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<p><span class="caption-text">Contributor Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#tree">Tree</a></li>
@@ -177,7 +178,7 @@
             
     
     
-  <div class="section" id="architecture">
+  <section id="architecture">
 <h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
 <p>In this part, the generic architecture of tree value will be introduced.
 You can try to understand its core ideas by reading this page.</p>
@@ -186,7 +187,7 @@ The data layer is called <code class="docutils literal notranslate"><span class=
 One or more tree values may be pointed to one tree, they share the same memory.
 In order to support the tree-to-tree operations (tree-to-value or value-to-value are special cases of tree-to-tree) ,<code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> are provided to transform a common value-based function to a tree-based function.</p>
 <p>The core architecture is like this:</p>
-<img alt="../../_images/architecture.puml.svg" class="align-center" src="../../_images/architecture.puml.svg" /><div class="section" id="tree">
+<img alt="../../_images/architecture.puml.svg" class="align-center" src="../../_images/architecture.puml.svg" /><section id="tree">
 <h2>Tree<a class="headerlink" href="#tree" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Tree</span></code> class is the data layer of the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>. The relation with <code class="docutils literal notranslate"><span class="pre">Tree</span></code> and <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> is similar to that of <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.Buffer</span></code>. Actually, there can be multiple <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> nodes pointed at the same <code class="docutils literal notranslate"><span class="pre">Tree</span></code> node, they will share the same memory and when one the them are modified, the other <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> pointed at the same position will be effected all at a time.</p>
 <p>Here is a example with the usage of the same memories.</p>
@@ -260,35 +261,35 @@ In order to support the tree-to-tree operations (tree-to-value or value-to-value
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span>Initial t1:
-&lt;TreeValue 0x7f552201b950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f7633a07950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f552201b450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7633a07450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 Initial t2:
-&lt;TreeValue 0x7f552201b950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f7633a07950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f552201b450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7633a07450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 
 Updated t1:
-&lt;TreeValue 0x7f552201b950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f7633a07950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 7
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f552201b450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7633a07450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 5
     └── &#39;d&#39; --&gt; 4
 
 Updated t2:
-&lt;TreeValue 0x7f552201b950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f7633a07950 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 7
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f552201b450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f7633a07450 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 5
     └── &#39;d&#39; --&gt; 4
 </pre></div></td></tr></table></div>
@@ -334,18 +335,18 @@ Updated t2:
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>t1:
-&lt;TreeValue 0x7f6f6a88c650 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f208c82c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f6f6a88c550 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f208c82c390 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 tree:
-&lt;Tree 0x7f6f6a88c650 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;Tree 0x7f208c82c850 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;Tree 0x7f6f6a88c550 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;Tree 0x7f208c82c390 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 </pre></div></td></tr></table></div>
@@ -356,8 +357,8 @@ tree:
 <li><p><a class="reference internal" href="../../api_doc/tree/common.html#apidoc-tree-common-tree"><span class="std std-ref">API documentation of Tree</span></a>.</p></li>
 <li><p><a class="reference internal" href="../../api_doc/tree/common.html#apidoc-tree-common-treeview"><span class="std std-ref">API documentation of TreeView</span></a>.</p></li>
 </ul>
-</div>
-<div class="section" id="treevalue">
+</section>
+<section id="treevalue">
 <h2>TreeValue<a class="headerlink" href="#treevalue" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> is the logic layer, all the operations and calculations are performed on this layer.</p>
 <p>There are 2 primitive <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> classes in this project, which are called <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> and <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>. In class <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, only the least necessary features are implemented, while the common and frequently-used features are all implement in the <code class="docutils literal notranslate"><span class="pre">FastTreeValue</span></code>, which inherits from <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>.</p>
@@ -369,8 +370,8 @@ tree:
 <li><p><a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-fasttreevalue"><span class="std std-ref">API documentation of FastTreeValue</span></a>.</p></li>
 <li><p><a class="reference internal" href="../../api_doc/tree/general.html#apidoc-tree-general-generaltreevalue"><span class="std std-ref">API documentation of general_tree_value</span></a>.</p></li>
 </ul>
-</div>
-<div class="section" id="func-treelize">
+</section>
+<section id="func-treelize">
 <h2>func_treelize<a class="headerlink" href="#func-treelize" title="Permalink to this headline">¶</a></h2>
 <p>Function <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code> is the core feature of this project, almost all the convenient calculations and operations are based on this function.</p>
 <p>For further information of <code class="docutils literal notranslate"><span class="pre">func_treelize</span></code>, take a look at the following pages and their source code implements:</p>
@@ -380,8 +381,8 @@ tree:
 <li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-methodtreelize"><span class="std std-ref">API documentation of method_treelize</span></a>.</p></li>
 <li><p><a class="reference internal" href="../../api_doc/tree/func.html#apidoc-tree-func-classmethodtreelize"><span class="std std-ref">API documentation of classmethod_treelize</span></a>.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
 

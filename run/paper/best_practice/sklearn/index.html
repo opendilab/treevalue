@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Apply into Scikit-Learn &mdash; treevalue 1.2.0 documentation</title>
@@ -86,7 +87,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <p><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Quick Start</a></li>
@@ -96,18 +97,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/cli_usage/index.html">CLI Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/plugins/index.html">Plugins</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Best Practice</span></p>
+<p><span class="caption-text">Best Practice</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../numpy/index.html">Apply into Numpy</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Apply into Scikit-Learn</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">treevalue.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/tree/index.html">treevalue.tree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_doc/utils/index.html">treevalue.utils</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributor Guide</span></p>
+<p><span class="caption-text">Contributor Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contribute/architecture/index.html">Architecture</a></li>
 </ul>
@@ -176,17 +177,19 @@
             
     
     
-  <div class="section" id="apply-into-scikit-learn">
+  <section id="apply-into-scikit-learn">
 <h1>Apply into Scikit-Learn<a class="headerlink" href="#apply-into-scikit-learn" title="Permalink to this headline">¶</a></h1>
 <p>Actually, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be used in practice with not only <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">torch</span></code> library, such as <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.
 In the following part, a demo of PCA to tree-structured arrays will be shown.</p>
 <p>In the field of traditional machine learning, PCA (Principal Component Analysis) is often used to preprocess data,
 by normalizing the data range, and trying to reduce the dimensionality of the data, so as to reduce the complexity
 of the input data and improve machine learning’s efficiency and quality. Just as the following image</p>
-<div class="figure align-default" id="id1">
+<figure class="align-default" id="id1">
 <img alt="PCA Principle" src="../../_images/heading_of_pca.jpg" />
-<p class="caption"><span class="caption-text">PCA in a nutshell. Source: Lavrenko and Sutton 2011, slide 13.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">PCA in a nutshell. Source: Lavrenko and Sutton 2011, slide 13.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>In the scikit-learn library, the PCA class is provided to support this function, and the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>
 can be used to simplify the data. For a set of <code class="docutils literal notranslate"><span class="pre">np.array</span></code> format data that presents a tree structure,
 we can implement the operation support for the tree structure by quickly wrapping the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>.
@@ -258,30 +261,30 @@ The specific code is as follows</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7f5bd7c20510&gt;
-├── a --&gt; array([[11,  9, -2],
-│                [ 1,  0,  8],
-│                [-2, -4, -5],
-│                [-5,  1, 12]])
-└── x --&gt; &lt;FastTreeValue 0x7f5bc346fd10&gt;
-    └── c --&gt; array([[-11, -12, -10,  -5],
-                     [-14, -14,  -8, -10],
-                     [ -5,  -9, -14, -10],
-                     [ -9, -14,  -8,  -5],
-                     [  0,  -1,   1, -11]])
+&lt;FastTreeValue 0x7f6a169febd0&gt;
+├── a --&gt; array([[-3, -2, -5],
+│                [11, 12, 12],
+│                [-1, -5, -5],
+│                [ 9, -5,  9]])
+└── x --&gt; &lt;FastTreeValue 0x7f6a16b02650&gt;
+    └── c --&gt; array([[-10,  -1,  -2, -14],
+                     [ -1,  -7,   2,   0],
+                     [-15,   4,  -7,   2],
+                     [-15,   1,  -8,  -4],
+                     [ -7,  -7, -13, -10]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7f5bc336ecd0&gt;
-├── a --&gt; array([[ 12.53900888,  -4.62761359,  -0.48316541],
-│                [ -3.85997835,  -2.33450145,   2.12736225],
-│                [  1.44259901,  10.33207806,  -0.20511215],
-│                [-10.12162954,  -3.36996302,  -1.43908469]])
-└── x --&gt; &lt;FastTreeValue 0x7f5bc3acdb10&gt;
-    └── c --&gt; array([[-4.80725691, -0.47074833, -1.82399195,  1.63148103],
-                     [-5.79416369, -3.30688729,  3.63115269, -0.16399322],
-                     [-0.49211662,  7.02232098,  0.95002739, -0.24955415],
-                     [-3.88878806, -1.62391468, -2.86404453, -1.32569886],
-                     [14.98232528, -1.62077068,  0.1068564 ,  0.1077652 ]])
+&lt;FastTreeValue 0x7f6a168fff90&gt;
+├── a --&gt; array([[-10.02222631,  -3.48539973,  -0.68517774],
+│                [ 16.0363528 ,  -4.6241402 ,   0.12335494],
+│                [-10.46129369,  -0.21185277,   0.76088939],
+│                [  4.44716721,   8.32139269,  -0.19906659]])
+└── x --&gt; &lt;FastTreeValue 0x7f6a168e7590&gt;
+    └── c --&gt; array([[ 2.26886944, -5.94287279,  7.14485882, -0.21327651],
+                     [10.84569109,  8.1190193 , -0.44374874,  0.12488954],
+                     [-9.07653941,  5.98810709, -0.58651463, -0.61237767],
+                     [-6.674287  , -0.13980484,  0.06463781,  0.88891486],
+                     [ 2.63626588, -8.02444876, -6.17923327, -0.18815023]])
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information, see the links below:</p>
@@ -289,7 +292,7 @@ Fit transformed data:
 <li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA">Official documentation of PCA in scikit-learn</a></p></li>
 <li><p><a class="reference external" href="https://devopedia.org/principal-component-analysis">Details of PCA</a></p></li>
 </ul>
-</div>
+</section>
 
 
 
