@@ -31,16 +31,17 @@ Almost all the operation can be supported in form of trees in a convenient way t
 
 ## Outline
 
-* Overview
-* Getting Started
-    * Prerequisite
-    * Installation
-    * Quick Usage
-    * Tutorials
-* Change Log
-* Join and Contribute
-* Citation
-* License
+* [Overview](#overview)
+* [Getting Started](#getting-started)
+    * [Prerequisite](#prerequisite)
+    * [Installation](#installation)
+    * [Quick Usage](#quick-usage)
+    * [Tutorials](#tutorials)
+* [Speed Performance](#speed-performance)
+* [Change Log](#change-log)
+* [Join and Contribute](#join-and-contribute)
+* [Citation](#citation)
+* [License](#license)
 
 ## Overview
 
@@ -56,7 +57,7 @@ Therefore, we need a kind of more proper data container, named `TreeValue`. It i
 
 ### Prerequisite
 
-`treevalue` has been tested in the Linux environment and with multiple Python versions, and it works properly on both macOS and Windows platforms (unit testing has not been carried out).
+`treevalue` has been fully tested in the Linux and macOS environment and with multiple Python versions, and it works properly on Windows platforms (unit testing has not been carried out).
 
 However, **`treevalue` currently does not support PyPy**, so just pay attention to this when using.
 
