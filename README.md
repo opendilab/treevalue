@@ -39,7 +39,7 @@ Almost all the operation can be supported in form of trees in a convenient way t
     * [Tutorials](#tutorials)
 * [Speed Performance](#speed-performance)
 * [Change Log](#change-log)
-* [Join and Contribute](#join-and-contribute)
+* [Feedback and Contribute](#feedback-and-contribute)
 * [Citation](#citation)
 * [License](#license)
 
@@ -285,17 +285,19 @@ Test benchmark code can be found here:
 </div>
 </details>
 
-
-## Join and Contribute
+## Feedback and Contribute
 
 Welcome to **OpenDILab** community - treevalue!
 
+If you meet some problem or have some brilliant ideas, you can [file an issue](https://github.com/opendilab/treevalue/issues/new/choose).
+
 <b>Scan the QR code and add us on Wechat:</b>
+
 <div align="center">
 <img src='https://github.com/opendilab/DI-engine/raw/main/assets/wechat.png' width="25%" />
 </div>
 
-Or contact us on [our slack channel](https://opendilab.slack.com/join/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ#/shared-invite/email):（这里我不知道该咋弄，github上我没见过搞出文档卡片的）
+Or just contact us with [slack](https://opendilab.slack.com/join/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ#/shared-invite/email) or email (opendilab.contact@gmail.com).
 
 Please check [Contributing Guidances](https://github.com/opendilab/treevalue/blob/main/CONTRIBUTING.md).
 
