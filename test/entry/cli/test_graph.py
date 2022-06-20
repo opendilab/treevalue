@@ -7,7 +7,7 @@ import zlib
 
 import pytest
 from click.testing import CliRunner
-from hbutils.testing import cmdv
+from hbutils.testing import cmdv, OS
 
 from treevalue import FastTreeValue, dump, graphics
 from treevalue.entry.cli import treevalue_cli
@@ -244,4 +244,7 @@ class TestEntryCliGraph:
                 assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
                                               f'The output is:\n{result.output}'
                 assert os.path.exists('test_graph.svg')
-                assert os.path.getsize('test_graph.svg') <= 1000
+                if OS.windows:
+                    assert os.path.getsize('test_graph.svg') <= 2000
+                else:
+                    assert os.path.getsize('test_graph.svg') <= 1000
