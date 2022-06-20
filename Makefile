@@ -1,4 +1,4 @@
-.PHONY: docs test unittest build clean benchmark
+.PHONY: docs test unittest build clean benchmark zip
 
 PYTHON := $(shell which python)
 
@@ -23,6 +23,9 @@ COMPILE_PLATFORM ?= manylinux_2_24_x86_64
 build:
 	$(PYTHON) setup.py build_ext --inplace \
 					$(if ${LINETRACE},--define CYTHON_TRACE,)
+
+zip:
+	$(PYTHON) -m build --sdist --outdir ${DIST_DIR}
 
 package:
 	$(PYTHON) -m build --sdist --wheel --outdir ${DIST_DIR}

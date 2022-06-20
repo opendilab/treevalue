@@ -1,15 +1,13 @@
-name: Package Release
+name: Release Test
 
-on:
-  release:
-    types: [ published ]
+on: workflow_dispatch
 
 jobs:
   source_release:
-    name: Publish source package to official pypi
+    name: Try package the source
     runs-on: ${{ matrix.os }}
-    if: ${{ github.repository == 'opendilab/treevalue' }}
     strategy:
+      fail-fast: false
       matrix:
         os:
           - 'ubuntu-18.04'
@@ -36,19 +34,12 @@ jobs:
       - name: Build packages
         run: |
           make zip
-      - name: Publish distribution 📦 to real PyPI
-        uses: pypa/gh-action-pypi-publish@master
+          ls -al dist
+      - name: Upload packed files to artifacts
+        uses: actions/upload-artifact@v2
         with:
-          password: ${{ secrets.PYPI_PASSWORD }}
-          verbose: true
-      - name: Upload distribution 📦 to github release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*
-          tag: ${{ github.ref }}
-          file_glob: true
-
+          name: build-artifacts-source-pack
+          path: ./dist/*
 
   wheel_release:
     name: Try build the wheels
@@ -118,16 +109,8 @@ jobs:
         shell: bash
         run: |
           ls -al ./wheelhouse
-      - name: Publish distribution 📦 to real PyPI
-        uses: pypa/gh-action-pypi-publish@master
+      - name: Upload packed files to artifacts
+        uses: actions/upload-artifact@v2
         with:
-          password: ${{ secrets.PYPI_PASSWORD }}
-          verbose: true
-          packages_dir: wheelhouse/
-      - name: Upload distribution 📦 to github release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: wheelhouse/*
-          tag: ${{ github.ref }}
-          file_glob: true
+          name: build-artifacts-${{ runner.os }}-cp${{ matrix.python }}-${{ matrix.architecture }}
+          path: ./wheelhouse/*

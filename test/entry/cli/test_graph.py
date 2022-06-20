@@ -1,11 +1,13 @@
 import os
 import pathlib
 import pickle
+import unittest
 import warnings
 import zlib
 
 import pytest
 from click.testing import CliRunner
+from hbutils.testing import cmdv
 
 from treevalue import FastTreeValue, dump, graphics
 from treevalue.entry.cli import treevalue_cli
@@ -24,6 +26,7 @@ g = graphics(
 
 @pytest.mark.unittest
 class TestEntryCliGraph:
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_simple_code_graph(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -54,6 +57,7 @@ class TestEntryCliGraph:
             assert not os.path.exists('test_graph.gv')
             assert len(result.output) <= 2500
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_simple_code_multiple_graph(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -76,6 +80,7 @@ class TestEntryCliGraph:
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 17500
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_simple_binary_graph(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -134,6 +139,7 @@ class TestEntryCliGraph:
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 6500
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_duplicates(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -162,6 +168,7 @@ class TestEntryCliGraph:
             shutil.copy('test_graph.svg', os.path.join(_p, 'test_graph.svg'))
             assert os.path.getsize('test_graph.svg') <= 11000
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_graph(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -203,6 +210,7 @@ class TestEntryCliGraph:
             assert result.exit_code != 0
             assert "Configuration should be KEY=VALUE, but 'bgcolor#ffffff00' found." in result.output
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_file_with_invalid_permission(self):
         runner = CliRunner()
         with runner.isolated_filesystem():

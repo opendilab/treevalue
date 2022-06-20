@@ -1,7 +1,12 @@
 name: Code Test
 
 on:
-  - push
+  push:
+    branches:
+      - main
+      - dev/*
+      - fix/*
+      - test/*
 
 jobs:
   unittest:
@@ -113,105 +118,3 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
-
-  benchmark:
-    name: Benchmark Test
-    runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - 'ubuntu-18.04'
-        python-version:
-          - '3.6'
-          - '3.7'
-          - '3.8'
-          - '3.9'
-          - '3.10'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 20
-      - name: Set up system dependences on linux
-        if: ${{ runner.os == 'Linux' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tree cloc wget curl make graphviz
-          sudo apt-get install -y libxml2-dev libxslt-dev python-dev  # need by pypy3
-          dot -V
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade flake8 setuptools wheel twine
-          pip install -r requirements.txt
-          pip install -r requirements-build.txt
-          pip install -r requirements-test.txt
-          pip install -r requirements-benchmark.txt
-          ./install_test.sh
-      - name: Test the basic environment
-        run: |
-          python -V
-          pip --version
-          pip list
-          tree .
-          cloc treevalue
-          cloc test
-      - name: Run benckmark
-        env:
-          CI: 'true'
-        run: |
-          make clean build benchmark compare
-
-  try_release:
-    name: Try build the release
-    runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - 'ubuntu-18.04'
-        python-version:
-          - '3.6'
-          - '3.7'
-          - '3.8'
-          - '3.9'
-          - '3.10'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 20
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Set up python dependences
-        run: |
-          pip install --upgrade pip
-          pip install --upgrade flake8 setuptools wheel twine
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-build.txt ]; then pip install -r requirements-build.txt; fi
-          if [ -f requirements-test.txt ]; then pip install -r requirements-test.txt; fi
-          pip install --upgrade build
-      - name: Build packages
-        run: |
-          make package
-          ls -al dist
-      - name: Get package version
-        run: |
-          make build
-          python -c 'from treevalue.config.meta import __VERSION__;print(__VERSION__)'
-          echo "PACKAGE_VERSION=$(python -c 'from treevalue.config.meta import __VERSION__;print(__VERSION__)')" >> $GITHUB_ENV
-      - uses: actions/upload-artifact@v2
-        with:
-          name: treevalue-v${{ env.PACKAGE_VERSION }}-${{ matrix.os }}-${{ matrix.python-version }}
-          path: dist
