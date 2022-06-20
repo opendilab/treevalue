@@ -5,8 +5,8 @@ on:
     types: [ published ]
 
 jobs:
-  release:
-    name: Publish to official pypi
+  source_release:
+    name: Publish source package to official pypi
     runs-on: ${{ matrix.os }}
     if: ${{ github.repository == 'opendilab/treevalue' }}
     strategy:
@@ -14,11 +14,7 @@ jobs:
         os:
           - 'ubuntu-18.04'
         python-version:
-          - '3.6'
-          - '3.7'
           - '3.8'
-          - '3.9'
-          - '3.10'
 
     steps:
       - name: Checkout code
@@ -39,10 +35,17 @@ jobs:
           pip install --upgrade build
       - name: Build packages
         run: |
-          make package
+          make zip
       - name: Publish distribution 📦 to real PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_PASSWORD }}
-          skip_existing: true
           verbose: true
+      - name: Upload distribution 📦 to github release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
