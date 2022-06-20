@@ -5,8 +5,8 @@ on:
     types: [ published ]
 
 jobs:
-  release:
-    name: Publish to official pypi
+  source_release:
+    name: Publish source package to official pypi
     runs-on: ${{ matrix.os }}
     if: ${{ github.repository == 'opendilab/treevalue' }}
     strategy:
@@ -14,11 +14,7 @@ jobs:
         os:
           - 'ubuntu-18.04'
         python-version:
-          - '3.6'
-          - '3.7'
           - '3.8'
-          - '3.9'
-          - '3.10'
 
     steps:
       - name: Checkout code
@@ -39,10 +35,99 @@ jobs:
           pip install --upgrade build
       - name: Build packages
         run: |
-          make package
+          make zip
       - name: Publish distribution 📦 to real PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_PASSWORD }}
-          skip_existing: true
           verbose: true
+      - name: Upload distribution 📦 to github release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*
+          tag: ${{ github.ref }}
+          file_glob: true
+
+
+  wheel_release:
+    name: Try build the wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - 'ubuntu-18.04'
+#          - 'windows-2019'
+          - 'macos-10.15'
+        python:
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+        architecture:
+          - x86_64
+          - arm64
+          - aarch64
+          - x86
+          - AMD64
+        exclude:
+          - os: ubuntu-18.04
+            architecture: arm64
+          - os: ubuntu-18.04
+            architecture: x86
+          - os: ubuntu-18.04
+            architecture: AMD64
+          - os: windows-2019
+            architecture: x86_64
+          - os: windows-2019
+            architecture: arm64
+          - os: windows-2019
+            architecture: aarch64
+          - os: macos-10.15
+            architecture: aarch64
+          - os: macos-10.15
+            architecture: x86
+          - os: macos-10.15
+            architecture: AMD64
+          - python: '3.6'
+            architecture: arm64
+          - python: '3.7'
+            architecture: arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 20
+
+      - name: Set up QEMU
+        if: ${{ runner.os == 'Linux' }}
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.7.0
+        env:
+          CIBW_SKIP: "pp* *musllinux*"
+          CIBW_ARCHS: ${{ matrix.architecture }}
+          CIBW_PROJECT_REQUIRES_PYTHON: ~=${{ matrix.python }}.0
+
+      - name: Show the buildings
+        shell: bash
+        run: |
+          ls -al ./wheelhouse
+      - name: Publish distribution 📦 to real PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}
+          verbose: true
+          packages_dir: wheelhouse/
+      - name: Upload distribution 📦 to github release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: wheelhouse/*
+          tag: ${{ github.ref }}
+          file_glob: true
