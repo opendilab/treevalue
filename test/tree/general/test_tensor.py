@@ -1,10 +1,18 @@
+import unittest
+
 import pytest
-import torch
+from hbutils.testing import vpip
+
+try:
+    import torch
+except ImportError:
+    torch = None
 
 from treevalue.tree import func_treelize, FastTreeValue
 
 
 @pytest.mark.unittest
+@unittest.skipUnless(vpip('torch') >= '1.1.0', 'Torch>=1.1.0 only')
 def test_for_torch_support():
     sin = func_treelize()(torch.sin)
     cos = func_treelize()(torch.cos)  # the same sin function

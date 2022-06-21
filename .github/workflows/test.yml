@@ -18,7 +18,7 @@ jobs:
       matrix:
         os:
           - 'ubuntu-18.04'
-          # - 'windows-2019'  # need to be fixed, see: https://github.com/opendilab/treevalue/issues/41
+          - 'windows-2019'  # need to be fixed, see: https://github.com/opendilab/treevalue/issues/41
           - 'macos-10.15'
         python-version:
           - '3.6'
@@ -29,21 +29,21 @@ jobs:
 
     steps:
       - name: Get system version for Linux
-        if: ${{ contains(matrix.os, 'ubuntu') }}
+        if: ${{ runner.os == 'Linux' }}
         shell: bash
         run: |
           echo "OS_NAME=Linux" >> $GITHUB_ENV
           echo "IS_WIN=" >> $GITHUB_ENV
           echo "IS_MAC=" >> $GITHUB_ENV
       - name: Get system version for Windows
-        if: ${{ contains(matrix.os, 'windows') }}
+        if: ${{ runner.os == 'Windows' }}
         shell: bash
         run: |
           echo "OS_NAME=Windows" >> $GITHUB_ENV
           echo "IS_WIN=1" >> $GITHUB_ENV
           echo "IS_MAC=" >> $GITHUB_ENV
       - name: Get system version for MacOS
-        if: ${{ contains(matrix.os, 'macos') }}
+        if: ${{ runner.os == 'macOS' }}
         shell: bash
         run: |
           echo "OS_NAME=MacOS" >> $GITHUB_ENV

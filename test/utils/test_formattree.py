@@ -19,6 +19,8 @@
 # And in this library 'treevalue', Apache Licence Version 2.0 is used as well.
 
 import doctest
+import io
+import os
 from operator import itemgetter
 from textwrap import dedent
 
@@ -31,6 +33,11 @@ from treevalue.utils import (
 )
 
 
+def _process_linesep(s: str) -> str:
+    with io.StringIO(s) as sf:
+        return os.linesep.join([line.rstrip('\r\n') for line in sf])
+
+
 @pytest.mark.unittest
 class TestFormatTree(TestCase):
 
@@ -40,9 +47,9 @@ class TestFormatTree(TestCase):
     def test_single_node_tree(self):
         tree = ('foo', [])
         output = self.format_tree(tree)
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
-        '''), output)
+        ''')), _process_linesep(output))
 
     def test_single_level_tree(self):
         tree = (
@@ -53,12 +60,12 @@ class TestFormatTree(TestCase):
             ],
         )
         output = self.format_tree(tree)
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
         ├── bar
         ├── baz
         └── qux
-        '''), output)
+        ''')), _process_linesep(output))
 
     def test_single_level_tree_with_ascii(self):
         tree = (
@@ -69,12 +76,12 @@ class TestFormatTree(TestCase):
             ],
         )
         output = self.format_tree(tree, encoding='ascii')
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
         +-- bar
         +-- baz
         `-- qux
-        '''), output)
+        ''')), _process_linesep(output))
 
     def test_multi_level_tree(self):
         tree = (
@@ -88,14 +95,14 @@ class TestFormatTree(TestCase):
             ],
         )
         output = self.format_tree(tree)
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
         ├── bar
         │   ├── a
         │   └── b
         ├── baz
         └── qux
-        '''), output)
+        ''')), _process_linesep(output))
 
     def test_multi_level_on_last_node_tree(self):
         tree = (
@@ -109,14 +116,14 @@ class TestFormatTree(TestCase):
             ],
         )
         output = self.format_tree(tree)
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
         ├── bar
         ├── baz
         └── qux
             ├── a
             └── b
-        '''), output)
+        ''')), _process_linesep(output))
 
     def test_acceptance(self):
         output = self.format_tree(ACCEPTANCE_INPUT)
@@ -140,7 +147,7 @@ class TestFormatTree(TestCase):
             ],
         )
         output = self.format_tree(tree)
-        self.assertEqual(dedent(u'''\
+        self.assertEqual(_process_linesep(dedent(u'''\
         foo
         ├── bar
         │   frob
@@ -151,7 +158,7 @@ class TestFormatTree(TestCase):
         ├── baz
         └── qux
             frab
-        '''), output)
+        ''')), _process_linesep(output))
 
 
 def d(name, files):
