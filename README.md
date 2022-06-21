@@ -37,6 +37,7 @@ Almost all the operation can be supported in form of trees in a convenient way t
     * [Installation](#installation)
     * [Quick Usage](#quick-usage)
     * [Tutorials](#tutorials)
+    * [External](#external)
 * [Speed Performance](#speed-performance)
 * [Change Log](#change-log)
 * [Feedback and Contribute](#feedback-and-contribute)
@@ -211,6 +212,12 @@ For more examples, explanations and further usages, take a look at:
     * [Object Oriented Usage](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#object-oriented-usage)
     * [Costumize My TreeValue Class](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#diy-treevalue-class)
     * [Visualization of TreeValue](https://opendilab.github.io/treevalue/main/tutorials/advanced_usage/index.html#draw-graph-for-treevalue)
+
+### External
+
+We provide an official treevalue-based-wrapper for numpy and torch called [DI-treetensor](https://github.com/opendilab/DI-treetensor) since the `treevalue` is often used with libraries like `numpy` and `torch`. It will actually be useful while working with AI fields.
+
+
 
 ## Speed Performance
 
