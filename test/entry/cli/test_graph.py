@@ -7,7 +7,7 @@ import zlib
 
 import pytest
 from click.testing import CliRunner
-from hbutils.testing import cmdv
+from hbutils.testing import cmdv, OS
 
 from treevalue import FastTreeValue, dump, graphics
 from treevalue.entry.cli import treevalue_cli
@@ -36,7 +36,8 @@ class TestEntryCliGraph:
                       '-o', 'test_graph.svg', '-o', 'test_graph.gv'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 7000
             assert os.path.exists('test_graph.gv')
@@ -52,7 +53,8 @@ class TestEntryCliGraph:
                           '-o', 'test_graph.svg', '-o', 'test_graph.gv', '-O'],
                 )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert not os.path.exists('test_graph.svg')
             assert not os.path.exists('test_graph.gv')
             assert len(result.output) <= 2500
@@ -66,7 +68,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', 'test.entry.cli.test_graph.t[12]', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 13000
 
@@ -76,7 +79,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', 'test.entry.cli.test_graph.*', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 17500
 
@@ -92,7 +96,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', 'g1.bg', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 6500
 
@@ -109,7 +114,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', '*.bg', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 17500
 
@@ -122,7 +128,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', 'test.entry.cli.test_graph.t1', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 13000
 
@@ -135,7 +142,8 @@ class TestEntryCliGraph:
                 args=['graph', '-t', 'test.entry.cli.test_graph.t1', '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 6500
 
@@ -149,7 +157,8 @@ class TestEntryCliGraph:
                       '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 12000
 
@@ -162,7 +171,8 @@ class TestEntryCliGraph:
                       '-o', 'test_graph.svg'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             import shutil
             shutil.copy('test_graph.svg', os.path.join(_p, 'test_graph.svg'))
@@ -179,7 +189,8 @@ class TestEntryCliGraph:
                           '-t', 'first title', '-o', 'test_graph.svg'],
                 )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('test_graph.svg')
             assert os.path.getsize('test_graph.svg') <= 16500
 
@@ -196,7 +207,8 @@ class TestEntryCliGraph:
                       '-c', 'bgcolor=#ffffff00', '-O'],
             )
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert len(result.output) <= 6000
             assert '#ffffff00' in result.output
 
@@ -207,7 +219,9 @@ class TestEntryCliGraph:
                       '-c', 'bgcolor#ffffff00', '-O'],
             )
 
-            assert result.exit_code != 0
+            assert result.exit_code != 0, f'The running expected to raise RuntimeError ' \
+                                          f'but not actually (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert "Configuration should be KEY=VALUE, but 'bgcolor#ffffff00' found." in result.output
 
     @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
@@ -227,6 +241,10 @@ class TestEntryCliGraph:
                     args=['graph', '-t', 'g1.bg', '-o', 'test_graph.svg'],
                 )
 
-                assert result.exit_code == 0
+                assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                              f'The output is:\n{result.output}'
                 assert os.path.exists('test_graph.svg')
-                assert os.path.getsize('test_graph.svg') <= 1000
+                if OS.windows:
+                    assert os.path.getsize('test_graph.svg') <= 2000
+                else:
+                    assert os.path.getsize('test_graph.svg') <= 1000

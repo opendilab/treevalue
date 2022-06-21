@@ -30,7 +30,8 @@ class TestEntryCliExport:
         with runner.isolated_filesystem():
             result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.t1'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 240
 
@@ -42,7 +43,8 @@ class TestEntryCliExport:
         with runner.isolated_filesystem():
             result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.*'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 240
             assert os.path.exists('t2.btv')
@@ -60,7 +62,8 @@ class TestEntryCliExport:
         with runner.isolated_filesystem():
             result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.t[23]'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert not os.path.exists('t1.btv')
             assert os.path.exists('t2.btv')
             assert os.path.getsize('t2.btv') < 290
@@ -78,7 +81,8 @@ class TestEntryCliExport:
             with pytest.warns(None):
                 result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.*', '-r'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 2170
             assert os.path.exists('t2.btv')
@@ -98,7 +102,8 @@ class TestEntryCliExport:
                 result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.*',
                                                        '-r', '-c', 'zlib'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 2170
             assert os.path.exists('t2.btv')
@@ -119,7 +124,8 @@ class TestEntryCliExport:
             result = runner.invoke(treevalue_cli, ['export', '-t', 'test.entry.cli.test_export.*',
                                                    '-c', 'gzip'])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 220
             assert os.path.exists('t2.btv')
@@ -140,7 +146,8 @@ class TestEntryCliExport:
                 '-c', 'test.entry.cli.test_export._my_compress:test.entry.cli.test_export._my_decompress'
             ])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('t1.btv')
             assert os.path.getsize('t1.btv') < 330
             assert os.path.exists('t2.btv')
@@ -167,7 +174,8 @@ class TestEntryCliExport:
                     '-o', 'subpath/t3.btv',
                 ])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('subpath/t1.btv')
             assert os.path.getsize('subpath/t1.btv') < 290
             assert os.path.exists('subpath/t2.btv')
@@ -190,7 +198,8 @@ class TestEntryCliExport:
                     '-d', 'subpath',
                 ])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert os.path.exists('subpath/t1.btv')
             assert os.path.getsize('subpath/t1.btv') < 290
             assert os.path.exists('subpath/t2.btv')
@@ -210,7 +219,8 @@ class TestEntryCliExport:
                     '-d', 'subpath',
                 ])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert not os.path.exists('subpath/t1.btv')
             assert os.path.exists('subpath/t2.btv')
             assert os.path.getsize('subpath/t2.btv') < 290
@@ -229,7 +239,8 @@ class TestEntryCliExport:
                     '-o', 'ppp.btv'
                 ])
 
-            assert result.exit_code == 0
+            assert result.exit_code == 0, f'Runtime Error (exitcode {result.exit_code}), ' \
+                                          f'The output is:\n{result.output}'
             assert not os.path.exists('t1.btv')
             assert not os.path.exists('t2.btv')
             assert os.path.exists('ppp.btv')
