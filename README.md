@@ -57,7 +57,7 @@ Therefore, we need a kind of more proper data container, named `TreeValue`. It i
 
 ### Prerequisite
 
-`treevalue` has been fully tested in the Linux and macOS environment and with multiple Python versions, and it works properly on Windows platforms (unit testing has not been carried out).
+`treevalue` has been fully tested in the Linux, macOS and Windows environment and with multiple Python versions, and it works properly on all these platforms.
 
 However, **`treevalue` currently does not support PyPy**, so just pay attention to this when using.
 
