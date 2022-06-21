@@ -12,11 +12,11 @@ skip = ["pp*"] # Do not build for PyPy
 [tool.cibuildwheel.windows]
 archs = ["x86", 'AMD64']
 before-test = [# Unittest for windows
-    "pip install -r \"{project}/requirements-test.txt\"",
+    "pip install -r \"{project}\\requirements-test-win.txt\"",
 ]
 test-command = [
-    "xcopy /e /i \"{project}/test\" test",
-    "copy \"{project}/pytest.ini\" pytest.ini",
+    "xcopy /e /i \"{project}\\test\" test",
+    "copy \"{project}\\pytest.ini\" pytest.ini",
     "pytest test -sv -m unittest --log-level=DEBUG",
     "rmdir /s /q test",
 ]
