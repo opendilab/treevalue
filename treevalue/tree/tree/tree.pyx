@@ -2,8 +2,8 @@
 # cython:language_level=3
 
 import os
-from operator import itemgetter
 from collections.abc import Sized, Container, Reversible
+from operator import itemgetter
 
 import cython
 from hbutils.design import SingletonMark
@@ -536,6 +536,26 @@ cdef class TreeValue:
 
         Returns:
             - keys: A generator of all the keys.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.keys()
+            treevalue_keys(['a', 'b', 'c'])
+            >>> len(t.keys())
+            3
+            >>> list(t.keys())
+            ['a', 'b', 'c']
+            >>> list(reversed(t.keys()))  # only available in python3.8+
+            ['c', 'b', 'a']
+            >>> 'a' in t.keys()
+            True
+            >>> 'f' in t.keys()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
         return treevalue_keys(self._st, self._type)
 
@@ -547,6 +567,26 @@ cdef class TreeValue:
 
         Returns:
             - values: A generator of all the values
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.values()
+            treevalue_values([1, 3, '233'])
+            >>> len(t.values())
+            3
+            >>> list(t.values())
+            [1, 3, '233']
+            >>> list(reversed(t.values()))  # only supported on python3.8+
+            ['233', 3, 1]
+            >>> 1 in t.values()
+            True
+            >>> 'fff' in t.values()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
         return treevalue_values(self._st, self._type)
 
@@ -558,6 +598,26 @@ cdef class TreeValue:
 
         Returns:
             - items: A generator of pairs of keys and values.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.items()
+            treevalue_items([('a', 1), ('b', 3), ('c', '233')])
+            >>> len(t.items())
+            3
+            >>> list(t.items())
+            [('a', 1), ('b', 3), ('c', '233')]
+            >>> list(reversed(t.items()))  # only supported on python3.8+
+            [('c', '233'), ('b', 3), ('a', 1)]
+            >>> ('a', 1) in t.items()
+            True
+            >>> ('c', '234') in t.values()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
         return treevalue_items(self._st, self._type)
 
@@ -681,7 +741,6 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
 
     def __repr__(self):
         return f'{type(self).__name__}({list(self)!r})'
-
 
 # noinspection PyPep8Naming
 cdef class treevalue_items(_CObject, Sized, Container, Reversible):
