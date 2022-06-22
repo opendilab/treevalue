@@ -1377,14 +1377,36 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.items">
 <code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.items" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get pairs of keys and values of this treevalue object, like the <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.items" title="treevalue.tree.general.FastTreeValue.items"><code class="xref py py-class docutils literal notranslate"><span class="pre">items</span></code></a>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>items: A generator of pairs of keys and values.</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">treevalue_items([(&#39;a&#39;, 1), (&#39;b&#39;, 3), (&#39;c&#39;, &#39;233&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;a&#39;, 1), (&#39;b&#39;, 3), (&#39;c&#39;, &#39;233&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>  <span class="c1"># only supported on python3.8+</span>
+<span class="go">[(&#39;c&#39;, &#39;233&#39;), (&#39;b&#39;, 3), (&#39;a&#39;, 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;234&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1408,14 +1430,36 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.keys" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get keys of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>keys: A generator of all the keys.</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">treevalue_keys([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>  <span class="c1"># only available in python3.8+</span>
+<span class="go">[&#39;c&#39;, &#39;b&#39;, &#39;a&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;f&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1630,14 +1674,36 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.values">
 <code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.values" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get value of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>values: A generator of all the values</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">treevalue_values([1, 3, &#39;233&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">[1, 3, &#39;233&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>  <span class="c1"># only supported on python3.8+</span>
+<span class="go">[&#39;233&#39;, 3, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;fff&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
