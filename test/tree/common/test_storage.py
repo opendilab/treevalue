@@ -4,6 +4,13 @@ import pytest
 
 from treevalue.tree.common import create_storage, raw, TreeStorage, delayed_partial
 
+try:
+    _ = reversed({}.keys())
+except TypeError:
+    _reversible = False
+else:
+    _reversible = True
+
 
 # noinspection PyArgumentList,DuplicatedCode,PyTypeChecker
 @pytest.mark.unittest
@@ -501,33 +508,49 @@ class TestTreeStorage:
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
 
-        assert set(t.keys()) == {'a', 'b', 'c', 'd', 'f'}
-        assert set(t.get('f').keys()) == {'x', 'y'}
+        assert set(t.iter_keys()) == {'a', 'b', 'c', 'd', 'f'}
+        assert set(t.get('f').iter_keys()) == {'x', 'y'}
+
+        if _reversible:
+            assert list(t.iter_rev_keys()) == list(t.iter_keys())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                t.iter_rev_keys()
 
     def test_values(self):
         h1 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'd': h1})
 
-        assert set(t.get('d').values()) == {3, 4}
-        assert len(list(t.values())) == 3
-        assert 1 in t.values()
-        assert 2 in t.values()
+        assert set(t.get('d').iter_values()) == {3, 4}
+        assert len(list(t.iter_values())) == 3
+        assert 1 in t.iter_values()
+        assert 2 in t.iter_values()
+        if _reversible:
+            assert list(t.iter_rev_values()) == list(t.iter_values())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                _ = list(t.iter_rev_values())
 
         t1 = create_storage({
             'a': delayed_partial(lambda: t.get('a')),
             'b': delayed_partial(lambda: t.get('b')),
             'd': delayed_partial(lambda: t.get('d')),
         })
-        assert set(t1.get('d').values()) == {3, 4}
-        assert len(list(t1.values())) == 3
-        assert 1 in t1.values()
-        assert 2 in t1.values()
+        assert set(t1.get('d').iter_values()) == {3, 4}
+        assert len(list(t1.iter_values())) == 3
+        assert 1 in t1.iter_values()
+        assert 2 in t1.iter_values()
+        if _reversible:
+            assert list(t1.iter_rev_values()) == list(t1.iter_values())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                _ = list(t1.iter_rev_values())
 
     def test_items(self):
         h1 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'd': raw(h1)})
 
-        for k, v in t.items():
+        for k, v in t.iter_items():
             if k == 'a':
                 assert v == 1
             elif k == 'b':
@@ -537,12 +560,18 @@ class TestTreeStorage:
             else:
                 pytest.fail('Should not reach here.')
 
+        if _reversible:
+            assert list(t.iter_rev_items()) == list(t.iter_items())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                _ = list(t.iter_rev_items())
+
         t1 = create_storage({
             'a': delayed_partial(lambda: t.get('a')),
             'b': delayed_partial(lambda: t.get('b')),
             'd': delayed_partial(lambda: t.get('d')),
         })
-        for k, v in t1.items():
+        for k, v in t1.iter_items():
             if k == 'a':
                 assert v == 1
             elif k == 'b':
@@ -551,6 +580,12 @@ class TestTreeStorage:
                 assert v == h1
             else:
                 pytest.fail('Should not reach here.')
+
+        if _reversible:
+            assert list(t1.iter_rev_values()) == list(t1.iter_values())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                _ = list(t1.iter_rev_values())
 
     def test_hash(self):
         h = {}
