@@ -185,27 +185,41 @@ cdef class TreeStorage:
         cdef str k
         cdef object v
         cdef list _items = []
-        for k, v in sorted(self.items(), key=lambda x: x[0]):
+        for k, v in sorted(self.iter_items(), key=lambda x: x[0]):
             _items.append((k, v))
 
         return hash(tuple(_items))
 
-    def keys(self):
+    def iter_keys(self):
         return self.map.keys()
 
-    def values(self):
+    def iter_rev_keys(self):
+        return reversed(self.map.keys())
+
+    def iter_values(self):
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
             yield _c_undelay_data(self.map, k, v)
 
-    def items(self):
+    def iter_rev_values(self):
+        cdef str k
+        cdef object v, nv
+        for k, v in reversed(self.map.items()):
+            yield _c_undelay_data(self.map, k, v)
+
+    def iter_items(self):
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
-            v = _c_undelay_data(self.map, k, v)
+            yield k, _c_undelay_data(self.map, k, v)
 
-            yield k, v
+    def iter_rev_items(self):
+        cdef str k
+        cdef object v, nv
+        for k, v in reversed(self.map.items()):
+            yield k, _c_undelay_data(self.map, k, v)
+
 
 cpdef object create_storage(dict value):
     cdef dict _map = {}

@@ -5,6 +5,13 @@ import pytest
 
 from treevalue import raw, TreeValue, delayed
 
+try:
+    _ = reversed({}.keys())
+except TypeError:
+    _reversible = False
+else:
+    _reversible = True
+
 
 class _Container:
     def __init__(self, value):
@@ -240,12 +247,14 @@ class TestTreeTreeTree:
         assert tv2
         assert not tv2.c
 
-    def test_tee_value_hash_equal(self):
+    def test_tree_value_hash_equal(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         assert tv1 == tv1
         assert not tv1 == 2
         assert tv1 == TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        assert tv1 != TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 4}})
         assert tv1.c == TreeValue({'x': 2, 'y': 3})
+        assert tv1.c != TreeValue({'x': 2, 'y': 3, 'z': 4})
 
         d = {
             tv1: 1,
@@ -330,23 +339,61 @@ class TestTreeTreeTree:
 
     def test_keys(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert len(tv1.keys()) == 4
         assert set(tv1.keys()) == {'a', 'b', 'c', 'd'}
+        assert 'a' in tv1.keys()
+        assert 'b' in tv1.keys()
+        assert 'c' in tv1.keys()
+        assert 'd' in tv1.keys()
+        assert 'e' not in tv1.keys()
+
+        assert repr(tv1.keys()) == "treevalue_keys(['a', 'b', 'c', 'd'])"
+        if _reversible:
+            assert list(reversed(tv1.keys())) == list(tv1.keys())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                reversed(tv1.keys())
 
     def test_values(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        assert len(tv1.values()) == 3
         assert set(tv1.c.values()) == {2, 3}
-        assert len(list(tv1.values())) == 3
         assert 1 in tv1.values()
         assert 2 in tv1.values()
+        assert 3 not in tv1.values()
+        assert TreeValue({'x': 2, 'y': 3}) in tv1.values()
+        assert TreeValue({'x': 2, 'y': 4}) not in tv1.values()
+
+        assert repr(TreeValue({'a': 1, 'b': 2}).values()) == 'treevalue_values([1, 2])'
+        if _reversible:
+            assert list(reversed(tv1.values())) == list(tv1.values())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                reversed(tv1.values())
 
     def test_items(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert len(tv1.items()) == 4
         assert sorted(tv1.items()) == [
             ('a', 1),
             ('b', 2),
             ('c', TreeValue({'x': 2, 'y': 3})),
             ('d', {'x': 2, 'y': 3}),
         ]
+        assert ('a', 1) in tv1.items()
+        assert ('b', 2) in tv1.items()
+        assert ('a', 2) not in tv1.items()
+        assert ('c', TreeValue({'x': 2, 'y': 3})) in tv1.items()
+        assert ('c', TreeValue({'x': 2, 'y': 4})) not in tv1.items()
+        assert ('d', {'x': 2, 'y': 3}) in tv1.items()
+        assert ('d', {'x': 2, 'y': 4}) not in tv1.items()
+
+        assert repr(TreeValue({'a': 1, 'b': 2}).items()) == "treevalue_items([('a', 1), ('b', 2)])"
+        if _reversible:
+            assert list(reversed(tv1.items())) == list(tv1.items())[::-1]
+        else:
+            with pytest.raises(TypeError):
+                reversed(tv1.items())
 
         class MyTreeValue(TreeValue):
             pass
