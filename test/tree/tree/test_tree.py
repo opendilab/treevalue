@@ -287,8 +287,7 @@ class TestTreeTreeTree:
         assert tv1.get('b') == 2
         assert tv1.get('c') == TreeValue({'x': 2, 'y': 3})
         assert tv1.get('d') == {'x': 2, 'y': 3}
-        with pytest.raises(KeyError):
-            _ = tv1.get('e')
+        assert tv1.get('e') is None
         assert tv1.get('e', 233) == 233
 
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})

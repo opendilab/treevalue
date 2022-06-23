@@ -102,26 +102,20 @@ cdef class TreeValue:
             return obj
 
     @cython.binding(True)
-    cpdef get(self, str key, object default=_GET_NO_DEFAULT):
+    cpdef get(self, str key, object default=None):
         r"""
         Overview:
             Get item from the tree node.
 
-        Arguments:
-            - key (:obj:`str`): Item's name.
-            - default (:obj:`default`): Default value when this item is not found, default is \
-                `_GET_NO_DEFAULT` which means just raise `KeyError` when not found.
+        :param key: Item's name.
+        :param default: Default value when this item is not found, default is ``None``.
+        :return: Item's value.
 
-        Returns:
-            - value: Item's value.
+        .. note::
+            The method :meth:`get` will never raise ``KeyError``, like the behaviour in \
+            `dict.get <https://docs.python.org/3/library/stdtypes.html#dict.get>`_.
         """
-        cdef object value
-        if default is _GET_NO_DEFAULT:
-            value = self._st.get(key)
-        else:
-            value = self._st.get_or_default(key, default)
-
-        return self._unraw(value)
+        return self._unraw(self._st.get_or_default(key, default))
 
     @cython.binding(True)
     cpdef pop(self, str key, object default=_GET_NO_DEFAULT):
@@ -129,13 +123,14 @@ cdef class TreeValue:
         Overview:
             Pop item from the tree node.
 
-        Arguments:
-            - key (:obj:`str`): Item's name.
-            - default (:obj:`default`): Default value when this item is not found, default is \
-                `_GET_NO_DEFAULT` which means just raise `KeyError` when not found.
+        :param key: Item's name.
+        :param default: Default value when this item is not found, default is ``_GET_NO_DEFAULT`` which means \
+            just raise ``KeyError`` when not found.
+        :return: Item's value.
 
-        Returns:
-            - value: Item's value.
+        .. note::
+            The method :meth:`pop` will raise ``KeyError`` when ``key`` is not found, like the behaviour in \
+            `dict.pop <https://docs.python.org/3/library/stdtypes.html#dict.pop>`_.
         """
         cdef object value
         if default is _GET_NO_DEFAULT:
