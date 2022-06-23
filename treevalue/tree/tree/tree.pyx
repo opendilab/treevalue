@@ -2,6 +2,7 @@
 # cython:language_level=3
 
 import os
+from collections.abc import Sized, Container, Reversible
 from operator import itemgetter
 
 import cython
@@ -10,6 +11,9 @@ from hbutils.design import SingletonMark
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
+
+cdef class _CObject:
+    pass
 
 cdef inline object _item_unwrap(object v):
     if isinstance(v, list) and len(v) == 1:
@@ -392,7 +396,7 @@ cdef class TreeValue:
         """
         cdef str k
         cdef object v
-        for k, v in self._st.items():
+        for k, v in self._st.iter_items():
             yield k, self._unraw(v)
 
     @cython.binding(True)
@@ -525,48 +529,97 @@ cdef class TreeValue:
         return self._st
 
     @cython.binding(True)
-    def keys(self):
+    cpdef treevalue_keys keys(self):
         """
         Overview:
             Get keys of this treevalue object, like the :class:`dict`.
 
         Returns:
             - keys: A generator of all the keys.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.keys()
+            treevalue_keys(['a', 'b', 'c'])
+            >>> len(t.keys())
+            3
+            >>> list(t.keys())
+            ['a', 'b', 'c']
+            >>> list(reversed(t.keys()))  # only available in python3.8+
+            ['c', 'b', 'a']
+            >>> 'a' in t.keys()
+            True
+            >>> 'f' in t.keys()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        return self._st.keys()
+        return treevalue_keys(self._st, self._type)
 
     @cython.binding(True)
-    def values(self):
+    cpdef treevalue_values values(self):
         """
         Overview:
             Get value of this treevalue object, like the :class:`dict`.
 
         Returns:
             - values: A generator of all the values
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.values()
+            treevalue_values([1, 3, '233'])
+            >>> len(t.values())
+            3
+            >>> list(t.values())
+            [1, 3, '233']
+            >>> list(reversed(t.values()))  # only supported on python3.8+
+            ['233', 3, 1]
+            >>> 1 in t.values()
+            True
+            >>> 'fff' in t.values()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        cdef object v
-        for v in self._st.values():
-            if isinstance(v, TreeStorage):
-                yield self._type(v)
-            else:
-                yield v
+        return treevalue_values(self._st, self._type)
 
     @cython.binding(True)
-    def items(self):
+    cpdef treevalue_items items(self):
         """
         Overview:
             Get pairs of keys and values of this treevalue object, like the :class:`items`.
 
         Returns:
             - items: A generator of pairs of keys and values.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>> 
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.items()
+            treevalue_items([('a', 1), ('b', 3), ('c', '233')])
+            >>> len(t.items())
+            3
+            >>> list(t.items())
+            [('a', 1), ('b', 3), ('c', '233')]
+            >>> list(reversed(t.items()))  # only supported on python3.8+
+            [('c', '233'), ('b', 3), ('a', 1)]
+            >>> ('a', 1) in t.items()
+            True
+            >>> ('c', '234') in t.values()
+            False
+
+        .. note::
+            :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        cdef str k
-        cdef object v
-        for k, v in self._st.items():
-            if isinstance(v, TreeStorage):
-                yield k, self._type(v)
-            else:
-                yield k, v
+        return treevalue_items(self._st, self._type)
 
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
@@ -578,9 +631,12 @@ cdef str _prefix_fix(object text, object prefix):
 
     return os.linesep.join(lines)
 
+cdef inline str _title_repr(TreeStorage st, object type_):
+    return f'<{type_.__name__} {hex(id(st))}>'
+
 cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, tuple path):
     cdef object nid = id(st)
-    cdef str self_repr = f'<{type_.__name__} {hex(nid)}>'
+    cdef str self_repr = _title_repr(st, type_)
     cdef list children = []
 
     cdef str k, _t_prefix
@@ -604,6 +660,129 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
 
     self_repr = _prefix_fix(self_repr, prefix)
     return self_repr, children
+
+try:
+    reversed({'a': 1}.keys())
+except TypeError:
+    _reversible = False
+else:
+    _reversible = True
+
+# noinspection PyPep8Naming
+cdef class treevalue_keys(_CObject, Sized, Container, Reversible):
+    def __cinit__(self, TreeStorage storage, type _type):
+        self._st = storage
+        self._type = _type
+
+    def __len__(self):
+        return self._st.size()
+
+    def __contains__(self, item):
+        return self._st.contains(item)
+
+    def _iter(self):
+        for k in self._st.iter_keys():
+            yield k
+
+    def __iter__(self):
+        return self._iter()
+
+    def _rev_iter(self):
+        for k in self._st.iter_rev_keys():
+            yield k
+
+    def __reversed__(self):
+        if _reversible:
+            return self._rev_iter()
+        else:
+            raise TypeError(f'{type(self).__name__!r} object is not reversible')
+
+    def __repr__(self):
+        return f'{type(self).__name__}({list(self)!r})'
+
+# noinspection PyPep8Naming
+cdef class treevalue_values(_CObject, Sized, Container, Reversible):
+    def __cinit__(self, TreeStorage storage, type _type):
+        self._st = storage
+        self._type = _type
+
+    def __len__(self):
+        return self._st.size()
+
+    def __contains__(self, item):
+        for v in self:
+            if item == v:
+                return True
+
+        return False
+
+    def _iter(self):
+        for v in self._st.iter_values():
+            if isinstance(v, TreeStorage):
+                yield self._type(v)
+            else:
+                yield v
+
+    def __iter__(self):
+        return self._iter()
+
+    def _rev_iter(self):
+        for v in self._st.iter_rev_values():
+            if isinstance(v, TreeStorage):
+                yield self._type(v)
+            else:
+                yield v
+
+    def __reversed__(self):
+        if _reversible:
+            return self._rev_iter()
+        else:
+            raise TypeError(f'{type(self).__name__!r} object is not reversible')
+
+    def __repr__(self):
+        return f'{type(self).__name__}({list(self)!r})'
+
+# noinspection PyPep8Naming
+cdef class treevalue_items(_CObject, Sized, Container, Reversible):
+    def __cinit__(self, TreeStorage storage, type _type):
+        self._st = storage
+        self._type = _type
+
+    def __len__(self):
+        return self._st.size()
+
+    def __contains__(self, item):
+        for k, v in self:
+            if item == (k, v):
+                return True
+
+        return False
+
+    def _iter(self):
+        for k, v in self._st.iter_items():
+            if isinstance(v, TreeStorage):
+                yield k, self._type(v)
+            else:
+                yield k, v
+
+    def __iter__(self):
+        return self._iter()
+
+    def _rev_iter(self):
+        for k, v in self._st.iter_rev_items():
+            if isinstance(v, TreeStorage):
+                yield k, self._type(v)
+            else:
+                yield k, v
+
+    def __reversed__(self):
+        if _reversible:
+            return self._rev_iter()
+        else:
+            raise TypeError(f'{type(self).__name__!r} object is not reversible')
+
+    def __repr__(self):
+        return f'{type(self).__name__}({list(self)!r})'
 
 cdef class DetachedDelayedProxy(DelayedProxy):
     def __init__(self, DelayedProxy proxy):
