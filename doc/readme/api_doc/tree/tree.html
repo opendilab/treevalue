@@ -671,27 +671,71 @@
 <dl class="py method">
 <dt id="treevalue.tree.tree.TreeValue.items">
 <code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.items" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get pairs of keys and values of this treevalue object, like the <a class="reference internal" href="#treevalue.tree.tree.TreeValue.items" title="treevalue.tree.tree.TreeValue.items"><code class="xref py py-class docutils literal notranslate"><span class="pre">items</span></code></a>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>items: A generator of pairs of keys and values.</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">treevalue_items([(&#39;a&#39;, 1), (&#39;b&#39;, 3), (&#39;c&#39;, &#39;233&#39;)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;a&#39;, 1), (&#39;b&#39;, 3), (&#39;c&#39;, &#39;233&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>  <span class="c1"># only supported on python3.8+</span>
+<span class="go">[(&#39;c&#39;, &#39;233&#39;), (&#39;b&#39;, 3), (&#39;a&#39;, 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;234&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="treevalue.tree.tree.TreeValue.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.keys" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get keys of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>keys: A generator of all the keys.</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">treevalue_keys([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>  <span class="c1"># only available in python3.8+</span>
+<span class="go">[&#39;c&#39;, &#39;b&#39;, &#39;a&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;f&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -715,14 +759,36 @@
 <dl class="py method">
 <dt id="treevalue.tree.tree.TreeValue.values">
 <code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.values" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dd><dl>
 <dt>Overview:</dt><dd><p>Get value of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 </dd>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>values: A generator of all the values</p></li>
 </ul>
 </dd>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">treevalue_values([1, 3, &#39;233&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="go">[1, 3, &#39;233&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>  <span class="c1"># only supported on python3.8+</span>
+<span class="go">[&#39;233&#39;, 3, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;fff&#39;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -1362,27 +1428,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f599d259730 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f599d3f2df0 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f599d259730__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f599d259730 -&gt; value__node_7f599d259730__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f599d259730__b [label=&quot;array([[5, 6],
+	node_7f786f24f760 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7f786f3e8e20 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7f786f24f760__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f786f24f760 -&gt; value__node_7f786f24f760__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f786f24f760__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f599d259730 -&gt; value__node_7f599d259730__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f599d259760 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f599d259730 -&gt; node_7f599d259760 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f599d3f2df0 -&gt; node_7f599d259760 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f599d40cbe0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f599d3f2df0 -&gt; node_7f599d40cbe0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f599d259760__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f599d259760 -&gt; value__node_7f599d259760__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f599d259760__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f599d259760 -&gt; value__node_7f599d259760__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f599d259760__e [label=&quot;array([[1, 2],
+	node_7f786f24f760 -&gt; value__node_7f786f24f760__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f24f790 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f786f24f760 -&gt; node_7f786f24f790 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f3e8e20 -&gt; node_7f786f24f790 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f402c10 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7f786f3e8e20 -&gt; node_7f786f402c10 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f786f24f790__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f786f24f790 -&gt; value__node_7f786f24f790__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f786f24f790__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7f786f24f790 -&gt; value__node_7f786f24f790__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7f786f24f790__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f599d259760 -&gt; value__node_7f599d259760__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f599d40cbe0 -&gt; node_7f599d259730 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f599d40cbe0 -&gt; node_7f599d259760 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f24f790 -&gt; value__node_7f786f24f790__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f402c10 -&gt; node_7f786f24f760 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7f786f402c10 -&gt; node_7f786f24f790 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -1620,8 +1686,8 @@ below</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../dev/mutablemapping/api_doc/tree/tree.html">dev/mutablemapping</a></dd>
                         <dd><a href="tree.html">doc/readme</a></dd>
+                        <dd><a href="../../../../dev/mutablemapping/api_doc/tree/tree.html">dev/mutablemapping</a></dd>
                         <dd><a href="../../../../main/api_doc/tree/tree.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
                         <dd><a href="../../../../run/paper/api_doc/tree/tree.html">run/paper</a></dd>
