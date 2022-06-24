@@ -1,5 +1,7 @@
 import codecs
 import os
+import shutil
+import tempfile
 import warnings
 from collections import OrderedDict
 from functools import partial
@@ -59,7 +61,9 @@ def _save_source_code(g: Digraph, path: str):
 
 
 def _save_image(g: Digraph, path: str, fmt: str):
-    g.render(path, format=fmt)
+    with tempfile.NamedTemporaryFile() as tmpfile:
+        svg_file = g.render(tmpfile.name, format=fmt)
+        shutil.copy(svg_file, path)
 
 
 _IMAGE_FMTS = {'svg', 'png'}
