@@ -245,6 +245,6 @@ class TestEntryCliGraph:
                                               f'The output is:\n{result.output}'
                 assert os.path.exists('test_graph.svg')
                 if OS.windows:
-                    assert os.path.getsize('test_graph.svg') <= 2000
+                    assert 5000 <= os.path.getsize('test_graph.svg') <= 6500
                 else:
-                    assert os.path.getsize('test_graph.svg') <= 1000
+                    assert 500 <= os.path.getsize('test_graph.svg') <= 1000

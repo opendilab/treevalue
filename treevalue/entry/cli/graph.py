@@ -60,9 +60,11 @@ def _save_source_code(g: Digraph, path: str):
         file.write(g.source)
 
 
+# Do not reopen an opened file in windows, it may cause PermissionDenied
+# See: https://stackoverflow.com/a/23212515/6995899
 def _save_image(g: Digraph, path: str, fmt: str):
-    with tempfile.NamedTemporaryFile() as tmpfile:
-        svg_file = g.render(tmpfile.name, format=fmt)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        svg_file = g.render(os.path.join(tmpdir, 'source.gv'), format=fmt)
         shutil.copy(svg_file, path)
 
 
