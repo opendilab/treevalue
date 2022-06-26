@@ -652,20 +652,22 @@
 <dd><dl class="simple">
 <dt>Overview:</dt><dd><p>Get item from the tree node.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Item’s name.</p></li>
-<li><dl class="simple">
-<dt>default (<code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>): Default value when this item is not found, default is </dt><dd><p><cite>_GET_NO_DEFAULT</cite> which means just raise <cite>KeyError</cite> when not found.</p>
-</dd>
 </dl>
-</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Item’s name.</p></li>
+<li><p><strong>default</strong> – Default value when this item is not found, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>value: Item’s value.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Item’s value.</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method <a class="reference internal" href="#treevalue.tree.tree.TreeValue.get" title="treevalue.tree.tree.TreeValue.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> will never raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>, like the behaviour in <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict.get">dict.get</a>.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -744,16 +746,22 @@
 <dd><dl class="simple">
 <dt>Overview:</dt><dd><p>Pop item from the tree node.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Item’s name.</p></li>
-<li><p>default (<code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code>): Default value when this item is not found, default is                 <cite>_GET_NO_DEFAULT</cite> which means just raise <cite>KeyError</cite> when not found.</p></li>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Item’s name.</p></li>
+<li><p><strong>default</strong> – Default value when this item is not found, default is <code class="docutils literal notranslate"><span class="pre">_GET_NO_DEFAULT</span></code> which means             just raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> when not found.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>value: Item’s value.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Item’s value.</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method <a class="reference internal" href="#treevalue.tree.tree.TreeValue.pop" title="treevalue.tree.tree.TreeValue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> will raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> when <code class="docutils literal notranslate"><span class="pre">key</span></code> is not found, like the behaviour in             <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict.pop">dict.pop</a>.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1428,27 +1436,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7ff62092e790 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7ff620ac8e50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7ff62092e790__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7ff62092e790 -&gt; value__node_7ff62092e790__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7ff62092e790__b [label=&quot;array([[5, 6],
+	node_7fcf7fbbc790 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7fcf7fd56e50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7fcf7fbbc790__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fcf7fbbc790 -&gt; value__node_7fcf7fbbc790__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fcf7fbbc790__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7ff62092e790 -&gt; value__node_7ff62092e790__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7ff62092e7c0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7ff62092e790 -&gt; node_7ff62092e7c0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7ff620ac8e50 -&gt; node_7ff62092e7c0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7ff620ae2c40 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7ff620ac8e50 -&gt; node_7ff620ae2c40 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7ff62092e7c0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7ff62092e7c0 -&gt; value__node_7ff62092e7c0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7ff62092e7c0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7ff62092e7c0 -&gt; value__node_7ff62092e7c0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7ff62092e7c0__e [label=&quot;array([[1, 2],
+	node_7fcf7fbbc790 -&gt; value__node_7fcf7fbbc790__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fbbc7c0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fcf7fbbc790 -&gt; node_7fcf7fbbc7c0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fd56e50 -&gt; node_7fcf7fbbc7c0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fd70c40 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fcf7fd56e50 -&gt; node_7fcf7fd70c40 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fcf7fbbc7c0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fcf7fbbc7c0 -&gt; value__node_7fcf7fbbc7c0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fcf7fbbc7c0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fcf7fbbc7c0 -&gt; value__node_7fcf7fbbc7c0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fcf7fbbc7c0__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7ff62092e7c0 -&gt; value__node_7ff62092e7c0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7ff620ae2c40 -&gt; node_7ff62092e790 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7ff620ae2c40 -&gt; node_7ff62092e7c0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fbbc7c0 -&gt; value__node_7fcf7fbbc7c0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fd70c40 -&gt; node_7fcf7fbbc790 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fcf7fd70c40 -&gt; node_7fcf7fbbc7c0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -1687,7 +1695,6 @@ below</p>
                 <dl>
                     <dt>Branches</dt>
                         <dd><a href="tree.html">main</a></dd>
-                        <dd><a href="../../../dev/mutablemapping/api_doc/tree/tree.html">dev/mutablemapping</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/tree/tree.html">run/paper</a></dd>
                 </dl>
