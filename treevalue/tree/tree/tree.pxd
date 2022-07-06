@@ -20,14 +20,15 @@ cdef class TreeValue:
     cpdef _getitem_extern(self, object key)
     cpdef _setitem_extern(self, object key, object value)
     cpdef _delitem_extern(self, object key)
-    cpdef get(self, str key, object default= *)
-    cpdef pop(self, str key, object default= *)
-    cpdef popitem(self)
-    cpdef void clear(self)
+    cdef void _update(self, object d, dict kwargs) except *
+    cpdef public get(self, str key, object default= *)
+    cpdef public pop(self, str key, object default= *)
+    cpdef public popitem(self)
+    cpdef public void clear(self)
 
-    cpdef treevalue_keys keys(self)
-    cpdef treevalue_values values(self)
-    cpdef treevalue_items items(self)
+    cpdef public treevalue_keys keys(self)
+    cpdef public treevalue_values values(self)
+    cpdef public treevalue_items items(self)
 
 cdef str _prefix_fix(object text, object prefix)
 cdef str _title_repr(TreeStorage st, object type_)
