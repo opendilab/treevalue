@@ -141,6 +141,27 @@ cdef class TreeValue:
         return self._unraw(value)
 
     @cython.binding(True)
+    cpdef popitem(self):
+        """
+        Overview:
+            Pop item (with a key and its value) from the tree node.
+
+        :return: Popped item.
+        :raise KeyError: When current treevalue is empty.
+
+        .. note::
+            The method :meth:`popitem` will raise ``KeyError`` when empty, like the behaviour in \
+            `dict.popitem <https://docs.python.org/3/library/stdtypes.html#dict.popitem>`_.
+        """
+        cdef str k
+        cdef object v
+        try:
+            k, v = self._st.popitem()
+            return k, self._unraw(v)
+        except KeyError:
+            raise KeyError(f'popitem(): {self._type.__name__} is empty.')
+
+    @cython.binding(True)
     cpdef _attr_extern(self, str key):
         r"""
         Overview:

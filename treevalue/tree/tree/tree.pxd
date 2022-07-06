@@ -22,6 +22,7 @@ cdef class TreeValue:
     cpdef _delitem_extern(self, object key)
     cpdef get(self, str key, object default= *)
     cpdef pop(self, str key, object default= *)
+    cpdef popitem(self)
 
     cpdef treevalue_keys keys(self)
     cpdef treevalue_values values(self)
