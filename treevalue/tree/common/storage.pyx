@@ -67,6 +67,9 @@ cdef class TreeStorage:
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
+    cpdef public void clear(self):
+        self.map.clear()
+
     cpdef public boolean contains(self, str key):
         return key in self.map
 

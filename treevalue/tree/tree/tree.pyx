@@ -162,6 +162,14 @@ cdef class TreeValue:
             raise KeyError(f'popitem(): {self._type.__name__} is empty.')
 
     @cython.binding(True)
+    cpdef void clear(self):
+        """
+        Overview:
+            Clear all the items in this treevalue object.
+        """
+        self._st.clear()
+
+    @cython.binding(True)
     cpdef _attr_extern(self, str key):
         r"""
         Overview:

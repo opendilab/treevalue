@@ -273,6 +273,19 @@ class TestTreeStorage:
         with pytest.raises(KeyError):
             t.del_('fff')
 
+    def test_clear(self):
+        t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
+        t.clear()
+        assert t == create_storage({})
+        assert t.size() == 0
+
+        d1 = delayed_partial(lambda: 1)
+        d2 = delayed_partial(lambda x: x + 1, d1)
+        t1 = create_storage({'a': d1, 'b': d2, 'c': d1, 'd': 100})
+        t1.clear()
+        assert t1 == create_storage({})
+        assert t1.size() == 0
+
     def test_contains(self):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.contains('a')
