@@ -2,7 +2,7 @@
 # cython:language_level=3
 
 import os
-from collections.abc import Sized, Container, Reversible
+from collections.abc import Sized, Container, Reversible, Mapping
 from operator import itemgetter
 
 import cython
@@ -168,6 +168,72 @@ cdef class TreeValue:
             Clear all the items in this treevalue object.
         """
         self._st.clear()
+
+    cdef void _update(self, object d, dict kwargs) except *:
+        cdef object dt
+        if d is None:
+            dt = {}
+        elif isinstance(d, Mapping):
+            dt = d
+        elif isinstance(d, TreeValue):
+            dt = d._detach().detach()
+        elif isinstance(d, TreeStorage):
+            dt = d.detach()
+        else:
+            raise TypeError(f'Invalid type of update dict - {type(d)!r}.')
+
+        cdef str key
+        cdef object value
+        for key, value in dt.items():
+            self._st.set(key, self._raw(value))
+        for key, value in kwargs.items():
+            self._st.set(key, self._raw(value))
+
+    @cython.binding(True)
+    def update(self, __update_dict=None, **kwargs):
+        """
+        Overview:
+            Update items in current treevalue.
+
+        :param __update_dict: Dictionary object for updating.
+        :param kwargs: Arguments for updating.
+
+        .. note::
+            The method :meth:`update` is similar to \
+            `dict.update <https://docs.python.org/3/library/stdtypes.html#dict.update>`_.
+
+        Examples::
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.update({'a': 10, 'f': 'sdkj'})  # with dict
+            >>> t
+            <TreeValue 0x7fa31f5ba048>
+            ├── 'a' --> 10
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            └── 'f' --> 'sdkj'
+            >>>
+            >>> t.update(a=100, ft='fffff')  # with key-word arguments
+            >>> t
+            <TreeValue 0x7fa31f5ba048>
+            ├── 'a' --> 100
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            ├── 'f' --> 'sdkj'
+            └── 'ft' --> 'fffff'
+            >>>
+            >>> t.update(TreeValue({'f': {'x': 1}, 'b': 40}))  # with TreeValue
+            >>> t
+            <TreeValue 0x7fa31f5ba048>
+            ├── 'a' --> 100
+            ├── 'b' --> 40
+            ├── 'c' --> '233'
+            ├── 'f' --> <TreeValue 0x7fa31f5ba278>
+            │   └── 'x' --> 1
+            └── 'ft' --> 'fffff'
+        """
+        self._update(__update_dict, kwargs)
 
     @cython.binding(True)
     cpdef _attr_extern(self, str key):

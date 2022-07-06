@@ -4,6 +4,7 @@ import re
 import pytest
 
 from treevalue import raw, TreeValue, delayed
+from treevalue.tree.common import create_storage
 
 try:
     _ = reversed({}.keys())
@@ -359,6 +360,54 @@ class TestTreeTreeTree:
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
         assert tv1.clear() is None
         assert not tv1
+
+    # noinspection DuplicatedCode
+    def test_update(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv1.update({'a': 3, 'c': TreeValue({'x': 3, 'y': 4}), 'd': {'x': 200, 'y': 300}})
+        assert tv1 == TreeValue({
+            'a': 3, 'b': 2,
+            'c': {'x': 3, 'y': 4},
+            'd': raw({'x': 200, 'y': 300}),
+        })
+
+        tv2 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv2.update(a=3, c=TreeValue({'x': 3, 'y': 4}), d={'x': 200, 'y': 300})
+        assert tv2 == TreeValue({
+            'a': 3, 'b': 2,
+            'c': {'x': 3, 'y': 4},
+            'd': raw({'x': 200, 'y': 300}),
+        })
+
+        tv3 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv3.update(TreeValue({'a': 3, 'c': {'x': 3, 'y': 4}, 'd': raw({'x': 200, 'y': 300})}))
+        assert tv3 == TreeValue({
+            'a': 3, 'b': 2,
+            'c': {'x': 3, 'y': 4},
+            'd': raw({'x': 200, 'y': 300}),
+        })
+
+        tv4 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv4.update(create_storage({'a': 3, 'c': {'x': 3, 'y': 4}, 'd': raw({'x': 200, 'y': 300})}))
+        assert tv4 == TreeValue({
+            'a': 3, 'b': 2,
+            'c': {'x': 3, 'y': 4},
+            'd': raw({'x': 200, 'y': 300}),
+        })
+
+        tv5 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        with pytest.raises(TypeError):
+            tv5.update('sdklfj')
+        with pytest.raises(TypeError):
+            tv5.update(123)
+
+        tv6 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        tv6.update({'a': 3, 'c': TreeValue({'x': 3, 'y': 4}), 'd': {'x': 200, 'y': 300}}, a=50, f='dfkl')
+        assert tv6 == TreeValue({
+            'a': 50, 'b': 2, 'f': 'dfkl',
+            'c': {'x': 3, 'y': 4},
+            'd': raw({'x': 200, 'y': 300}),
+        })
 
     def test_keys(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
