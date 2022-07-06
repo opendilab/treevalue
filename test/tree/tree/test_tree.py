@@ -355,6 +355,11 @@ class TestTreeTreeTree:
         with pytest.raises(KeyError):
             tv2.popitem()
 
+    def test_clear(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert tv1.clear() is None
+        assert not tv1
+
     def test_keys(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
         assert len(tv1.keys()) == 4

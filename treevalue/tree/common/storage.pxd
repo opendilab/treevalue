@@ -16,6 +16,7 @@ cdef class TreeStorage:
     cpdef public object pop_or_default(self, str key, object default)
     cpdef public tuple popitem(self)
     cpdef public void del_(self, str key) except *
+    cpdef public void clear(self)
     cpdef public boolean contains(self, str key)
     cpdef public uint size(self)
     cpdef public boolean empty(self)

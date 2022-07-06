@@ -23,6 +23,7 @@ cdef class TreeValue:
     cpdef get(self, str key, object default= *)
     cpdef pop(self, str key, object default= *)
     cpdef popitem(self)
+    cpdef void clear(self)
 
     cpdef treevalue_keys keys(self)
     cpdef treevalue_values values(self)
