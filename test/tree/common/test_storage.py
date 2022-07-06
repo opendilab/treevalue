@@ -208,6 +208,33 @@ class TestTreeStorage:
         assert t1.pop_or_default('fff', delayed_partial(lambda: 2345)) == 2345
         assert not t1.contains('fff')
 
+    def test_popitem(self):
+        t = create_storage({})
+        with pytest.raises(KeyError):
+            t.popitem()
+
+        t1 = create_storage({'a': 1, 'b': 2, 'c': {'x': 2}})
+        assert sorted([t1.popitem() for _ in range(t1.size())]) == [
+            ('a', 1), ('b', 2), ('c', create_storage({'x': 2}))
+        ]
+
+        t2 = create_storage({
+            'a': delayed_partial(lambda: 1),
+            'b': delayed_partial(lambda: 2),
+        })
+        assert sorted([t2.popitem() for _ in range(t2.size())]) == [
+            ('a', 1), ('b', 2)
+        ]
+
+        d1 = delayed_partial(lambda: 1)
+        d2 = delayed_partial(lambda x: x + 1, d1)
+        t3 = create_storage({
+            'a': d1, 'b': d2, 'c': d1,
+        })
+        assert sorted([t3.popitem() for _ in range(t3.size())]) == [
+            ('a', 1), ('b', 2), ('c', 1)
+        ]
+
     def test_set(self):
         t = create_storage({})
         t.set('a', 1)
