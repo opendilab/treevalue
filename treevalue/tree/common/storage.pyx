@@ -55,6 +55,12 @@ cdef class TreeStorage:
             del self.map[key]
         return res
 
+    cpdef public tuple popitem(self):
+        cdef str k
+        cdef object v
+        k, v = self.map.popitem()
+        return k, undelay(v)
+
     cpdef public void del_(self, str key) except *:
         try:
             del self.map[key]

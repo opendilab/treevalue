@@ -336,6 +336,25 @@ class TestTreeTreeTree:
         assert tv3.pop('b', 345) == 345
         assert tv3.pop('c', 345) == 345
 
+    def test_popitem(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
+        assert sorted([tv1.popitem() for _ in range(len(tv1))]) == [
+            ('a', 1), ('b', 2),
+            ('c', TreeValue({'x': 2, 'y': 3})),
+            ('d', {'x': 2, 'y': 3}),
+        ]
+        with pytest.raises(KeyError):
+            tv1.popitem()
+
+        d1 = delayed(lambda: 1)
+        d2 = delayed(lambda x: x + 1, d1)
+        tv2 = TreeValue({'a': d1, 'b': d2, 'c': d1, 'd': 100})
+        assert sorted([tv2.popitem() for _ in range(len(tv2))]) == [
+            ('a', 1), ('b', 2), ('c', 1), ('d', 100),
+        ]
+        with pytest.raises(KeyError):
+            tv2.popitem()
+
     def test_keys(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
         assert len(tv1.keys()) == 4
