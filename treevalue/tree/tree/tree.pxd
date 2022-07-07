@@ -25,6 +25,7 @@ cdef class TreeValue:
     cpdef public pop(self, str key, object default= *)
     cpdef public popitem(self)
     cpdef public void clear(self)
+    cpdef public object setdefault(self, str key, object default= *)
 
     cpdef public treevalue_keys keys(self)
     cpdef public treevalue_values values(self)

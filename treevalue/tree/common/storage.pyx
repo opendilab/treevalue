@@ -22,6 +22,16 @@ cdef class TreeStorage:
     cpdef public void set(self, str key, object value) except *:
         self.map[key] = unraw(value)
 
+    cpdef public object setdefault(self, str key, object default):
+        cdef object v, df
+        try:
+            v = self.map[key]
+            return _c_undelay_data(self.map, key, v)
+        except KeyError:
+            df = unraw(default)
+            self.map[key] = df
+            return _c_undelay_data(self.map, key, df)
+
     # get and get_or_default is designed separately due to the consideration of performance
     cpdef public object get(self, str key):
         cdef object v, nv

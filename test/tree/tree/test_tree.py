@@ -146,6 +146,29 @@ class TestTreeTreeTree:
         assert isinstance(tv1.fff, dict)
         assert tv1.fff == {'x': 1, 'y': 2}
 
+    def test_setdefault(self):
+        t = TreeValue({})
+        assert t.setdefault('a', 1) == 1
+        assert t == TreeValue({'a': 1})
+        assert t.setdefault('a', 100) == 1
+        assert t == TreeValue({'a': 1})
+
+        assert t.setdefault('f', {'a': 1, 'b': 2}) == {'a': 1, 'b': 2}
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2})})
+        assert t.setdefault('f', {'y': 1, 'z': 2}) == {'a': 1, 'b': 2}
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2})})
+
+        assert t.setdefault('c', TreeValue({'a': 1, 'b': 2})) == TreeValue({'a': 1, 'b': 2})
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2}), 'c': {'a': 1, 'b': 2}})
+        assert t.setdefault('c', TreeValue({'aa': 1, 'bb': 2})) == TreeValue({'a': 1, 'b': 2})
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2}), 'c': {'a': 1, 'b': 2}})
+
+        d = delayed(lambda: 1)
+        assert t.setdefault('g', delayed(lambda x: x + 1, d)) == 2
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2}), 'c': {'a': 1, 'b': 2}, 'g': 2})
+        assert t.setdefault('g', delayed(lambda x: x + 100, d)) == 2
+        assert t == TreeValue({'a': 1, 'f': raw({'a': 1, 'b': 2}), 'c': {'a': 1, 'b': 2}, 'g': 2})
+
     def test_tree_value_operate_with_item(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2 = TreeValue(tv1)

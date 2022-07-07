@@ -169,7 +169,66 @@ cdef class TreeValue:
         """
         self._st.clear()
 
-    cdef void _update(self, object d, dict kwargs) except *:
+    @cython.binding(True)
+    cpdef object setdefault(self, str key, object default=None):
+        """
+        Overview:
+            Set the ``default`` to this treevalue and return it if the ``key`` is not exist, \
+            otherwise just return the existing value of ``key``.
+
+        :param key: Items' name.
+        :param default: Default value of the ``key``, ``None`` will be used when not given.
+        :return: The newest value of the ``key``.
+
+        .. note::
+            The behaviour of method :meth:`setdefault` is similar to \
+            `dict.setdefault <https://docs.python.org/3/library/stdtypes.html#dict.setdefault>`_.
+
+        Examples::
+            >>> from treevalue import TreeValue, delayed
+            >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
+            >>> t.setdefault('d', 'dsflgj')  # set new value
+            'dsflgj'
+            >>> t
+            <TreeValue 0x7efe31576048>
+            ├── 'a' --> 1
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            └── 'd' --> 'dsflgj'
+            >>>
+            >>> t.setdefault('ff')  # default value - None
+            >>> t
+            <TreeValue 0x7efe31576048>
+            ├── 'a' --> 1
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            ├── 'd' --> 'dsflgj'
+            └── 'ff' --> None
+            >>>
+            >>> t.setdefault('a', 1000)  # existing key
+            1
+            >>> t
+            <TreeValue 0x7efe31576048>
+            ├── 'a' --> 1
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            ├── 'd' --> 'dsflgj'
+            └── 'ff' --> None
+            >>>
+            >>> t.setdefault('g', delayed(lambda: 1))  # delayed value
+            1
+            >>> t
+            <TreeValue 0x7efe31576048>
+            ├── 'a' --> 1
+            ├── 'b' --> 3
+            ├── 'c' --> '233'
+            ├── 'd' --> 'dsflgj'
+            ├── 'ff' --> None
+            └── 'g' --> 1
+        """
+        return self._unraw(self._st.setdefault(key, self._raw(default)))
+
+    cdef inline void _update(self, object d, dict kwargs) except *:
         cdef object dt
         if d is None:
             dt = {}

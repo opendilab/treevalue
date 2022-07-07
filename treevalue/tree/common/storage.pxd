@@ -10,6 +10,7 @@ cdef class TreeStorage:
     cdef readonly dict map
 
     cpdef public void set(self, str key, object value) except *
+    cpdef public object setdefault(self, str key, object default)
     cpdef public object get(self, str key)
     cpdef public object get_or_default(self, str key, object default)
     cpdef public object pop(self, str key)

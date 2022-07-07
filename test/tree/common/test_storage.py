@@ -264,6 +264,26 @@ class TestTreeStorage:
         t.set('fff', raw({'x': 1, 'y': 2}))
         assert t.get('fff') == {'x': 1, 'y': 2}
 
+    def test_setdefault(self):
+        t = create_storage({})
+        assert t.setdefault('a', 1) == 1
+        assert t == create_storage({'a': 1})
+        assert t.setdefault('b', 2) == 2
+        assert t == create_storage({'a': 1, 'b': 2})
+        assert t.setdefault('a', 100) == 1
+        assert t == create_storage({'a': 1, 'b': 2})
+
+        assert t.setdefault('c', create_storage({'a': 100, 'b': 200})) == create_storage({'a': 100, 'b': 200})
+        assert t == create_storage({'a': 1, 'b': 2, 'c': {'a': 100, 'b': 200}})
+        assert t.setdefault('c', create_storage({'a': 400, 'b': 300})) == create_storage({'a': 100, 'b': 200})
+        assert t == create_storage({'a': 1, 'b': 2, 'c': {'a': 100, 'b': 200}})
+
+        d1 = delayed_partial(lambda: 1)
+        assert t.setdefault('g', delayed_partial(lambda x: x + 1, d1)) == 2
+        assert t == create_storage({'a': 1, 'b': 2, 'c': {'a': 100, 'b': 200}, 'g': 2})
+        assert t.setdefault('g', delayed_partial(lambda x: x * 100, d1)) == 2
+        assert t == create_storage({'a': 1, 'b': 2, 'c': {'a': 100, 'b': 200}, 'g': 2})
+
     def test_del_(self):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         t.del_('c')
