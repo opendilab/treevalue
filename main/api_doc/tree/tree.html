@@ -795,6 +795,75 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="treevalue.tree.tree.TreeValue.setdefault">
+<code class="sig-name descname">setdefault</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.setdefault" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Set the <code class="docutils literal notranslate"><span class="pre">default</span></code> to this treevalue and return it if the <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist,             otherwise just return the existing value of <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Items’ name.</p></li>
+<li><p><strong>default</strong> – Default value of the <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code> will be used when not given.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newest value of the <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The behaviour of method <a class="reference internal" href="#treevalue.tree.tree.TreeValue.setdefault" title="treevalue.tree.tree.TreeValue.setdefault"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setdefault()</span></code></a> is similar to             <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict.setdefault">dict.setdefault</a>.</p>
+</div>
+<dl>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;dsflgj&#39;</span><span class="p">)</span>  <span class="c1"># set new value</span>
+<span class="go">&#39;dsflgj&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7efe31576048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 3</span>
+<span class="go">├── &#39;c&#39; --&gt; &#39;233&#39;</span>
+<span class="go">└── &#39;d&#39; --&gt; &#39;dsflgj&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;ff&#39;</span><span class="p">)</span>  <span class="c1"># default value - None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7efe31576048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 3</span>
+<span class="go">├── &#39;c&#39; --&gt; &#39;233&#39;</span>
+<span class="go">├── &#39;d&#39; --&gt; &#39;dsflgj&#39;</span>
+<span class="go">└── &#39;ff&#39; --&gt; None</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># existing key</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7efe31576048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 3</span>
+<span class="go">├── &#39;c&#39; --&gt; &#39;233&#39;</span>
+<span class="go">├── &#39;d&#39; --&gt; &#39;dsflgj&#39;</span>
+<span class="go">└── &#39;ff&#39; --&gt; None</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">delayed</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># delayed value</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7efe31576048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 1</span>
+<span class="go">├── &#39;b&#39; --&gt; 3</span>
+<span class="go">├── &#39;c&#39; --&gt; &#39;233&#39;</span>
+<span class="go">├── &#39;d&#39; --&gt; &#39;dsflgj&#39;</span>
+<span class="go">├── &#39;ff&#39; --&gt; None</span>
+<span class="go">└── &#39;g&#39; --&gt; 1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="treevalue.tree.tree.TreeValue.update">
 <code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">__update_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.tree.TreeValue.update" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
@@ -1521,27 +1590,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f1e206ac700 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f1e20845dc0 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f1e206ac700__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f1e206ac700 -&gt; value__node_7f1e206ac700__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f1e206ac700__b [label=&quot;array([[5, 6],
+	node_7fe0eb6cc820 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7fe0eb867ee0 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7fe0eb6cc820__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fe0eb6cc820 -&gt; value__node_7fe0eb6cc820__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fe0eb6cc820__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f1e206ac700 -&gt; value__node_7f1e206ac700__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f1e206ac730 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f1e206ac700 -&gt; node_7f1e206ac730 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f1e20845dc0 -&gt; node_7f1e206ac730 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f1e2085fbb0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f1e20845dc0 -&gt; node_7f1e2085fbb0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f1e206ac730__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f1e206ac730 -&gt; value__node_7f1e206ac730__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f1e206ac730__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f1e206ac730 -&gt; value__node_7f1e206ac730__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f1e206ac730__e [label=&quot;array([[1, 2],
+	node_7fe0eb6cc820 -&gt; value__node_7fe0eb6cc820__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb6cc850 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fe0eb6cc820 -&gt; node_7fe0eb6cc850 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb867ee0 -&gt; node_7fe0eb6cc850 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb87fcd0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fe0eb867ee0 -&gt; node_7fe0eb87fcd0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fe0eb6cc850__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fe0eb6cc850 -&gt; value__node_7fe0eb6cc850__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fe0eb6cc850__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fe0eb6cc850 -&gt; value__node_7fe0eb6cc850__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fe0eb6cc850__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f1e206ac730 -&gt; value__node_7f1e206ac730__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f1e2085fbb0 -&gt; node_7f1e206ac700 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f1e2085fbb0 -&gt; node_7f1e206ac730 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb6cc850 -&gt; value__node_7fe0eb6cc850__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb87fcd0 -&gt; node_7fe0eb6cc820 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fe0eb87fcd0 -&gt; node_7fe0eb6cc850 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -1779,7 +1848,6 @@ below</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../dev/setdefault/api_doc/tree/tree.html">dev/setdefault</a></dd>
                         <dd><a href="tree.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/tree/tree.html">run/paper</a></dd>
