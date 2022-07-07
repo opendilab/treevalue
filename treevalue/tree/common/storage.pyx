@@ -2,8 +2,8 @@
 # cython:language_level=3
 
 from copy import deepcopy
+cimport cython
 
-from libc.string cimport strlen
 from libcpp cimport bool
 
 from .base cimport raw, unraw
@@ -12,6 +12,7 @@ from .delay cimport undelay
 cdef inline object _keep_object(object obj):
     return obj
 
+@cython.final
 cdef class TreeStorage:
     def __cinit__(self, dict map_):
         self.map = map_
@@ -19,10 +20,24 @@ cdef class TreeStorage:
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
 
-    cpdef public void set(self, str key, object value) except *:
+    cpdef public inline void set(self, str key, object value) except *:
+        """
+        Set value of given ``key`` in this storage object.
+
+        :param key: Key of the target item, should be a string.
+        :param value: Value of the target item, should be a native object, raw wrapped object or \\
+            a delayed object.
+        """
         self.map[key] = unraw(value)
 
-    cpdef public object setdefault(self, str key, object default):
+    cpdef public inline object setdefault(self, str key, object default):
+        """
+        Set value of given ``key`` if it is not exist yet.
+
+        :param key: Key of the target item, should be a string.
+        :param default: Default value of the target item, similar to ``value`` in method :meth:`set`.
+        :return: Value of the actual-exist item.
+        """
         cdef object v, df
         try:
             v = self.map[key]
@@ -33,7 +48,14 @@ cdef class TreeStorage:
             return _c_undelay_data(self.map, key, df)
 
     # get and get_or_default is designed separately due to the consideration of performance
-    cpdef public object get(self, str key):
+    cpdef public inline object get(self, str key):
+        """
+        Get value of the given ``key``.
+
+        :param key: Key of the item.
+        :return: Value of the item.
+        :raise KeyError: When ``key`` is not exist, raise ``KeyError``.
+        """
         cdef object v, nv
         try:
             v = self.map[key]
@@ -41,21 +63,29 @@ cdef class TreeStorage:
         except KeyError:
             raise KeyError(f"Key {repr(key)} not found in this tree.")
 
-    cpdef public object get_or_default(self, str key, object default):
-        cdef object v, nv
+    cpdef public inline object get_or_default(self, str key, object default):
+        """
+        Get value of the given ``key``, return ``default`` when not exist.
+
+        :param key: Key of the item.
+        :param default: Default value of the item.
+        :return: Value of the item if ``key`` is exist, otherwise return ``default``.
+        """
+        cdef object v
         v = self.map.get(key, default)
         return _c_undelay_check_data(self.map, key, v)
 
     # pop and pop_or_default is designed separately due to the consideration of performance
-    cpdef public object pop(self, str key):
-        cdef object v, nv, res
-        try:
-            v = self.map[key]
-            res = _c_undelay_data(self.map, key, v)
-            del self.map[key]
-            return res
-        except KeyError:
-            raise KeyError(f"Key {repr(key)} not found in this tree.")
+    cpdef public inline object pop(self, str key):
+        """
+        Pop the item with the given ``key``, and return its value.
+        After :meth:`pop` method, the ``key`` will be no longer in current storage object.
+
+        :param key: Key of the item.
+        :return: Value of the item.
+        :raise KeyError: When ``key`` is not exist, raise ``KeyError``.
+        """
+        return undelay(self.map.pop(key))
 
     cpdef public object pop_or_default(self, str key, object default):
         cdef object v, nv, res

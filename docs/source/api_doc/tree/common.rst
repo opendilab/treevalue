@@ -9,7 +9,11 @@ TreeStorage
 -----------
 
 .. autoclass:: TreeStorage
-    :members: get, get_or_default, pop, pop_or_default, set, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach
+    :members: get, get_or_default, pop, pop_or_default, set, setdefault, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach
+
+    .. note::
+        Please refer to the source code for method details in this section of the documentation \
+        because adding method signatures will significantly decrease running speed.
 
 
 .. _apidoc_tree_common_raw:
