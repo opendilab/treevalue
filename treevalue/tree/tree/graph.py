@@ -185,7 +185,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         graph_title=title or "<untitled>",
         graph_cfg=cfg or {},
         repr_gen=repr_gen or (lambda x: nohtml(repr(x))),
-        iter_gen=lambda n: iter(n) if isinstance(n, TreeValue) else None,
+        iter_gen=lambda n: iter(n.items()) if isinstance(n, TreeValue) else None,
         node_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, is_root, root: {
             'fillcolor': _shape_color(root[2]),
             'color': _border_color(root[2], is_node),

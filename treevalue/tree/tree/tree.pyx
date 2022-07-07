@@ -15,6 +15,13 @@ from ...utils import format_tree
 cdef class _CObject:
     pass
 
+try:
+    reversed({'a': 1}.keys())
+except TypeError:
+    _reversible = False
+else:
+    _reversible = True
+
 cdef inline object _item_unwrap(object v):
     if isinstance(v, list) and len(v) == 1:
         return v[0]
@@ -529,24 +536,49 @@ cdef class TreeValue:
         Overview:
             Get iterator of this tree value.
 
-        Returns:
-            - iter (:obj:`iter`): Iterator for keys and values.
+        :return: An iterator for the keys.
 
-        Example:
+        Examples:
+            >>> from treevalue import TreeValue
+            >>>
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': 3})
-            >>> for key, value in t:
-            >>>     print(key, value)
+            >>> for key in t:
+            ...     print(key)
+            a
+            b
+            x
 
-            The output will be:
-
-            >>> a 1
-            >>> b 2
-            >>> x 3
+        .. note::
+            The method :meth:`__iter__`'s bahaviour should be similar to \
+            `dict.__iter__ <https://docs.python.org/3/library/stdtypes.html#dict.update>`_.
         """
-        cdef str k
-        cdef object v
-        for k, v in self._st.iter_items():
-            yield k, self._unraw(v)
+        yield from self._st.iter_keys()
+
+    @cython.binding(True)
+    def __reversed__(self):
+        """
+        Overview:
+            Get the reversed iterator of tree value.
+
+        :return: A reversed iterator for the keys.
+
+        Examples:
+            >>> from treevalue import TreeValue
+            >>>
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': 3})
+            >>> for key in reversed(t):
+            ...     print(key)
+            x
+            b
+            a
+
+        .. note::
+            Only available in python 3.8 or higher version.
+        """
+        if _reversible:
+            return self._st.iter_rev_keys()
+        else:
+            raise TypeError(f'{self._type.__name__!r} object is not reversible')
 
     @cython.binding(True)
     def __len__(self):
@@ -809,13 +841,6 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
 
     self_repr = _prefix_fix(self_repr, prefix)
     return self_repr, children
-
-try:
-    reversed({'a': 1}.keys())
-except TypeError:
-    _reversible = False
-else:
-    _reversible = True
 
 # noinspection PyPep8Naming
 cdef class treevalue_keys(_CObject, Sized, Container, Reversible):
