@@ -140,6 +140,12 @@ class TestTreeTreeTree:
         with pytest.raises(AttributeError):
             del tv1._property__data
 
+        tv1.ff = raw(1)
+        assert tv1.ff == 1
+        tv1.fff = raw({'x': 1, 'y': 2})
+        assert isinstance(tv1.fff, dict)
+        assert tv1.fff == {'x': 1, 'y': 2}
+
     def test_tree_value_operate_with_item(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
         tv2 = TreeValue(tv1)
