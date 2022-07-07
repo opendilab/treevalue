@@ -252,12 +252,19 @@ class TestTreeTreeTree:
     def test_tree_value_iter(self):
         # Attention: dict(tv1) is not supported in python 3.7+
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
-        assert sorted(list(tv1)) == [
-            ('a', 1),
-            ('b', 2),
-            ('c', TreeValue({'x': 2, 'y': 3}))
-        ]
-        assert sorted(list(tv1.c)) == [('x', 2), ('y', 3)]
+        assert sorted(list(tv1)) == ['a', 'b', 'c']
+        assert sorted(list(tv1.c)) == ['x', 'y']
+
+    def test_tree_value_reversed(self):
+        tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
+        if _reversible:
+            assert list(reversed(tv1)) == list(iter(tv1))[::-1]
+            assert list(reversed(tv1.c)) == list(iter(tv1.c))[::-1]
+        else:
+            with pytest.raises(TypeError):
+                reversed(tv1)
+            with pytest.raises(TypeError):
+                reversed(tv1.c)
 
     def test_tree_value_len(self):
         tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
