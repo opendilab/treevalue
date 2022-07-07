@@ -20,7 +20,7 @@ cdef class TreeStorage:
         return ({},), {}
 
     cpdef public void set(self, str key, object value) except *:
-        self.map[key] = value
+        self.map[key] = unraw(value)
 
     # get and get_or_default is designed separately due to the consideration of performance
     cpdef public object get(self, str key):

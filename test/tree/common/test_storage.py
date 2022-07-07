@@ -258,6 +258,12 @@ class TestTreeStorage:
         t.set('0' * 1000, 235)
         assert t.get('0' * 1000) == 235
 
+        t.set('ff', raw(1))
+        assert t.get('ff') == 1
+
+        t.set('fff', raw({'x': 1, 'y': 2}))
+        assert t.get('fff') == {'x': 1, 'y': 2}
+
     def test_del_(self):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         t.del_('c')
