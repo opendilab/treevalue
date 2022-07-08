@@ -119,7 +119,7 @@ cpdef walk(TreeValue tree):
         - iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full \
             path of the node, the 2nd one is the value.
 
-    Examples::
+    Examples:
         >>> from treevalue import TreeValue, walk
         >>> tv1 = TreeValue({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 2}})
         >>> for k, v in walk(tv1):

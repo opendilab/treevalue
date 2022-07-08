@@ -63,21 +63,31 @@ cdef class TreeValue:
     @cython.binding(True)
     def __init__(self, object data):
         """
-        Overview:
-            Constructor of `TreeValue`.
+        Constructor of :class:`TreeValue`.
 
-        Arguments:
-            - data: (:obj:`Union[TreeStorage, 'TreeValue', dict]`): Original data to init a tree value, \
-                can be a `TreeStorage`, `TreeValue` or dict.
+        :param data: Original data to init a tree value, should be a :class:`treevalue.tree.common.TreeStorage`, \
+            :class:`TreeValue` or a :class:`dict`.
 
         Example:
-            >>> TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> # this is the tree:
-            >>> # <root> -+--> a (1)
-            >>> #         +--> b (2)
-            >>> #         +--> x
-            >>> #              +--> c (3)
-            >>> #              +--> d (4)
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})  # create an instance
+            >>> t
+            <TreeValue 0x7fbcf70750b8>
+            ├── 'a' --> 1
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fbcf70750f0>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> t2 = TreeValue(t)  # create a new treevalue with the same storage of t
+            >>> t2
+            <TreeValue 0x7fbcf70750b8>
+            ├── 'a' --> 1
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fbcf70750f0>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> t2 is t
+            False
         """
         if isinstance(data, TreeStorage):
             self._st = data
@@ -93,7 +103,18 @@ cdef class TreeValue:
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
 
+    @cython.binding(True)
     cpdef TreeStorage _detach(self):
+        """
+        Detach the inner :class:`treevalue.tree.common.TreeStorage` object.
+
+        :return: :class:`treevalue.tree.common.TreeStorage` object.
+
+        .. warning::
+            This is an inner method of :class:`TreeValue`, which is not recommended to be actually used. \
+            If you need to instantiate a new :class:`TreeValue` with the same storage, just pass this \
+            :class:`TreeValue` object as the argument of the :meth:`__init__`.
+        """
         return self._st
 
     cdef inline object _unraw(self, object obj):
@@ -111,8 +132,7 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef get(self, str key, object default=None):
         r"""
-        Overview:
-            Get item from the tree node.
+        Get item from the tree node.
 
         :param key: Item's name.
         :param default: Default value when this item is not found, default is ``None``.
@@ -121,23 +141,54 @@ cdef class TreeValue:
         .. note::
             The method :meth:`get` will never raise ``KeyError``, like the behaviour in \
             `dict.get <https://docs.python.org/3/library/stdtypes.html#dict.get>`_.
+
+        Examples:
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t.get('a')
+            1
+            >>> t.get('x')
+            <TreeValue 0x7f488a65f0b8>
+            ├── 'c' --> 3
+            └── 'd' --> 4
+            >>> t.get('f')  # key not exist
+            None
+            >>> t.get('f', 123)
+            123
         """
         return self._unraw(self._st.get_or_default(key, default))
 
     @cython.binding(True)
     cpdef pop(self, str key, object default=_GET_NO_DEFAULT):
         """
-        Overview:
-            Pop item from the tree node.
+        Pop item from the tree node.
 
         :param key: Item's name.
         :param default: Default value when this item is not found, default is ``_GET_NO_DEFAULT`` which means \
             just raise ``KeyError`` when not found.
         :return: Item's value.
+        :raise KeyError: When ``key`` is not exist and ``default`` is not given, raise ``KeyError``.
 
         .. note::
             The method :meth:`pop` will raise ``KeyError`` when ``key`` is not found, like the behaviour in \
             `dict.pop <https://docs.python.org/3/library/stdtypes.html#dict.pop>`_.
+        
+        Examples:
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t.pop('a')
+            1
+            >>> t.pop('x')
+            <TreeValue 0x7f488a65f080>
+            ├── 'c' --> 3
+            └── 'd' --> 4
+            >>> t
+            <TreeValue 0x7f488a65f048>
+            └── 'b' --> 2
+            >>> t.pop('f')
+            KeyError: 'f'
+            >>> t.pop('f', 123)
+            123
         """
         cdef object value
         if default is _GET_NO_DEFAULT:
@@ -150,8 +201,7 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef popitem(self):
         """
-        Overview:
-            Pop item (with a key and its value) from the tree node.
+        Pop item (with a key and its value) from the tree node.
 
         :return: Popped item.
         :raise KeyError: When current treevalue is empty.
@@ -159,6 +209,21 @@ cdef class TreeValue:
         .. note::
             The method :meth:`popitem` will raise ``KeyError`` when empty, like the behaviour in \
             `dict.popitem <https://docs.python.org/3/library/stdtypes.html#dict.popitem>`_.
+        
+        Examples:
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t.popitem()
+            ('x', <TreeValue 0x7f488a65f0b8>
+            ├── 'c' --> 3
+            └── 'd' --> 4
+            )
+            >>> t.popitem()
+            ('b', 2)
+            >>> t.popitem()
+            ('a', 1)
+            >>> t.popitem()
+            KeyError: 'popitem(): TreeValue is empty.'
         """
         cdef str k
         cdef object v
@@ -171,17 +236,29 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef void clear(self):
         """
-        Overview:
-            Clear all the items in this treevalue object.
+        Clear all the items in this treevalue object.
+        
+        Examples:
+            >>> from treevalue import TreeValue
+            >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
+            >>> t
+            <TreeValue 0x7fd2553f0048>
+            ├── 'a' --> 1
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fd2553e3fd0>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> t.clear()
+            >>> t
+            <TreeValue 0x7fd2553f0048>
         """
         self._st.clear()
 
     @cython.binding(True)
     cpdef object setdefault(self, str key, object default=None):
         """
-        Overview:
-            Set the ``default`` to this treevalue and return it if the ``key`` is not exist, \
-            otherwise just return the existing value of ``key``.
+        Set the ``default`` to this treevalue and return it if the ``key`` is not exist, \
+        otherwise just return the existing value of ``key``.
 
         :param key: Items' name.
         :param default: Default value of the ``key``, ``None`` will be used when not given.
@@ -191,7 +268,7 @@ cdef class TreeValue:
             The behaviour of method :meth:`setdefault` is similar to \
             `dict.setdefault <https://docs.python.org/3/library/stdtypes.html#dict.setdefault>`_.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue, delayed
             >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
             >>> t.setdefault('d', 'dsflgj')  # set new value
@@ -202,7 +279,6 @@ cdef class TreeValue:
             ├── 'b' --> 3
             ├── 'c' --> '233'
             └── 'd' --> 'dsflgj'
-            >>>
             >>> t.setdefault('ff')  # default value - None
             >>> t
             <TreeValue 0x7efe31576048>
@@ -211,7 +287,6 @@ cdef class TreeValue:
             ├── 'c' --> '233'
             ├── 'd' --> 'dsflgj'
             └── 'ff' --> None
-            >>>
             >>> t.setdefault('a', 1000)  # existing key
             1
             >>> t
@@ -221,7 +296,6 @@ cdef class TreeValue:
             ├── 'c' --> '233'
             ├── 'd' --> 'dsflgj'
             └── 'ff' --> None
-            >>>
             >>> t.setdefault('g', delayed(lambda: 1))  # delayed value
             1
             >>> t
@@ -268,9 +342,8 @@ cdef class TreeValue:
             The method :meth:`update` is similar to \
             `dict.update <https://docs.python.org/3/library/stdtypes.html#dict.update>`_.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
-            >>>
             >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
             >>> t.update({'a': 10, 'f': 'sdkj'})  # with dict
             >>> t
@@ -279,7 +352,6 @@ cdef class TreeValue:
             ├── 'b' --> 3
             ├── 'c' --> '233'
             └── 'f' --> 'sdkj'
-            >>>
             >>> t.update(a=100, ft='fffff')  # with key-word arguments
             >>> t
             <TreeValue 0x7fa31f5ba048>
@@ -288,7 +360,6 @@ cdef class TreeValue:
             ├── 'c' --> '233'
             ├── 'f' --> 'sdkj'
             └── 'ft' --> 'fffff'
-            >>>
             >>> t.update(TreeValue({'f': {'x': 1}, 'b': 40}))  # with TreeValue
             >>> t
             <TreeValue 0x7fa31f5ba048>
@@ -321,22 +392,31 @@ cdef class TreeValue:
     @cython.binding(True)
     def __getattribute__(self, str item):
         """
-        Overview:
-            Get item from this tree value.
+        Get item from this tree value.
 
-        Arguments:
-            - key (:obj:`str`): Attribute name.
-
-        Returns:
-            - attr (:obj:): Target attribute value.
+        :param item: Name of attribute.
+        :return: Target attribute value; if ``item`` is exist in :meth:`keys`, return its value.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> t.a    # 1
-            >>> t.b    # 2
-            >>> t.x.c  # 3
+            >>> t.a
+            1
+            >>> t.b
+            2
+            >>> t.x
+            <TreeValue 0x7fd2553e3fd0>
+            ├── 'c' --> 3
+            └── 'd' --> 4
+            >>> t.x.c
+            3
+            >>> t.keys  # this is a method
+            <bound method TreeValue.keys of <TreeValue 0x7fd2553f00b8>>
+            >>> t.ff  # this key is not exist
+            AttributeError: Attribute 'ff' not found.
         """
 
+        # the order of the attributes' getting is altered
         # original order: __dict__, self._st, self._attr_extern
         # new order: self._st, __dict__, self._attr_extern
         # this may cause problem when pickle.loads, so __getnewargs_ex__ and __cinit__ is necessary
@@ -351,67 +431,91 @@ cdef class TreeValue:
     @cython.binding(True)
     def __setattr__(self, str key, object value):
         """
-        Overview:
-            Set sub node to this tree value.
+        Set sub node to this tree value.
 
-        Arguments:
-            - key (:obj:`str`): Attribute name.
-            - value (:obj:): Sub value.
+        :param key: Name of the attribute.
+        :param value: Sub value.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> t.a = 3                 # t will be TreeValue({'a': 3, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> t.b = {'x': 1, 'y': 2}  # t will be TreeValue({'a': 3, 'b': {'x': 1, 'y': 2}, 'x': {'c': 3, 'd': 4}})
+            >>> t.a = 3  # set a value
+            >>> t
+            <TreeValue 0x7fd2553f0048>
+            ├── 'a' --> 3
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fd2553f0080>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> t.b = {'x': 1, 'y': 2}  # set a dict
+            >>> t
+            <TreeValue 0x7fd2553f0048>
+            ├── 'a' --> 3
+            ├── 'b' --> {'x': 1, 'y': 2}
+            └── 'x' --> <TreeValue 0x7fd2553f0080>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> t.b = TreeValue({'x': 1, 'y': 2})  # set a tree
+            >>> t
+            <TreeValue 0x7fd2553f0048>
+            ├── 'a' --> 3
+            ├── 'b' --> <TreeValue 0x7fd2553e3fd0>
+            │   ├── 'x' --> 1
+            │   └── 'y' --> 2
+            └── 'x' --> <TreeValue 0x7fd2553f0080>
+                ├── 'c' --> 3
+                └── 'd' --> 4
         """
         self._st.set(key, self._raw(value))
 
     @cython.binding(True)
     def __delattr__(self, str item):
         """
-        Overview:
-            Delete attribute from tree value.
+        Delete attribute from tree value.
 
-        Arguments:
-            - key (:obj:`str`): Attribute name.
+        :param item: Name of the attribute.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> del t.a    # t will be TreeValue({'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> del t.x.c  # t will be TreeValue({'b': 2, 'x': {'d': 4}})
+            >>> del t.a
+            >>> t
+            <TreeValue 0x7fd2251ae320>
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fd2553f00b8>
+                ├── 'c' --> 3
+                └── 'd' --> 4
+            >>> del t.x.c
+            >>> t
+            <TreeValue 0x7fd2251ae320>
+            ├── 'b' --> 2
+            └── 'x' --> <TreeValue 0x7fd2553f00b8>
+                └── 'd' --> 4
         """
         try:
             self._st.del_(item)
         except KeyError:
-            raise AttributeError("Unable to delete attribute {attr}.".format(attr=repr(item)))
+            raise AttributeError(f"Unable to delete attribute {item!r}.")
 
     @cython.binding(True)
     cpdef _getitem_extern(self, object key):
         r"""
-        Overview:
-            External protected function for support the getitem operation. \
-            Default is raise a `KeyError`.
+        External protected function for support the :meth:`__getitem__` operation. \
+        Default behaviour is raising a `KeyError`.
 
-        Arguments:
-            - key (:obj:`object`): Item object.
-
-        Returns:
-            - return (:obj:): Anything you like, \
-                and if it is not able to validly return anything, \
-                just raise an ``KeyError`` here.
+        :param key: Item object.
+        :return: Anything you like, this depends on your implements. 
+        :raise KeyError: If it is not able to validly return anything, just raise an ``KeyError`` here.
         """
-        raise KeyError(f'Key {repr(key)} not found.')
+        raise KeyError(key)
 
     @cython.binding(True)
     def __getitem__(self, object key):
         """
-        Overview:
-            Get item from this tree value.
+        Get item from this tree value.
 
-        Arguments:
-            - key (:obj:`str`): Item object.
-
-        Returns:
-            - value (:obj:): Target object value.
+        :param key: Item object.
+        :return: Target object value.
 
         Example:
             >>> from treevalue import TreeValue
@@ -431,29 +535,23 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef _setitem_extern(self, object key, object value):
         r"""
-        Overview:
-            External function for supporting ``__setitem__`` operation.
+        External function for supporting :meth:`__setitem__` operation.
         
-        Arguments:
-            - key (:obj:`object`): Key object.
-            - value (:obj:`object`): Value object.
-        
-        Raises:
-            - NotImplementError: Just raise this when not implemented.
+        :param key: Key object.
+        :param value: Value object.
+        :raise NotImplementedError: When not implemented, raise ``NotImplementedError``. 
         """
         raise NotImplementedError
 
     @cython.binding(True)
     def __setitem__(self, object key, object value):
         """
-        Overview:
-            Set item to current :class:`TreeValue` object.
+        Set item to current :class:`TreeValue` object.
 
-        Arguments:
-            - key (:obj:`object`): Key object.
-            - value (:obj:`object`): Value object.
+        :param key: Key object.
+        :param value: Value object.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> t['a'] = 11
@@ -474,27 +572,21 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef _delitem_extern(self, object key):
         r"""
-        Overview:
-            External function for supporting ``__delitem__`` operation.
-        
-        Arguments:
-            - key (:obj:`object`): Key object.
-        
-        Raises:
-            - KeyError: Just raise this in default case.
+        External function for supporting :meth:`__delitem__` operation.
+
+        :param key: Key object.
+        :raise KeyError: Raise ``KeyError`` in default case.
         """
-        raise KeyError(f'Key {repr(key)} not found.')
+        raise KeyError(key)
 
     @cython.binding(True)
     def __delitem__(self, object key):
         """
-        Overview:
-            Delete item from current :class:`TreeValue`.
+        Delete item from current :class:`TreeValue`.
 
-        Arguments:
-            - key (:obj:`object`): Key object.
+        :param key: Key object.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> del t['a']
@@ -511,36 +603,31 @@ cdef class TreeValue:
             self._delitem_extern(_item_unwrap(key))
 
     @cython.binding(True)
-    def __contains__(self, str item):
+    def __contains__(self, str key):
         """
-        Overview:
-            Check if attribute is in this tree value.
+        Check if attribute is in this tree value.
 
-        Arguments:
-            - key (:obj:`str`): Attribute name.
-
-        Returns:
-            - exist (:obj:`bool`): If attribute is in this tree value.
+        :param key: Key to check.
+        :return: ``key`` is existed or not in this tree value.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> 'a' in t  # True
             >>> 'b' in t  # True
             >>> 'c' in t  # False
         """
-        return self._st.contains(item)
+        return self._st.contains(key)
 
     @cython.binding(True)
     def __iter__(self):
         """
-        Overview:
-            Get iterator of this tree value.
+        Get iterator of this tree value.
 
         :return: An iterator for the keys.
 
         Examples:
             >>> from treevalue import TreeValue
-            >>>
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': 3})
             >>> for key in t:
             ...     print(key)
@@ -557,14 +644,12 @@ cdef class TreeValue:
     @cython.binding(True)
     def __reversed__(self):
         """
-        Overview:
-            Get the reversed iterator of tree value.
+        Get the reversed iterator of tree value.
 
         :return: A reversed iterator for the keys.
 
         Examples:
             >>> from treevalue import TreeValue
-            >>>
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': 3})
             >>> for key in reversed(t):
             ...     print(key)
@@ -583,13 +668,12 @@ cdef class TreeValue:
     @cython.binding(True)
     def __len__(self):
         """
-        Overview:
-            Get count of the keys.
+        Get count of the keys.
 
-        Returns:
-            - length (:obj:`int`): Count of the keys.
+        :return: Count of the keys.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
             >>> len(t)    # 3
             >>> len(t.x)  # 2
@@ -599,13 +683,12 @@ cdef class TreeValue:
     @cython.binding(True)
     def __bool__(self):
         """
-        Overview:
-            Check if the tree value is not empty.
+        Check if the tree value is not empty.
 
-        Returns:
-            - non_empty (:obj:`bool`): Not empty or do.
+        :return: Not empty or do.
 
         Example:
+            >>> from treevalue import TreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': {}})
             >>> not not t    # True
             >>> not not t.x  # True
@@ -616,11 +699,9 @@ cdef class TreeValue:
     @cython.binding(True)
     def __repr__(self):
         """
-        Overview:
-            Get representation format of tree value.
+        Get representation format of tree value.
 
-        Returns:
-            - repr (:obj:`str`): Representation string.
+        :return: Represenation string.
 
         Example:
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
@@ -640,31 +721,29 @@ cdef class TreeValue:
     @cython.binding(True)
     def __hash__(self):
         """
-        Overview:
-            Hash value of current object.
+        Hash value of current object.
 
-        Returns:
-            - hash (:obj:`int`): Hash code of current object.
+        :return: Hash value of current object.
+
+        .. note::
+            If the structure and hash values of two tree values are exactly the same, their hash value \
+            is guaranteed to be the same.
         """
         return hash(self._st)
 
     @cython.binding(True)
     def __eq__(self, object other):
         """
-        Overview:
-            Check the equality of two tree values.
+        Check the equality of two tree values.
 
-        Arguments:
-            - other (:obj:`TreeValue`): Another tree value.
-
-        Returns:
-            - equal (:obj:`bool`): Equality.
+        :param other: Another tree value object.
+        :return: Equal or not.
 
         Example:
+            >>> from treevalue import TreeValue, clone, FastTreeValue
             >>> t = TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
-            >>> clone(t) == t                                                # True
-            >>> t == TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 5}})      # False
             >>> t == TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})      # True
+            >>> t == TreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 5}})      # False
             >>> t == FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})  # False (type not match)
         """
         if self is other:
@@ -677,11 +756,10 @@ cdef class TreeValue:
     @cython.binding(True)
     def __setstate__(self, TreeStorage state):
         """
-        Overview:
-            Deserialize operation, can support `pickle.loads`.
+        Deserialize operation, can support `pickle.loads`.
 
-        Arguments:
-            - tree (:obj:`Tree`): Deserialize tree.
+        :param state: :class:`treevalue.tree.common.TreeStorage` object, \
+            which should be used when deserialization.
 
         Examples:
             >>> import pickle
@@ -696,8 +774,9 @@ cdef class TreeValue:
     @cython.binding(True)
     def __getstate__(self):
         """
-        Overview:
-            Serialize operation, can support `pickle.dumps`.
+        Serialize operation, can support `pickle.dumps`.
+
+        :return: A :class:`treevalue.tree.common.TreeStorage` object, used for serialization.
 
         Examples:
             >>> import pickle
@@ -712,13 +791,11 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef treevalue_keys keys(self):
         """
-        Overview:
-            Get keys of this treevalue object, like the :class:`dict`.
+        Get keys of this treevalue object, like the :class:`dict`.
 
-        Returns:
-            - keys: A generator of all the keys.
+        :return: A mapping object for tree value's keys. 
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
             >>> 
             >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
@@ -743,13 +820,11 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef treevalue_values values(self):
         """
-        Overview:
-            Get value of this treevalue object, like the :class:`dict`.
+        Get value of this treevalue object, like the :class:`dict`.
 
-        Returns:
-            - values: A generator of all the values
+        :return: A mapping object for tree value's values.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
             >>> 
             >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
@@ -774,13 +849,11 @@ cdef class TreeValue:
     @cython.binding(True)
     cpdef treevalue_items items(self):
         """
-        Overview:
-            Get pairs of keys and values of this treevalue object, like the :class:`items`.
+        Get pairs of keys and values of this treevalue object, like the :class:`items`.
 
-        Returns:
-            - items: A generator of pairs of keys and values.
+        :return: A mapping object for tree value's items.
 
-        Examples::
+        Examples:
             >>> from treevalue import TreeValue
             >>> 
             >>> t = TreeValue({'a': 1, 'b': 3, 'c': '233'})
@@ -985,12 +1058,11 @@ def delayed(func, *args, **kwargs):
         The given ``func`` will not be called until its value is accessed, and \
         it will be only called once, after that the delayed node will be replaced by the actual value.
 
-    Arguments:
-        - func: Delayed function.
-        - args: Positional arguments.
-        - kwargs: Key-word arguments.
+    :param func: Delayed function.
+    :param args: Positional arguments.
+    :param kwargs: Key-word arguments.
 
-    Examples::
+    Examples:
         >>> from treevalue import TreeValue, delayed
         >>> def f(x):
         ...     print('f is called, x is', x)

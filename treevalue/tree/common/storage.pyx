@@ -2,8 +2,8 @@
 # cython:language_level=3
 
 from copy import deepcopy
+cimport cython
 
-from libc.string cimport strlen
 from libcpp cimport bool
 
 from .base cimport raw, unraw
@@ -12,6 +12,7 @@ from .delay cimport undelay
 cdef inline object _keep_object(object obj):
     return obj
 
+@cython.final
 cdef class TreeStorage:
     def __cinit__(self, dict map_):
         self.map = map_
@@ -19,10 +20,24 @@ cdef class TreeStorage:
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
 
-    cpdef public void set(self, str key, object value) except *:
+    cpdef public inline void set(self, str key, object value) except *:
+        """
+        Set value of given ``key`` in this storage object.
+
+        :param key: Key of the target item, should be a string.
+        :param value: Value of the target item, should be a native object, raw wrapped object or \\
+            a delayed object.
+        """
         self.map[key] = unraw(value)
 
-    cpdef public object setdefault(self, str key, object default):
+    cpdef public inline object setdefault(self, str key, object default):
+        """
+        Set value of given ``key`` if it is not exist yet.
+
+        :param key: Key of the target item, should be a string.
+        :param default: Default value of the target item, similar to ``value`` in method :meth:`set`.
+        :return: Value of the actual-exist item.
+        """
         cdef object v, df
         try:
             v = self.map[key]
@@ -33,60 +48,102 @@ cdef class TreeStorage:
             return _c_undelay_data(self.map, key, df)
 
     # get and get_or_default is designed separately due to the consideration of performance
-    cpdef public object get(self, str key):
-        cdef object v, nv
-        try:
-            v = self.map[key]
-            return _c_undelay_data(self.map, key, v)
-        except KeyError:
-            raise KeyError(f"Key {repr(key)} not found in this tree.")
+    cpdef public inline object get(self, str key):
+        """
+        Get value of the given ``key``.
 
-    cpdef public object get_or_default(self, str key, object default):
-        cdef object v, nv
+        :param key: Key of the item.
+        :return: Value of the item.
+        :raise KeyError: When ``key`` is not exist, raise ``KeyError``.
+        """
+        cdef object v
+        v = self.map[key]
+        return _c_undelay_data(self.map, key, v)
+
+    cpdef public inline object get_or_default(self, str key, object default):
+        """
+        Get value of the given ``key``, return ``default`` when not exist.
+
+        :param key: Key of the item.
+        :param default: Default value of the item.
+        :return: Value of the item if ``key`` is exist, otherwise return ``default``.
+        """
+        cdef object v
         v = self.map.get(key, default)
         return _c_undelay_check_data(self.map, key, v)
 
     # pop and pop_or_default is designed separately due to the consideration of performance
-    cpdef public object pop(self, str key):
-        cdef object v, nv, res
-        try:
-            v = self.map[key]
-            res = _c_undelay_data(self.map, key, v)
-            del self.map[key]
-            return res
-        except KeyError:
-            raise KeyError(f"Key {repr(key)} not found in this tree.")
+    cpdef public inline object pop(self, str key):
+        """
+        Pop the item with the given ``key``, and return its value.
+        After :meth:`pop` method, the ``key`` will be no longer in current storage object.
 
-    cpdef public object pop_or_default(self, str key, object default):
-        cdef object v, nv, res
-        v = self.map.get(key, default)
-        res = _c_undelay_data(self.map, key, v)
-        if key in self.map:
-            del self.map[key]
-        return res
+        :param key: Key of the item.
+        :return: Value of the item.
+        :raise KeyError: When ``key`` is not exist, raise ``KeyError``.
+        """
+        return undelay(self.map.pop(key))
 
-    cpdef public tuple popitem(self):
+    cpdef public inline object pop_or_default(self, str key, object default):
+        """
+        Pop the item with the given ``key``, return its value when exist, otherwise return ``default``.
+
+        :param key: Key of the item.
+        :param default: Default value of the item.
+        :return: Value of the item if ``key`` is exist, otherwise return ``default``.
+        """
+        return undelay(self.map.pop(key, default))
+
+    cpdef public inline tuple popitem(self):
+        """
+        Pop one item from current storage.
+
+        :return: Tuple of the key and its value.
+        :raise KeyError: When current storage is empty, raise ``KeyError``.
+        """
         cdef str k
         cdef object v
         k, v = self.map.popitem()
         return k, undelay(v)
 
-    cpdef public void del_(self, str key) except *:
-        try:
-            del self.map[key]
-        except KeyError:
-            raise KeyError(f"Key {repr(key)} not found in this tree.")
+    cpdef public inline void del_(self, str key) except *:
+        """
+        Delete the item with given ``key``.
 
-    cpdef public void clear(self):
+        :param key: Key of the item.
+        :raise KeyError: When ``key`` is not exist, raise ``KeyError``.
+        """
+        del self.map[key]
+
+    cpdef public inline void clear(self):
+        """
+        Clear all the items in current storage.
+        """
         self.map.clear()
 
-    cpdef public boolean contains(self, str key):
+    cpdef public inline boolean contains(self, str key):
+        """
+        Return true if ``key`` is exist in current storage, otherwise return false.
+
+        :param key: Key.
+        :return: ``key`` is exist or not.
+        """
         return key in self.map
 
-    cpdef public uint size(self):
+    cpdef public inline uint size(self):
+        """
+        Return the size of the current storage.
+
+        :return: Size of current storage.
+        """
         return len(self.map)
 
-    cpdef public boolean empty(self):
+    cpdef public inline boolean empty(self):
+        """
+        Return true if current storage is empty (size is 0), otherwise return false.
+
+        :return: Empty or not.
+        """
         return not self.map
 
     cpdef public dict dump(self):
@@ -210,37 +267,67 @@ cdef class TreeStorage:
         return hash(tuple(_items))
 
     def iter_keys(self):
+        """
+        Iterate keys in current storage.
+
+        :return: Iterator of current keys in normal order.
+        """
         return self.map.keys()
 
     def iter_rev_keys(self):
+        """
+        Reversely iterate keys in current storage.
+
+        :return: Iterator of current keys in reversed order.
+        """
         return reversed(self.map.keys())
 
     def iter_values(self):
+        """
+        Iterate values in current storage.
+
+        :return: Iterator of current values in normal order.
+        """
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
             yield _c_undelay_data(self.map, k, v)
 
     def iter_rev_values(self):
+        """
+        Reversely iterate values in current storage.
+
+        :return: Iterator of current values in reversed order.
+        """
         cdef str k
         cdef object v, nv
         for k, v in reversed(self.map.items()):
             yield _c_undelay_data(self.map, k, v)
 
     def iter_items(self):
+        """
+        Iterate items in current storage.
+
+        :return: Iterator of current items in normal order.
+        """
         cdef str k
         cdef object v, nv
         for k, v in self.map.items():
             yield k, _c_undelay_data(self.map, k, v)
 
     def iter_rev_items(self):
+        """
+        Reversely iterate items in current storage.
+
+        :return: Iterator of current items in reversed order.
+        """
         cdef str k
         cdef object v, nv
         for k, v in reversed(self.map.items()):
             yield k, _c_undelay_data(self.map, k, v)
 
 
-cpdef object create_storage(dict value):
+cpdef inline object create_storage(dict value):
     cdef dict _map = {}
     cdef str k
     cdef object v

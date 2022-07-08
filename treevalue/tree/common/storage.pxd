@@ -2,10 +2,12 @@
 # cython:language_level=3
 
 from libcpp cimport bool
+cimport cython
 
 ctypedef unsigned char boolean
 ctypedef unsigned int uint
 
+@cython.final
 cdef class TreeStorage:
     cdef readonly dict map
 
