@@ -255,16 +255,28 @@
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__delattr__">
 <code class="sig-name descname">__delattr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__delattr__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Delete attribute from tree value.</p>
+<dd><p>Delete attribute from tree value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – Name of the attribute.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Attribute name.</p></li>
-</ul>
-</dd>
-<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="o">.</span><span class="n">a</span>    <span class="c1"># t will be TreeValue({&#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span>  <span class="c1"># t will be TreeValue({&#39;b&#39;: 2, &#39;x&#39;: {&#39;d&#39;: 4}})</span>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="o">.</span><span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7fd2251ae320&gt;</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fd2553f00b8&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7fd2251ae320&gt;</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fd2553f00b8&gt;</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
 </pre></div>
 </div>
 </dd>
@@ -327,21 +339,20 @@
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__eq__">
 <code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__eq__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Check the equality of two tree values.</p>
+<dd><p>Check the equality of two tree values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – Another tree value object.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>other (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeValue</span></code>): Another tree value.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Equal or not.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>equal (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>): Equality.</p></li>
-</ul>
-</dd>
-<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clone</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="n">t</span>                                                <span class="c1"># True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">==</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}})</span>      <span class="c1"># False</span>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span><span class="p">,</span> <span class="n">clone</span><span class="p">,</span> <span class="n">FastTreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">==</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>      <span class="c1"># True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">==</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}})</span>      <span class="c1"># False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">==</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>  <span class="c1"># False (type not match)</span>
 </pre></div>
 </div>
@@ -367,21 +378,32 @@
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__getattribute__">
 <code class="sig-name descname">__getattribute__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__getattribute__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Get item from this tree value.</p>
+<dd><p>Get item from this tree value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – Name of attribute.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Attribute name.</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Target attribute value; if <code class="docutils literal notranslate"><span class="pre">item</span></code> is exist in <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.keys" title="treevalue.tree.general.FastTreeValue.keys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">keys()</span></code></a>, return its value.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>attr (:obj:): Target attribute value.</p></li>
-</ul>
-</dd>
-<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span>    <span class="c1"># 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span>    <span class="c1"># 2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span>  <span class="c1"># 3</span>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span>
+<span class="go">&lt;TreeValue 0x7fd2553e3fd0&gt;</span>
+<span class="go">├── &#39;c&#39; --&gt; 3</span>
+<span class="go">└── &#39;d&#39; --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">c</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">keys</span>  <span class="c1"># this is a method</span>
+<span class="go">&lt;bound method TreeValue.keys of &lt;TreeValue 0x7fd2553f00b8&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">ff</span>  <span class="c1"># this key is not exist</span>
+<span class="go">AttributeError: Attribute &#39;ff&#39; not found.</span>
 </pre></div>
 </div>
 </dd>
@@ -450,9 +472,13 @@
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__getstate__">
 <code class="sig-name descname">__getstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__getstate__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Serialize operation, can support <cite>pickle.dumps</cite>.</p>
+<dd><p>Serialize operation, can support <cite>pickle.dumps</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="common.html#treevalue.tree.common.TreeStorage" title="treevalue.tree.common.TreeStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">treevalue.tree.common.TreeStorage</span></code></a> object, used for serialization.</p>
 </dd>
+</dl>
+<dl>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -468,14 +494,16 @@
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__hash__">
 <code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__hash__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Overview:</dt><dd><p>Hash value of current object.</p>
-</dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>hash (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>): Hash code of current object.</p></li>
-</ul>
+<dd><p>Hash value of current object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Hash value of current object.</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the structure and hash values of two tree values are exactly the same, their hash value             is guaranteed to be the same.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -675,10 +703,7 @@ Original id of self will be kept.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__iter__">
 <code class="sig-name descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__iter__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Overview:</dt><dd><p>Get iterator of this tree value.</p>
-</dd>
-</dl>
+<dd><p>Get iterator of this tree value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>An iterator for the keys.</p>
@@ -686,7 +711,6 @@ Original id of self will be kept.</p>
 </dl>
 <dl>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
-<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
@@ -880,13 +904,13 @@ Original id of self will be kept.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__repr__">
 <code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Get representation format of tree value.</p>
+<dd><p>Get representation format of tree value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Represenation string.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>repr (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Representation string.</p></li>
-</ul>
-</dd>
+</dl>
+<dl>
 <dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
 <span class="go">&lt;TreeValue 0x7f672fc53320&gt;</span>
@@ -1068,17 +1092,44 @@ Original id of self will be kept.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__setattr__">
 <code class="sig-name descname">__setattr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__setattr__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Set sub node to this tree value.</p>
-</dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>key (<code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>): Attribute name.</p></li>
-<li><p>value (:obj:): Sub value.</p></li>
+<dd><p>Set sub node to this tree value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Name of the attribute.</p></li>
+<li><p><strong>value</strong> – Sub value.</p></li>
 </ul>
 </dd>
-<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>                 <span class="c1"># t will be TreeValue({&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># t will be TreeValue({&#39;a&#39;: 3, &#39;b&#39;: {&#39;x&#39;: 1, &#39;y&#39;: 2}, &#39;x&#39;: {&#39;c&#39;: 3, &#39;d&#39;: 4}})</span>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># set a value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7fd2553f0048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 3</span>
+<span class="go">├── &#39;b&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fd2553f0080&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># set a dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7fd2553f0048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 3</span>
+<span class="go">├── &#39;b&#39; --&gt; {&#39;x&#39;: 1, &#39;y&#39;: 2}</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fd2553f0080&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>  <span class="c1"># set a tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&lt;TreeValue 0x7fd2553f0048&gt;</span>
+<span class="go">├── &#39;a&#39; --&gt; 3</span>
+<span class="go">├── &#39;b&#39; --&gt; &lt;TreeValue 0x7fd2553e3fd0&gt;</span>
+<span class="go">│   ├── &#39;x&#39; --&gt; 1</span>
+<span class="go">│   └── &#39;y&#39; --&gt; 2</span>
+<span class="go">└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fd2553f0080&gt;</span>
+<span class="go">    ├── &#39;c&#39; --&gt; 3</span>
+<span class="go">    └── &#39;d&#39; --&gt; 4</span>
 </pre></div>
 </div>
 </dd>
@@ -1149,13 +1200,13 @@ Original id of self will be kept.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.__setstate__">
 <code class="sig-name descname">__setstate__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__setstate__" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Deserialize operation, can support <cite>pickle.loads</cite>.</p>
+<dd><p>Deserialize operation, can support <cite>pickle.loads</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – <a class="reference internal" href="common.html#treevalue.tree.common.TreeStorage" title="treevalue.tree.common.TreeStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">treevalue.tree.common.TreeStorage</span></code></a> object,             which should be used when deserialization.</p>
 </dd>
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Tree</span></code>): Deserialize tree.</p></li>
-</ul>
-</dd>
+</dl>
+<dl>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -1383,14 +1434,14 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.items">
 <code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.items" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Get pairs of keys and values of this treevalue object, like the <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.items" title="treevalue.tree.general.FastTreeValue.items"><code class="xref py py-class docutils literal notranslate"><span class="pre">items</span></code></a>.</p>
+<dd><p>Get pairs of keys and values of this treevalue object, like the <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.items" title="treevalue.tree.general.FastTreeValue.items"><code class="xref py py-class docutils literal notranslate"><span class="pre">items</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping object for tree value’s items.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>items: A generator of pairs of keys and values.</p></li>
-</ul>
-</dd>
-<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+</dl>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -1436,14 +1487,14 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.keys" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Get keys of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<dd><p>Get keys of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping object for tree value’s keys.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>keys: A generator of all the keys.</p></li>
-</ul>
-</dd>
-<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+</dl>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -1680,14 +1731,14 @@ Multiple tree values is supported.</p>
 <dl class="py method">
 <dt id="treevalue.tree.general.FastTreeValue.values">
 <code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.values" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Overview:</dt><dd><p>Get value of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<dd><p>Get value of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping object for tree value’s values.</p>
 </dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>values: A generator of all the values</p></li>
-</ul>
-</dd>
-<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
+</dl>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">TreeValue</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;233&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
@@ -1723,7 +1774,7 @@ The order of walk is not promised, if you need the ordered walking result,      
 <li><p>iter: Iterator to walk the given tree, contains 2 items, the 1st one is the full                     path of the node, the 2nd one is the value.</p></li>
 </ul>
 </dd>
-<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">walk</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">walk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tv1</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tv1</span><span class="o">.</span><span class="n">walk</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
@@ -1830,7 +1881,6 @@ The order of walk is not promised, if you need the ordered walking result,      
                 <dl>
                     <dt>Branches</dt>
                         <dd><a href="general.html">dev/method</a></dd>
-                        <dd><a href="../../../../doc/method/api_doc/tree/general.html">doc/method</a></dd>
                         <dd><a href="../../../../main/api_doc/tree/general.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/api_doc/tree/general.html">refactor/color</a></dd>
                         <dd><a href="../../../../run/paper/api_doc/tree/general.html">run/paper</a></dd>
