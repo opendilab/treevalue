@@ -6,7 +6,7 @@ treevalue.tree.common
 .. _apidoc_tree_common_treestorage:
 
 TreeStorage
------------
+-------------
 
 .. autoclass:: TreeStorage
     :members: get, get_or_default, pop, pop_or_default, popitem, set, setdefault, del_, contains, size, empty, copy, deepcopy, deepcopyx, dump, deepdump, deepdumpx, jsondumpx, copy_from, deepcopy_from, deepcopyx_from, detach, clear, iter_keys, iter_rev_keys, iter_values, iter_rev_values, iter_items, iter_rev_items
@@ -14,6 +14,14 @@ TreeStorage
     .. note::
         Please refer to the source code for method details in this section of the documentation \
         because adding method signatures will significantly decrease running speed.
+
+
+.. _apidoc_tree_common_create_storage:
+
+create_storage
+-------------------
+
+.. autofunction:: create_storage
 
 
 .. _apidoc_tree_common_raw:
