@@ -108,6 +108,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">treevalue.tree</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">treevalue.tree.common</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#treestorage">TreeStorage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-storage">create_storage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#raw">raw</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#unraw">unraw</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#rawwrapper">RawWrapper</a></li>
@@ -203,6 +204,254 @@
 <dl class="py class">
 <dt id="treevalue.tree.common.TreeStorage">
 <em class="property">class </em><code class="sig-prename descclassname">treevalue.tree.common.</code><code class="sig-name descname">TreeStorage</code><a class="headerlink" href="#treevalue.tree.common.TreeStorage" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the source code for method details in this section of the documentation because adding method signatures will significantly decrease running speed.</p>
+</div>
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all the items in current storage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.contains">
+<code class="sig-name descname">contains</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist in current storage, otherwise return false.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – Key.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">key</span></code> is exist or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.del_">
+<code class="sig-name descname">del_</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.del_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the item with given <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.empty">
+<code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if current storage is empty (size is 0), otherwise return false.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Empty or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value of the given <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of the item.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.get_or_default">
+<code class="sig-name descname">get_or_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.get_or_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value of the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, return <code class="docutils literal notranslate"><span class="pre">default</span></code> when not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Key of the item.</p></li>
+<li><p><strong>default</strong> – Default value of the item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of the item if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_items">
+<code class="sig-name descname">iter_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate items in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current items in normal order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_keys">
+<code class="sig-name descname">iter_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate keys in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current keys in normal order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_rev_items">
+<code class="sig-name descname">iter_rev_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reversely iterate items in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current items in reversed order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_rev_keys">
+<code class="sig-name descname">iter_rev_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reversely iterate keys in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current keys in reversed order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_rev_values">
+<code class="sig-name descname">iter_rev_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reversely iterate values in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current values in reversed order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.iter_values">
+<code class="sig-name descname">iter_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate values in current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Iterator of current values in normal order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop the item with the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, and return its value.
+After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop" title="treevalue.tree.common.TreeStorage.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> method, the <code class="docutils literal notranslate"><span class="pre">key</span></code> will be no longer in current storage object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of the item.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.pop_or_default">
+<code class="sig-name descname">pop_or_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.pop_or_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop the item with the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, return its value when exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Key of the item.</p></li>
+<li><p><strong>default</strong> – Default value of the item.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of the item if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.popitem">
+<code class="sig-name descname">popitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.popitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop one item from current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of the key and its value.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError</strong> – When current storage is empty, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.set">
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set value of given <code class="docutils literal notranslate"><span class="pre">key</span></code> in this storage object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Key of the target item, should be a string.</p></li>
+<li><p><strong>value</strong> – Value of the target item, should be a native object, raw wrapped object or a delayed object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.setdefault">
+<code class="sig-name descname">setdefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.setdefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set value of given <code class="docutils literal notranslate"><span class="pre">key</span></code> if it is not exist yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Key of the target item, should be a string.</p></li>
+<li><p><strong>default</strong> – Default value of the target item, similar to <code class="docutils literal notranslate"><span class="pre">value</span></code> in method <a class="reference internal" href="#treevalue.tree.common.TreeStorage.set" title="treevalue.tree.common.TreeStorage.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value of the actual-exist item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="treevalue.tree.common.TreeStorage.size">
+<code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of the current storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Size of current storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="create-storage">
+<span id="apidoc-tree-common-create-storage"></span><h2>create_storage<a class="headerlink" href="#create-storage" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.tree.common.create_storage">
+<code class="sig-prename descclassname">treevalue.tree.common.</code><code class="sig-name descname">create_storage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.create_storage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -497,7 +746,6 @@ Can be accessed in <a class="reference internal" href="#treevalue.tree.common.un
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../dev/method/api_doc/tree/common.html">dev/method</a></dd>
                         <dd><a href="common.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/common.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/api_doc/tree/common.html">run/paper</a></dd>
