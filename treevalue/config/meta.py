@@ -7,7 +7,7 @@ Overview:
 __TITLE__ = "treevalue"
 
 #: Version of this project.
-__VERSION__ = "1.4.0"
+__VERSION__ = "1.4.1"
 
 #: Short description of the project, will be included in ``setup.py``.
 __DESCRIPTION__ = 'A flexible, generalized tree-based data structure.'
