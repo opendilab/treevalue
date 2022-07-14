@@ -815,7 +815,7 @@ cdef class TreeValue:
         .. note::
             :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        return treevalue_keys(self._st, self._type)
+        return treevalue_keys(self, self._st)
 
     @cython.binding(True)
     cpdef treevalue_values values(self):
@@ -844,7 +844,7 @@ cdef class TreeValue:
         .. note::
             :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        return treevalue_values(self._st, self._type)
+        return treevalue_values(self, self._st)
 
     @cython.binding(True)
     cpdef treevalue_items items(self):
@@ -873,7 +873,7 @@ cdef class TreeValue:
         .. note::
             :func:`reversed` is only available in python 3.8 or higher versions.
         """
-        return treevalue_items(self._st, self._type)
+        return treevalue_items(self, self._st)
 
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
@@ -917,9 +917,9 @@ cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, 
 
 # noinspection PyPep8Naming
 cdef class treevalue_keys(_CObject, Sized, Container, Reversible):
-    def __cinit__(self, TreeStorage storage, type _type):
+    def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
-        self._type = _type
+        self._type = type(tv)
 
     def __len__(self):
         return self._st.size()
@@ -949,9 +949,9 @@ cdef class treevalue_keys(_CObject, Sized, Container, Reversible):
 
 # noinspection PyPep8Naming
 cdef class treevalue_values(_CObject, Sized, Container, Reversible):
-    def __cinit__(self, TreeStorage storage, type _type):
+    def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
-        self._type = _type
+        self._type = type(tv)
 
     def __len__(self):
         return self._st.size()
@@ -991,9 +991,9 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
 
 # noinspection PyPep8Naming
 cdef class treevalue_items(_CObject, Sized, Container, Reversible):
-    def __cinit__(self, TreeStorage storage, type _type):
+    def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
-        self._type = _type
+        self._type = type(tv)
 
     def __len__(self):
         return self._st.size()

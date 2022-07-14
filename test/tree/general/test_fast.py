@@ -1,7 +1,7 @@
 import pytest
 
 from treevalue.tree import FastTreeValue, method_treelize
-from .base import get_tree_test
+from .base import get_fasttreevalue_test
 
 
 class MyFastTreeValue(FastTreeValue):
@@ -15,7 +15,7 @@ class MyFastTreeValue(FastTreeValue):
 
 
 @pytest.mark.unittest
-class TestTreeGeneralFast(get_tree_test(FastTreeValue)):
+class TestTreeGeneralFast(get_fasttreevalue_test(FastTreeValue)):
     def test_my_fast_tree_value(self):
         t1 = MyFastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4, 'e': 7}})
         t2 = MyFastTreeValue({'a': 11, 'b': 22, 'c': 4, 'x': {'c': 33, 'd': 5}})
