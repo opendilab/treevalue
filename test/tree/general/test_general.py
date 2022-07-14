@@ -1,7 +1,7 @@
 import pytest
 
 from treevalue.tree import general_tree_value, method_treelize
-from .base import get_tree_test
+from .base import get_fasttreevalue_test
 
 
 class TreeNumber(general_tree_value()):
@@ -34,7 +34,7 @@ class BanAndOverrideTreeNumber(general_tree_value(methods=dict(
 
 
 @pytest.mark.unittest
-class TestTreeGeneralGeneral(get_tree_test(TreeNumber)):
+class TestTreeGeneralGeneral(get_fasttreevalue_test(TreeNumber)):
     def test_numeric_append(self):
         t1 = TreeNumber({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
         t2 = TreeNumber({'a': 11, 'b': 22, 'x': {'c': 33, 'd': 5}})
