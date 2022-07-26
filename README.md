@@ -1,5 +1,5 @@
 <div align="center">
-    <a href="https://opendilab.github.io/treevalue/"><img width="1000px" height="auto" src="https://github.com/opendilab/treevalue/blob/main/docs/source/_static/title-banner.png"></a>
+    <a href="https://opendilab.github.io/treevalue/"><img width="1000px" height="auto" src="https://github.com/opendilab/treevalue/raw/main/docs/source/_static/title-banner.png"></a>
 </div>
 
 ---
@@ -245,9 +245,9 @@ The following 2 tables are the performance comparison result with [jax pytree](h
 
 This is the comparison between dm-tree, jax-libtree and us, with `flatten` and `mapping` operations (**lower value means less time cost and runs faster**)
 
-![Time cost of flatten operation](docs/source/_static/Time%20cost%20of%20flatten%20operation.svg)
+![Time cost of flatten operation](https://github.com/opendilab/treevalue/raw/main/docs/source/_static/Time%20cost%20of%20flatten%20operation.svg)
 
-![Time cost of mapping operation](docs/source/_static/Time%20cost%20of%20mapping%20operation.svg)
+![Time cost of mapping operation](https://github.com/opendilab/treevalue/raw/main/docs/source/_static/Time%20cost%20of%20mapping%20operation.svg)
 
 The following table is the performance comparison result with [tianshou Batch](https://github.com/thu-ml/tianshou).
 
@@ -258,11 +258,11 @@ The following table is the performance comparison result with [tianshou Batch](h
 
 And this is the comparison between Tianshou Batch and us, with `cat` , `stack` and `split` operations (**lower value means less time cost and runs faster**)
 
-![Time cost of cat operation](docs/source/_static/Time%20cost%20of%20cat%20operation.svg)
+![Time cost of cat operation](https://github.com/opendilab/treevalue/raw/main/docs/source/_static/Time%20cost%20of%20cat%20operation.svg)
 
-![Time cost of stack operation](docs/source/_static/Time%20cost%20of%20stack%20operation.svg)
+![Time cost of stack operation](https://github.com/opendilab/treevalue/raw/main/docs/source/_static/Time%20cost%20of%20stack%20operation.svg)
 
-![Time cost of split operation](docs/source/_static/Time%20cost%20of%20split%20operation.svg)
+![Time cost of split operation](https://github.com/opendilab/treevalue/raw/main/docs/source/_static/Time%20cost%20of%20split%20operation.svg)
 
 Test benchmark code can be found here:
 
