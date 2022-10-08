@@ -304,7 +304,7 @@ If you meet some problem or have some brilliant ideas, you can [file an issue](h
 <img src='https://github.com/opendilab/DI-engine/raw/main/assets/wechat.png' width="25%" />
 </div>
 
-Or just contact us with [slack](https://opendilab.slack.com/join/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ#/shared-invite/email) or email (opendilab.contact@gmail.com).
+Or just contact us with [slack](https://opendilab.slack.com/join/shared_invite/zt-v9tmv4fp-nUBAQEH1_Kuyu_q4plBssQ#/shared-invite/email) or email (opendilab@pjlab.org.cn).
 
 Please check [Contributing Guidances](https://github.com/opendilab/treevalue/blob/main/CONTRIBUTING.md).
 
