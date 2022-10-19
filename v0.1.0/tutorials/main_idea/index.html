@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -183,7 +185,31 @@
             
     
     
-  <section id="main-idea">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="main-idea">
 <h1>Main Idea<a class="headerlink" href="#main-idea" title="Permalink to this headline">¶</a></h1>
 <section id="why-treevalue-is-designed">
 <span id="tutorials-mainidea-why"></span><h2>Why TreeValue is designed?<a class="headerlink" href="#why-treevalue-is-designed" title="Permalink to this headline">¶</a></h2>
@@ -236,7 +262,7 @@ is more impossible.</p>
 <p>with the following output.</p>
 <div class="highlight-text notranslate"><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
-{&#39;a&#39;: 12, &#39;b&#39;: 24, &#39;x&#39;: {&#39;c&#39;: 33, &#39;d&#39;: 51}}
+{&#39;x&#39;: {&#39;d&#39;: 51, &#39;c&#39;: 33}, &#39;b&#39;: 24, &#39;a&#39;: 12}
 </pre></div></td></tr></table></div>
 </div>
 <p>Although in fact, as python coders, we may have been accustomed to such a native recursive writing method, but from the perspective of actual engineering construction, such a writing method is not intuitive enough:</p>
@@ -284,10 +310,10 @@ is more impossible.</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(d1, d2):
-&lt;TreeValue 0x7feeb0c72d00 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;TreeValue 0x7f1157bfc4f0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7feeb0c66040 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f1157bf5b50 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 33
     └── &#39;d&#39; --&gt; 51
 </pre></div></td></tr></table></div>
@@ -318,10 +344,10 @@ is more impossible.</p>
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>d1 + d2:
-&lt;FastTreeValue 0x7f67d6098eb0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
+&lt;FastTreeValue 0x7fb2a881eeb0 keys: [&#39;a&#39;, &#39;b&#39;, &#39;x&#39;]&gt;
 ├── &#39;a&#39; --&gt; 12
 ├── &#39;b&#39; --&gt; 24
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f67d608cf10 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fb2a8814490 keys: [&#39;c&#39;, &#39;d&#39;]&gt;
     ├── &#39;c&#39; --&gt; 33
     └── &#39;d&#39; --&gt; 51
 </pre></div></td></tr></table></div>
@@ -356,7 +382,7 @@ is more impossible.</p>
 <div class="math notranslate nohighlight">
 \[\forall \left\{ a_i \right\} \left( 0 \leq i \leq n\right), f_T\left(a_0, a_1, \cdots, a_n\right) = f\left(a_0, a_1, \cdots, a_n\right)\]</div>
 <p>Based on this mathematical property, treelize operation to the native functions will not change its original property, when you are using it as a native function, you will feel native special than usual.</p>
-</div>
+</aside>
 <p>So we can define this kind of mappings from function <span class="math notranslate nohighlight">\(f\)</span> to <span class="math notranslate nohighlight">\(f_T\)</span> as mapping <span class="math notranslate nohighlight">\(T\)</span>, so the treelize process can be expressed in the following symbolic form:</p>
 <div class="math notranslate nohighlight">
 \[f_T = T\left( f \right)\]</div>
@@ -428,6 +454,7 @@ is more impossible.</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../doc/dmtree/tutorials/main_idea/index.html">doc/dmtree</a></dd>
                         <dd><a href="../../../doc/readme/tutorials/main_idea/index.html">doc/readme</a></dd>
                         <dd><a href="../../../main/tutorials/main_idea/index.html">main</a></dd>
                         <dd><a href="../../../refactor/color/tutorials/main_idea/index.html">refactor/color</a></dd>

@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -197,7 +199,31 @@
             
     
     
-  <section id="treevalue-tree-common">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="treevalue-tree-common">
 <h1>treevalue.tree.common<a class="headerlink" href="#treevalue-tree-common" title="Permalink to this headline">¶</a></h1>
 <section id="treestorage">
 <span id="apidoc-tree-common-treestorage"></span><h2>TreeStorage<a class="headerlink" href="#treestorage" title="Permalink to this headline">¶</a></h2>
@@ -207,7 +233,7 @@
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Please refer to the source code for method details in this section of the documentation because adding method signatures will significantly decrease running speed.</p>
-</div>
+</aside>
 <dl class="py method">
 <dt id="treevalue.tree.common.TreeStorage.clear">
 <code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.clear" title="Permalink to this definition">¶</a></dt>
@@ -219,10 +245,10 @@
 <code class="sig-name descname">contains</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return true if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist in current storage, otherwise return false.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – Key.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">key</span></code> is exist or not.</p>
 </dd>
 </dl>
@@ -233,10 +259,10 @@
 <code class="sig-name descname">del_</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.del_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete the item with given <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
 </dd>
 </dl>
@@ -247,7 +273,7 @@
 <code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return true if current storage is empty (size is 0), otherwise return false.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Empty or not.</p>
 </dd>
 </dl>
@@ -258,13 +284,13 @@
 <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get value of the given <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Value of the item.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
 </dd>
 </dl>
@@ -275,13 +301,13 @@
 <code class="sig-name descname">get_or_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.get_or_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get value of the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, return <code class="docutils literal notranslate"><span class="pre">default</span></code> when not exist.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – Key of the item.</p></li>
 <li><p><strong>default</strong> – Default value of the item.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Value of the item if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
 </dd>
 </dl>
@@ -292,7 +318,7 @@
 <code class="sig-name descname">iter_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate items in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current items in normal order.</p>
 </dd>
 </dl>
@@ -303,7 +329,7 @@
 <code class="sig-name descname">iter_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate keys in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current keys in normal order.</p>
 </dd>
 </dl>
@@ -314,7 +340,7 @@
 <code class="sig-name descname">iter_rev_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reversely iterate items in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current items in reversed order.</p>
 </dd>
 </dl>
@@ -325,7 +351,7 @@
 <code class="sig-name descname">iter_rev_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reversely iterate keys in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current keys in reversed order.</p>
 </dd>
 </dl>
@@ -336,7 +362,7 @@
 <code class="sig-name descname">iter_rev_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_rev_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reversely iterate values in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current values in reversed order.</p>
 </dd>
 </dl>
@@ -347,7 +373,7 @@
 <code class="sig-name descname">iter_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.iter_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate values in current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator of current values in normal order.</p>
 </dd>
 </dl>
@@ -359,13 +385,13 @@
 <dd><p>Pop the item with the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, and return its value.
 After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop" title="treevalue.tree.common.TreeStorage.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> method, the <code class="docutils literal notranslate"><span class="pre">key</span></code> will be no longer in current storage object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> – Key of the item.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Value of the item.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>KeyError</strong> – When <code class="docutils literal notranslate"><span class="pre">key</span></code> is not exist, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
 </dd>
 </dl>
@@ -376,13 +402,13 @@ After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop
 <code class="sig-name descname">pop_or_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.pop_or_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pop the item with the given <code class="docutils literal notranslate"><span class="pre">key</span></code>, return its value when exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – Key of the item.</p></li>
 <li><p><strong>default</strong> – Default value of the item.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Value of the item if <code class="docutils literal notranslate"><span class="pre">key</span></code> is exist, otherwise return <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
 </dd>
 </dl>
@@ -393,10 +419,10 @@ After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop
 <code class="sig-name descname">popitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.popitem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pop one item from current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple of the key and its value.</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>KeyError</strong> – When current storage is empty, raise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p>
 </dd>
 </dl>
@@ -407,7 +433,7 @@ After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop
 <code class="sig-name descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set value of given <code class="docutils literal notranslate"><span class="pre">key</span></code> in this storage object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – Key of the target item, should be a string.</p></li>
 <li><p><strong>value</strong> – Value of the target item, should be a native object, raw wrapped object or a delayed object.</p></li>
@@ -421,13 +447,13 @@ After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop
 <code class="sig-name descname">setdefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.setdefault" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set value of given <code class="docutils literal notranslate"><span class="pre">key</span></code> if it is not exist yet.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – Key of the target item, should be a string.</p></li>
 <li><p><strong>default</strong> – Default value of the target item, similar to <code class="docutils literal notranslate"><span class="pre">value</span></code> in method <a class="reference internal" href="#treevalue.tree.common.TreeStorage.set" title="treevalue.tree.common.TreeStorage.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Value of the actual-exist item.</p>
 </dd>
 </dl>
@@ -438,7 +464,7 @@ After <a class="reference internal" href="#treevalue.tree.common.TreeStorage.pop
 <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.common.TreeStorage.size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the size of the current storage.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Size of current storage.</p>
 </dd>
 </dl>
@@ -748,6 +774,7 @@ Can be accessed in <a class="reference internal" href="#treevalue.tree.common.un
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../doc/dmtree/api_doc/tree/common.html">doc/dmtree</a></dd>
                         <dd><a href="../../../doc/readme/api_doc/tree/common.html">doc/readme</a></dd>
                         <dd><a href="common.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/common.html">refactor/color</a></dd>

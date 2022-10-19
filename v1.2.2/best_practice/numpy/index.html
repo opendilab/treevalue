@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -177,7 +179,31 @@
             
     
     
-  <section id="apply-into-numpy">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="apply-into-numpy">
 <h1>Apply into Numpy<a class="headerlink" href="#apply-into-numpy" title="Permalink to this headline">¶</a></h1>
 <p>In following parts, we will show some demos about how to use <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> in practice.</p>
 <p>For example, now we have a group of structed data in python-dict type, we want to do different operations on differnent key-value pairs inplace,
@@ -405,47 +431,47 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span>mean0 &amp; mean1: 1.428632140159607 1.4286321
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span>mean0 &amp; mean1: 1.3413146436214447 1.3413147
 
 
-even_index_a0: [[[0.11667093 0.49288836 0.4291349  0.77445596 0.7664422  0.60704285
-   0.12323106 0.36687368]
-  [0.9591749  0.6109505  0.3088313  0.6149591  0.83922696 0.9923114
-   0.7212673  0.00368448]]
+even_index_a0: [[[0.16758266 0.21135496 0.57779646 0.27307826 0.7553774  0.8627598
+   0.28075132 0.86448634]
+  [0.42883483 0.91512215 0.34528184 0.816658   0.9531264  0.279079
+   0.27361065 0.03296008]]
 
- [[0.369342   0.02912192 0.13116711 0.30303955 0.7271237  0.8287589
-   0.40259582 0.20634177]
-  [0.05910155 0.4656503  0.7295812  0.6638449  0.2562274  0.5954983
-   0.8604812  0.78671527]]
+ [[0.7456325  0.9656886  0.7160061  0.8545517  0.1272641  0.89963794
+   0.8816407  0.94545186]
+  [0.31931856 0.09844275 0.23659666 0.42442244 0.977858   0.41594446
+   0.35693598 0.6809348 ]]
 
- [[0.1764874  0.17892241 0.7862218  0.53304076 0.8947473  0.42820826
-   0.749803   0.5054361 ]
-  [0.7715215  0.6333117  0.8198203  0.70749533 0.0238926  0.5489037
-   0.6464409  0.7258536 ]]
+ [[0.39498058 0.07387082 0.7335505  0.34997112 0.9896897  0.6867815
+   0.2131316  0.18044706]
+  [0.11193924 0.3446953  0.6819636  0.14317073 0.12816893 0.28106377
+   0.5433548  0.14049223]]
 
- [[0.61010456 0.41956615 0.3486771  0.73314834 0.23181574 0.75350046
-   0.0672152  0.9604407 ]
-  [0.54241353 0.3769255  0.76002187 0.7084596  0.5938722  0.31163076
-   0.48649788 0.83085316]]]
-even_index_a1: [[[0.11667093 0.49288836 0.4291349  0.77445596 0.7664422  0.60704285
-   0.12323106 0.36687368]
-  [0.9591749  0.6109505  0.3088313  0.6149591  0.83922696 0.9923114
-   0.7212673  0.00368448]]
+ [[0.9683113  0.81536704 0.08864497 0.9052356  0.38426784 0.88433814
+   0.714008   0.38559008]
+  [0.14611764 0.73912406 0.41011497 0.41321117 0.87737924 0.17973886
+   0.24018118 0.91798455]]]
+even_index_a1: [[[0.16758266 0.21135496 0.57779646 0.27307826 0.7553774  0.8627598
+   0.28075132 0.86448634]
+  [0.42883483 0.91512215 0.34528184 0.816658   0.9531264  0.279079
+   0.27361065 0.03296008]]
 
- [[0.369342   0.02912192 0.13116711 0.30303955 0.7271237  0.8287589
-   0.40259582 0.20634177]
-  [0.05910155 0.4656503  0.7295812  0.6638449  0.2562274  0.5954983
-   0.8604812  0.78671527]]
+ [[0.7456325  0.9656886  0.7160061  0.8545517  0.1272641  0.89963794
+   0.8816407  0.94545186]
+  [0.31931856 0.09844275 0.23659666 0.42442244 0.977858   0.41594446
+   0.35693598 0.6809348 ]]
 
- [[0.1764874  0.17892241 0.7862218  0.53304076 0.8947473  0.42820826
-   0.749803   0.5054361 ]
-  [0.7715215  0.6333117  0.8198203  0.70749533 0.0238926  0.5489037
-   0.6464409  0.7258536 ]]
+ [[0.39498058 0.07387082 0.7335505  0.34997112 0.9896897  0.6867815
+   0.2131316  0.18044706]
+  [0.11193924 0.3446953  0.6819636  0.14317073 0.12816893 0.28106377
+   0.5433548  0.14049223]]
 
- [[0.61010456 0.41956615 0.3486771  0.73314834 0.23181574 0.75350046
-   0.0672152  0.9604407 ]
-  [0.54241353 0.3769255  0.76002187 0.7084596  0.5938722  0.31163076
-   0.48649788 0.83085316]]]
+ [[0.9683113  0.81536704 0.08864497 0.9052356  0.38426784 0.88433814
+   0.714008   0.38559008]
+  [0.14611764 0.73912406 0.41011497 0.41321117 0.87737924 0.17973886
+   0.24018118 0.91798455]]]
 </pre></div></td></tr></table></div>
 </div>
 <p>In this case, we can see that the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be properly applied into the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library.
@@ -513,6 +539,7 @@ The tree-structured matrix calculation can be easily built with <code class="doc
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../doc/dmtree/best_practice/numpy/index.html">doc/dmtree</a></dd>
                         <dd><a href="../../../doc/readme/best_practice/numpy/index.html">doc/readme</a></dd>
                         <dd><a href="../../../main/best_practice/numpy/index.html">main</a></dd>
                         <dd><a href="../../../refactor/color/best_practice/numpy/index.html">refactor/color</a></dd>

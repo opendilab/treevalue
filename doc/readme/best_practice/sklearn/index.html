@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -177,17 +179,41 @@
             
     
     
-  <section id="apply-into-scikit-learn">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="apply-into-scikit-learn">
 <h1>Apply into Scikit-Learn<a class="headerlink" href="#apply-into-scikit-learn" title="Permalink to this headline">¶</a></h1>
 <p>Actually, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be used in practice with not only <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">torch</span></code> library, such as <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.
 In the following part, a demo of PCA to tree-structured arrays will be shown.</p>
 <p>In the field of traditional machine learning, PCA (Principal Component Analysis) is often used to preprocess data,
 by normalizing the data range, and trying to reduce the dimensionality of the data, so as to reduce the complexity
 of the input data and improve machine learning’s efficiency and quality. Just as the following image</p>
-<figure class="align-default" id="id1">
+<figure class="align-default" id="figure-1">
 <img alt="PCA Principle" src="../../_images/heading_of_pca.jpg" />
 <figcaption>
-<p><span class="caption-text">PCA in a nutshell. Source: Lavrenko and Sutton 2011, slide 13.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">PCA in a nutshell. Source: Lavrenko and Sutton 2011, slide 13.</span><a class="headerlink" href="#figure-1" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>In the scikit-learn library, the PCA class is provided to support this function, and the function <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>
@@ -261,30 +287,30 @@ The specific code is as follows</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7f5d6ddb17f0&gt;
-├── &#39;a&#39; --&gt; array([[ 0,  4,  7],
-│                  [12,  5, -3],
-│                  [ 5,  6,  0],
-│                  [ 4, 12, 10]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5d6ddb1820&gt;
-    └── &#39;c&#39; --&gt; array([[-13, -10,  -9,  -3],
-                       [-15,   4, -11,   2],
-                       [ -5,  -3,  -4,   2],
-                       [-13,   2,  -3,  -2],
-                       [-13,  -2,  -4,  -7]])
+&lt;FastTreeValue 0x7f43f70d6a30&gt;
+├── &#39;a&#39; --&gt; array([[-3,  8,  4],
+│                  [-1,  6, 10],
+│                  [-5, 13,  5],
+│                  [14, -1, 14]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f43f70d6ee0&gt;
+    └── &#39;c&#39; --&gt; array([[ -3, -15,  -5,  -9],
+                       [  3,   0,  -6,  -8],
+                       [ -2,  -2, -15, -15],
+                       [  0, -13,  -9,  -1],
+                       [-10, -11,   0, -11]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7f5d671df430&gt;
-├── &#39;a&#39; --&gt; array([[-5.074936  , -4.57671918, -0.82077164],
-│                  [ 9.37766823,  1.43228269, -0.93963017],
-│                  [ 2.7823882 , -1.45723893,  1.73486905],
-│                  [-7.08512043,  4.60167542,  0.02553276]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f5d6df61ca0&gt;
-    └── &#39;c&#39; --&gt; array([[-7.42988825, -3.45442167, -3.33523964,  0.46894361],
-                       [ 7.62637598, -2.38943564, -3.98091962, -0.40157897],
-                       [-1.74277944,  7.77711291, -1.36304024, -0.31836434],
-                       [ 3.32752425,  0.52204135,  3.65328139,  1.2603929 ],
-                       [-1.78123255, -2.45529695,  5.02591811, -1.00939321]])
+&lt;FastTreeValue 0x7f43f6830c40&gt;
+├── &#39;a&#39; --&gt; array([[-5.68321254, -1.71141456, -1.77402238],
+│                  [-0.80226391,  2.66896648, -0.77973749],
+│                  [-9.3628607 , -0.30107607,  2.03007209],
+│                  [15.84833715, -0.65647584,  0.52368779]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f43f70f0cd0&gt;
+    └── &#39;c&#39; --&gt; array([[-6.28002643,  0.35533014, -2.04547742,  2.62507726],
+                       [ 7.42711432,  1.80922071,  6.26183295,  0.62780684],
+                       [10.30187428, -3.43200662, -4.79303466, -0.39941911],
+                       [-3.76929256,  8.66513267, -1.41854753, -1.52827755],
+                       [-7.6796696 , -7.3976769 ,  1.99522667, -1.32518744]])
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information, see the links below:</p>
@@ -353,6 +379,7 @@ Fit transformed data:
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dmtree/best_practice/sklearn/index.html">doc/dmtree</a></dd>
                         <dd><a href="index.html">doc/readme</a></dd>
                         <dd><a href="../../../../main/best_practice/sklearn/index.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/index.html">refactor/color</a></dd>

@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -189,7 +191,31 @@
             
     
     
-  <section id="treevalue-tree-general">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="treevalue-tree-general">
 <h1>treevalue.tree.general<a class="headerlink" href="#treevalue-tree-general" title="Permalink to this headline">¶</a></h1>
 <section id="fasttreevalue">
 <span id="apidoc-tree-general-fasttreevalue"></span><h2>FastTreeValue<a class="headerlink" href="#fasttreevalue" title="Permalink to this headline">¶</a></h2>
@@ -257,7 +283,7 @@
 <code class="sig-name descname">__delattr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__delattr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete attribute from tree value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>item</strong> – Name of the attribute.</p>
 </dd>
 </dl>
@@ -333,7 +359,7 @@
 <span class="go">    └── &#39;x&#39; --&gt; {&#39;y&#39;: 4}</span>
 </pre></div>
 </div>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -341,10 +367,10 @@
 <code class="sig-name descname">__eq__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__eq__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the equality of two tree values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – Another tree value object.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Equal or not.</p>
 </dd>
 </dl>
@@ -380,10 +406,10 @@
 <code class="sig-name descname">__getattribute__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__getattribute__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get item from this tree value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>item</strong> – Name of attribute.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Target attribute value; if <code class="docutils literal notranslate"><span class="pre">item</span></code> is exist in <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.keys" title="treevalue.tree.general.FastTreeValue.keys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">keys()</span></code></a>, return its value.</p>
 </dd>
 </dl>
@@ -466,7 +492,7 @@
 <span class="go">    └── &#39;x&#39; --&gt; 3</span>
 </pre></div>
 </div>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -474,7 +500,7 @@
 <code class="sig-name descname">__getstate__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__getstate__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize operation, can support <cite>pickle.dumps</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A <a class="reference internal" href="common.html#treevalue.tree.common.TreeStorage" title="treevalue.tree.common.TreeStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">treevalue.tree.common.TreeStorage</span></code></a> object, used for serialization.</p>
 </dd>
 </dl>
@@ -496,14 +522,14 @@
 <code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__hash__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hash value of current object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Hash value of current object.</p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If the structure and hash values of two tree values are exactly the same, their hash value             is guaranteed to be the same.</p>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -705,7 +731,7 @@ Original id of self will be kept.</p>
 <code class="sig-name descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__iter__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get iterator of this tree value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An iterator for the keys.</p>
 </dd>
 </dl>
@@ -724,7 +750,7 @@ Original id of self will be kept.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The method <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.__iter__" title="treevalue.tree.general.FastTreeValue.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a>’s bahaviour should be similar to             <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict.update">dict.__iter__</a>.</p>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -906,7 +932,7 @@ Original id of self will be kept.</p>
 <code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get representation format of tree value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Represenation string.</p>
 </dd>
 </dl>
@@ -1094,7 +1120,7 @@ Original id of self will be kept.</p>
 <code class="sig-name descname">__setattr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__setattr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set sub node to this tree value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> – Name of the attribute.</p></li>
 <li><p><strong>value</strong> – Sub value.</p></li>
@@ -1194,7 +1220,7 @@ Original id of self will be kept.</p>
 <span class="go">    └── &#39;x&#39; --&gt; {&#39;a&#39;: -2, &#39;y&#39;: 4}</span>
 </pre></div>
 </div>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -1202,7 +1228,7 @@ Original id of self will be kept.</p>
 <code class="sig-name descname">__setstate__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.__setstate__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deserialize operation, can support <cite>pickle.loads</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>state</strong> – <a class="reference internal" href="common.html#treevalue.tree.common.TreeStorage" title="treevalue.tree.common.TreeStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">treevalue.tree.common.TreeStorage</span></code></a> object,             which should be used when deserialization.</p>
 </dd>
 </dl>
@@ -1436,7 +1462,7 @@ Multiple tree values is supported.</p>
 <code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get pairs of keys and values of this treevalue object, like the <a class="reference internal" href="#treevalue.tree.general.FastTreeValue.items" title="treevalue.tree.general.FastTreeValue.items"><code class="xref py py-class docutils literal notranslate"><span class="pre">items</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A mapping object for tree value’s items.</p>
 </dd>
 </dl>
@@ -1463,7 +1489,7 @@ Multiple tree values is supported.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -1489,7 +1515,7 @@ Multiple tree values is supported.</p>
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get keys of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A mapping object for tree value’s keys.</p>
 </dd>
 </dl>
@@ -1516,7 +1542,7 @@ Multiple tree values is supported.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -1733,7 +1759,7 @@ Multiple tree values is supported.</p>
 <code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.general.FastTreeValue.values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get value of this treevalue object, like the <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A mapping object for tree value’s values.</p>
 </dd>
 </dl>
@@ -1760,7 +1786,7 @@ Multiple tree values is supported.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">reversed()</span></code> is only available in python 3.8 or higher versions.</p>
-</div>
+</aside>
 </dd></dl>
 
 <dl class="py method">
@@ -1882,6 +1908,7 @@ The order of walk is not promised, if you need the ordered walking result,      
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../doc/dmtree/api_doc/tree/general.html">doc/dmtree</a></dd>
                         <dd><a href="../../../doc/readme/api_doc/tree/general.html">doc/readme</a></dd>
                         <dd><a href="../../../main/api_doc/tree/general.html">main</a></dd>
                         <dd><a href="../../../refactor/color/api_doc/tree/general.html">refactor/color</a></dd>

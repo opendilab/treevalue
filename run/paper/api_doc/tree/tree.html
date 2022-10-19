@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -26,7 +26,9 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -209,7 +211,31 @@
             
     
     
-  <section id="treevalue-tree-tree">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="treevalue-tree-tree">
 <h1>treevalue.tree.tree<a class="headerlink" href="#treevalue-tree-tree" title="Permalink to this headline">¶</a></h1>
 <section id="treevalue">
 <span id="apidoc-tree-tree-treevalue"></span><h2>TreeValue<a class="headerlink" href="#treevalue" title="Permalink to this headline">¶</a></h2>
@@ -710,7 +736,7 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The result of function <a class="reference internal" href="#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">flatten()</span></code></a> is guaranteed to be ordered, which means it obey one of the tree traversal order. But please note that the order of key values under the same subtree is not guaranteed.</p>
-</div>
+</aside>
 </dd></dl>
 
 </section>
@@ -780,7 +806,7 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <p class="admonition-title">Note</p>
 <p>It is recommended to pass an ordered iterable object in <code class="docutils literal notranslate"><span class="pre">pairs</span></code>, this will improve the speed performance of function <a class="reference internal" href="#treevalue.tree.tree.unflatten" title="treevalue.tree.tree.unflatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">unflatten()</span></code></a>.</p>
 <p>Because of this, it is a good idea to keep the <a class="reference internal" href="#treevalue.tree.tree.flatten" title="treevalue.tree.tree.flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">flatten()</span></code></a>’s result’s order when executing your own processing logic.</p>
-</div>
+</aside>
 </dd></dl>
 
 </section>
@@ -807,7 +833,7 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <li><p><code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">v,</span> <span class="pre">p:</span> <span class="pre">f(v,</span> <span class="pre">p)</span></code>, which means map the original value and full path (in form of <code class="docutils literal notranslate"><span class="pre">tuple</span></code>)             to a new values based on given <code class="docutils literal notranslate"><span class="pre">v</span></code> and given <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
 </ul>
 <p>When the given <code class="docutils literal notranslate"><span class="pre">func</span></code> is a python function (with <code class="docutils literal notranslate"><span class="pre">__code__</span></code> attribute), its number of arguments will         be detected automatically, and use the correct way to call it when doing mapping, otherwise it will be         directly used with the pattern of <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">v:</span> <span class="pre">f(v)</span></code>.</p>
-</div>
+</aside>
 <dl>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">_TreeValue</span></code>): Mapped tree value object.</p></li>
@@ -876,7 +902,7 @@ The order of walk is not promised, if you need the ordered walking result, just 
 <li><p><code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">v,</span> <span class="pre">p:</span> <span class="pre">f(v,</span> <span class="pre">p)</span></code>, which means map the original value and full path (in form of <code class="docutils literal notranslate"><span class="pre">tuple</span></code>)             to a new values based on given <code class="docutils literal notranslate"><span class="pre">v</span></code> and given <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
 </ul>
 <p>When the given <code class="docutils literal notranslate"><span class="pre">func</span></code> is a python function (with <code class="docutils literal notranslate"><span class="pre">__code__</span></code> attribute), its number of arguments will         be detected automatically, and use the correct way to call it when doing filter, otherwise it will be         directly used with the pattern of <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">v:</span> <span class="pre">f(v)</span></code>.</p>
-</div>
+</aside>
 <dl>
 <dt>Returns:</dt><dd><ul class="simple">
 <li><p>tree (<code class="xref py py-obj docutils literal notranslate"><span class="pre">_TreeValue</span></code>): Filtered tree value object.</p></li>
@@ -1158,27 +1184,27 @@ Multiple tree values is supported.</p>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f9204524c10 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f9203c76820 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f9204524c10__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f9204524c10 -&gt; value__node_7f9204524c10__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f9204524c10__b [label=&quot;array([[5, 6],
+	node_7fb734522a90 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7fb734522ca0 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7fb734522a90__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fb734522a90 -&gt; value__node_7fb734522a90__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fb734522a90__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f9204524c10 -&gt; value__node_7f9204524c10__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f920438b7f0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f9204524c10 -&gt; node_7f920438b7f0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f9203c76820 -&gt; node_7f920438b7f0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f9203c768b0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f9203c76820 -&gt; node_7f9203c768b0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f920438b7f0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f920438b7f0 -&gt; value__node_7f920438b7f0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f920438b7f0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f920438b7f0 -&gt; value__node_7f920438b7f0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f920438b7f0__e [label=&quot;array([[1, 2],
+	node_7fb734522a90 -&gt; value__node_7fb734522a90__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb734dc9a30 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fb734522a90 -&gt; node_7fb734dc9a30 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb734522ca0 -&gt; node_7fb734dc9a30 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb7345229a0 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7fb734522ca0 -&gt; node_7fb7345229a0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fb734dc9a30__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fb734dc9a30 -&gt; value__node_7fb734dc9a30__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fb734dc9a30__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7fb734dc9a30 -&gt; value__node_7fb734dc9a30__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7fb734dc9a30__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f920438b7f0 -&gt; value__node_7f920438b7f0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f9203c768b0 -&gt; node_7f9204524c10 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f9203c768b0 -&gt; node_7f920438b7f0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb734dc9a30 -&gt; value__node_7fb734dc9a30__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb7345229a0 -&gt; node_7fb734522a90 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7fb7345229a0 -&gt; node_7fb734dc9a30 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -1418,6 +1444,7 @@ below</p>
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../../doc/dmtree/api_doc/tree/tree.html">doc/dmtree</a></dd>
                         <dd><a href="../../../../doc/readme/api_doc/tree/tree.html">doc/readme</a></dd>
                         <dd><a href="../../../../main/api_doc/tree/tree.html">main</a></dd>
                         <dd><a href="../../../../refactor/color/api_doc/tree/tree.html">refactor/color</a></dd>
