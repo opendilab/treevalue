@@ -29,6 +29,14 @@ structure processing when the calculation is tree-based.
     best_practice/numpy/index
     best_practice/sklearn/index
 
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Comparison
+
+    comparison/dmtree.result
+
+
 .. toctree::
     :maxdepth: 2
     :caption: API Documentation

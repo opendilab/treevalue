@@ -13,6 +13,8 @@ GRAPHVIZ_MK := ${SOURCEDIR}/graphviz.mk
 GRAPHVIZ    := $(MAKE) -f "${GRAPHVIZ_MK}" SOURCE=${SOURCEDIR}
 DEMOS_MK    := ${SOURCEDIR}/demos.mk
 DEMOS       := $(MAKE) -f "${DEMOS_MK}" SOURCE=${SOURCEDIR}
+NOTEBOOK_MK := ${SOURCEDIR}/notebook.mk
+NOTEBOOK    := $(MAKE) -f "${NOTEBOOK_MK}" SOURCE=${SOURCEDIR}
 
 _CURRENT_PATH := ${PATH}
 _PROJ_DIR     := $(shell readlink -f ${CURDIR}/..)
@@ -37,6 +39,7 @@ contents:
 	@$(DIAGRAMS) build
 	@$(GRAPHVIZ) build
 	@$(DEMOS) build
+	@$(NOTEBOOK) build
 build: html
 html: contents
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
@@ -50,6 +53,7 @@ clean:
 	@$(DIAGRAMS) clean
 	@$(GRAPHVIZ) clean
 	@$(DEMOS) clean
+	@$(NOTEBOOK) clean
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 sourcedir:
