@@ -89,6 +89,12 @@ if not os.environ.get("NO_CONTENTS_BUILD"):
     if demos.wait() != 0:
         raise ChildProcessError("Demos failed with %d." % (demos.returncode,))
 
+    notebook_cmd = (where.first('make'), '-f', "notebook.mk", "build")
+    print("Executing notebooks {cmd} at {cp}...".format(cmd=repr(notebook_cmd), cp=repr(_DOC_PATH)))
+    demos = Popen(notebook_cmd, stdout=sys.stdout, stderr=sys.stderr, env=_env, cwd=_DOC_PATH)
+    if demos.wait() != 0:
+        raise ChildProcessError("Notebook failed with %d." % (demos.returncode,))
+
     print("Build of contents complete.")
 
 from treevalue.config.meta import __TITLE__, __AUTHOR__, __VERSION__
@@ -118,6 +124,7 @@ extensions = [
     'sphinx.ext.graphviz',
     'enum_tools.autoenum',
     "sphinx_multiversion",
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
