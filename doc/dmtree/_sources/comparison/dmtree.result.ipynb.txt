@@ -21,18 +21,186 @@
     }
    },
    "source": [
-    "## Run Environment Information"
+    "In this section, we will compare the feature and performance of the [dm-tree](https://github.com/deepmind/tree) library, which is developed by deepmind."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Before starting the comparison, let us define some thing."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 1,
    "metadata": {
+    "collapsed": false,
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:33.750636Z",
-     "iopub.status.busy": "2022-10-19T20:38:33.750142Z",
-     "iopub.status.idle": "2022-10-19T20:38:33.776275Z",
-     "shell.execute_reply": "2022-10-19T20:38:33.775323Z"
+     "iopub.execute_input": "2022-10-20T11:06:32.569626Z",
+     "iopub.status.busy": "2022-10-20T11:06:32.568905Z",
+     "iopub.status.idle": "2022-10-20T11:06:32.581974Z",
+     "shell.execute_reply": "2022-10-20T11:06:32.580439Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "origin = {'a': 1, 'b': 2, 'c': {'x': 3, 'y': 4}}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "## Mapping Operation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Mapping operation is quite common in the processing of trees. A mapping function should be provided to create a new tree based on the mapped tree."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "### TreeValue's mapping"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "In TreeValue, mapping is provided to simply create a new tree."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:32.601771Z",
+     "iopub.status.busy": "2022-10-20T11:06:32.601467Z",
+     "iopub.status.idle": "2022-10-20T11:06:32.666367Z",
+     "shell.execute_reply": "2022-10-20T11:06:32.665411Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6cdcb58be0>\n",
+       "├── 'a' --> 1\n",
+       "├── 'b' --> 2\n",
+       "└── 'c' --> <FastTreeValue 0x7f6cdcb58d00>\n",
+       "    ├── 'x' --> 3\n",
+       "    └── 'y' --> 4"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from treevalue import FastTreeValue, mapping\n",
+    "\n",
+    "tv = FastTreeValue(origin)\n",
+    "tv"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:32.718222Z",
+     "iopub.status.busy": "2022-10-20T11:06:32.717633Z",
+     "iopub.status.idle": "2022-10-20T11:06:32.724324Z",
+     "shell.execute_reply": "2022-10-20T11:06:32.723500Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6cdc88c2e0>\n",
+       "├── 'a' --> 2\n",
+       "├── 'b' --> 4\n",
+       "└── 'c' --> <FastTreeValue 0x7f6cdc88c130>\n",
+       "    ├── 'x' --> 6\n",
+       "    └── 'y' --> 8"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mapping(tv, lambda x: x * 2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance test."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:32.728478Z",
+     "iopub.status.busy": "2022-10-20T11:06:32.728203Z",
+     "iopub.status.idle": "2022-10-20T11:06:34.941092Z",
+     "shell.execute_reply": "2022-10-20T11:06:34.940220Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -43,29 +211,321 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "OS: Linux-5.15.0-1021-azure-x86_64-with-glibc2.2.5\n",
-      "Python: CPython 3.8.14\n",
-      "Processor: x86_64\n",
-      "CPUS: 2\n",
-      "Memory: 6.781 GiB\n",
-      "Has CUDA: No\n"
+      "2.7 µs ± 83.6 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
    "source": [
-    "import os\n",
-    "import platform\n",
-    "import shutil\n",
-    "\n",
-    "import psutil\n",
-    "from hbutils.scale import size_to_bytes_str\n",
-    "\n",
-    "print('OS:', platform.platform())\n",
-    "print('Python:', platform.python_implementation(), platform.python_version())\n",
-    "print('Processor:', platform.processor())\n",
-    "print('CPUS:', os.cpu_count())\n",
-    "print('Memory:', size_to_bytes_str(psutil.virtual_memory().total, precision=3))\n",
-    "print('Has CUDA:', 'Yes' if shutil.which('nvidia-smi') else 'No')"
+    "%timeit mapping(tv, lambda x: x * 2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "In order to support the cased that the mapped value is related to both path and value of each node, we can use the 'path mapping mode' by simply use the second parameter of the mapping function."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:34.945183Z",
+     "iopub.status.busy": "2022-10-20T11:06:34.944796Z",
+     "iopub.status.idle": "2022-10-20T11:06:34.951920Z",
+     "shell.execute_reply": "2022-10-20T11:06:34.950454Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6cdc875b50>\n",
+       "├── 'a' --> ('path', ('a',), 'value', 1)\n",
+       "├── 'b' --> ('path', ('b',), 'value', 2)\n",
+       "└── 'c' --> <FastTreeValue 0x7f6cdc8754c0>\n",
+       "    ├── 'x' --> ('path', ('c', 'x'), 'value', 3)\n",
+       "    └── 'y' --> ('path', ('c', 'y'), 'value', 4)"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mapping(tv, lambda x, p: ('path', p, 'value', x))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "And here is the performance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:34.956435Z",
+     "iopub.status.busy": "2022-10-20T11:06:34.956154Z",
+     "iopub.status.idle": "2022-10-20T11:06:37.233168Z",
+     "shell.execute_reply": "2022-10-20T11:06:37.232257Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2.81 µs ± 41.4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit mapping(tv, lambda x, p: ('path', p, 'value', x))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "### DM-Tree's mapping"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "In DM-Tree, mapping operation is supported by [map_structure](https://tree.readthedocs.io/en/latest/api.html#tree.map_structure) function."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:37.237574Z",
+     "iopub.status.busy": "2022-10-20T11:06:37.237316Z",
+     "iopub.status.idle": "2022-10-20T11:06:37.244261Z",
+     "shell.execute_reply": "2022-10-20T11:06:37.243134Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from tree import map_structure"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:37.247611Z",
+     "iopub.status.busy": "2022-10-20T11:06:37.247342Z",
+     "iopub.status.idle": "2022-10-20T11:06:37.252952Z",
+     "shell.execute_reply": "2022-10-20T11:06:37.252075Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'a': 2, 'b': 4, 'c': {'x': 6, 'y': 8}}"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "map_structure(lambda x: x * 2, origin)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "This is the performance of `map_structure`, obviously much slower than `mapping` in TreeValue."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:37.257915Z",
+     "iopub.status.busy": "2022-10-20T11:06:37.257667Z",
+     "iopub.status.idle": "2022-10-20T11:06:51.749570Z",
+     "shell.execute_reply": "2022-10-20T11:06:51.748748Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "17.8 µs ± 114 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit map_structure(lambda x: x * 2, origin)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "To supported the second situation in the last section, [map_structure_with_path](https://tree.readthedocs.io/en/latest/api.html#tree.map_structure_with_path) can be used."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:51.755222Z",
+     "iopub.status.busy": "2022-10-20T11:06:51.753451Z",
+     "iopub.status.idle": "2022-10-20T11:06:51.759672Z",
+     "shell.execute_reply": "2022-10-20T11:06:51.758803Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from tree import map_structure_with_path"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:51.763429Z",
+     "iopub.status.busy": "2022-10-20T11:06:51.763146Z",
+     "iopub.status.idle": "2022-10-20T11:06:51.769866Z",
+     "shell.execute_reply": "2022-10-20T11:06:51.769084Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'a': ('path', ('a',), 'value', 1),\n",
+       " 'b': ('path', ('b',), 'value', 2),\n",
+       " 'c': {'x': ('path', ('c', 'x'), 'value', 3),\n",
+       "  'y': ('path', ('c', 'y'), 'value', 4)}}"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "map_structure_with_path(lambda path, x: ('path', path, 'value', x), origin)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "collapsed": false,
+    "execution": {
+     "iopub.execute_input": "2022-10-20T11:06:51.773501Z",
+     "iopub.status.busy": "2022-10-20T11:06:51.773047Z",
+     "iopub.status.idle": "2022-10-20T11:06:54.953733Z",
+     "shell.execute_reply": "2022-10-20T11:06:54.952885Z"
+    },
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "39.4 µs ± 1.45 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit map_structure_with_path(lambda path, x: ('path', path, 'value', x), origin)"
    ]
   },
   {
@@ -89,26 +549,7 @@
     }
    },
    "source": [
-    "We create a dictionary for flatten"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:33.819519Z",
-     "iopub.status.busy": "2022-10-19T20:38:33.818856Z",
-     "iopub.status.idle": "2022-10-19T20:38:33.822925Z",
-     "shell.execute_reply": "2022-10-19T20:38:33.822204Z"
-    },
-    "pycharm": {
-     "name": "#%%\n"
-    }
-   },
-   "outputs": [],
-   "source": [
-    "origin = {'a': 1, 'b': 2, 'c': {'x': 3, 'y': 4}}"
+    "In tree operations, flatten is often used to linearly expand the tree structure for operations such as parallel processing. Based on flatten, unflatten is its inverse operation, which can recover the tree structure from the linear data."
    ]
   },
   {
@@ -124,35 +565,64 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "In TreeValue, flatten and unflatten are provided, which usage are simple."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 13,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:33.826427Z",
-     "iopub.status.busy": "2022-10-19T20:38:33.826188Z",
-     "iopub.status.idle": "2022-10-19T20:38:33.865348Z",
-     "shell.execute_reply": "2022-10-19T20:38:33.864569Z"
+     "iopub.execute_input": "2022-10-20T11:06:54.959067Z",
+     "iopub.status.busy": "2022-10-20T11:06:54.958781Z",
+     "iopub.status.idle": "2022-10-20T11:06:54.964969Z",
+     "shell.execute_reply": "2022-10-20T11:06:54.964028Z"
     },
     "pycharm": {
      "name": "#%%\n"
     }
    },
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6cdec4c850>\n",
+       "├── 'a' --> 1\n",
+       "├── 'b' --> 2\n",
+       "└── 'c' --> <FastTreeValue 0x7f6cdec4c580>\n",
+       "    ├── 'x' --> 3\n",
+       "    └── 'y' --> 4"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
     "from treevalue import FastTreeValue, flatten, unflatten\n",
     "\n",
-    "origin_tree = FastTreeValue(origin)"
+    "origin_tree = FastTreeValue(origin)\n",
+    "origin_tree"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 14,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:33.869314Z",
-     "iopub.status.busy": "2022-10-19T20:38:33.868991Z",
-     "iopub.status.idle": "2022-10-19T20:38:33.879416Z",
-     "shell.execute_reply": "2022-10-19T20:38:33.878606Z"
+     "iopub.execute_input": "2022-10-20T11:06:54.969782Z",
+     "iopub.status.busy": "2022-10-20T11:06:54.969487Z",
+     "iopub.status.idle": "2022-10-20T11:06:54.975298Z",
+     "shell.execute_reply": "2022-10-20T11:06:54.974465Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -165,7 +635,7 @@
        "[(('a',), 1), (('b',), 2), (('c', 'x'), 3), (('c', 'y'), 4)]"
       ]
      },
-     "execution_count": 4,
+     "execution_count": 14,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -176,14 +646,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance of `flatten`"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 15,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:33.884322Z",
-     "iopub.status.busy": "2022-10-19T20:38:33.884066Z",
-     "iopub.status.idle": "2022-10-19T20:38:39.809310Z",
-     "shell.execute_reply": "2022-10-19T20:38:39.807605Z"
+     "iopub.execute_input": "2022-10-20T11:06:54.979947Z",
+     "iopub.status.busy": "2022-10-20T11:06:54.979511Z",
+     "iopub.status.idle": "2022-10-20T11:07:01.602454Z",
+     "shell.execute_reply": "2022-10-20T11:07:01.601543Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -194,7 +676,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "726 ns ± 12.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
+      "816 ns ± 18.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
      ]
     }
    ],
@@ -203,14 +685,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "The tree can be re-created from `flatted` with function `unflatten`."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 16,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:39.812940Z",
-     "iopub.status.busy": "2022-10-19T20:38:39.812696Z",
-     "iopub.status.idle": "2022-10-19T20:38:39.819264Z",
-     "shell.execute_reply": "2022-10-19T20:38:39.818475Z"
+     "iopub.execute_input": "2022-10-20T11:07:01.607001Z",
+     "iopub.status.busy": "2022-10-20T11:07:01.606746Z",
+     "iopub.status.idle": "2022-10-20T11:07:01.612001Z",
+     "shell.execute_reply": "2022-10-20T11:07:01.611122Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -220,15 +714,15 @@
     {
      "data": {
       "text/plain": [
-       "<TreeValue 0x7fd6c804dc70>\n",
+       "<TreeValue 0x7f6cdc531f40>\n",
        "├── 'a' --> 1\n",
        "├── 'b' --> 2\n",
-       "└── 'c' --> <TreeValue 0x7fd6c804da00>\n",
+       "└── 'c' --> <TreeValue 0x7f6cdc531df0>\n",
        "    ├── 'x' --> 3\n",
        "    └── 'y' --> 4"
       ]
      },
-     "execution_count": 6,
+     "execution_count": 16,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -238,14 +732,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "And here is the performance."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 17,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:39.822968Z",
-     "iopub.status.busy": "2022-10-19T20:38:39.822698Z",
-     "iopub.status.idle": "2022-10-19T20:38:46.156806Z",
-     "shell.execute_reply": "2022-10-19T20:38:46.155430Z"
+     "iopub.execute_input": "2022-10-20T11:07:01.616709Z",
+     "iopub.status.busy": "2022-10-20T11:07:01.616462Z",
+     "iopub.status.idle": "2022-10-20T11:07:08.851084Z",
+     "shell.execute_reply": "2022-10-20T11:07:08.849050Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -256,7 +762,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "781 ns ± 9.38 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
+      "898 ns ± 36.4 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
      ]
     }
    ],
@@ -285,50 +791,19 @@
     }
    },
    "source": [
-    "This is the [dm-tree](https://github.com/deepmind/tree) library\n",
-    "And here is a simplest example of dm-tree."
+    "[Flatten](https://tree.readthedocs.io/en/latest/api.html#tree.flatten) is provided in DM-Tree as well, but it differs from that in TreeValue, as the following"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:46.161067Z",
-     "iopub.status.busy": "2022-10-19T20:38:46.160810Z",
-     "iopub.status.idle": "2022-10-19T20:38:46.167495Z",
-     "shell.execute_reply": "2022-10-19T20:38:46.166417Z"
-    },
-    "pycharm": {
-     "name": "#%%\n"
-    }
-   },
-   "outputs": [],
-   "source": [
-    "from tree import flatten, flatten_with_path"
-   ]
-  },
-  {
-   "cell_type": "markdown",
+   "execution_count": 18,
    "metadata": {
     "collapsed": false,
-    "pycharm": {
-     "name": "#%% md\n"
-    }
-   },
-   "source": [
-    "We try to flatten `origin` with both [flatten](https://tree.readthedocs.io/en/latest/api.html#tree.flatten) and [flatten_with_path](https://tree.readthedocs.io/en/latest/api.html#tree.flatten_with_path) function, and then measure their performance."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:46.170867Z",
-     "iopub.status.busy": "2022-10-19T20:38:46.170589Z",
-     "iopub.status.idle": "2022-10-19T20:38:46.176173Z",
-     "shell.execute_reply": "2022-10-19T20:38:46.175120Z"
+     "iopub.execute_input": "2022-10-20T11:07:08.857509Z",
+     "iopub.status.busy": "2022-10-20T11:07:08.856818Z",
+     "iopub.status.idle": "2022-10-20T11:07:08.866941Z",
+     "shell.execute_reply": "2022-10-20T11:07:08.865683Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -341,24 +816,39 @@
        "[1, 2, 3, 4]"
       ]
      },
-     "execution_count": 9,
+     "execution_count": 18,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "from tree import flatten\n",
+    "\n",
     "flatten(origin)"
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": 10,
+   "cell_type": "markdown",
    "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "collapsed": false,
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:46.180548Z",
-     "iopub.status.busy": "2022-10-19T20:38:46.180295Z",
-     "iopub.status.idle": "2022-10-19T20:38:54.174011Z",
-     "shell.execute_reply": "2022-10-19T20:38:54.173155Z"
+     "iopub.execute_input": "2022-10-20T11:07:08.872325Z",
+     "iopub.status.busy": "2022-10-20T11:07:08.872038Z",
+     "iopub.status.idle": "2022-10-20T11:07:18.330433Z",
+     "shell.execute_reply": "2022-10-20T11:07:18.329591Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -369,7 +859,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "987 ns ± 26.2 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
+      "1.16 µs ± 30 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
      ]
     }
    ],
@@ -378,14 +868,38 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "The structure of the tree is dropped, only the data is extracted from the tree. This means the `flatten` function in DM-Tree is irreversible, we can not recover the original tree with the result above."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "The reversible resolution provided in DM-Tree is [flatten_with_path](https://tree.readthedocs.io/en/latest/api.html#tree.flatten_with_path)"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 20,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:54.192695Z",
-     "iopub.status.busy": "2022-10-19T20:38:54.192254Z",
-     "iopub.status.idle": "2022-10-19T20:38:54.198942Z",
-     "shell.execute_reply": "2022-10-19T20:38:54.197902Z"
+     "iopub.execute_input": "2022-10-20T11:07:18.334984Z",
+     "iopub.status.busy": "2022-10-20T11:07:18.334702Z",
+     "iopub.status.idle": "2022-10-20T11:07:18.343119Z",
+     "shell.execute_reply": "2022-10-20T11:07:18.342280Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -398,24 +912,39 @@
        "[(('a',), 1), (('b',), 2), (('c', 'x'), 3), (('c', 'y'), 4)]"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 20,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "from tree import flatten_with_path\n",
+    "\n",
     "flatten_with_path(origin)"
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": 12,
+   "cell_type": "markdown",
    "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance, much slower than `flatten` in TreeValue."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "collapsed": false,
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:38:54.202440Z",
-     "iopub.status.busy": "2022-10-19T20:38:54.202172Z",
-     "iopub.status.idle": "2022-10-19T20:39:06.534856Z",
-     "shell.execute_reply": "2022-10-19T20:39:06.534032Z"
+     "iopub.execute_input": "2022-10-20T11:07:18.347230Z",
+     "iopub.status.busy": "2022-10-20T11:07:18.346956Z",
+     "iopub.status.idle": "2022-10-20T11:07:19.955649Z",
+     "shell.execute_reply": "2022-10-20T11:07:19.954513Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -426,7 +955,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "15.2 µs ± 359 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+      "19.7 µs ± 1.43 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
      ]
     }
    ],
@@ -443,49 +972,18 @@
     }
    },
    "source": [
-    "Obviously, `flatten` in dm-tree is an irreversible operation, but `flatten_with_path` is reversible, which is similar to `flatten` in treevalue."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {
-    "collapsed": false,
-    "pycharm": {
-     "name": "#%% md\n"
-    }
-   },
-   "source": [
-    "But the [unflatten_as](https://tree.readthedocs.io/en/latest/api.html#tree.unflatten_as) is absolutely another thing in dm-tree"
+    "To re-create the original tree, we need a tree structure with any objects filled inside. Use the [unflatten_as](https://tree.readthedocs.io/en/latest/api.html#tree.unflatten_as) to archive this goal."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 22,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:06.539357Z",
-     "iopub.status.busy": "2022-10-19T20:39:06.538902Z",
-     "iopub.status.idle": "2022-10-19T20:39:06.542769Z",
-     "shell.execute_reply": "2022-10-19T20:39:06.541911Z"
-    },
-    "pycharm": {
-     "name": "#%%\n"
-    }
-   },
-   "outputs": [],
-   "source": [
-    "from tree import unflatten_as"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 14,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:06.546166Z",
-     "iopub.status.busy": "2022-10-19T20:39:06.545699Z",
-     "iopub.status.idle": "2022-10-19T20:39:06.552025Z",
-     "shell.execute_reply": "2022-10-19T20:39:06.551173Z"
+     "iopub.execute_input": "2022-10-20T11:07:19.960426Z",
+     "iopub.status.busy": "2022-10-20T11:07:19.960176Z",
+     "iopub.status.idle": "2022-10-20T11:07:19.966103Z",
+     "shell.execute_reply": "2022-10-20T11:07:19.965236Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -498,24 +996,38 @@
        "{'a': 1, 'b': 2, 'c': {'x': 3, 'y': 4}}"
       ]
      },
-     "execution_count": 14,
+     "execution_count": 22,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "from tree import unflatten_as\n",
+    "\n",
     "unflatten_as({'a': None, 'b': None, 'c': {'x': None, 'y': None}}, [1, 2, 3, 4])"
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 23,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:06.556238Z",
-     "iopub.status.busy": "2022-10-19T20:39:06.555984Z",
-     "iopub.status.idle": "2022-10-19T20:39:16.435347Z",
-     "shell.execute_reply": "2022-10-19T20:39:16.434599Z"
+     "iopub.execute_input": "2022-10-20T11:07:19.971397Z",
+     "iopub.status.busy": "2022-10-20T11:07:19.971113Z",
+     "iopub.status.idle": "2022-10-20T11:07:31.632378Z",
+     "shell.execute_reply": "2022-10-20T11:07:31.631481Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -526,7 +1038,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "12.2 µs ± 112 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+      "14.3 µs ± 185 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
@@ -543,7 +1055,7 @@
     }
    },
    "source": [
-    "## Positional Replacement"
+    "### Positional Replacement"
    ]
   },
   {
@@ -555,18 +1067,30 @@
     }
    },
    "source": [
-    "This is the performance in treevalue"
+    "It is obvious that the `unflatten_as` in DM-Tree is quite different from `unflatten` in TreeValue, for the former one is `replacing` and the latter one is `constructing`. This means the `unflatten_as` in DM-Tree may supported some more features, such as creating a new tree with another tree's structure and the given values. So we need an experiment on this, called 'positional replacement'."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "First, in TreeValue, we can build a function named `replace` to realize this."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": 24,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:16.439572Z",
-     "iopub.status.busy": "2022-10-19T20:39:16.439184Z",
-     "iopub.status.idle": "2022-10-19T20:39:16.443804Z",
-     "shell.execute_reply": "2022-10-19T20:39:16.443118Z"
+     "iopub.execute_input": "2022-10-20T11:07:31.636796Z",
+     "iopub.status.busy": "2022-10-20T11:07:31.636406Z",
+     "iopub.status.idle": "2022-10-20T11:07:31.641888Z",
+     "shell.execute_reply": "2022-10-20T11:07:31.640780Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -582,14 +1106,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Create a new tree based on `origin_tree`'s structure and new values."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": 25,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:16.447119Z",
-     "iopub.status.busy": "2022-10-19T20:39:16.446625Z",
-     "iopub.status.idle": "2022-10-19T20:39:16.453037Z",
-     "shell.execute_reply": "2022-10-19T20:39:16.452218Z"
+     "iopub.execute_input": "2022-10-20T11:07:31.646778Z",
+     "iopub.status.busy": "2022-10-20T11:07:31.646426Z",
+     "iopub.status.idle": "2022-10-20T11:07:31.652320Z",
+     "shell.execute_reply": "2022-10-20T11:07:31.651420Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -599,15 +1135,15 @@
     {
      "data": {
       "text/plain": [
-       "<TreeValue 0x7fd6c8054cd0>\n",
+       "<TreeValue 0x7f6cdc875460>\n",
        "├── 'a' --> 3\n",
        "├── 'b' --> 5\n",
-       "└── 'c' --> <TreeValue 0x7fd6c80548b0>\n",
+       "└── 'c' --> <TreeValue 0x7f6cdec4ceb0>\n",
        "    ├── 'x' --> 7\n",
        "    └── 'y' --> 9"
       ]
      },
-     "execution_count": 17,
+     "execution_count": 25,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -617,14 +1153,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 26,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:16.458239Z",
-     "iopub.status.busy": "2022-10-19T20:39:16.457704Z",
-     "iopub.status.idle": "2022-10-19T20:39:18.305676Z",
-     "shell.execute_reply": "2022-10-19T20:39:18.304884Z"
+     "iopub.execute_input": "2022-10-20T11:07:31.657460Z",
+     "iopub.status.busy": "2022-10-20T11:07:31.657007Z",
+     "iopub.status.idle": "2022-10-20T11:07:33.729690Z",
+     "shell.execute_reply": "2022-10-20T11:07:33.728924Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -635,7 +1183,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "2.27 µs ± 37.5 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+      "2.55 µs ± 35 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
@@ -652,37 +1200,18 @@
     }
    },
    "source": [
-    "This is the performance in dm-tree"
+    "In DM-Tree, `unflatten_as` can be directly used."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 27,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:18.309612Z",
-     "iopub.status.busy": "2022-10-19T20:39:18.309223Z",
-     "iopub.status.idle": "2022-10-19T20:39:18.313227Z",
-     "shell.execute_reply": "2022-10-19T20:39:18.312457Z"
-    },
-    "pycharm": {
-     "name": "#%%\n"
-    }
-   },
-   "outputs": [],
-   "source": [
-    "from tree import unflatten_as"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 20,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:18.316740Z",
-     "iopub.status.busy": "2022-10-19T20:39:18.316192Z",
-     "iopub.status.idle": "2022-10-19T20:39:18.322002Z",
-     "shell.execute_reply": "2022-10-19T20:39:18.321047Z"
+     "iopub.execute_input": "2022-10-20T11:07:33.733945Z",
+     "iopub.status.busy": "2022-10-20T11:07:33.733533Z",
+     "iopub.status.idle": "2022-10-20T11:07:33.739542Z",
+     "shell.execute_reply": "2022-10-20T11:07:33.738683Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -695,24 +1224,38 @@
        "{'a': 3, 'b': 5, 'c': {'x': 7, 'y': 9}}"
       ]
      },
-     "execution_count": 20,
+     "execution_count": 27,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "from tree import unflatten_as\n",
+    "\n",
     "unflatten_as(origin, [3, 5, 7, 9])"
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "Here is the performance, even much slower than the `replace` function for integration."
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 28,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2022-10-19T20:39:18.326346Z",
-     "iopub.status.busy": "2022-10-19T20:39:18.326116Z",
-     "iopub.status.idle": "2022-10-19T20:39:28.358167Z",
-     "shell.execute_reply": "2022-10-19T20:39:28.357367Z"
+     "iopub.execute_input": "2022-10-20T11:07:33.743598Z",
+     "iopub.status.busy": "2022-10-20T11:07:33.743192Z",
+     "iopub.status.idle": "2022-10-20T11:07:45.443883Z",
+     "shell.execute_reply": "2022-10-20T11:07:45.443019Z"
     },
     "pycharm": {
      "name": "#%%\n"
@@ -723,7 +1266,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "12.4 µs ± 447 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+      "14.4 µs ± 536 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
@@ -740,7 +1283,31 @@
     }
    },
    "source": [
-    "Treevalue's performance is much better."
+    "## Conclusion"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "The mapping operation is supported by both library, and `mapping` in TreeValue's performance is significantly higher than the `map_structure` and `map_structure_with_path` in DM-Tree."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   },
+   "source": [
+    "The `flatten` and `unflatten` in TreeValue is reversible, but in DM-Tree not. DM-Tree's performance on flatten and unflatten operation is lower than that in TreeValue in all aspects."
    ]
   }
  ],
