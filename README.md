@@ -222,6 +222,7 @@ We provide an official treevalue-based-wrapper for numpy and torch called [DI-tr
 ## Speed Performance
 
 Here is the speed performance of all the operations in `FastTreeValue`; the following table is the performance comparison result with [dm-tree](https://github.com/deepmind/tree).
+(In DM-Tree, the `unflatten` operation is different from that in TreeValue, see: [Comparison Between TreeValue and DM-Tree](https://opendilab.github.io/treevalue/main/comparison/dmtree.result.html) for more details.)
 
 |                                                     |     flatten      |  flatten(with path)   |        mapping        |     mapping(with path)      |
 | --------------------------------------------------- | :--------------: | :-------------------: | :-------------------: | :-------------------------: |
@@ -289,8 +290,8 @@ Test benchmark code can be found here:
         1.1.0: Add version information; fix bug of default value; add flatten and unflatten; optimization speed performance.
 * 2021-10-24
         1.0.0: Greatly optimize the speed performance using cython, overhead has been reduced to a negligible level.
-</div>
-</details>
+    </div>
+    </details>
 
 ## Feedback and Contribute
 

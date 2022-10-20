@@ -34,6 +34,8 @@ structure processing when the calculation is tree-based.
     :maxdepth: 2
     :caption: Comparison
 
+    comparison/generic
+    comparison/environment.result
     comparison/dmtree.result
 
 
