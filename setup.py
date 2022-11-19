@@ -31,7 +31,8 @@ with open('README.md', 'r', 'utf-8') as f:
     readme = f.read()
 
 
-def find_pyx(path='.'):
+def find_pyx(path=None):
+    path = path or os.path.join(here, _package_name)
     pyx_files = []
     for root, dirs, filenames in os.walk(path):
         for fname in filenames:
