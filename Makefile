@@ -39,6 +39,7 @@ clean:
 	rm -rf $(shell find ${SRC_DIR} -name '*.so') \
 			$(shell ls $(addsuffix .c, $(basename ${CYTHON_FILES})) \
 					  $(addsuffix .cpp, $(basename ${CYTHON_FILES})) \
+					  $(addsuffix .h, $(basename ${CYTHON_FILES})) \
 				2> /dev/null)
 	rm -rf ${DIST_DIR} ${WHEELHOUSE_DIR}
 
