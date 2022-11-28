@@ -8,6 +8,7 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
+from .constraint cimport Constraint, to_constraint, EmptyConstraint
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
@@ -56,12 +57,13 @@ cdef class TreeValue:
         The `TreeValue` class is a light-weight framework just for DIY.
     """
 
-    def __cinit__(self, object data):
+    def __cinit__(self, object data, Constraint constraint=None):
         self._st = _DEFAULT_STORAGE
+        self._constraint = EmptyConstraint() if constraint is None else constraint
         self._type = type(self)
 
     @cython.binding(True)
-    def __init__(self, object data):
+    def __init__(self, object data, object constraint=None):
         """
         Constructor of :class:`TreeValue`.
 
@@ -99,6 +101,8 @@ cdef class TreeValue:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
                     type=repr(type(data).__name__)))
+
+        self._constraint = to_constraint(constraint)
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}

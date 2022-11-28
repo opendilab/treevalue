@@ -3,6 +3,7 @@
 
 from libcpp cimport bool
 
+from .constraint cimport Constraint
 from ..common.delay cimport DelayedProxy
 from ..common.storage cimport TreeStorage
 
@@ -11,6 +12,7 @@ cdef class _CObject:
 
 cdef class TreeValue:
     cdef readonly TreeStorage _st
+    cdef readonly Constraint _constraint
     cdef readonly type _type
 
     cpdef TreeStorage _detach(self)
@@ -20,7 +22,7 @@ cdef class TreeValue:
     cpdef _getitem_extern(self, object key)
     cpdef _setitem_extern(self, object key, object value)
     cpdef _delitem_extern(self, object key)
-    cdef void _update(self, object d, dict kwargs) except *
+    cdef void _update(self, object d, dict kwargs) except*
     cpdef public get(self, str key, object default= *)
     cpdef public pop(self, str key, object default= *)
     cpdef public popitem(self)
