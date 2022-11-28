@@ -6,52 +6,52 @@ from libcpp cimport bool
 cdef class _WrappedConstraintException(Exception):
     pass
 
-cdef class BaseConstraint:
+cdef class Constraint:
     cpdef void _validate_node(self, object instance) except*
     cpdef void _validate_value(self, object instance) except*
     cpdef object _features(self)
-    cpdef bool _contains(self, BaseConstraint other)
-    cpdef BaseConstraint _transaction(self, str key)
+    cpdef bool _contains(self, Constraint other)
+    cpdef Constraint _transaction(self, str key)
 
-    cdef bool _feature_match(self, BaseConstraint other)
-    cdef bool _contains_check(self, BaseConstraint other)
+    cdef bool _feature_match(self, Constraint other)
+    cdef bool _contains_check(self, Constraint other)
     cdef tuple _native_validate(self, object instance, type type_, list path)
     cpdef tuple check(self, object instance)
     cpdef bool equiv(self, object other)
 
-cdef BaseConstraint _r_parse_cons(object obj)
-cpdef BaseConstraint to_constraint(object obj)
+cdef Constraint _r_parse_cons(object obj)
+cpdef Constraint to_constraint(object obj)
 
-cdef class EmptyConstraint(BaseConstraint):
+cdef class EmptyConstraint(Constraint):
     pass
 
-cdef class ValueConstraint(BaseConstraint):
+cdef class ValueConstraint(Constraint):
     pass
 
-cdef class NodeConstraint(BaseConstraint):
+cdef class NodeConstraint(Constraint):
     pass
 
 cdef class TypeConstraint(ValueConstraint):
     cdef readonly type type_
 
-cdef class LeafConstraint(BaseConstraint):
+cdef class LeafConstraint(Constraint):
     pass
 
 cpdef LeafConstraint cleaf()
 
-cdef class TreeConstraint(BaseConstraint):
+cdef class TreeConstraint(Constraint):
     cdef readonly dict _constraints
 
-cdef BaseConstraint _s_tree_merge(list constraints)
-cdef BaseConstraint _s_tree(TreeConstraint constraint)
+cdef Constraint _s_tree_merge(list constraints)
+cdef Constraint _s_tree(TreeConstraint constraint)
 
-cdef class CompositeConstraint(BaseConstraint):
+cdef class CompositeConstraint(Constraint):
     cdef readonly tuple _constraints
 
-cdef void _rec_composite_iter(BaseConstraint constraint, list lst)
-cdef list _r_composite_iter(BaseConstraint constraint)
+cdef void _rec_composite_iter(Constraint constraint, list lst)
+cdef list _r_composite_iter(Constraint constraint)
 
-cdef BaseConstraint _s_generic_merge(list constraints)
-cdef BaseConstraint _s_composite(CompositeConstraint constraint)
+cdef Constraint _s_generic_merge(list constraints)
+cdef Constraint _s_composite(CompositeConstraint constraint)
 
-cdef BaseConstraint _s_simplify(BaseConstraint constraint)
+cdef Constraint _s_simplify(Constraint constraint)

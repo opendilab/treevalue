@@ -1,4 +1,4 @@
-from .constraint import to_constraint, BaseConstraint, NodeConstraint, ValueConstraint, cleaf
+from .constraint import to_constraint, Constraint, NodeConstraint, ValueConstraint, cleaf
 from .flatten import flatten, unflatten, flatten_values, flatten_keys
 from .functional import mapping, filter_, mask, reduce_
 from .graph import graphics

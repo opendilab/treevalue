@@ -10,7 +10,7 @@ from ..common.storage cimport TreeStorage
 cdef class _WrappedConstraintException(Exception):
     pass
 
-cdef class BaseConstraint:
+cdef class Constraint:
     cpdef void _validate_node(self, object instance) except*:
         raise NotImplementedError  # pragma: no cover
 
@@ -20,27 +20,27 @@ cdef class BaseConstraint:
     cpdef object _features(self):
         raise NotImplementedError  # pragma: no cover
 
-    cpdef bool _contains(self, BaseConstraint other):
+    cpdef bool _contains(self, Constraint other):
         raise NotImplementedError  # pragma: no cover
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         raise NotImplementedError  # pragma: no cover
 
-    cdef inline bool _feature_match(self, BaseConstraint other):
+    cdef inline bool _feature_match(self, Constraint other):
         return type(self) == type(other) and self._features() == other._features()
 
-    cdef inline bool _contains_check(self, BaseConstraint other):
+    cdef inline bool _contains_check(self, Constraint other):
         return isinstance(other, EmptyConstraint) or self._feature_match(other) or self._contains(other)
 
     cdef tuple _native_validate(self, object instance, type type_, list path):
         cdef dict raw
         cdef str key
         cdef object value
-        cdef BaseConstraint subcons
+        cdef Constraint subcons
 
         cdef bool retval
         cdef tuple retpath
-        cdef BaseConstraint retcons
+        cdef Constraint retcons
         cdef Exception reterr
 
         if isinstance(instance, TreeStorage):
@@ -81,7 +81,7 @@ cdef class BaseConstraint:
     def validate(self, object instance):
         cdef bool retval
         cdef tuple retpath
-        cdef BaseConstraint retcons
+        cdef Constraint retcons
         cdef Exception reterr
         retval, retpath, retcons, reterr = self.check(instance)
 
@@ -95,30 +95,30 @@ cdef class BaseConstraint:
         return hash(self._features())
 
     cpdef bool equiv(self, object other):
-        cdef BaseConstraint c = to_constraint(other)
+        cdef Constraint c = to_constraint(other)
         return self._contains_check(c) and c._contains_check(self)
 
     def __ge__(self, other):
-        cdef BaseConstraint c = to_constraint(other)
+        cdef Constraint c = to_constraint(other)
         return self._contains_check(c)
 
     def __gt__(self, other):
-        cdef BaseConstraint c = to_constraint(other)
+        cdef Constraint c = to_constraint(other)
         return self._contains_check(c) and not c._contains_check(self)
 
     def __le__(self, other):
-        cdef BaseConstraint c = to_constraint(other)
+        cdef Constraint c = to_constraint(other)
         return c._contains_check(self)
 
     def __lt__(self, other):
-        cdef BaseConstraint c = to_constraint(other)
+        cdef Constraint c = to_constraint(other)
         return c._contains_check(self) and not self._contains_check(c)
 
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
 
-cdef inline BaseConstraint _r_parse_cons(object obj):
-    if isinstance(obj, BaseConstraint):
+cdef inline Constraint _r_parse_cons(object obj):
+    if isinstance(obj, Constraint):
         return obj
     elif obj is None:
         return EmptyConstraint()
@@ -131,10 +131,10 @@ cdef inline BaseConstraint _r_parse_cons(object obj):
     else:
         raise TypeError(f'Invalid constraint - {obj!r}.')
 
-cpdef inline BaseConstraint to_constraint(object obj):
+cpdef inline Constraint to_constraint(object obj):
     return _s_simplify(_r_parse_cons(obj))
 
-cdef class EmptyConstraint(BaseConstraint):
+cdef class EmptyConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         pass
 
@@ -144,10 +144,10 @@ cdef class EmptyConstraint(BaseConstraint):
     cpdef object _features(self):
         return ()
 
-    cpdef bool _contains(self, BaseConstraint other):
+    cpdef bool _contains(self, Constraint other):
         return isinstance(other, EmptyConstraint)
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         return self
 
     def __bool__(self):
@@ -156,18 +156,18 @@ cdef class EmptyConstraint(BaseConstraint):
     def __repr__(self):
         return f'<{type(self).__name__}>'
 
-cdef class ValueConstraint(BaseConstraint):
+cdef class ValueConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         pass
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         return self
 
-cdef class NodeConstraint(BaseConstraint):
+cdef class NodeConstraint(Constraint):
     cpdef void _validate_value(self, object instance) except*:
         raise TypeError(f'TreeValue node expected, but value {instance!r} found.')
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         return EmptyConstraint()
 
 cdef class TypeConstraint(ValueConstraint):
@@ -181,10 +181,10 @@ cdef class TypeConstraint(ValueConstraint):
     cpdef object _features(self):
         return self.type_
 
-    cpdef bool _contains(self, BaseConstraint other):
+    cpdef bool _contains(self, Constraint other):
         return isinstance(other, TypeConstraint) and issubclass(self.type_, other.type_)
 
-cdef class LeafConstraint(BaseConstraint):
+cdef class LeafConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         raise TypeError(f'TreeValue leaf expected, but node found:{os.linesep}{instance!r}.')
 
@@ -194,10 +194,10 @@ cdef class LeafConstraint(BaseConstraint):
     cpdef object _features(self):
         return None
 
-    cpdef bool _contains(self, BaseConstraint other):
+    cpdef bool _contains(self, Constraint other):
         return isinstance(other, LeafConstraint)
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         return EmptyConstraint()
 
     def __repr__(self):
@@ -206,7 +206,7 @@ cdef class LeafConstraint(BaseConstraint):
 cpdef inline LeafConstraint cleaf():
     return LeafConstraint()
 
-cdef class TreeConstraint(BaseConstraint):
+cdef class TreeConstraint(Constraint):
     def __cinit__(self, dict constraints):
         self._constraints = {key: constraints[key] for key in sorted(constraints.keys())}
 
@@ -223,9 +223,9 @@ cdef class TreeConstraint(BaseConstraint):
             ft.append((key, self._constraints[key]))
         return tuple(ft)
 
-    cpdef bool _contains(self, BaseConstraint other):
+    cpdef bool _contains(self, Constraint other):
         cdef str key
-        cdef BaseConstraint _s_cons, _o_cons
+        cdef Constraint _s_cons, _o_cons
         cdef list _f_keys
         if isinstance(other, TreeConstraint):
             _f_keys = sorted(set(self._constraints.keys()) | set(other._constraints.keys()))
@@ -239,16 +239,16 @@ cdef class TreeConstraint(BaseConstraint):
         else:
             return False
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         if key in self._constraints:
             return self._constraints[key]
         else:
             return EmptyConstraint()
 
-cdef inline BaseConstraint _s_tree_merge(list constraints):
+cdef inline Constraint _s_tree_merge(list constraints):
     cdef dict cmap = {}
     cdef str key
-    cdef BaseConstraint cons
+    cdef Constraint cons
     cdef TreeConstraint tcons
     for tcons in constraints:
         for key, cons in tcons._constraints.items():
@@ -269,11 +269,11 @@ cdef inline BaseConstraint _s_tree_merge(list constraints):
     else:
         return EmptyConstraint()
 
-cdef inline BaseConstraint _s_tree(TreeConstraint constraint):
+cdef inline Constraint _s_tree(TreeConstraint constraint):
     cdef dict dcons = {}
     cdef list keys = sorted(constraint._constraints.keys())
     cdef str key
-    cdef BaseConstraint cons, pcons
+    cdef Constraint cons, pcons
     for key in keys:
         pcons = _s_simplify(constraint._constraints[key])
         if not isinstance(pcons, EmptyConstraint):
@@ -284,12 +284,12 @@ cdef inline BaseConstraint _s_tree(TreeConstraint constraint):
     else:
         return EmptyConstraint()
 
-cdef class CompositeConstraint(BaseConstraint):
+cdef class CompositeConstraint(Constraint):
     def __cinit__(self, list constraints):
         self._constraints = tuple(sorted(constraints, key=lambda x: repr(x._features())))
 
     cpdef void _validate_node(self, object instance) except*:
-        cdef BaseConstraint cons
+        cdef Constraint cons
         for cons in self._constraints:
             try:
                 cons._validate_node(instance)
@@ -299,7 +299,7 @@ cdef class CompositeConstraint(BaseConstraint):
                 raise _WrappedConstraintException(err, cons)
 
     cpdef void _validate_value(self, object instance) except*:
-        cdef BaseConstraint cons
+        cdef Constraint cons
         for cons in self._constraints:
             try:
                 cons._validate_value(instance)
@@ -311,8 +311,8 @@ cdef class CompositeConstraint(BaseConstraint):
     cpdef object _features(self):
         return self._constraints
 
-    cpdef bool _contains(self, BaseConstraint other):
-        cdef BaseConstraint cons, pcons
+    cpdef bool _contains(self, Constraint other):
+        cdef Constraint cons, pcons
         cdef bool found_contains
         if isinstance(other, CompositeConstraint):
             for pcons in other._constraints:
@@ -333,24 +333,24 @@ cdef class CompositeConstraint(BaseConstraint):
 
             return False
 
-    cpdef BaseConstraint _transaction(self, str key):
+    cpdef Constraint _transaction(self, str key):
         return CompositeConstraint([c._transaction(key) for c in self._constraints])
 
-cdef inline void _rec_composite_iter(BaseConstraint constraint, list lst):
-    cdef BaseConstraint cons
+cdef inline void _rec_composite_iter(Constraint constraint, list lst):
+    cdef Constraint cons
     if isinstance(constraint, CompositeConstraint):
         for cons in constraint._constraints:
             _rec_composite_iter(cons, lst)
     else:
         lst.append(constraint)
 
-cdef inline list _r_composite_iter(BaseConstraint constraint):
+cdef inline list _r_composite_iter(Constraint constraint):
     cdef list lst = []
     _rec_composite_iter(constraint, lst)
     return lst
 
-cdef inline BaseConstraint _s_generic_merge(list constraints):
-    cdef BaseConstraint gcons, cons, pcons
+cdef inline Constraint _s_generic_merge(list constraints):
+    cdef Constraint gcons, cons, pcons
     cdef list sins = []
     cdef list trees = []
     for gcons in constraints:
@@ -361,7 +361,7 @@ cdef inline BaseConstraint _s_generic_merge(list constraints):
             elif not isinstance(pcons, EmptyConstraint):
                 sins.append(pcons)
 
-    cdef BaseConstraint tree = _s_tree_merge(trees)
+    cdef Constraint tree = _s_tree_merge(trees)
     if not isinstance(tree, EmptyConstraint):
         sins.append(tree)
 
@@ -391,10 +391,10 @@ cdef inline BaseConstraint _s_generic_merge(list constraints):
     else:
         return CompositeConstraint(finals)
 
-cdef inline BaseConstraint _s_composite(CompositeConstraint constraint):
+cdef inline Constraint _s_composite(CompositeConstraint constraint):
     return _s_generic_merge(list(constraint._constraints))
 
-cdef inline BaseConstraint _s_simplify(BaseConstraint constraint):
+cdef inline Constraint _s_simplify(Constraint constraint):
     if isinstance(constraint, CompositeConstraint):
         return _s_composite(constraint)
     elif isinstance(constraint, TreeConstraint):
