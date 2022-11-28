@@ -85,18 +85,8 @@ cdef class BaseConstraint:
         cdef Exception reterr
         retval, retpath, retcons, reterr = self.check(instance)
 
-        cdef tuple args, fargs
-        cdef list pargs
-        cdef object msg
         if not retval:
-            args = reterr.args
-            if args:
-                msg, *pargs = args
-                fargs = (msg, (retpath, retcons), *pargs)
-            else:
-                fargs = (retpath,)
-
-            raise type(reterr)(*fargs)
+            raise reterr
 
     def __eq__(self, other):
         return self._feature_match(to_constraint(other))
@@ -270,8 +260,8 @@ cdef inline BaseConstraint _s_tree_merge(list constraints):
     cdef list clist
     cdef dict fmap = {}
     for key, clist in cmap.items():
-        cons = _s_composite(clist)
-        if not cons:
+        cons = _s_generic_merge(clist)
+        if cons:
             fmap[key] = cons
 
     if fmap:
@@ -350,10 +340,7 @@ cdef inline void _rec_composite_iter(BaseConstraint constraint, list lst):
     cdef BaseConstraint cons
     if isinstance(constraint, CompositeConstraint):
         for cons in constraint._constraints:
-            if isinstance(cons, CompositeConstraint):
-                _rec_composite_iter(cons, lst)
-            else:
-                lst.append(cons)
+            _rec_composite_iter(cons, lst)
     else:
         lst.append(constraint)
 
@@ -398,9 +385,8 @@ cdef inline BaseConstraint _s_generic_merge(list constraints):
         if i not in _child_ids:
             finals.append(sins[i])
 
-    if not finals:
-        return EmptyConstraint()
-    elif len(finals) == 1:
+    assert finals, 'Finals should not be empty, but it\'s empty actually.'
+    if len(finals) == 1:
         return finals[0]
     else:
         return CompositeConstraint(finals)

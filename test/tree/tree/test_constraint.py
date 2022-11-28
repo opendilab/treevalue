@@ -2,7 +2,7 @@ import pytest
 
 from treevalue.tree.tree import TreeValue, cleaf
 from treevalue.tree.tree.constraint import to_constraint, TypeConstraint, EmptyConstraint, LeafConstraint, \
-    ValueConstraint
+    ValueConstraint, TreeConstraint
 
 
 class GreaterThanConstraint(ValueConstraint):
@@ -20,6 +20,7 @@ class GreaterThanConstraint(ValueConstraint):
         return isinstance(other, GreaterThanConstraint) and self.value >= other.value
 
 
+# noinspection DuplicatedCode,PyArgumentList,PyTypeChecker
 @pytest.mark.unittest
 class TestTreeTreeConstraint:
     def test_empty(self):
@@ -453,3 +454,89 @@ class TestTreeTreeConstraint:
         assert isinstance(reterr, TypeError)
         with pytest.raises(TypeError):
             c1.validate(t7)
+
+    def test_composite_tree(self):
+        c1 = to_constraint([
+            {
+                'a': [int, object],
+                'b': {
+                    'x': [str, None],
+                    'y': object,
+                },
+                'c': None,
+            },
+            {
+                'b': {
+                    'x': [cleaf(), None],
+                    'y': float,
+                }
+            },
+            {
+                'a': GreaterThanConstraint(3),
+            },
+        ])
+        assert c1
+        assert isinstance(c1, TreeConstraint)
+        assert c1 == {'a': [int, GreaterThanConstraint(3)], 'b': {'x': [cleaf(), str], 'y': float}}
+
+        assert c1 >= c1
+        assert not (c1 > c1)
+        assert c1 <= c1
+        assert not (c1 < c1)
+
+        assert not (c1 >= object)
+        assert not (c1 > object)
+        assert not (c1 <= object)
+        assert not (c1 < object)
+
+        assert c1 >= {'a': int}
+        assert c1 > {'a': int}
+        assert not (c1 <= {'a': int})
+        assert not (c1 < {'a': int})
+
+        assert c1 >= {'a': int, 'b': {'y': float}}
+        assert c1 > {'a': int, 'b': {'y': float}}
+        assert not (c1 <= {'a': int, 'b': {'y': float}})
+        assert not (c1 < {'a': int, 'b': {'y': float}})
+
+        assert c1 >= {'a': [int, GreaterThanConstraint(3)], 'b': {'x': [cleaf(), str], 'y': float}}
+        assert not (c1 > {'a': [int, GreaterThanConstraint(3)], 'b': {'x': [cleaf(), str], 'y': float}})
+        assert c1 <= {'a': [int, GreaterThanConstraint(3)], 'b': {'x': [cleaf(), str], 'y': float}}
+        assert not (c1 < {'a': [int, GreaterThanConstraint(3)], 'b': {'x': [cleaf(), str], 'y': float}})
+
+        assert c1 >= {'c': None}
+        assert c1 > {'c': None}
+        assert not (c1 <= {'c': None})
+        assert not (c1 < {'c': None})
+
+    def test_complex(self):
+        c1 = to_constraint([
+            GreaterThanConstraint(4),
+            {
+                'a': [int, object],
+                'b': {
+                    'x': [int, None],
+                    'y': object,
+                },
+                'c': None,
+            },
+            {
+                'b': {
+                    'x': [cleaf(), None],
+                    'y': int,
+                }
+            },
+            {
+                'a': GreaterThanConstraint(3),
+            },
+        ])
+        assert c1 == [
+            GreaterThanConstraint(4),
+            {
+                'a': [int, GreaterThanConstraint(3)],
+                'b': {
+                    'x': [int, cleaf()],
+                    'y': int,
+                }
+            },
+        ]
