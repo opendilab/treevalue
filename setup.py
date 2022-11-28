@@ -60,7 +60,7 @@ setup(
     url='https://github.com/HansBug/treevalue',
 
     # environment
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     ext_modules=cythonize(
         find_pyx(),
         language_level=3,
@@ -77,7 +77,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
