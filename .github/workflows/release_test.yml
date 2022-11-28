@@ -10,17 +10,17 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - 'ubuntu-18.04'
+          - 'ubuntu-20.04'
         python-version:
           - '3.8'
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 20
       - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up python dependences
@@ -48,9 +48,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - 'ubuntu-18.04'
+          - 'ubuntu-20.04'
           - 'windows-2019'
-          - 'macos-10.15'
+          - 'macos-12'
         python:
           - '3.7'
           - '3.8'
@@ -63,11 +63,11 @@ jobs:
           - x86
           - AMD64
         exclude:
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             architecture: arm64
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             architecture: x86
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             architecture: AMD64
           - os: windows-2019
             architecture: x86_64
@@ -75,18 +75,18 @@ jobs:
             architecture: arm64
           - os: windows-2019
             architecture: aarch64
-          - os: macos-10.15
+          - os: macos-12
             architecture: aarch64
-          - os: macos-10.15
+          - os: macos-12
             architecture: x86
-          - os: macos-10.15
+          - os: macos-12
             architecture: AMD64
           - python: '3.7'
             architecture: arm64
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 20
 

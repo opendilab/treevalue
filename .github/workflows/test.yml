@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - 'ubuntu-18.04'
+          - 'ubuntu-20.04'
           - 'windows-2019'  # need to be fixed, see: https://github.com/opendilab/treevalue/issues/41
-          - 'macos-10.15'
+          - 'macos-12'
         python-version:
           - '3.7'
           - '3.8'
@@ -59,7 +59,7 @@ jobs:
         run: |
           echo "IS_PYPY=1" >> $GITHUB_ENV
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 20
       - name: Set up system dependences on linux
@@ -82,7 +82,7 @@ jobs:
           brew install tree cloc wget curl make zip graphviz
           dot -V
       - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -110,7 +110,7 @@ jobs:
         run: |
           make clean build unittest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
