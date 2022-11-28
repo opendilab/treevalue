@@ -1,5 +1,6 @@
 import pytest
 
+from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
 from treevalue.tree.tree.constraint import to_constraint, TypeConstraint, EmptyConstraint, LeafConstraint, \
     ValueConstraint, TreeConstraint
@@ -540,3 +541,55 @@ class TestTreeTreeConstraint:
                 }
             },
         ]
+
+    def test_with_delay(self):
+        c1 = to_constraint([
+            object,
+            {
+                'a': [int, GreaterThanConstraint(3)],
+                'b': {
+                    'x': [cleaf(), str, None],
+                    'y': float,
+                },
+                'c': None,
+            }
+        ])
+
+        t1 = TreeValue({
+            'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+            'b': delayed(lambda x: TreeValue({
+                'x': f'f-{x * x!r}',
+                'y': x * 1.1,
+            }), x=7)
+        })
+        retval, retpath, retcons, reterr = c1.check(t1)
+        assert retval
+        assert retpath is None
+        assert retcons is None
+        assert reterr is None
+
+        t2 = TreeValue({
+            'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+            'b': delayed(lambda x: TreeValue({
+                'x': x * x,
+                'y': x * 1.1,
+            }), x=7)
+        })
+        retval, retpath, retcons, reterr = c1.check(t2)
+        assert not retval
+        assert retpath == ('b', 'x')
+        assert retcons == str
+        assert isinstance(reterr, TypeError)
+
+        t2 = TreeValue({
+            'a': delayed(lambda x, y: x * (y + 1), 3, -6),
+            'b': delayed(lambda x: TreeValue({
+                'x': f'f-{x * x!r}',
+                'y': x * 1.1,
+            }), x=7)
+        })
+        retval, retpath, retcons, reterr = c1.check(t2)
+        assert not retval
+        assert retpath == ('a',)
+        assert retcons == GreaterThanConstraint(3)
+        assert isinstance(reterr, ValueError)

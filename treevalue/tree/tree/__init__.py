@@ -5,4 +5,4 @@ from .graph import graphics
 from .io import loads, load, dumps, dump
 from .service import jsonify, clone, typetrans, walk
 from .structural import subside, union, rise
-from .tree import TreeValue, delayed
+from .tree import TreeValue, delayed, ValidationError

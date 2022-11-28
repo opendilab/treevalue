@@ -4,8 +4,10 @@ from typing import Type
 
 import pytest
 
-from treevalue import raw, TreeValue, delayed
+from test.tree.tree.test_constraint import GreaterThanConstraint
+from treevalue import raw, TreeValue, delayed, ValidationError
 from treevalue.tree.common import create_storage
+from treevalue.tree.tree.constraint import cleaf
 
 try:
     _ = reversed({}.keys())
@@ -520,5 +522,82 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
                 ('c', MyTreeValue({'x': 2, 'y': 3})),
                 ('d', {'x': 2, 'y': 3}),
             ]
+
+        def test_validation(self):
+            t1 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1.1,
+                }), x=7)
+            }, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            t1.validate()
+
+            t2 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1,
+                }), x=7)
+            }, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            with pytest.raises(ValidationError) as ei:
+                t2.validate()
+            err = ei.value
+            self_, reterr, retpath, retcons = err.args
+            assert self_ == treevalue_class({'a': 21, 'b': {'x': 'f-49', 'y': 7}})
+            assert isinstance(reterr, TypeError)
+            assert retpath == ('b', 'y')
+            assert retcons == float
+            line1, *_ = str(err).splitlines(keepends=False)
+            assert line1 == "Validation failed on <TypeConstraint <class 'float'>> at position ('b', 'y')"
+
+            t3 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1,
+                }), x=7)
+            })
+            t3 = treevalue_class(t3, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            with pytest.raises(ValidationError) as ei:
+                t3.validate()
+            err = ei.value
+            self_, reterr, retpath, retcons = err.args
+            assert self_ == treevalue_class({'a': 21, 'b': {'x': 'f-49', 'y': 7}})
+            assert isinstance(reterr, TypeError)
+            assert retpath == ('b', 'y')
+            assert retcons == float
+            line1, *_ = str(err).splitlines(keepends=False)
+            assert line1 == "Validation failed on <TypeConstraint <class 'float'>> at position ('b', 'y')"
 
     return _TestClass

@@ -48,6 +48,18 @@ cdef inline TreeStorage _dict_unpack(dict d):
 
 _DEFAULT_STORAGE = create_storage({})
 
+cdef class ValidationError(Exception):
+    def __init__(self, TreeValue obj, Exception error, tuple path, Constraint cons):
+        Exception.__init__(self, obj, error, path, cons)
+        self._object = obj
+        self._error = error
+        self._path = path
+        self._cons = cons
+
+    def __str__(self):
+        return f"Validation failed on {self._cons!r} at position {self._path!r}{os.linesep}" \
+               f"{type(self._error).__name__}: {self._error}"
+
 cdef class TreeValue:
     r"""
     Overview:
@@ -57,9 +69,9 @@ cdef class TreeValue:
         The `TreeValue` class is a light-weight framework just for DIY.
     """
 
-    def __cinit__(self, object data, Constraint constraint=None):
+    def __cinit__(self, object data, object constraint=None):
         self._st = _DEFAULT_STORAGE
-        self._constraint = EmptyConstraint() if constraint is None else constraint
+        self.constraint = EmptyConstraint()
         self._type = type(self)
 
     @cython.binding(True)
@@ -93,16 +105,20 @@ cdef class TreeValue:
         """
         if isinstance(data, TreeStorage):
             self._st = data
+            self.constraint = to_constraint(constraint)
         elif isinstance(data, TreeValue):
             self._st = data._detach()
+            if constraint is None:
+                self.constraint = data.constraint
+            else:
+                self.constraint = to_constraint(constraint)
         elif isinstance(data, dict):
             self._st = _dict_unpack(data)
+            self.constraint = to_constraint(constraint)
         else:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
                     type=repr(type(data).__name__)))
-
-        self._constraint = to_constraint(constraint)
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
@@ -313,7 +329,7 @@ cdef class TreeValue:
         """
         return self._unraw(self._st.setdefault(key, self._raw(default)))
 
-    cdef inline void _update(self, object d, dict kwargs) except *:
+    cdef inline void _update(self, object d, dict kwargs) except*:
         cdef object dt
         if d is None:
             dt = {}
@@ -878,6 +894,18 @@ cdef class TreeValue:
             :func:`reversed` is only available in python 3.8 or higher versions.
         """
         return treevalue_items(self, self._st)
+
+    @cython.binding(True)
+    cpdef void validate(self) except*:
+        cdef bool retval
+        cdef tuple retpath
+        cdef Constraint retcons
+        cdef Exception reterr
+
+        if __debug__:
+            retval, retpath, retcons, reterr = self.constraint.check(self)
+            if not retval:
+                raise ValidationError(self, reterr, retpath, retcons)
 
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []

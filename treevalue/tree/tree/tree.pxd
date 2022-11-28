@@ -10,9 +10,15 @@ from ..common.storage cimport TreeStorage
 cdef class _CObject:
     pass
 
+cdef class ValidationError(Exception):
+    cdef readonly TreeValue _object
+    cdef readonly Exception _error
+    cdef readonly tuple _path
+    cdef readonly Constraint _cons
+
 cdef class TreeValue:
     cdef readonly TreeStorage _st
-    cdef readonly Constraint _constraint
+    cdef readonly Constraint constraint
     cdef readonly type _type
 
     cpdef TreeStorage _detach(self)
@@ -32,6 +38,8 @@ cdef class TreeValue:
     cpdef public treevalue_keys keys(self)
     cpdef public treevalue_values values(self)
     cpdef public treevalue_items items(self)
+
+    cpdef void validate(self) except*
 
 cdef str _prefix_fix(object text, object prefix)
 cdef str _title_repr(TreeStorage st, object type_)

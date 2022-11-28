@@ -1,6 +1,9 @@
 .PHONY: docs test unittest build clean benchmark zip
 
-PYTHON := $(shell which python)
+NO_DEBUG     ?=
+NO_DOCSTRING ?=
+NO_DEBUG_CMD := $(if ${NO_DOCSTRING},-OO,$(if ${NO_DEBUG},-O,))
+PYTHON := $(shell which python) ${NO_DEBUG_CMD}
 
 DOC_DIR        := ./docs
 DIST_DIR       := ./dist
@@ -46,7 +49,7 @@ clean:
 test: unittest benchmark
 
 unittest:
-	pytest "${RANGE_TEST_DIR}" \
+	$(PYTHON) -m pytest "${RANGE_TEST_DIR}" \
 		-sv -m unittest \
 		$(shell for type in ${COV_TYPES}; do echo "--cov-report=$$type"; done) \
 		--cov="${RANGE_SRC_DIR}" \
@@ -54,7 +57,7 @@ unittest:
 		$(if ${WORKERS},-n ${WORKERS},)
 
 benchmark:
-	pytest "${RANGE_TEST_DIR}" \
+	$(PYTHON) -m pytest "${RANGE_TEST_DIR}" \
 		-sv -m benchmark \
 		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
 		--benchmark-disable-gc \
@@ -62,7 +65,7 @@ benchmark:
 		$(if ${WORKERS},-n ${WORKERS},)
 
 compare:
-	pytest "${RANGE_BENCH_DIR}" \
+	$(PYTHON) -m pytest "${RANGE_BENCH_DIR}" \
 		-sv -m benchmark \
 		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
 		--benchmark-disable-gc \

@@ -5,7 +5,7 @@ import os
 from libcpp cimport bool
 
 from .tree cimport TreeValue
-from ..common.storage cimport TreeStorage
+from ..common.storage cimport TreeStorage, _c_undelay_data
 
 cdef class _WrappedConstraintException(Exception):
     pass
@@ -54,6 +54,7 @@ cdef class Constraint:
 
             raw = instance.detach()
             for key, value in raw.items():
+                value = _c_undelay_data(raw, key, value)
                 path.append(key)
                 subcons = self._transaction(key)
                 retval, retpath, retcons, reterr = subcons._native_validate(raw[key], type_, path)
