@@ -185,6 +185,39 @@ cdef class TypeConstraint(ValueConstraint):
     cpdef bool _contains(self, Constraint other):
         return isinstance(other, TypeConstraint) and issubclass(self.type_, other.type_)
 
+cdef inline str _c_func_fullname(object f):
+    cdef str fname = f.__name__
+    cdef str mname = getattr(f, '__module__', '')
+    return f'{mname}.{fname}' if mname else fname
+
+cdef class ValueFuncConstraint(ValueConstraint):
+    def __cinit__(self, object func, str name):
+        self.func = func
+        self.name = name
+
+    cpdef object _features(self):
+        return self.name, self.func
+
+    cpdef bool _contains(self, Constraint other):
+        return type(self) == type(other) and self.func == other.func
+
+    def __repr__(self):
+        return f'<{type(self).__name__} {self.name}>'
+
+cdef class ValueValidateConstraint(ValueFuncConstraint):
+    cpdef void _validate_value(self, object instance) except*:
+        self.func(instance)
+
+cdef class ValueCheckConstraint(ValueFuncConstraint):
+    cpdef void _validate_value(self, object instance) except*:
+        assert self.func(instance), f'Check of {self.name!r} failed.'
+
+cpdef inline ValueValidateConstraint vval(object func, object name=None):
+    return ValueValidateConstraint(func, str(name or _c_func_fullname(func)))
+
+cpdef inline ValueCheckConstraint vcheck(object func, object name=None):
+    return ValueCheckConstraint(func, str(name or _c_func_fullname(func)))
+
 cdef class LeafConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         raise TypeError(f'TreeValue leaf expected, but node found:{os.linesep}{instance!r}.')
@@ -206,6 +239,34 @@ cdef class LeafConstraint(Constraint):
 
 cpdef inline LeafConstraint cleaf():
     return LeafConstraint()
+
+cdef class NodeFuncConstraint(NodeConstraint):
+    def __cinit__(self, object func, str name):
+        self.func = func
+        self.name = name
+
+    cpdef object _features(self):
+        return self.name, self.func
+
+    cpdef bool _contains(self, Constraint other):
+        return type(self) == type(other) and self.func == other.func
+
+    def __repr__(self):
+        return f'<{type(self).__name__} {self.name}>'
+
+cdef class NodeValidateConstraint(NodeFuncConstraint):
+    cpdef void _validate_node(self, object instance) except*:
+        self.func(instance)
+
+cdef class NodeCheckConstraint(NodeFuncConstraint):
+    cpdef void _validate_node(self, object instance) except*:
+        assert self.func(instance), f'Check of {self.name!r} failed.'
+
+cpdef inline NodeValidateConstraint nval(object func, object name=None):
+    return NodeValidateConstraint(func, str(name or _c_func_fullname(func)))
+
+cpdef inline NodeCheckConstraint ncheck(object func, object name=None):
+    return NodeCheckConstraint(func, str(name or _c_func_fullname(func)))
 
 cdef class TreeConstraint(Constraint):
     def __cinit__(self, dict constraints):

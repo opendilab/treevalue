@@ -34,10 +34,38 @@ cdef class NodeConstraint(Constraint):
 cdef class TypeConstraint(ValueConstraint):
     cdef readonly type type_
 
+cdef str _c_func_fullname(object f)
+
+cdef class ValueFuncConstraint(ValueConstraint):
+    cdef readonly object func
+    cdef readonly str name
+
+cdef class ValueValidateConstraint(ValueFuncConstraint):
+    pass
+
+cdef class ValueCheckConstraint(ValueFuncConstraint):
+    pass
+
+cpdef ValueValidateConstraint vval(object func, object name= *)
+cpdef ValueCheckConstraint vcheck(object func, object name= *)
+
 cdef class LeafConstraint(Constraint):
     pass
 
 cpdef LeafConstraint cleaf()
+
+cdef class NodeFuncConstraint(NodeConstraint):
+    cdef readonly object func
+    cdef readonly str name
+
+cdef class NodeValidateConstraint(NodeFuncConstraint):
+    pass
+
+cdef class NodeCheckConstraint(NodeFuncConstraint):
+    pass
+
+cpdef NodeValidateConstraint nval(object func, object name= *)
+cpdef NodeCheckConstraint ncheck(object func, object name= *)
 
 cdef class TreeConstraint(Constraint):
     cdef readonly dict _constraints

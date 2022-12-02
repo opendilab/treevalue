@@ -3,7 +3,7 @@ import pytest
 from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
 from treevalue.tree.tree.constraint import to_constraint, TypeConstraint, EmptyConstraint, LeafConstraint, \
-    ValueConstraint, TreeConstraint
+    ValueConstraint, TreeConstraint, vval, vcheck, nval, ncheck
 
 
 class GreaterThanConstraint(ValueConstraint):
@@ -593,3 +593,198 @@ class TestTreeTreeConstraint:
         assert retpath == ('a',)
         assert retcons == GreaterThanConstraint(3)
         assert isinstance(reterr, ValueError)
+
+    def test_value_func(self):
+        def _v_validate(x):
+            if x < 5:
+                raise ValueError('X is lower than 5.')
+
+        c1 = vval(_v_validate, '5_check')
+        assert repr(c1) == '<ValueValidateConstraint 5_check>'
+        assert c1 == vval(_v_validate, '5_check')
+        assert c1 != vval(_v_validate, '6_check')
+
+        assert c1 >= vval(_v_validate, '5_check')
+        assert not (c1 > vval(_v_validate, '5_check'))
+        assert c1 <= vval(_v_validate, '5_check')
+        assert not (c1 < vval(_v_validate, '5_check'))
+
+        assert c1 >= vval(_v_validate, '4_check')
+        assert not (c1 > vval(_v_validate, '4_check'))
+        assert c1 <= vval(_v_validate, '4_check')
+        assert not (c1 < vval(_v_validate, '4_check'))
+
+        assert c1.equiv(vval(_v_validate, '5_check'))
+        assert c1.equiv(vval(_v_validate, '4_check'))
+        assert not c1.equiv(vval(int))
+
+        retval, retpath, retcons, reterr = c1.check(10)
+        assert retval
+        assert retpath is None
+        assert retcons is None
+        assert reterr is None
+        c1.validate(10)
+
+        retval, retpath, retcons, reterr = c1.check(3)
+        assert not retval
+        assert retpath == ()
+        assert retcons is c1
+        assert isinstance(reterr, ValueError)
+        with pytest.raises(ValueError):
+            c1.validate(3)
+
+        _f_check = lambda x: x >= 5
+        c2 = vcheck(_f_check, '5_check')
+        assert repr(c2) == '<ValueCheckConstraint 5_check>'
+        assert c2 == c2
+        assert c2 == vcheck(_f_check, '5_check')
+        assert c2 != vcheck(_f_check, '4_check')
+
+        assert c2 >= vcheck(_f_check, '5_check')
+        assert not (c2 > vcheck(_f_check, '5_check'))
+        assert c2 <= vcheck(_f_check, '5_check')
+        assert not (c2 < vcheck(_f_check, '5_check'))
+
+        assert c2 >= vcheck(_f_check, '4_check')
+        assert not (c2 > vcheck(_f_check, '4_check'))
+        assert c2 <= vcheck(_f_check, '4_check')
+        assert not (c2 < vcheck(_f_check, '4_check'))
+
+        assert c2.equiv(vcheck(_f_check, '5_check'))
+        assert c2.equiv(vcheck(_f_check, '5_check'))
+        assert not c2.equiv(vcheck(lambda x: x >= 4, '5_check'))
+
+        retval, retpath, retcons, reterr = c2.check(10)
+        assert retval
+        assert retpath is None
+        assert retcons is None
+        assert reterr is None
+        c2.validate(10)
+
+        retval, retpath, retcons, reterr = c2.check(3)
+        assert not retval
+        assert retpath == ()
+        assert retcons is c2
+        assert isinstance(reterr, AssertionError)
+        with pytest.raises(AssertionError):
+            c2.validate(3)
+
+    def test_node_func(self):
+        def _n_validate(x: TreeValue):
+            if 'a' in x and 'b' in x:
+                if x.a + x.b <= 5:
+                    raise ValueError('A + B is lower than 5.')
+            else:
+                raise KeyError('A or B not found.')
+
+        c1 = nval(_n_validate, 'ab5')
+        assert repr(c1) == '<NodeValidateConstraint ab5>'
+        assert c1 == c1
+        assert c1 == nval(_n_validate, 'ab5')
+        assert c1 != nval(_n_validate, 'ab6')
+
+        assert c1 >= nval(_n_validate, 'ab5')
+        assert not (c1 > nval(_n_validate, 'ab5'))
+        assert c1 <= nval(_n_validate, 'ab5')
+        assert not (c1 < nval(_n_validate, 'ab5'))
+
+        assert c1 >= nval(_n_validate, 'ab6')
+        assert not (c1 > nval(_n_validate, 'ab6'))
+        assert c1 <= nval(_n_validate, 'ab6')
+        assert not (c1 < nval(_n_validate, 'ab6'))
+
+        retval, retpath, retcons, reterr = c1.check(TreeValue({'a': 4, 'b': 2}))
+        assert retval
+        assert retpath is None
+        assert retcons is None
+        assert reterr is None
+        c1.validate(TreeValue({'a': 4, 'b': 2}))
+
+        retval, retpath, retcons, reterr = c1.check(TreeValue({'a': 2, 'b': 2}))
+        assert not retval
+        assert retpath == ()
+        assert retcons == nval(_n_validate, 'ab5')
+        assert isinstance(reterr, ValueError)
+        with pytest.raises(ValueError):
+            c1.validate(TreeValue({'a': 2, 'b': 2}))
+
+        retval, retpath, retcons, reterr = c1.check(TreeValue({'b': 2}))
+        assert not retval
+        assert retpath == ()
+        assert retcons == nval(_n_validate, 'ab5')
+        assert isinstance(reterr, KeyError)
+        with pytest.raises(KeyError):
+            c1.validate(TreeValue({'b': 2}))
+
+        retval, retpath, retcons, reterr = c1.check(10)
+        assert not retval
+        assert retpath == ()
+        assert retcons == nval(_n_validate, 'ab5')
+        assert isinstance(reterr, TypeError)
+        with pytest.raises(TypeError):
+            c1.validate(10)
+
+        _f_check = lambda x: 'a' in x and 'b' in x and x.a + x.b > 5
+        c2 = ncheck(_f_check, 'ab5')
+        assert repr(c2) == '<NodeCheckConstraint ab5>'
+        assert c2 == c2
+        assert c2 == ncheck(_f_check, 'ab5')
+        assert c2 != ncheck(_f_check, 'ab6')
+
+        assert c2 >= ncheck(_f_check, 'ab5')
+        assert not (c2 > ncheck(_f_check, 'ab5'))
+        assert c2 <= ncheck(_f_check, 'ab5')
+        assert not (c2 < ncheck(_f_check, 'ab5'))
+
+        assert c2 >= ncheck(_f_check, 'ab6')
+        assert not (c2 > ncheck(_f_check, 'ab6'))
+        assert c2 <= ncheck(_f_check, 'ab6')
+        assert not (c2 < ncheck(_f_check, 'ab6'))
+
+        retval, retpath, retcons, reterr = c2.check(TreeValue({'a': 4, 'b': 2}))
+        assert retval
+        assert retpath is None
+        assert retcons is None
+        assert reterr is None
+        c2.validate(TreeValue({'a': 4, 'b': 2}))
+
+        retval, retpath, retcons, reterr = c2.check(TreeValue({'a': 2, 'b': 2}))
+        assert not retval
+        assert retpath == ()
+        assert retcons == ncheck(_f_check, 'ab5')
+        assert isinstance(reterr, AssertionError)
+        with pytest.raises(AssertionError):
+            c2.validate(TreeValue({'a': 2, 'b': 2}))
+
+        retval, retpath, retcons, reterr = c2.check(TreeValue({'b': 2}))
+        assert not retval
+        assert retpath == ()
+        assert retcons == ncheck(_f_check, 'ab5')
+        assert isinstance(reterr, AssertionError)
+        with pytest.raises(AssertionError):
+            c2.validate(TreeValue({'b': 2}))
+
+        retval, retpath, retcons, reterr = c2.check(10)
+        assert not retval
+        assert retpath == ()
+        assert retcons == ncheck(_f_check, 'ab5')
+        assert isinstance(reterr, TypeError)
+        with pytest.raises(TypeError):
+            c2.validate(10)
+
+    def test_hash_eq(self):
+        d = {
+            to_constraint(int): 2389,
+            to_constraint(GreaterThanConstraint(3)): 'sdfk'
+        }
+
+        assert to_constraint(int) in d
+        assert d[to_constraint(int)] == 2389
+        assert to_constraint(float) not in d
+        assert GreaterThanConstraint(3) in d
+        assert d[GreaterThanConstraint(3)] == 'sdfk'
+        assert GreaterThanConstraint(4) not in d
+
+    def test_error(self):
+        with pytest.raises(TypeError):
+            _ = to_constraint('jkdhfkjsdfh')
