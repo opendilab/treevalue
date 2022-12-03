@@ -22,7 +22,7 @@ cdef class TreeValue:
     cdef readonly type _type
 
     cpdef TreeStorage _detach(self)
-    cdef object _unraw(self, object obj)
+    cdef object _unraw(self, object obj, str key)
     cdef object _raw(self, object obj)
     cpdef _attr_extern(self, str key)
     cpdef _getitem_extern(self, object key)
@@ -54,11 +54,13 @@ cdef class treevalue_keys(_CObject):
 cdef class treevalue_values(_CObject):
     cdef readonly TreeStorage _st
     cdef readonly type _type
+    cdef readonly Constraint _constraint
 
 # noinspection PyPep8Naming
 cdef class treevalue_items(_CObject):
     cdef readonly TreeStorage _st
     cdef readonly type _type
+    cdef readonly Constraint _constraint
 
 cdef class DetachedDelayedProxy(DelayedProxy):
     cdef DelayedProxy proxy

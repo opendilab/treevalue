@@ -43,6 +43,27 @@ class _Container:
 
 def get_treevalue_test(treevalue_class: Type[TreeValue]):
     # noinspection DuplicatedCode,PyMethodMayBeStatic
+
+    def get_demo_constraint_tree():
+        return treevalue_class({
+            'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+            'b': delayed(lambda x: TreeValue({
+                'x': f'f-{x * x!r}',
+                'y': x * 1.1,
+            }), x=7)
+        }, constraint=[
+            object,
+            {
+                'a': [int, GreaterThanConstraint(3)],
+                'b': {
+                    'x': [cleaf(), str, None],
+                    'y': float,
+                },
+                'c': None,
+            }
+        ])
+
+    # noinspection PyMethodMayBeStatic
     @pytest.mark.unittest
     class _TestClass:
         def test_tree_value_init(self):
@@ -599,5 +620,85 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert retcons == float
             line1, *_ = str(err).splitlines(keepends=False)
             assert line1 == "Validation failed on <TypeConstraint <class 'float'>> at position ('b', 'y')"
+
+        def test_constraint_get(self, ):
+            t1 = get_demo_constraint_tree()
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert t1.a == 21
+            t1b = t1.b
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+            t1b = t1.get('b')
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+            t1b = t1['b']
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+        # noinspection PyTypeChecker
+        def test_constraint_pop(self):
+            t1 = get_demo_constraint_tree()
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert t1.pop('a') == 21
+            assert 'a' not in t1
+
+            t1b = t1.pop('b')
+            assert 'b' not in t1
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+        def test_constraint_popitem(self):
+            t1 = get_demo_constraint_tree()
+
+            a_found, b_found = False, False
+            while t1:
+                key, value = t1.popitem()
+                if key == 'a':
+                    assert not a_found, f'Duplicate key {"a"!r} found.'
+                    assert value == 21
+                    a_found = True
+                elif key == 'b':
+                    assert not b_found, f'Duplicate key {"b"!r} found.'
+                    assert value.x == 'f-49'
+                    assert value.y == pytest.approx(7.7)
+                    assert value.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+                    b_found = True
+                else:
+                    pytest.fail(f'Unexpected key {key!r} found.')
+
+            assert a_found and b_found, f'Key {"a"!r} or {"b"!r} not found in {t1!r}.'
+
+        def test_with_constraints(self):
+            t1 = get_demo_constraint_tree()
+            t2 = t1.with_constraints(GreaterThanConstraint(10))
+            assert t2.constraint.equiv([
+                GreaterThanConstraint(10),
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            t3 = t1.with_constraints([GreaterThanConstraint(10), int], clear=True)
+            assert t3.constraint.equiv([int, GreaterThanConstraint(10)])
 
     return _TestClass

@@ -8,7 +8,7 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
-from .constraint cimport Constraint, to_constraint, EmptyConstraint
+from .constraint cimport Constraint, to_constraint, EmptyConstraint, transact
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
@@ -137,9 +137,9 @@ cdef class TreeValue:
         """
         return self._st
 
-    cdef inline object _unraw(self, object obj):
+    cdef inline object _unraw(self, object obj, str key):
         if isinstance(obj, TreeStorage):
-            return self._type(obj)
+            return self._type(obj, transact(self.constraint, key))
         else:
             return obj
 
@@ -176,7 +176,7 @@ cdef class TreeValue:
             >>> t.get('f', 123)
             123
         """
-        return self._unraw(self._st.get_or_default(key, default))
+        return self._unraw(self._st.get_or_default(key, default), key)
 
     @cython.binding(True)
     cpdef pop(self, str key, object default=_GET_NO_DEFAULT):
@@ -216,7 +216,7 @@ cdef class TreeValue:
         else:
             value = self._st.pop_or_default(key, default)
 
-        return self._unraw(value)
+        return self._unraw(value, key)
 
     @cython.binding(True)
     cpdef popitem(self):
@@ -249,7 +249,7 @@ cdef class TreeValue:
         cdef object v
         try:
             k, v = self._st.popitem()
-            return k, self._unraw(v)
+            return k, self._unraw(v, k)
         except KeyError:
             raise KeyError(f'popitem(): {self._type.__name__} is empty.')
 
@@ -327,7 +327,7 @@ cdef class TreeValue:
             ├── 'ff' --> None
             └── 'g' --> 1
         """
-        return self._unraw(self._st.setdefault(key, self._raw(default)))
+        return self._unraw(self._st.setdefault(key, self._raw(default)), key)
 
     cdef inline void _update(self, object d, dict kwargs) except*:
         cdef object dt
@@ -441,7 +441,7 @@ cdef class TreeValue:
         # new order: self._st, __dict__, self._attr_extern
         # this may cause problem when pickle.loads, so __getnewargs_ex__ and __cinit__ is necessary
         if self._st.contains(item):
-            return self._unraw(self._st.get(item))
+            return self._unraw(self._st.get(item), item)
         else:
             try:
                 return object.__getattribute__(self, item)
@@ -548,7 +548,7 @@ cdef class TreeValue:
             3
         """
         if isinstance(key, str):
-            return self._unraw(self._st.get(key))
+            return self._unraw(self._st.get(key), key)
         else:
             return self._getitem_extern(_item_unwrap(key))
 
@@ -907,6 +907,13 @@ cdef class TreeValue:
             if not retval:
                 raise ValidationError(self, reterr, retpath, retcons)
 
+    @cython.binding(True)
+    def with_constraints(self, object constraint, bool clear=False):
+        if clear:
+            return self._type(self._st, to_constraint(constraint))
+        else:
+            return self._type(self._st, to_constraint([constraint, self.constraint]))
+
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
     cdef int i
@@ -984,6 +991,7 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
     def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
         self._type = type(tv)
+        self._constraint = tv.constraint
 
     def __len__(self):
         return self._st.size()
@@ -996,9 +1004,9 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
         return False
 
     def _iter(self):
-        for v in self._st.iter_values():
+        for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v)
+                yield self._type(v, transact(self._constraint, k))
             else:
                 yield v
 
@@ -1006,9 +1014,9 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
         return self._iter()
 
     def _rev_iter(self):
-        for v in self._st.iter_rev_values():
+        for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v)
+                yield self._type(v, transact(self._constraint, k))
             else:
                 yield v
 
@@ -1026,6 +1034,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
         self._type = type(tv)
+        self._constraint = tv.constraint
 
     def __len__(self):
         return self._st.size()
@@ -1040,7 +1049,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def _iter(self):
         for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v)
+                yield k, self._type(v, transact(self._constraint, k))
             else:
                 yield k, v
 
@@ -1050,7 +1059,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def _rev_iter(self):
         for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v)
+                yield k, self._type(v, transact(self._constraint, k))
             else:
                 yield k, v
 
