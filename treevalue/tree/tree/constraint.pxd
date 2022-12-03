@@ -83,3 +83,5 @@ cdef Constraint _s_generic_merge(list constraints)
 cdef Constraint _s_composite(CompositeConstraint constraint)
 
 cdef Constraint _s_simplify(Constraint constraint)
+
+cpdef Constraint transact(object cons, str key)

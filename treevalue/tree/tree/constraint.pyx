@@ -463,3 +463,8 @@ cdef inline Constraint _s_simplify(Constraint constraint):
         return _s_tree(constraint)
     else:
         return constraint
+
+cpdef inline Constraint transact(object cons, str key):
+    cdef Constraint constraint = to_constraint(cons)
+    # noinspection PyProtectedMember
+    return _s_simplify(constraint._transaction(key))

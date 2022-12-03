@@ -3,7 +3,7 @@ import pytest
 from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
 from treevalue.tree.tree.constraint import to_constraint, TypeConstraint, EmptyConstraint, LeafConstraint, \
-    ValueConstraint, TreeConstraint, vval, vcheck, nval, ncheck
+    ValueConstraint, TreeConstraint, vval, vcheck, nval, ncheck, transact
 
 
 class GreaterThanConstraint(ValueConstraint):
@@ -788,3 +788,17 @@ class TestTreeTreeConstraint:
     def test_error(self):
         with pytest.raises(TypeError):
             _ = to_constraint('jkdhfkjsdfh')
+
+    def test_transact(self):
+        assert transact(int, 'a') == int
+        assert transact(nval(lambda x: True, 'nothing'), 'b') == None
+        assert transact({'a': int, 'b': [float, GreaterThanConstraint(3)]}, 'a') == int
+        assert transact({'a': int, 'b': [float, GreaterThanConstraint(3)]}, 'b') == [float, GreaterThanConstraint(3)]
+        assert transact([int, nval(lambda x: True, 'nothing'), GreaterThanConstraint(3)], 'c') == \
+               [int, GreaterThanConstraint(3)]
+        assert transact([int, GreaterThanConstraint(3), {'a': str, 'b': GreaterThanConstraint(2)}], 'a') == \
+               [int, GreaterThanConstraint(3), str]
+        assert transact([int, GreaterThanConstraint(3), {'a': str, 'b': GreaterThanConstraint(2)}], 'b') == \
+               [int, GreaterThanConstraint(3)]
+        assert transact([int, GreaterThanConstraint(3), {'a': str, 'b': GreaterThanConstraint(2)}], 'c') == \
+               [int, GreaterThanConstraint(3)]
