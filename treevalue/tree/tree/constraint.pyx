@@ -118,23 +118,6 @@ cdef class Constraint:
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
 
-cdef inline Constraint _r_parse_cons(object obj):
-    if isinstance(obj, Constraint):
-        return obj
-    elif obj is None:
-        return EmptyConstraint()
-    elif isinstance(obj, type):
-        return TypeConstraint(obj)
-    elif isinstance(obj, (list, tuple)):
-        return CompositeConstraint([_r_parse_cons(c) for c in obj])
-    elif isinstance(obj, dict):
-        return TreeConstraint({key: _r_parse_cons(value) for key, value in obj.items()})
-    else:
-        raise TypeError(f'Invalid constraint - {obj!r}.')
-
-cpdef inline Constraint to_constraint(object obj):
-    return _s_simplify(_r_parse_cons(obj))
-
 cdef class EmptyConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         pass
@@ -157,6 +140,25 @@ cdef class EmptyConstraint(Constraint):
     def __repr__(self):
         return f'<{type(self).__name__}>'
 
+_EMPTY_CONSTRAINT = EmptyConstraint()
+
+cdef inline Constraint _r_parse_cons(object obj):
+    if isinstance(obj, Constraint):
+        return obj
+    elif obj is None:
+        return _EMPTY_CONSTRAINT
+    elif isinstance(obj, type):
+        return TypeConstraint(obj)
+    elif isinstance(obj, (list, tuple)):
+        return CompositeConstraint([_r_parse_cons(c) for c in obj])
+    elif isinstance(obj, dict):
+        return TreeConstraint({key: _r_parse_cons(value) for key, value in obj.items()})
+    else:
+        raise TypeError(f'Invalid constraint - {obj!r}.')
+
+cpdef inline Constraint to_constraint(object obj):
+    return _s_simplify(_r_parse_cons(obj))
+
 cdef class ValueConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
         pass
@@ -169,7 +171,7 @@ cdef class NodeConstraint(Constraint):
         raise TypeError(f'TreeValue node expected, but value {instance!r} found.')
 
     cpdef Constraint _transaction(self, str key):
-        return EmptyConstraint()
+        return _EMPTY_CONSTRAINT
 
 cdef class TypeConstraint(ValueConstraint):
     def __cinit__(self, type type_):
@@ -232,7 +234,7 @@ cdef class LeafConstraint(Constraint):
         return isinstance(other, LeafConstraint)
 
     cpdef Constraint _transaction(self, str key):
-        return EmptyConstraint()
+        return _EMPTY_CONSTRAINT
 
     def __repr__(self):
         return f'<{type(self).__name__}>'
@@ -305,7 +307,7 @@ cdef class TreeConstraint(Constraint):
         if key in self._constraints:
             return self._constraints[key]
         else:
-            return EmptyConstraint()
+            return _EMPTY_CONSTRAINT
 
 cdef inline Constraint _s_tree_merge(list constraints):
     cdef dict cmap = {}
@@ -329,7 +331,7 @@ cdef inline Constraint _s_tree_merge(list constraints):
     if fmap:
         return TreeConstraint(fmap)
     else:
-        return EmptyConstraint()
+        return _EMPTY_CONSTRAINT
 
 cdef inline Constraint _s_tree(TreeConstraint constraint):
     cdef dict dcons = {}
@@ -344,7 +346,7 @@ cdef inline Constraint _s_tree(TreeConstraint constraint):
     if dcons:
         return TreeConstraint(dcons)
     else:
-        return EmptyConstraint()
+        return _EMPTY_CONSTRAINT
 
 cdef class CompositeConstraint(Constraint):
     def __cinit__(self, list constraints):
@@ -428,7 +430,7 @@ cdef inline Constraint _s_generic_merge(list constraints):
         sins.append(tree)
 
     if not sins:
-        return EmptyConstraint()
+        return _EMPTY_CONSTRAINT
 
     cdef int i, j
     cdef set _child_ids = set()
@@ -465,6 +467,10 @@ cdef inline Constraint _s_simplify(Constraint constraint):
         return constraint
 
 cpdef inline Constraint transact(object cons, str key):
-    cdef Constraint constraint = to_constraint(cons)
-    # noinspection PyProtectedMember
-    return _s_simplify(constraint._transaction(key))
+    cdef Constraint constraint
+    if isinstance(cons, EmptyConstraint):
+        return _EMPTY_CONSTRAINT
+    else:
+        constraint = to_constraint(cons)
+        # noinspection PyProtectedMember
+        return _s_simplify(constraint._transaction(key))

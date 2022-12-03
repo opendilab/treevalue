@@ -8,7 +8,7 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
-from .constraint cimport Constraint, to_constraint, EmptyConstraint, transact
+from .constraint cimport Constraint, to_constraint, transact, _EMPTY_CONSTRAINT
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
@@ -71,7 +71,7 @@ cdef class TreeValue:
 
     def __cinit__(self, object data, object constraint=None):
         self._st = _DEFAULT_STORAGE
-        self.constraint = EmptyConstraint()
+        self.constraint = _EMPTY_CONSTRAINT
         self._type = type(self)
 
     @cython.binding(True)

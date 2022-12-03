@@ -19,11 +19,13 @@ cdef class Constraint:
     cpdef tuple check(self, object instance)
     cpdef bool equiv(self, object other)
 
-cdef Constraint _r_parse_cons(object obj)
-cpdef Constraint to_constraint(object obj)
-
 cdef class EmptyConstraint(Constraint):
     pass
+
+cdef EmptyConstraint _EMPTY_CONSTRAINT
+
+cdef Constraint _r_parse_cons(object obj)
+cpdef Constraint to_constraint(object obj)
 
 cdef class ValueConstraint(Constraint):
     pass
