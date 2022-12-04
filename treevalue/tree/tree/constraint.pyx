@@ -2,6 +2,7 @@
 # cython:language_level=3
 import os
 
+import cython
 from libcpp cimport bool
 
 from .tree cimport TreeValue
@@ -26,13 +27,16 @@ cdef class Constraint:
     cpdef Constraint _transaction(self, str key):
         raise NotImplementedError  # pragma: no cover
 
+    @cython.final
     cdef inline bool _feature_match(self, Constraint other):
         return type(self) == type(other) and self._features() == other._features()
 
+    @cython.final
     cdef inline bool _contains_check(self, Constraint other):
         return isinstance(other, EmptyConstraint) or self._feature_match(other) or self._contains(other)
 
-    cdef tuple _native_validate(self, object instance, type type_, list path):
+    @cython.final
+    cdef inline tuple _native_validate(self, object instance, type type_, list path):
         cdef dict raw
         cdef str key
         cdef object value
@@ -118,20 +122,21 @@ cdef class Constraint:
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
 
+@cython.final
 cdef class EmptyConstraint(Constraint):
-    cpdef void _validate_node(self, object instance) except*:
+    cpdef inline void _validate_node(self, object instance) except*:
         pass
 
-    cpdef void _validate_value(self, object instance) except*:
+    cpdef inline void _validate_value(self, object instance) except*:
         pass
 
-    cpdef object _features(self):
+    cpdef inline object _features(self):
         return ()
 
-    cpdef bool _contains(self, Constraint other):
+    cpdef inline bool _contains(self, Constraint other):
         return isinstance(other, EmptyConstraint)
 
-    cpdef Constraint _transaction(self, str key):
+    cpdef inline Constraint _transaction(self, str key):
         return self
 
     def __bool__(self):
@@ -157,7 +162,10 @@ cdef inline Constraint _r_parse_cons(object obj):
         raise TypeError(f'Invalid constraint - {obj!r}.')
 
 cpdef inline Constraint to_constraint(object obj):
-    return _s_simplify(_r_parse_cons(obj))
+    if obj is None:
+        return _EMPTY_CONSTRAINT
+    else:
+        return _s_simplify(_r_parse_cons(obj))
 
 cdef class ValueConstraint(Constraint):
     cpdef void _validate_node(self, object instance) except*:
@@ -206,12 +214,14 @@ cdef class ValueFuncConstraint(ValueConstraint):
     def __repr__(self):
         return f'<{type(self).__name__} {self.name}>'
 
+@cython.final
 cdef class ValueValidateConstraint(ValueFuncConstraint):
-    cpdef void _validate_value(self, object instance) except*:
+    cpdef inline void _validate_value(self, object instance) except*:
         self.func(instance)
 
+@cython.final
 cdef class ValueCheckConstraint(ValueFuncConstraint):
-    cpdef void _validate_value(self, object instance) except*:
+    cpdef inline void _validate_value(self, object instance) except*:
         assert self.func(instance), f'Check of {self.name!r} failed.'
 
 cpdef inline ValueValidateConstraint vval(object func, object name=None):
@@ -220,20 +230,21 @@ cpdef inline ValueValidateConstraint vval(object func, object name=None):
 cpdef inline ValueCheckConstraint vcheck(object func, object name=None):
     return ValueCheckConstraint(func, str(name or _c_func_fullname(func)))
 
+@cython.final
 cdef class LeafConstraint(Constraint):
-    cpdef void _validate_node(self, object instance) except*:
+    cpdef inline void _validate_node(self, object instance) except*:
         raise TypeError(f'TreeValue leaf expected, but node found:{os.linesep}{instance!r}.')
 
-    cpdef void _validate_value(self, object instance) except*:
+    cpdef inline void _validate_value(self, object instance) except*:
         pass
 
-    cpdef object _features(self):
+    cpdef inline object _features(self):
         return None
 
-    cpdef bool _contains(self, Constraint other):
+    cpdef inline bool _contains(self, Constraint other):
         return isinstance(other, LeafConstraint)
 
-    cpdef Constraint _transaction(self, str key):
+    cpdef inline Constraint _transaction(self, str key):
         return _EMPTY_CONSTRAINT
 
     def __repr__(self):
@@ -256,12 +267,14 @@ cdef class NodeFuncConstraint(NodeConstraint):
     def __repr__(self):
         return f'<{type(self).__name__} {self.name}>'
 
+@cython.final
 cdef class NodeValidateConstraint(NodeFuncConstraint):
-    cpdef void _validate_node(self, object instance) except*:
+    cpdef inline void _validate_node(self, object instance) except*:
         self.func(instance)
 
+@cython.final
 cdef class NodeCheckConstraint(NodeFuncConstraint):
-    cpdef void _validate_node(self, object instance) except*:
+    cpdef inline void _validate_node(self, object instance) except*:
         assert self.func(instance), f'Check of {self.name!r} failed.'
 
 cpdef inline NodeValidateConstraint nval(object func, object name=None):

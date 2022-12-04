@@ -1,6 +1,7 @@
 # distutils:language=c++
 # cython:language_level=3
 
+import cython
 from libcpp cimport bool
 
 cdef class _WrappedConstraintException(Exception):
@@ -19,6 +20,7 @@ cdef class Constraint:
     cpdef tuple check(self, object instance)
     cpdef bool equiv(self, object other)
 
+@cython.final
 cdef class EmptyConstraint(Constraint):
     pass
 
@@ -33,6 +35,7 @@ cdef class ValueConstraint(Constraint):
 cdef class NodeConstraint(Constraint):
     pass
 
+@cython.final
 cdef class TypeConstraint(ValueConstraint):
     cdef readonly type type_
 
@@ -42,15 +45,18 @@ cdef class ValueFuncConstraint(ValueConstraint):
     cdef readonly object func
     cdef readonly str name
 
+@cython.final
 cdef class ValueValidateConstraint(ValueFuncConstraint):
     pass
 
+@cython.final
 cdef class ValueCheckConstraint(ValueFuncConstraint):
     pass
 
 cpdef ValueValidateConstraint vval(object func, object name= *)
 cpdef ValueCheckConstraint vcheck(object func, object name= *)
 
+@cython.final
 cdef class LeafConstraint(Constraint):
     pass
 
@@ -60,9 +66,11 @@ cdef class NodeFuncConstraint(NodeConstraint):
     cdef readonly object func
     cdef readonly str name
 
+@cython.final
 cdef class NodeValidateConstraint(NodeFuncConstraint):
     pass
 
+@cython.final
 cdef class NodeCheckConstraint(NodeFuncConstraint):
     pass
 
