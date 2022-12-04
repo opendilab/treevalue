@@ -10,6 +10,11 @@ from ..common.storage cimport TreeStorage
 cdef class _CObject:
     pass
 
+cdef class _SimplifiedConstraintProxy:
+    cdef readonly Constraint cons
+
+cdef Constraint _c_get_constraint(object cons)
+
 cdef class ValidationError(Exception):
     cdef readonly TreeValue _object
     cdef readonly Exception _error
@@ -20,6 +25,7 @@ cdef class TreeValue:
     cdef readonly TreeStorage _st
     cdef readonly Constraint constraint
     cdef readonly type _type
+    cdef readonly dict _child_constraints
 
     cpdef TreeStorage _detach(self)
     cdef object _unraw(self, object obj, str key)
@@ -55,12 +61,18 @@ cdef class treevalue_values(_CObject):
     cdef readonly TreeStorage _st
     cdef readonly type _type
     cdef readonly Constraint _constraint
+    cdef readonly dict _child_constraints
+
+    cdef _SimplifiedConstraintProxy _transact(self, str key)
 
 # noinspection PyPep8Naming
 cdef class treevalue_items(_CObject):
     cdef readonly TreeStorage _st
     cdef readonly type _type
     cdef readonly Constraint _constraint
+    cdef readonly dict _child_constraints
+
+    cdef _SimplifiedConstraintProxy _transact(self, str key)
 
 cdef class DetachedDelayedProxy(DelayedProxy):
     cdef DelayedProxy proxy

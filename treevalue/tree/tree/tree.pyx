@@ -48,6 +48,16 @@ cdef inline TreeStorage _dict_unpack(dict d):
 
 _DEFAULT_STORAGE = create_storage({})
 
+cdef class _SimplifiedConstraintProxy:
+    def __cinit__(self, Constraint cons):
+        self.cons = cons
+
+cdef inline Constraint _c_get_constraint(object cons):
+    if isinstance(cons, _SimplifiedConstraintProxy):
+        return cons.cons
+    else:
+        return to_constraint(cons)
+
 cdef class ValidationError(Exception):
     def __init__(self, TreeValue obj, Exception error, tuple path, Constraint cons):
         Exception.__init__(self, obj, error, path, cons)
@@ -73,6 +83,7 @@ cdef class TreeValue:
         self._st = _DEFAULT_STORAGE
         self.constraint = _EMPTY_CONSTRAINT
         self._type = type(self)
+        self._child_constraints = {}
 
     @cython.binding(True)
     def __init__(self, object data, object constraint=None):
@@ -105,16 +116,17 @@ cdef class TreeValue:
         """
         if isinstance(data, TreeStorage):
             self._st = data
-            self.constraint = to_constraint(constraint)
+            self.constraint = _c_get_constraint(constraint)
         elif isinstance(data, TreeValue):
             self._st = data._detach()
             if constraint is None:
                 self.constraint = data.constraint
+                self._child_constraints = data._child_constraints
             else:
-                self.constraint = to_constraint(constraint)
+                self.constraint = _c_get_constraint(constraint)
         elif isinstance(data, dict):
             self._st = _dict_unpack(data)
-            self.constraint = to_constraint(constraint)
+            self.constraint = _c_get_constraint(constraint)
         else:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
@@ -138,8 +150,14 @@ cdef class TreeValue:
         return self._st
 
     cdef inline object _unraw(self, object obj, str key):
+        cdef _SimplifiedConstraintProxy child_constraint
         if isinstance(obj, TreeStorage):
-            return self._type(obj, transact(self.constraint, key))
+            if key in self._child_constraints:
+                child_constraint = self._child_constraints[key]
+            else:
+                child_constraint = _SimplifiedConstraintProxy(transact(self.constraint, key))
+                self._child_constraints[key] = child_constraint
+            return self._type(obj, constraint=child_constraint)
         else:
             return obj
 
@@ -992,6 +1010,7 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
         self._st = storage
         self._type = type(tv)
         self._constraint = tv.constraint
+        self._child_constraints = {}
 
     def __len__(self):
         return self._st.size()
@@ -1003,10 +1022,19 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
 
         return False
 
+    cdef inline _SimplifiedConstraintProxy _transact(self, str key):
+        cdef _SimplifiedConstraintProxy cons
+        if key in self._child_constraints:
+            return self._child_constraints[key]
+        else:
+            cons = _SimplifiedConstraintProxy(transact(self._constraint, key))
+            self._child_constraints[key] = cons
+            return cons
+
     def _iter(self):
         for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v, transact(self._constraint, k))
+                yield self._type(v, self._transact(k))
             else:
                 yield v
 
@@ -1016,7 +1044,7 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
     def _rev_iter(self):
         for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v, transact(self._constraint, k))
+                yield self._type(v, self._transact(k))
             else:
                 yield v
 
@@ -1035,6 +1063,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
         self._st = storage
         self._type = type(tv)
         self._constraint = tv.constraint
+        self._child_constraints = {}
 
     def __len__(self):
         return self._st.size()
@@ -1046,10 +1075,19 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
 
         return False
 
+    cdef inline _SimplifiedConstraintProxy _transact(self, str key):
+        cdef _SimplifiedConstraintProxy cons
+        if key in self._child_constraints:
+            return self._child_constraints[key]
+        else:
+            cons = _SimplifiedConstraintProxy(transact(self._constraint, key))
+            self._child_constraints[key] = cons
+            return cons
+
     def _iter(self):
         for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v, transact(self._constraint, k))
+                yield k, self._type(v, self._transact(k))
             else:
                 yield k, v
 
@@ -1059,7 +1097,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def _rev_iter(self):
         for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v, transact(self._constraint, k))
+                yield k, self._type(v, self._transact(k))
             else:
                 yield k, v
 
