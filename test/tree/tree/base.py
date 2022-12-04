@@ -701,4 +701,31 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             t3 = t1.with_constraints([GreaterThanConstraint(10), int], clear=True)
             assert t3.constraint.equiv([int, GreaterThanConstraint(10)])
 
+        def test_pickle_constraints(self):
+            t1 = get_demo_constraint_tree()
+            assert t1.a == 21
+            assert t1.b.x == 'f-49'
+            assert t1.b.y == pytest.approx(7.7)
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            binary = pickle.dumps(t1)
+            newt1 = pickle.loads(binary)
+            assert newt1.a == 21
+            assert newt1.b.x == 'f-49'
+            assert newt1.b.y == pytest.approx(7.7)
+            assert newt1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert newt1 == t1
+            assert newt1.constraint == t1.constraint
+
     return _TestClass

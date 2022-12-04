@@ -792,7 +792,7 @@ cdef class TreeValue:
             return False
 
     @cython.binding(True)
-    def __setstate__(self, TreeStorage state):
+    def __setstate__(self, tuple state):
         """
         Deserialize operation, can support `pickle.loads`.
 
@@ -807,7 +807,7 @@ cdef class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        self._st = state
+        self._st, self.constraint = state
 
     @cython.binding(True)
     def __getstate__(self):
@@ -824,7 +824,7 @@ cdef class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        return self._st
+        return self._st, self.constraint
 
     @cython.binding(True)
     cpdef treevalue_keys keys(self):
