@@ -195,6 +195,9 @@ cdef class TypeConstraint(ValueConstraint):
     cpdef bool _contains(self, Constraint other):
         return isinstance(other, TypeConstraint) and issubclass(self.type_, other.type_)
 
+    def __reduce__(self):
+        return TypeConstraint, (self.type_,)
+
 cdef inline str _c_func_fullname(object f):
     cdef str fname = f.__name__
     cdef str mname = getattr(f, '__module__', '')
@@ -213,6 +216,9 @@ cdef class ValueFuncConstraint(ValueConstraint):
 
     def __repr__(self):
         return f'<{type(self).__name__} {self.name}>'
+
+    def __reduce__(self):
+        return type(self), (self.func, self.name)
 
 @cython.final
 cdef class ValueValidateConstraint(ValueFuncConstraint):
@@ -245,7 +251,7 @@ cdef class LeafConstraint(Constraint):
         return isinstance(other, LeafConstraint)
 
     cpdef inline Constraint _transaction(self, str key):
-        return _EMPTY_CONSTRAINT
+        return _EMPTY_CONSTRAINT  # pragma: no cover
 
     def __repr__(self):
         return f'<{type(self).__name__}>'
@@ -267,6 +273,9 @@ cdef class NodeFuncConstraint(NodeConstraint):
     def __repr__(self):
         return f'<{type(self).__name__} {self.name}>'
 
+    def __reduce__(self):
+        return type(self), (self.func, self.name)
+
 @cython.final
 cdef class NodeValidateConstraint(NodeFuncConstraint):
     cpdef inline void _validate_node(self, object instance) except*:
@@ -284,8 +293,11 @@ cpdef inline NodeCheckConstraint ncheck(object func, object name=None):
     return NodeCheckConstraint(func, str(name or _c_func_fullname(func)))
 
 cdef class TreeConstraint(Constraint):
-    def __cinit__(self, dict constraints):
-        self._constraints = {key: constraints[key] for key in sorted(constraints.keys())}
+    def __cinit__(self, dict constraints, bool need_sort=True):
+        if need_sort:
+            self._constraints = {key: constraints[key] for key in sorted(constraints.keys())}
+        else:
+            self._constraints = dict(constraints)
 
     cpdef void _validate_node(self, object instance) except*:
         pass
@@ -321,6 +333,9 @@ cdef class TreeConstraint(Constraint):
             return self._constraints[key]
         else:
             return _EMPTY_CONSTRAINT
+
+    def __reduce__(self):
+        return TreeConstraint, (self._constraints, False)
 
 cdef inline Constraint _s_tree_merge(list constraints):
     cdef dict cmap = {}
@@ -362,8 +377,11 @@ cdef inline Constraint _s_tree(TreeConstraint constraint):
         return _EMPTY_CONSTRAINT
 
 cdef class CompositeConstraint(Constraint):
-    def __cinit__(self, list constraints):
-        self._constraints = tuple(sorted(constraints, key=lambda x: repr(x._features())))
+    def __cinit__(self, list constraints, bool need_sort=True):
+        if need_sort:
+            self._constraints = tuple(sorted(constraints, key=lambda x: repr(x._features())))
+        else:
+            self._constraints = tuple(constraints)
 
     cpdef void _validate_node(self, object instance) except*:
         cdef Constraint cons
@@ -412,6 +430,9 @@ cdef class CompositeConstraint(Constraint):
 
     cpdef Constraint _transaction(self, str key):
         return CompositeConstraint([c._transaction(key) for c in self._constraints])
+
+    def __reduce__(self):
+        return CompositeConstraint, (list(self._constraints), False)
 
 cdef inline void _rec_composite_iter(Constraint constraint, list lst):
     cdef Constraint cons

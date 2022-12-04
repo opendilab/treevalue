@@ -1,9 +1,12 @@
+import pickle
+
 import pytest
 
 from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
 from treevalue.tree.tree.constraint import to_constraint, TypeConstraint, EmptyConstraint, LeafConstraint, \
-    ValueConstraint, TreeConstraint, vval, vcheck, nval, ncheck, transact
+    ValueConstraint, TreeConstraint, vval, vcheck, nval, ncheck, transact, CompositeConstraint, ValueValidateConstraint, \
+    ValueCheckConstraint, NodeCheckConstraint, NodeValidateConstraint
 
 
 class GreaterThanConstraint(ValueConstraint):
@@ -21,9 +24,35 @@ class GreaterThanConstraint(ValueConstraint):
         return isinstance(other, GreaterThanConstraint) and self.value >= other.value
 
 
+class OverValueCheck:
+    def __init__(self, value):
+        self.value = value
+
+    def __call__(self, v):
+        return v > self.value
+
+
+class OverValueValidation:
+    def __init__(self, value):
+        self.value = value
+
+    def __call__(self, v):
+        if v <= self.value:
+            raise ValueError(f'Invalid value - {v!r}.')
+
+
 # noinspection DuplicatedCode,PyArgumentList,PyTypeChecker
 @pytest.mark.unittest
 class TestTreeTreeConstraint:
+    def test_example_constraint(self):
+        c = GreaterThanConstraint(10)
+        binary = pickle.dumps(c)
+        newc = pickle.loads(binary)
+
+        assert isinstance(newc, GreaterThanConstraint)
+        assert newc.value == 10
+        assert c == newc
+
     def test_empty(self):
         c1 = to_constraint(None)
         assert isinstance(c1, EmptyConstraint)
@@ -47,6 +76,10 @@ class TestTreeTreeConstraint:
         c1.validate(1)
         c1.validate(None)
         c1.validate(TreeValue({'a': 1, 'b': {'x': 2, 'y': 3}}))
+
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, EmptyConstraint)
 
     def test_type(self):
         c1 = to_constraint(int)
@@ -106,6 +139,12 @@ class TestTreeTreeConstraint:
         with pytest.raises(TypeError):
             c1.validate(t2)
 
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, TypeConstraint)
+        assert newc.type_ == int
+        assert newc == int
+
     def test_leaf(self):
         c1 = to_constraint(cleaf())
         assert isinstance(c1, LeafConstraint)
@@ -144,6 +183,10 @@ class TestTreeTreeConstraint:
         assert isinstance(reterr, TypeError)
         with pytest.raises(TypeError):
             c1.validate(t1)
+
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, LeafConstraint)
 
     def test_custom_value(self):
         c1 = GreaterThanConstraint(3)
@@ -343,6 +386,11 @@ class TestTreeTreeConstraint:
         with pytest.raises(TypeError):
             c1.validate(t4)
 
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, CompositeConstraint)
+        assert newc == [GreaterThanConstraint(3), int]
+
     def test_tree(self):
         assert to_constraint({'a': None, 'b': []}) == to_constraint(None)
 
@@ -456,6 +504,18 @@ class TestTreeTreeConstraint:
         with pytest.raises(TypeError):
             c1.validate(t7)
 
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, TreeConstraint)
+        assert newc == {
+            'a': [int, GreaterThanConstraint(3)],
+            'b': {
+                'x': [cleaf(), str, None],
+                'y': float,
+            },
+            'c': None,
+        }
+
     def test_composite_tree(self):
         c1 = to_constraint([
             {
@@ -510,6 +570,29 @@ class TestTreeTreeConstraint:
         assert not (c1 <= {'c': None})
         assert not (c1 < {'c': None})
 
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, TreeConstraint)
+        assert newc == [
+            {
+                'a': [int, object],
+                'b': {
+                    'x': [str, None],
+                    'y': object,
+                },
+                'c': None,
+            },
+            {
+                'b': {
+                    'x': [cleaf(), None],
+                    'y': float,
+                }
+            },
+            {
+                'a': GreaterThanConstraint(3),
+            },
+        ]
+
     def test_complex(self):
         c1 = to_constraint([
             GreaterThanConstraint(4),
@@ -539,6 +622,30 @@ class TestTreeTreeConstraint:
                     'x': [int, cleaf()],
                     'y': int,
                 }
+            },
+        ]
+
+        binary = pickle.dumps(c1)
+        newc = pickle.loads(binary)
+        assert isinstance(newc, CompositeConstraint)
+        assert newc == [
+            GreaterThanConstraint(4),
+            {
+                'a': [int, object],
+                'b': {
+                    'x': [int, None],
+                    'y': object,
+                },
+                'c': None,
+            },
+            {
+                'b': {
+                    'x': [cleaf(), None],
+                    'y': int,
+                }
+            },
+            {
+                'a': GreaterThanConstraint(3),
             },
         ]
 
@@ -669,6 +776,22 @@ class TestTreeTreeConstraint:
         with pytest.raises(AssertionError):
             c2.validate(3)
 
+        cx = vval(OverValueValidation(5), 'over5')
+        binary = pickle.dumps(cx)
+        newcx = pickle.loads(binary)
+        assert isinstance(newcx, ValueValidateConstraint)
+        assert isinstance(newcx.func, OverValueValidation)
+        assert newcx.func.value == 5
+        assert newcx.name == 'over5'
+
+        cx = vcheck(OverValueCheck(5), 'over5')
+        binary = pickle.dumps(cx)
+        newcx = pickle.loads(binary)
+        assert isinstance(newcx, ValueCheckConstraint)
+        assert isinstance(newcx.func, OverValueCheck)
+        assert newcx.func.value == 5
+        assert newcx.name == 'over5'
+
     def test_node_func(self):
         def _n_validate(x: TreeValue):
             if 'a' in x and 'b' in x:
@@ -771,6 +894,22 @@ class TestTreeTreeConstraint:
         assert isinstance(reterr, TypeError)
         with pytest.raises(TypeError):
             c2.validate(10)
+
+        cx = nval(OverValueValidation(5), 'over5')
+        binary = pickle.dumps(cx)
+        newcx = pickle.loads(binary)
+        assert isinstance(newcx, NodeValidateConstraint)
+        assert isinstance(newcx.func, OverValueValidation)
+        assert newcx.func.value == 5
+        assert newcx.name == 'over5'
+
+        cx = ncheck(OverValueCheck(5), 'over5')
+        binary = pickle.dumps(cx)
+        newcx = pickle.loads(binary)
+        assert isinstance(newcx, NodeCheckConstraint)
+        assert isinstance(newcx.func, OverValueCheck)
+        assert newcx.func.value == 5
+        assert newcx.name == 'over5'
 
     def test_hash_eq(self):
         d = {
