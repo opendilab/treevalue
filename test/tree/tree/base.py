@@ -4,8 +4,10 @@ from typing import Type
 
 import pytest
 
-from treevalue import raw, TreeValue, delayed
+from test.tree.tree.test_constraint import GreaterThanConstraint
+from treevalue import raw, TreeValue, delayed, ValidationError
 from treevalue.tree.common import create_storage
+from treevalue.tree.tree.constraint import cleaf
 
 try:
     _ = reversed({}.keys())
@@ -41,6 +43,27 @@ class _Container:
 
 def get_treevalue_test(treevalue_class: Type[TreeValue]):
     # noinspection DuplicatedCode,PyMethodMayBeStatic
+
+    def get_demo_constraint_tree():
+        return treevalue_class({
+            'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+            'b': delayed(lambda x: TreeValue({
+                'x': f'f-{x * x!r}',
+                'y': x * 1.1,
+            }), x=7)
+        }, constraint=[
+            object,
+            {
+                'a': [int, GreaterThanConstraint(3)],
+                'b': {
+                    'x': [cleaf(), str, None],
+                    'y': float,
+                },
+                'c': None,
+            }
+        ])
+
+    # noinspection PyMethodMayBeStatic
     @pytest.mark.unittest
     class _TestClass:
         def test_tree_value_init(self):
@@ -520,5 +543,190 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
                 ('c', MyTreeValue({'x': 2, 'y': 3})),
                 ('d', {'x': 2, 'y': 3}),
             ]
+
+        def test_validation(self):
+            t1 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1.1,
+                    'z': None,
+                }), x=7)
+            }, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            t1.validate()
+
+            t2 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1,
+                }), x=7)
+            }, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            with pytest.raises(ValidationError) as ei:
+                t2.validate()
+            err = ei.value
+            self_, reterr, retpath, retcons = err.args
+            assert self_ == treevalue_class({'a': 21, 'b': {'x': 'f-49', 'y': 7}})
+            assert isinstance(reterr, TypeError)
+            assert retpath == ('b', 'y')
+            assert retcons == float
+            line1, *_ = str(err).splitlines(keepends=False)
+            assert line1 == "Validation failed on <TypeConstraint <class 'float'>> at position ('b', 'y')"
+
+            t3 = treevalue_class({
+                'a': delayed(lambda x, y: x * (y + 1), 3, 6),
+                'b': delayed(lambda x: TreeValue({
+                    'x': f'f-{x * x!r}',
+                    'y': x * 1,
+                }), x=7)
+            })
+            t3 = treevalue_class(t3, constraint=[
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {
+                        'x': [cleaf(), str, None],
+                        'y': float,
+                    },
+                    'c': None,
+                }
+            ])
+            with pytest.raises(ValidationError) as ei:
+                t3.validate()
+            err = ei.value
+            self_, reterr, retpath, retcons = err.args
+            assert self_ == treevalue_class({'a': 21, 'b': {'x': 'f-49', 'y': 7}})
+            assert isinstance(reterr, TypeError)
+            assert retpath == ('b', 'y')
+            assert retcons == float
+            line1, *_ = str(err).splitlines(keepends=False)
+            assert line1 == "Validation failed on <TypeConstraint <class 'float'>> at position ('b', 'y')"
+
+        def test_constraint_get(self, ):
+            t1 = get_demo_constraint_tree()
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert t1.a == 21
+            t1b = t1.b
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+            t1b = t1.get('b')
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+            t1b = t1['b']
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+        # noinspection PyTypeChecker
+        def test_constraint_pop(self):
+            t1 = get_demo_constraint_tree()
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert t1.pop('a') == 21
+            assert 'a' not in t1
+
+            t1b = t1.pop('b')
+            assert 'b' not in t1
+            assert t1b.x == 'f-49'
+            assert t1b.y == pytest.approx(7.7)
+            assert t1b.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+
+        def test_constraint_popitem(self):
+            t1 = get_demo_constraint_tree()
+
+            a_found, b_found = False, False
+            while t1:
+                key, value = t1.popitem()
+                if key == 'a':
+                    assert not a_found, f'Duplicate key {"a"!r} found.'
+                    assert value == 21
+                    a_found = True
+                elif key == 'b':
+                    assert not b_found, f'Duplicate key {"b"!r} found.'
+                    assert value.x == 'f-49'
+                    assert value.y == pytest.approx(7.7)
+                    assert value.constraint.equiv([object, {'x': [cleaf(), str], 'y': float}])
+                    b_found = True
+                else:
+                    pytest.fail(f'Unexpected key {key!r} found.')
+
+            assert a_found and b_found, f'Key {"a"!r} or {"b"!r} not found in {t1!r}.'
+
+        def test_with_constraints(self):
+            t1 = get_demo_constraint_tree()
+            t2 = t1.with_constraints(GreaterThanConstraint(10))
+            assert t2.constraint.equiv([
+                GreaterThanConstraint(10),
+                object,
+                {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            t3 = t1.with_constraints([GreaterThanConstraint(10), int], clear=True)
+            assert t3.constraint.equiv([int, GreaterThanConstraint(10)])
+
+        def test_pickle_constraints(self):
+            t1 = get_demo_constraint_tree()
+            assert t1.a == 21
+            assert t1.b.x == 'f-49'
+            assert t1.b.y == pytest.approx(7.7)
+            assert t1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            binary = pickle.dumps(t1)
+            newt1 = pickle.loads(binary)
+            assert newt1.a == 21
+            assert newt1.b.x == 'f-49'
+            assert newt1.b.y == pytest.approx(7.7)
+            assert newt1.constraint.equiv([
+                object, {
+                    'a': [int, GreaterThanConstraint(3)],
+                    'b': {'x': [cleaf(), str], 'y': float}
+                }
+            ])
+
+            assert newt1 == t1
+            assert newt1.constraint == t1.constraint
 
     return _TestClass

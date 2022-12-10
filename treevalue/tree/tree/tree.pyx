@@ -8,6 +8,7 @@ from operator import itemgetter
 import cython
 from hbutils.design import SingletonMark
 
+from .constraint cimport Constraint, to_constraint, transact, _EMPTY_CONSTRAINT
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
@@ -47,6 +48,28 @@ cdef inline TreeStorage _dict_unpack(dict d):
 
 _DEFAULT_STORAGE = create_storage({})
 
+cdef class _SimplifiedConstraintProxy:
+    def __cinit__(self, Constraint cons):
+        self.cons = cons
+
+cdef inline Constraint _c_get_constraint(object cons):
+    if isinstance(cons, _SimplifiedConstraintProxy):
+        return cons.cons
+    else:
+        return to_constraint(cons)
+
+cdef class ValidationError(Exception):
+    def __init__(self, TreeValue obj, Exception error, tuple path, Constraint cons):
+        Exception.__init__(self, obj, error, path, cons)
+        self._object = obj
+        self._error = error
+        self._path = path
+        self._cons = cons
+
+    def __str__(self):
+        return f"Validation failed on {self._cons!r} at position {self._path!r}{os.linesep}" \
+               f"{type(self._error).__name__}: {self._error}"
+
 cdef class TreeValue:
     r"""
     Overview:
@@ -56,12 +79,14 @@ cdef class TreeValue:
         The `TreeValue` class is a light-weight framework just for DIY.
     """
 
-    def __cinit__(self, object data):
+    def __cinit__(self, object data, object constraint=None):
         self._st = _DEFAULT_STORAGE
+        self.constraint = _EMPTY_CONSTRAINT
         self._type = type(self)
+        self._child_constraints = {}
 
     @cython.binding(True)
-    def __init__(self, object data):
+    def __init__(self, object data, object constraint=None):
         """
         Constructor of :class:`TreeValue`.
 
@@ -91,10 +116,17 @@ cdef class TreeValue:
         """
         if isinstance(data, TreeStorage):
             self._st = data
+            self.constraint = _c_get_constraint(constraint)
         elif isinstance(data, TreeValue):
             self._st = data._detach()
+            if constraint is None:
+                self.constraint = data.constraint
+                self._child_constraints = data._child_constraints
+            else:
+                self.constraint = _c_get_constraint(constraint)
         elif isinstance(data, dict):
             self._st = _dict_unpack(data)
+            self.constraint = _c_get_constraint(constraint)
         else:
             raise TypeError(
                 "Unknown initialization type for tree value - {type}.".format(
@@ -117,9 +149,15 @@ cdef class TreeValue:
         """
         return self._st
 
-    cdef inline object _unraw(self, object obj):
+    cdef inline object _unraw(self, object obj, str key):
+        cdef _SimplifiedConstraintProxy child_constraint
         if isinstance(obj, TreeStorage):
-            return self._type(obj)
+            if key in self._child_constraints:
+                child_constraint = self._child_constraints[key]
+            else:
+                child_constraint = _SimplifiedConstraintProxy(transact(self.constraint, key))
+                self._child_constraints[key] = child_constraint
+            return self._type(obj, constraint=child_constraint)
         else:
             return obj
 
@@ -156,7 +194,7 @@ cdef class TreeValue:
             >>> t.get('f', 123)
             123
         """
-        return self._unraw(self._st.get_or_default(key, default))
+        return self._unraw(self._st.get_or_default(key, default), key)
 
     @cython.binding(True)
     cpdef pop(self, str key, object default=_GET_NO_DEFAULT):
@@ -196,7 +234,7 @@ cdef class TreeValue:
         else:
             value = self._st.pop_or_default(key, default)
 
-        return self._unraw(value)
+        return self._unraw(value, key)
 
     @cython.binding(True)
     cpdef popitem(self):
@@ -229,7 +267,7 @@ cdef class TreeValue:
         cdef object v
         try:
             k, v = self._st.popitem()
-            return k, self._unraw(v)
+            return k, self._unraw(v, k)
         except KeyError:
             raise KeyError(f'popitem(): {self._type.__name__} is empty.')
 
@@ -307,9 +345,9 @@ cdef class TreeValue:
             ├── 'ff' --> None
             └── 'g' --> 1
         """
-        return self._unraw(self._st.setdefault(key, self._raw(default)))
+        return self._unraw(self._st.setdefault(key, self._raw(default)), key)
 
-    cdef inline void _update(self, object d, dict kwargs) except *:
+    cdef inline void _update(self, object d, dict kwargs) except*:
         cdef object dt
         if d is None:
             dt = {}
@@ -421,7 +459,7 @@ cdef class TreeValue:
         # new order: self._st, __dict__, self._attr_extern
         # this may cause problem when pickle.loads, so __getnewargs_ex__ and __cinit__ is necessary
         if self._st.contains(item):
-            return self._unraw(self._st.get(item))
+            return self._unraw(self._st.get(item), item)
         else:
             try:
                 return object.__getattribute__(self, item)
@@ -528,7 +566,7 @@ cdef class TreeValue:
             3
         """
         if isinstance(key, str):
-            return self._unraw(self._st.get(key))
+            return self._unraw(self._st.get(key), key)
         else:
             return self._getitem_extern(_item_unwrap(key))
 
@@ -754,7 +792,7 @@ cdef class TreeValue:
             return False
 
     @cython.binding(True)
-    def __setstate__(self, TreeStorage state):
+    def __setstate__(self, tuple state):
         """
         Deserialize operation, can support `pickle.loads`.
 
@@ -769,7 +807,7 @@ cdef class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        self._st = state
+        self._st, self.constraint = state
 
     @cython.binding(True)
     def __getstate__(self):
@@ -786,7 +824,7 @@ cdef class TreeValue:
             >>> bin_ = pickle.dumps(t)  # dump it to binary
             >>> pickle.loads(bin_)      #  TreeValue({'a': 1, 'b': 2, 'x': {'c': 3}})
         """
-        return self._st
+        return self._st, self.constraint
 
     @cython.binding(True)
     cpdef treevalue_keys keys(self):
@@ -875,6 +913,25 @@ cdef class TreeValue:
         """
         return treevalue_items(self, self._st)
 
+    @cython.binding(True)
+    cpdef void validate(self) except*:
+        cdef bool retval
+        cdef tuple retpath
+        cdef Constraint retcons
+        cdef Exception reterr
+
+        if __debug__:
+            retval, retpath, retcons, reterr = self.constraint.check(self)
+            if not retval:
+                raise ValidationError(self, reterr, retpath, retcons)
+
+    @cython.binding(True)
+    def with_constraints(self, object constraint, bool clear=False):
+        if clear:
+            return self._type(self._st, to_constraint(constraint))
+        else:
+            return self._type(self._st, to_constraint([constraint, self.constraint]))
+
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
     cdef int i
@@ -952,6 +1009,8 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
     def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
         self._type = type(tv)
+        self._constraint = tv.constraint
+        self._child_constraints = {}
 
     def __len__(self):
         return self._st.size()
@@ -963,10 +1022,19 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
 
         return False
 
+    cdef inline _SimplifiedConstraintProxy _transact(self, str key):
+        cdef _SimplifiedConstraintProxy cons
+        if key in self._child_constraints:
+            return self._child_constraints[key]
+        else:
+            cons = _SimplifiedConstraintProxy(transact(self._constraint, key))
+            self._child_constraints[key] = cons
+            return cons
+
     def _iter(self):
-        for v in self._st.iter_values():
+        for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v)
+                yield self._type(v, self._transact(k))
             else:
                 yield v
 
@@ -974,9 +1042,9 @@ cdef class treevalue_values(_CObject, Sized, Container, Reversible):
         return self._iter()
 
     def _rev_iter(self):
-        for v in self._st.iter_rev_values():
+        for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield self._type(v)
+                yield self._type(v, self._transact(k))
             else:
                 yield v
 
@@ -994,6 +1062,8 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def __cinit__(self, TreeValue tv, TreeStorage storage):
         self._st = storage
         self._type = type(tv)
+        self._constraint = tv.constraint
+        self._child_constraints = {}
 
     def __len__(self):
         return self._st.size()
@@ -1005,10 +1075,19 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
 
         return False
 
+    cdef inline _SimplifiedConstraintProxy _transact(self, str key):
+        cdef _SimplifiedConstraintProxy cons
+        if key in self._child_constraints:
+            return self._child_constraints[key]
+        else:
+            cons = _SimplifiedConstraintProxy(transact(self._constraint, key))
+            self._child_constraints[key] = cons
+            return cons
+
     def _iter(self):
         for k, v in self._st.iter_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v)
+                yield k, self._type(v, self._transact(k))
             else:
                 yield k, v
 
@@ -1018,7 +1097,7 @@ cdef class treevalue_items(_CObject, Sized, Container, Reversible):
     def _rev_iter(self):
         for k, v in self._st.iter_rev_items():
             if isinstance(v, TreeStorage):
-                yield k, self._type(v)
+                yield k, self._type(v, self._transact(k))
             else:
                 yield k, v
 
