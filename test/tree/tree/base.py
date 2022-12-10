@@ -550,6 +550,7 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
                 'b': delayed(lambda x: TreeValue({
                     'x': f'f-{x * x!r}',
                     'y': x * 1.1,
+                    'z': None,
                 }), x=7)
             }, constraint=[
                 object,

@@ -20,6 +20,8 @@ _TREE_DATA_4 = {'a': 1, 'b': 2, 'd': {'x': 3, 'y': 4}}
 _TREE_4 = TreeValue(_TREE_DATA_4)
 
 
+# need to warm up when first run this
+# because some features (e.g. child tree's constraint) will use cache
 @pytest.mark.benchmark(group='treevalue_class', warmup=True, min_rounds=20)
 class TestTreeValueBenchmark:
     @lru_cache()
