@@ -1,6 +1,7 @@
 import pickle
 
 import pytest
+import torch
 
 from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
@@ -80,6 +81,19 @@ class TestTreeTreeConstraint:
         binary = pickle.dumps(c1)
         newc = pickle.loads(binary)
         assert isinstance(newc, EmptyConstraint)
+
+    def test_type_with_meta(self):
+        c1 = to_constraint(torch.Tensor)
+        assert isinstance(c1, TypeConstraint)
+        assert c1
+        assert c1.type_ == torch.Tensor
+
+        assert c1 == torch.Tensor
+        assert c1 >= torch.Tensor
+        assert c1 <= torch.Tensor
+        assert not (c1 != torch.Tensor)
+        assert not (c1 > torch.Tensor)
+        assert not (c1 < torch.Tensor)
 
     def test_type(self):
         c1 = to_constraint(int)

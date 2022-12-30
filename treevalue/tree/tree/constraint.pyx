@@ -182,7 +182,8 @@ cdef class NodeConstraint(Constraint):
         return _EMPTY_CONSTRAINT
 
 cdef class TypeConstraint(ValueConstraint):
-    def __cinit__(self, type type_):
+    def __cinit__(self, object type_):
+        assert isinstance(type_, type), f'A type class expected, but {type_!r} given.'
         self.type_ = type_
 
     cpdef void _validate_value(self, object instance) except*:
