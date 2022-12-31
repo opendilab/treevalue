@@ -66,6 +66,7 @@ jobs:
           - '3.8'
           - '3.9'
           - '3.10'
+          - '3.11'
         architecture:
           - x86_64
           - arm64
@@ -106,7 +107,7 @@ jobs:
         with:
           platforms: all
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.7.0
+        uses: pypa/cibuildwheel@v2.11.4
         env:
           CIBW_SKIP: "pp* *musllinux*"
           CIBW_ARCHS: ${{ matrix.architecture }}
