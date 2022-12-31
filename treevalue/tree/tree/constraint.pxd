@@ -37,7 +37,7 @@ cdef class NodeConstraint(Constraint):
 
 @cython.final
 cdef class TypeConstraint(ValueConstraint):
-    cdef readonly type type_
+    cdef readonly object type_
 
 cdef str _c_func_fullname(object f)
 
