@@ -26,11 +26,6 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
-        exclude:
-          - os: 'windows-2019'
-            python-version: '3.11'
-          - os: 'macos-12'
-            python-version: '3.11'
 
     steps:
       - name: Get system version for Linux
@@ -99,6 +94,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-build.txt
           pip install -r requirements-test.txt
+          pip install -r requirements-test-extra.txt | True
       - name: Test the basic environment
         shell: bash
         run: |
