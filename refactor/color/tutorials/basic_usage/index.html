@@ -250,10 +250,10 @@
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>&lt;FastTreeValue 0x7f3ef4f5cbb0&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>&lt;FastTreeValue 0x7efed364fbb0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2.3
-└── x --&gt; &lt;FastTreeValue 0x7f3ef5968b20&gt;
+└── x --&gt; &lt;FastTreeValue 0x7efed405bb20&gt;
     ├── c --&gt; &#39;str&#39;
     ├── d --&gt; [1, 2, None]
     └── e --&gt; b&#39;bytes&#39;
@@ -372,58 +372,58 @@
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span>Original tree:
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f3392f0afd0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be147ffd0&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 Value of t.a:  1
 Value of t.x.c: 3
 Value of t.x:
-&lt;FastTreeValue 0x7f3392f0afd0&gt;
+&lt;FastTreeValue 0x7f6be147ffd0&gt;
 ├── c --&gt; 3
 └── d --&gt; 4
 
 Value after t.a = 233:
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 233
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f3392f0afd0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be147ffd0&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 Value after t.x.d = -1:
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 233
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f3392f0afd0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be147ffd0&gt;
     ├── c --&gt; 3
     └── d --&gt; -1
 
 Value after t.x = FastTreeValue({&#39;e&#39;: 5, &#39;f&#39;: 6}):
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 233
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f33924fed30&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be0a73d30&gt;
     ├── e --&gt; 5
     └── f --&gt; 6
 
 Value after t.x.g = {&#39;e&#39;: 5, &#39;f&#39;: 6}:
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 233
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f33924fed30&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be0a73d30&gt;
     ├── e --&gt; 5
     ├── f --&gt; 6
     └── g --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
 Value after del t.x.g:
-&lt;FastTreeValue 0x7f3392f21dc0&gt;
+&lt;FastTreeValue 0x7f6be1496dc0&gt;
 ├── a --&gt; 233
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f33924fed30&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f6be0a73d30&gt;
     ├── e --&gt; 5
     └── f --&gt; 6
 </pre></div></td></tr></table></div>
@@ -488,23 +488,23 @@ And the full life circle of the tree <code class="docutils literal notranslate">
 <span class="normal">18</span>
 <span class="normal">19</span>
 <span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span>Result of t[0]:
-&lt;FastTreeValue 0x7f12d4bd4b80&gt;
+&lt;FastTreeValue 0x7fad16f7fb80&gt;
 ├── a --&gt; 1
 ├── b --&gt; 4
-└── x --&gt; &lt;FastTreeValue 0x7f12d4bd4d30&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fad16f7fd30&gt;
     ├── c --&gt; 11
     └── d --&gt; -2
 
 Result of t[::-1]:
-&lt;FastTreeValue 0x7f12d4bd4b80&gt;
+&lt;FastTreeValue 0x7fad16f7fb80&gt;
 ├── a --&gt; [3, 2, 1]
 ├── b --&gt; [16, 9, 4]
-└── x --&gt; &lt;FastTreeValue 0x7f12d4bd4d30&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fad16f7fd30&gt;
     ├── c --&gt; [17, 13, 11]
     └── d --&gt; [-8, -4, -2]
 
 Result of t.x[1:]:
-&lt;FastTreeValue 0x7f12d4bd4d00&gt;
+&lt;FastTreeValue 0x7fad16f7fd00&gt;
 ├── c --&gt; [13, 17]
 └── d --&gt; [-4, -8]
 </pre></div></td></tr></table></div>
@@ -570,33 +570,33 @@ Result of t.x[1:]:
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span>Result of t1 + t2:
-&lt;FastTreeValue 0x7f177741fa60&gt;
+&lt;FastTreeValue 0x7fd6d6adca60&gt;
 ├── a --&gt; 4
 ├── b --&gt; 9
-└── x --&gt; &lt;FastTreeValue 0x7f177741fa00&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fd6d6adca00&gt;
     ├── c --&gt; 17
     └── d --&gt; -1
 
 Result of t1 - t2:
-&lt;FastTreeValue 0x7f177741fa60&gt;
+&lt;FastTreeValue 0x7fd6d6adca60&gt;
 ├── a --&gt; -2
 ├── b --&gt; -5
-└── x --&gt; &lt;FastTreeValue 0x7f177741fa00&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fd6d6adca00&gt;
     ├── c --&gt; -11
     └── d --&gt; 9
 
 Result of t1 ^ t2:
-&lt;FastTreeValue 0x7f177741fa60&gt;
+&lt;FastTreeValue 0x7fd6d6adca60&gt;
 ├── a --&gt; 2
 ├── b --&gt; 5
-└── x --&gt; &lt;FastTreeValue 0x7f177741fa00&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fd6d6adca00&gt;
     ├── c --&gt; 13
     └── d --&gt; -1
 
-Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7f177741fa60&gt;
+Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7fd6d6adca60&gt;
 ├── a --&gt; -8.0
 ├── b --&gt; -25.9453125
-└── x --&gt; &lt;FastTreeValue 0x7f177741fa00&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fd6d6adca00&gt;
     ├── c --&gt; -52.999997072947785
     └── d --&gt; -5096
 </pre></div></td></tr></table></div>
@@ -630,44 +630,44 @@ The structures of the trees involved in <code class="docutils literal notranslat
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t1:
-&lt;FastTreeValue 0x7fe2e004ddc0&gt;
+&lt;FastTreeValue 0x7f1362d71dc0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7fe2e0036fd0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f1362d5afd0&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 t2:
-&lt;FastTreeValue 0x7fe2df62ad30&gt;
+&lt;FastTreeValue 0x7f136234ed30&gt;
 ├── a --&gt; 3
 ├── b --&gt; 7
-└── x --&gt; &lt;FastTreeValue 0x7fe2df62ab80&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f136234eb80&gt;
     ├── c --&gt; 14
     └── d --&gt; -5
 
 t1 + t2:
-&lt;FastTreeValue 0x7fe2df62abb0&gt;
+&lt;FastTreeValue 0x7f136234ebb0&gt;
 ├── a --&gt; 4
 ├── b --&gt; 9
-└── x --&gt; &lt;FastTreeValue 0x7fe2df62ad00&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f136234ed00&gt;
     ├── c --&gt; 17
     └── d --&gt; -1
 
 
 After t1 += t2
 t1:
-&lt;FastTreeValue 0x7fe2e004ddc0&gt;
+&lt;FastTreeValue 0x7f1362d71dc0&gt;
 ├── a --&gt; 4
 ├── b --&gt; 9
-└── x --&gt; &lt;FastTreeValue 0x7fe2e0036fd0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f1362d5afd0&gt;
     ├── c --&gt; 17
     └── d --&gt; -1
 
 t2:
-&lt;FastTreeValue 0x7fe2df62ad30&gt;
+&lt;FastTreeValue 0x7f136234ed30&gt;
 ├── a --&gt; 3
 ├── b --&gt; 7
-└── x --&gt; &lt;FastTreeValue 0x7fe2df62ab80&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f136234eb80&gt;
     ├── c --&gt; 14
     └── d --&gt; -5
 </pre></div>
@@ -734,10 +734,10 @@ t2:
 <span class="normal">7</span>
 <span class="normal">8</span>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span>Result of gcd(t1, t2):
-&lt;TreeValue 0x7f990a1bba60&gt;
+&lt;TreeValue 0x7fc4af2eaa60&gt;
 ├── a --&gt; 2
 ├── b --&gt; 6
-└── x --&gt; &lt;TreeValue 0x7f990a1bbbb0&gt;
+└── x --&gt; &lt;TreeValue 0x7fc4af2eabb0&gt;
     ├── c --&gt; 2
     └── d --&gt; 9
 
