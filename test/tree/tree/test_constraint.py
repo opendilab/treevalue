@@ -1,7 +1,13 @@
 import pickle
+import unittest
 
 import pytest
-import torch
+from hbutils.testing import vpip
+
+try:
+    import torch
+except ImportError:
+    torch = None
 
 from treevalue import delayed
 from treevalue.tree.tree import TreeValue, cleaf
@@ -82,6 +88,7 @@ class TestTreeTreeConstraint:
         newc = pickle.loads(binary)
         assert isinstance(newc, EmptyConstraint)
 
+    @unittest.skipUnless(vpip('torch') >= '1.1.0', 'Torch>=1.1.0 only')
     def test_type_with_meta(self):
         c1 = to_constraint(torch.Tensor)
         assert isinstance(c1, TypeConstraint)
