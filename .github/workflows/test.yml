@@ -86,7 +86,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Install PyPI dependencies
         shell: bash
         run: |
           python -m pip install --upgrade pip
@@ -94,7 +94,11 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-build.txt
           pip install -r requirements-test.txt
-          pip install -r requirements-test-extra.txt | true
+      - name: Install extra PyPI dependencies
+        continue-on-error: true
+        shell: bash
+        run: |
+          pip install -r requirements-test-extra.txt
       - name: Test the basic environment
         shell: bash
         run: |
