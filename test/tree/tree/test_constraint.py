@@ -95,6 +95,10 @@ class TestTreeTreeConstraint:
         assert not (c1 > torch.Tensor)
         assert not (c1 < torch.Tensor)
 
+    def test_type_init_error(self):
+        with pytest.raises(AssertionError):
+            _ = TypeConstraint(123)
+
     def test_type(self):
         c1 = to_constraint(int)
         assert isinstance(c1, TypeConstraint)
