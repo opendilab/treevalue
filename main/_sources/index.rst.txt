@@ -38,6 +38,7 @@ structure processing when the calculation is tree-based.
     comparison/environment.result
     comparison/dmtree.result
     comparison/tianshou_batch.result
+    comparison/jax_libtree.result
 
 
 .. toctree::
