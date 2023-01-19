@@ -486,7 +486,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>origin = {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: {&#39;x&#39;: 3, &#39;y&#39;: 4}}
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">origin</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}</span>
 </pre></div>
 </div>
 </div>
@@ -500,10 +500,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from treevalue import FastTreeValue, mapping
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">mapping</span>
 
-tv = FastTreeValue(origin)
-tv
+<span class="n">tv</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+<span class="n">tv</span>
 </pre></div>
 </div>
 </div>
@@ -513,10 +513,10 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f00f4183d90&gt;
+&lt;FastTreeValue 0x7f472c12f820&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f00f4183460&gt;
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f472c12f7c0&gt;
     ├── &#39;x&#39; --&gt; 3
     └── &#39;y&#39; --&gt; 4
 </pre></div></div>
@@ -525,7 +525,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mapping(tv, lambda x: x * 2)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapping</span><span class="p">(</span><span class="n">tv</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -535,10 +535,10 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f00e4e6b220&gt;
+&lt;FastTreeValue 0x7f471ce15cd0&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 4
-└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f00e4e6b160&gt;
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f471ce15d90&gt;
     ├── &#39;x&#39; --&gt; 6
     └── &#39;y&#39; --&gt; 8
 </pre></div></div>
@@ -548,7 +548,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit mapping(tv, lambda x: x * 2)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> mapping(tv, lambda x: x * 2)
 </pre></div>
 </div>
 </div>
@@ -557,7 +557,7 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.34 µs ± 5.54 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.24 µs ± 6.83 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>In order to support the cased that the mapped value is related to both path and value of each node, we can use the ‘path mapping mode’ by simply use the second parameter of the mapping function.</p>
@@ -565,7 +565,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mapping(tv, lambda x, p: (&#39;path&#39;, p, &#39;value&#39;, x))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapping</span><span class="p">(</span><span class="n">tv</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -575,10 +575,10 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f00f4183b80&gt;
+&lt;FastTreeValue 0x7f471ce7a5b0&gt;
 ├── &#39;a&#39; --&gt; (&#39;path&#39;, (&#39;a&#39;,), &#39;value&#39;, 1)
 ├── &#39;b&#39; --&gt; (&#39;path&#39;, (&#39;b&#39;,), &#39;value&#39;, 2)
-└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f00f4183b20&gt;
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f471ce7a4f0&gt;
     ├── &#39;x&#39; --&gt; (&#39;path&#39;, (&#39;c&#39;, &#39;x&#39;), &#39;value&#39;, 3)
     └── &#39;y&#39; --&gt; (&#39;path&#39;, (&#39;c&#39;, &#39;y&#39;), &#39;value&#39;, 4)
 </pre></div></div>
@@ -588,7 +588,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit mapping(tv, lambda x, p: (&#39;path&#39;, p, &#39;value&#39;, x))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> mapping(tv, lambda x, p: (&#39;path&#39;, p, &#39;value&#39;, x))
 </pre></div>
 </div>
 </div>
@@ -597,7 +597,7 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.45 µs ± 4.48 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.3 µs ± 6.12 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -608,7 +608,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import map_structure
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">map_structure</span>
 </pre></div>
 </div>
 </div>
@@ -616,7 +616,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>map_structure(lambda x: x * 2, origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map_structure</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -634,7 +634,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit map_structure(lambda x: x * 2, origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> map_structure(lambda x: x * 2, origin)
 </pre></div>
 </div>
 </div>
@@ -643,7 +643,7 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16.4 µs ± 33.6 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+15.9 µs ± 37.5 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To supported the second situation in the last section, <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.map_structure_with_path">map_structure_with_path</a> can be used.</p>
@@ -651,7 +651,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import map_structure_with_path
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">map_structure_with_path</span>
 </pre></div>
 </div>
 </div>
@@ -659,7 +659,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>map_structure_with_path(lambda path, x: (&#39;path&#39;, path, &#39;value&#39;, x), origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map_structure_with_path</span><span class="p">(</span><span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">origin</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -680,7 +680,7 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit map_structure_with_path(lambda path, x: (&#39;path&#39;, path, &#39;value&#39;, x), origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> map_structure_with_path(lambda path, x: (&#39;path&#39;, path, &#39;value&#39;, x), origin)
 </pre></div>
 </div>
 </div>
@@ -689,7 +689,7 @@ tv
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-34.7 µs ± 74.5 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+34.4 µs ± 89.9 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -704,10 +704,10 @@ tv
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from treevalue import FastTreeValue, flatten, unflatten
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">unflatten</span>
 
-origin_tree = FastTreeValue(origin)
-origin_tree
+<span class="n">origin_tree</span> <span class="o">=</span> <span class="n">FastTreeValue</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+<span class="n">origin_tree</span>
 </pre></div>
 </div>
 </div>
@@ -717,10 +717,10 @@ origin_tree
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f00e4e76280&gt;
+&lt;FastTreeValue 0x7f471cd7a070&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f00e4e76df0&gt;
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f471cd7a220&gt;
     ├── &#39;x&#39; --&gt; 3
     └── &#39;y&#39; --&gt; 4
 </pre></div></div>
@@ -729,8 +729,8 @@ origin_tree
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>flatted = flatten(origin_tree)
-flatted
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flatted</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">origin_tree</span><span class="p">)</span>
+<span class="n">flatted</span>
 </pre></div>
 </div>
 </div>
@@ -748,7 +748,7 @@ flatted
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit flatten(origin_tree)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> flatten(origin_tree)
 </pre></div>
 </div>
 </div>
@@ -757,7 +757,7 @@ flatted
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-728 ns ± 3.17 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+777 ns ± 5.81 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The tree can be re-created from <code class="docutils literal notranslate"><span class="pre">flatted</span></code> with function <code class="docutils literal notranslate"><span class="pre">unflatten</span></code>.</p>
@@ -765,7 +765,7 @@ flatted
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>unflatten(flatted)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unflatten</span><span class="p">(</span><span class="n">flatted</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -775,10 +775,10 @@ flatted
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;TreeValue 0x7f00e4e76ac0&gt;
+&lt;TreeValue 0x7f471cd7a0a0&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f00e4e76340&gt;
+└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f471ce089d0&gt;
     ├── &#39;x&#39; --&gt; 3
     └── &#39;y&#39; --&gt; 4
 </pre></div></div>
@@ -788,7 +788,7 @@ flatted
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit unflatten(flatted)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> unflatten(flatted)
 </pre></div>
 </div>
 </div>
@@ -797,7 +797,7 @@ flatted
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-811 ns ± 13.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+823 ns ± 2.87 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -808,9 +808,9 @@ flatted
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import flatten
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">flatten</span>
 
-flatten(origin)
+<span class="n">flatten</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -828,7 +828,7 @@ flatten(origin)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit flatten(origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> flatten(origin)
 </pre></div>
 </div>
 </div>
@@ -837,7 +837,7 @@ flatten(origin)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.02 µs ± 25.4 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.03 µs ± 1.89 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The structure of the tree is dropped, only the data is extracted from the tree. This means the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> function in DM-Tree is irreversible, we can not recover the original tree with the result above.</p>
@@ -846,9 +846,9 @@ flatten(origin)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import flatten_with_path
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">flatten_with_path</span>
 
-flatten_with_path(origin)
+<span class="n">flatten_with_path</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -866,7 +866,7 @@ flatten_with_path(origin)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit flatten_with_path(origin)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> flatten_with_path(origin)
 </pre></div>
 </div>
 </div>
@@ -875,7 +875,7 @@ flatten_with_path(origin)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16.7 µs ± 35.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+16.1 µs ± 15.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To re-create the original tree, we need a tree structure with any objects filled inside. Use the <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.unflatten_as">unflatten_as</a> to archive this goal.</p>
@@ -883,9 +883,9 @@ flatten_with_path(origin)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import unflatten_as
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">unflatten_as</span>
 
-unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: None, &#39;y&#39;: None}}, [1, 2, 3, 4])
+<span class="n">unflatten_as</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}},</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -903,7 +903,7 @@ unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: N
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: None, &#39;y&#39;: None}}, [1, 2, 3, 4])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: None, &#39;y&#39;: None}}, [1, 2, 3, 4])
 </pre></div>
 </div>
 </div>
@@ -912,7 +912,7 @@ unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: N
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-13.3 µs ± 9.97 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+12.6 µs ± 30.4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -924,11 +924,11 @@ unflatten_as({&#39;a&#39;: None, &#39;b&#39;: None, &#39;c&#39;: {&#39;x&#39;: N
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from treevalue import flatten, unflatten
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">unflatten</span>
 
-def replace(t, v):
-    pairs = flatten(t)
-    return unflatten([(path, vi) for (path, _), vi in zip(pairs, v)])
+<span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">unflatten</span><span class="p">([(</span><span class="n">path</span><span class="p">,</span> <span class="n">vi</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">vi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">v</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
@@ -937,7 +937,7 @@ def replace(t, v):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>replace(origin_tree, [3, 5, 7, 9])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">replace</span><span class="p">(</span><span class="n">origin_tree</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -947,10 +947,10 @@ def replace(t, v):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;TreeValue 0x7f00e4e6bbe0&gt;
+&lt;TreeValue 0x7f472c134310&gt;
 ├── &#39;a&#39; --&gt; 3
 ├── &#39;b&#39; --&gt; 5
-└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f00e4e6bf40&gt;
+└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f472c134b50&gt;
     ├── &#39;x&#39; --&gt; 7
     └── &#39;y&#39; --&gt; 9
 </pre></div></div>
@@ -960,7 +960,7 @@ def replace(t, v):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit replace(origin_tree, [3, 5, 7, 9])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> replace(origin_tree, [3, 5, 7, 9])
 </pre></div>
 </div>
 </div>
@@ -969,7 +969,7 @@ def replace(t, v):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.62 µs ± 10.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.33 µs ± 16.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>In DM-Tree, <code class="docutils literal notranslate"><span class="pre">unflatten_as</span></code> can be directly used.</p>
@@ -977,9 +977,9 @@ def replace(t, v):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tree import unflatten_as
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tree</span> <span class="kn">import</span> <span class="n">unflatten_as</span>
 
-unflatten_as(origin, [3, 5, 7, 9])
+<span class="n">unflatten_as</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -997,7 +997,7 @@ unflatten_as(origin, [3, 5, 7, 9])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%timeit unflatten_as(origin, [3, 5, 7, 9])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> unflatten_as(origin, [3, 5, 7, 9])
 </pre></div>
 </div>
 </div>
@@ -1006,7 +1006,7 @@ unflatten_as(origin, [3, 5, 7, 9])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-13 µs ± 38.4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+12.4 µs ± 32.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1039,7 +1039,7 @@ unflatten_as(origin, [3, 5, 7, 9])
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2022, HansBug, DI-engine&#39;s Contributors
+        &copy; Copyright 2023, HansBug, DI-engine&#39;s Contributors
 
     </p>
   </div>
