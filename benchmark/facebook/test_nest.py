@@ -1,3 +1,5 @@
+from ..base import CMP_N
+
 try:
     import nest
 except ImportError:
@@ -14,7 +16,7 @@ _UMARK = pytest.mark.benchmark(group='facebook-nest') if nest is not None else p
 
 @_UMARK
 class TestCompareFacebookNest:
-    N = 5
+    N = CMP_N
 
     def __create_nested_tree_data(self, n):
         return {
