@@ -111,6 +111,7 @@ jobs:
         env:
           CI: 'true'
           CMP_N: '13'
+          BENCHMARK_FILE: benchmark
         shell: bash
         run: |
           make benchmark
@@ -118,6 +119,12 @@ jobs:
         env:
           CI: 'true'
           CMP_N: '13'
+          BENCHMARK_FILE: compare
         shell: bash
         run: |
           make compare
+      - name: Upload packed files to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts-${{ runner.os }}-cp${{ matrix.python }}
+          path: ./.benchmarks/**/*.json

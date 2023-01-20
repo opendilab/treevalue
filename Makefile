@@ -22,6 +22,7 @@ CYTHON_FILES := $(shell find ${SRC_DIR} -name '*.pyx')
 
 COV_TYPES        ?= xml term-missing
 COMPILE_PLATFORM ?= manylinux_2_24_x86_64
+BENCHMARK_FILE   ?=
 
 build:
 	$(PYTHON) setup.py build_ext --inplace \
@@ -62,7 +63,9 @@ benchmark:
 		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
 		--benchmark-disable-gc \
 		--benchmark-sort=mean \
-		$(if ${WORKERS},-n ${WORKERS},)
+		$(if ${WORKERS},-n ${WORKERS},) \
+		--benchmark-autosave \
+		$(if ${BENCHMARK_FILE},--benchmark-save=${BENCHMARK_FILE},)
 
 compare:
 	$(PYTHON) -m pytest "${RANGE_BENCH_DIR}" \
@@ -70,7 +73,9 @@ compare:
 		--benchmark-columns=min,max,mean,median,IQR,ops,rounds,iterations \
 		--benchmark-disable-gc \
 		--benchmark-sort=mean \
-		$(if ${WORKERS},-n ${WORKERS},)
+		$(if ${WORKERS},-n ${WORKERS},) \
+		--benchmark-autosave \
+		$(if ${BENCHMARK_FILE},--benchmark-save=${BENCHMARK_FILE},)
 
 docs:
 	$(MAKE) -C "${DOC_DIR}" build
