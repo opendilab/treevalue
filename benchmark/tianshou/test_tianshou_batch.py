@@ -75,96 +75,96 @@ class TestCompareWithTianShouBatch:
     N = CMP_N
     _LEVELS = [2 ** i for i in range(N)]
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tsb_stack(self, benchmark, cnt):
-        batches = [self.__setup_batch() for _ in range(cnt)]
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tsb_stack(self, benchmark, n):
+        batches = [self.__setup_batch() for _ in range(n)]
         benchmark(Batch.stack, batches)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tsb_stack_cuda(self, benchmark, cnt):
-        batches = [self.__setup_batch_cuda() for _ in range(cnt)]
+    def test_tsb_stack_cuda(self, benchmark, n):
+        batches = [self.__setup_batch_cuda() for _ in range(n)]
         benchmark(Batch.stack, batches)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tv_stack(self, benchmark, cnt):
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tv_stack(self, benchmark, n):
         stack = FastTreeValue.func(subside=True)(torch.stack)
-        trees = [self.__setup_tree() for _ in range(cnt)]
+        trees = [self.__setup_tree() for _ in range(n)]
         benchmark(stack, trees)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tv_stack_cuda(self, benchmark, cnt):
+    def test_tv_stack_cuda(self, benchmark, n):
         stack = FastTreeValue.func(subside=True)(torch.stack)
-        trees = [self.__setup_tree_cuda() for _ in range(cnt)]
+        trees = [self.__setup_tree_cuda() for _ in range(n)]
         benchmark(stack, trees)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tsb_cat(self, benchmark, cnt):
-        batches = [self.__setup_batch() for _ in range(cnt)]
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tsb_cat(self, benchmark, n):
+        batches = [self.__setup_batch() for _ in range(n)]
         benchmark(Batch.cat, batches)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tsb_cat_cuda(self, benchmark, cnt):
-        batches = [self.__setup_batch_cuda() for _ in range(cnt)]
+    def test_tsb_cat_cuda(self, benchmark, n):
+        batches = [self.__setup_batch_cuda() for _ in range(n)]
         benchmark(Batch.cat, batches)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tv_cat(self, benchmark, cnt):
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tv_cat(self, benchmark, n):
         cat = FastTreeValue.func(subside=True)(torch.cat)
-        trees = [self.__setup_tree() for _ in range(cnt)]
+        trees = [self.__setup_tree() for _ in range(n)]
         benchmark(cat, trees)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tv_cat_cuda(self, benchmark, cnt):
+    def test_tv_cat_cuda(self, benchmark, n):
         cat = FastTreeValue.func(subside=True)(torch.cat)
-        trees = [self.__setup_tree_cuda() for _ in range(cnt)]
+        trees = [self.__setup_tree_cuda() for _ in range(n)]
         benchmark(cat, trees)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tsb_split(self, benchmark, cnt):
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tsb_split(self, benchmark, n):
         def split(*args, **kwargs):
             return list(Batch.split(*args, **kwargs))
 
         batch = Batch({
-            'obs': torch.randn(cnt, 4, 84, 84),
-            'action': torch.randint(0, 6, size=(cnt, 1,)),
-            'reward': torch.rand(cnt, 1),
+            'obs': torch.randn(n, 4, 84, 84),
+            'action': torch.randint(0, 6, size=(n, 1,)),
+            'reward': torch.rand(n, 1),
         })
         benchmark(split, batch, 1, shuffle=False, merge_last=True)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tsb_split_cuda(self, benchmark, cnt):
+    def test_tsb_split_cuda(self, benchmark, n):
         def split(*args, **kwargs):
             return list(Batch.split(*args, **kwargs))
 
         batch = Batch({
-            'obs': torch.randn(cnt, 4, 84, 84).cuda(),
-            'action': torch.randint(0, 6, size=(cnt, 1,)).cuda(),
-            'reward': torch.rand(cnt, 1).cuda(),
+            'obs': torch.randn(n, 4, 84, 84).cuda(),
+            'action': torch.randint(0, 6, size=(n, 1,)).cuda(),
+            'reward': torch.rand(n, 1).cuda(),
         })
         benchmark(split, batch, 1, shuffle=False, merge_last=True)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
-    def test_tv_split(self, benchmark, cnt):
+    @pytest.mark.parametrize('n', _LEVELS)
+    def test_tv_split(self, benchmark, n):
         split = FastTreeValue.func(rise=True)(torch.split)
         tree = FastTreeValue({
-            'obs': torch.randn(cnt, 4, 84, 84),
-            'action': torch.randint(0, 6, size=(cnt, 1,)),
-            'reward': torch.rand(cnt, 1),
+            'obs': torch.randn(n, 4, 84, 84),
+            'action': torch.randint(0, 6, size=(n, 1,)),
+            'reward': torch.rand(n, 1),
         })
         benchmark(split, tree, 1)
 
-    @pytest.mark.parametrize('cnt', _LEVELS)
+    @pytest.mark.parametrize('n', _LEVELS)
     @skipUnless(HAS_CUDA, 'CUDA required')
-    def test_tv_split_cuda(self, benchmark, cnt):
+    def test_tv_split_cuda(self, benchmark, n):
         split = FastTreeValue.func(rise=True)(torch.split)
         tree = FastTreeValue({
-            'obs': torch.randn(cnt, 4, 84, 84).cuda(),
-            'action': torch.randint(0, 6, size=(cnt, 1,)).cuda(),
-            'reward': torch.rand(cnt, 1).cuda(),
+            'obs': torch.randn(n, 4, 84, 84).cuda(),
+            'action': torch.randint(0, 6, size=(n, 1,)).cuda(),
+            'reward': torch.rand(n, 1).cuda(),
         })
         benchmark(split, tree, 1)
