@@ -22,7 +22,11 @@ CYTHON_FILES := $(shell find ${SRC_DIR} -name '*.pyx')
 
 COV_TYPES        ?= xml term-missing
 COMPILE_PLATFORM ?= manylinux_2_24_x86_64
-BENCHMARK_FILE   ?=
+
+BENCHMARK_FILE       ?=
+BENCHMARK_OUTPUT_DIR ?= .benchmarks
+BM_FILES             := $(shell find ${BENCHMARK_OUTPUT_DIR} -name '*.json' -type f)
+BM_CSV_FILES         := $(addsuffix .csv,$(basename ${BM_FILES}))
 
 build:
 	$(PYTHON) setup.py build_ext --inplace \
@@ -76,6 +80,10 @@ compare:
 		$(if ${WORKERS},-n ${WORKERS},) \
 		--benchmark-autosave \
 		$(if ${BENCHMARK_FILE},--benchmark-save=${BENCHMARK_FILE},)
+
+%.csv: %.json
+	$(PYTHON) bmtrans.py -i "$(shell readlink -f $<)" -o "$(shell readlink -f $@)"
+bmtrans: ${BM_CSV_FILES}
 
 docs:
 	$(MAKE) -C "${DOC_DIR}" build

@@ -123,8 +123,16 @@ jobs:
         shell: bash
         run: |
           make compare
+      - name: Build csv file for download
+        env:
+          CI: 'true'
+        shell: bash
+        run: |
+          make bmtrans
       - name: Upload packed files to artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts-${{ runner.os }}-cp${{ matrix.python-version }}
-          path: ./.benchmarks/**/*.json
+          path: |
+            ./.benchmarks/**/*.json
+            ./.benchmarks/**/*.csv
