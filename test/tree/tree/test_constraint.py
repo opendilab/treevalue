@@ -1,6 +1,7 @@
 import pickle
 import unittest
 
+import numpy as np
 import pytest
 from hbutils.testing import vpip
 
@@ -88,6 +89,9 @@ class TestTreeTreeConstraint:
         newc = pickle.loads(binary)
         assert isinstance(newc, EmptyConstraint)
 
+        assert not c1.grab_first(EmptyConstraint)
+        assert c1.grab_all(EmptyConstraint) == []
+
     @unittest.skipUnless(vpip('torch') >= '1.1.0', 'Torch>=1.1.0 only')
     def test_type_with_meta(self):
         c1 = to_constraint(torch.Tensor)
@@ -101,6 +105,16 @@ class TestTreeTreeConstraint:
         assert not (c1 != torch.Tensor)
         assert not (c1 > torch.Tensor)
         assert not (c1 < torch.Tensor)
+
+        assert c1.grab_first(TypeConstraint) is c1
+        assert c1.grab_first(TypeConstraint, type_=torch.Tensor) is c1
+        assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
+        assert not c1.grab_first(GreaterThanConstraint)
+
+        assert c1.grab_all(TypeConstraint) == [c1]
+        assert c1.grab_all(TypeConstraint, type_=torch.Tensor) == [c1]
+        assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
+        assert c1.grab_all(GreaterThanConstraint) == []
 
     def test_type_init_error(self):
         with pytest.raises(AssertionError):
@@ -170,6 +184,16 @@ class TestTreeTreeConstraint:
         assert newc.type_ == int
         assert newc == int
 
+        assert c1.grab_first(TypeConstraint) is c1
+        assert c1.grab_first(TypeConstraint, type_=int) is c1
+        assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
+        assert not c1.grab_first(GreaterThanConstraint)
+
+        assert c1.grab_all(TypeConstraint) == [c1]
+        assert c1.grab_all(TypeConstraint, type_=int) == [c1]
+        assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
+        assert c1.grab_all(GreaterThanConstraint) == []
+
     def test_leaf(self):
         c1 = to_constraint(cleaf())
         assert isinstance(c1, LeafConstraint)
@@ -212,6 +236,14 @@ class TestTreeTreeConstraint:
         binary = pickle.dumps(c1)
         newc = pickle.loads(binary)
         assert isinstance(newc, LeafConstraint)
+
+        assert c1.grab_first(LeafConstraint) is c1
+        assert not c1.grab_first(LeafConstraint, type_=int)
+        assert not c1.grab_first(GreaterThanConstraint)
+
+        assert c1.grab_all(LeafConstraint) == [c1]
+        assert c1.grab_all(LeafConstraint, type_=int) == []
+        assert c1.grab_all(GreaterThanConstraint) == []
 
     def test_custom_value(self):
         c1 = GreaterThanConstraint(3)
@@ -290,6 +322,18 @@ class TestTreeTreeConstraint:
         assert isinstance(reterr, ValueError)
         with pytest.raises(ValueError):
             c1.validate(t1)
+
+        assert c1.grab_first(GreaterThanConstraint) is c1
+        assert c1.grab_first(GreaterThanConstraint, value=3) is c1
+        assert not c1.grab_first(GreaterThanConstraint, value=2)
+        assert not c1.grab_first(GreaterThanConstraint, type_=int)
+        assert not c1.grab_first(TypeConstraint)
+
+        assert c1.grab_all(GreaterThanConstraint) == [c1]
+        assert c1.grab_all(GreaterThanConstraint, value=3) == [c1]
+        assert c1.grab_all(GreaterThanConstraint, value=2) == []
+        assert c1.grab_all(GreaterThanConstraint, type_=int) == []
+        assert c1.grab_all(TypeConstraint) == []
 
     def test_composite(self):
         c1 = to_constraint([
@@ -411,10 +455,28 @@ class TestTreeTreeConstraint:
         with pytest.raises(TypeError):
             c1.validate(t4)
 
+        assert list(c1) == [GreaterThanConstraint(3), to_constraint(int)]
+
         binary = pickle.dumps(c1)
         newc = pickle.loads(binary)
         assert isinstance(newc, CompositeConstraint)
         assert newc == [GreaterThanConstraint(3), int]
+
+        assert c1.grab_first(TypeConstraint) == int
+        assert c1.grab_first(TypeConstraint, type_=int) == int
+        assert not c1.grab_first(TypeConstraint, type_=float)
+        assert c1.grab_first(GreaterThanConstraint) == GreaterThanConstraint(3)
+        assert c1.grab_first(GreaterThanConstraint, value=3) == GreaterThanConstraint(3)
+        assert not c1.grab_first(GreaterThanConstraint, value=10)
+        assert not c1.grab_first(CompositeConstraint)
+
+        assert c1.grab_all(TypeConstraint) == [to_constraint(int)]
+        assert c1.grab_all(TypeConstraint, type_=int) == [to_constraint(int)]
+        assert c1.grab_all(TypeConstraint, type_=float) == []
+        assert c1.grab_all(GreaterThanConstraint) == [GreaterThanConstraint(3)]
+        assert c1.grab_all(GreaterThanConstraint, value=3) == [GreaterThanConstraint(3)]
+        assert c1.grab_all(GreaterThanConstraint, value=2) == []
+        assert c1.grab_all(CompositeConstraint) == []
 
     def test_tree(self):
         assert to_constraint({'a': None, 'b': []}) == to_constraint(None)
@@ -540,6 +602,14 @@ class TestTreeTreeConstraint:
             },
             'c': None,
         }
+
+        assert not c1.grab_first(TypeConstraint)
+        assert not c1.grab_first(GreaterThanConstraint)
+        assert not c1.grab_first(TreeConstraint)
+
+        assert c1.grab_all(TypeConstraint) == []
+        assert c1.grab_all(GreaterThanConstraint) == []
+        assert c1.grab_all(TreeConstraint) == []
 
     def test_composite_tree(self):
         c1 = to_constraint([
