@@ -13,7 +13,7 @@ cdef class Constraint:
     cpdef object _features(self)
     cpdef bool _contains(self, Constraint other)
     cpdef Constraint _transaction(self, str key)
-    cpdef bool _grabable(self, tuple items, dict params)
+    cpdef bool _grabable(self, tuple items, dict params) except*
 
     cdef bool _feature_match(self, Constraint other)
     cdef bool _contains_check(self, Constraint other)

@@ -1,5 +1,6 @@
 import pickle
 import unittest
+from collections.abc import Sequence
 
 import numpy as np
 import pytest
@@ -47,6 +48,29 @@ class OverValueValidation:
     def __call__(self, v):
         if v <= self.value:
             raise ValueError(f'Invalid value - {v!r}.')
+
+
+class ShapePrefixConstraint(ValueConstraint, Sequence):
+    def __init__(self, *shape):
+        self.__shape = shape
+
+    def __len__(self):
+        return len(self.__shape)
+
+    def __getitem__(self, item):
+        return self.__shape[item]
+
+    def _contains(self, other):
+        return isinstance(other, ShapePrefixConstraint) and self.__shape[:len(other.__shape)] == other.__shape
+
+    def _validate_value(self, instance):
+        if not hasattr(instance, 'shape'):
+            raise TypeError(f'No shape found in {instance!r}.')
+        if instance.shape[:len(self.__shape)] != self.__shape:
+            raise ValueError(f'Shape prefix {self.__shape!r} expected, but shape {instance.shape} found.')
+
+    def _features(self):
+        return self.__shape
 
 
 # noinspection DuplicatedCode,PyArgumentList,PyTypeChecker
@@ -110,11 +134,17 @@ class TestTreeTreeConstraint:
         assert c1.grab_first(TypeConstraint, type_=torch.Tensor) is c1
         assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
         assert not c1.grab_first(GreaterThanConstraint)
+        assert c1.grab_first(lambda x: isinstance(x, TypeConstraint)) is c1
+        assert c1.grab_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) is c1
+        assert not c1.grab_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray)
 
         assert c1.grab_all(TypeConstraint) == [c1]
         assert c1.grab_all(TypeConstraint, type_=torch.Tensor) == [c1]
         assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
         assert c1.grab_all(GreaterThanConstraint) == []
+        assert c1.grab_all(lambda x: isinstance(x, TypeConstraint)) == [c1]
+        assert c1.grab_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) == [c1]
+        assert c1.grab_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray) == []
 
     def test_type_init_error(self):
         with pytest.raises(AssertionError):
@@ -188,11 +218,13 @@ class TestTreeTreeConstraint:
         assert c1.grab_first(TypeConstraint, type_=int) is c1
         assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
         assert not c1.grab_first(GreaterThanConstraint)
+        assert not c1.grab_first(TypeConstraint, np.ndarray)
 
         assert c1.grab_all(TypeConstraint) == [c1]
         assert c1.grab_all(TypeConstraint, type_=int) == [c1]
         assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
         assert c1.grab_all(GreaterThanConstraint) == []
+        assert c1.grab_all(TypeConstraint, np.ndarray) == []
 
     def test_leaf(self):
         c1 = to_constraint(cleaf())
@@ -1036,3 +1068,28 @@ class TestTreeTreeConstraint:
                [int, GreaterThanConstraint(3)]
         assert transact([int, GreaterThanConstraint(3), {'a': str, 'b': GreaterThanConstraint(2)}], 'c') == \
                [int, GreaterThanConstraint(3)]
+
+    def test_shape_prefix(self):
+        c1 = ShapePrefixConstraint(2, 3, 4)
+        assert c1.grab_first(ShapePrefixConstraint, ) is c1
+        assert c1.grab_first(ShapePrefixConstraint, 2) is c1
+        assert c1.grab_first(ShapePrefixConstraint, 2, 3) is c1
+        assert not c1.grab_first(ShapePrefixConstraint, 2, 2)
+        assert not c1.grab_first(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7)
+        assert not c1.grab_first(ShapePrefixConstraint, 'nihao')
+
+        assert c1.grab_all(ShapePrefixConstraint, ) == [c1]
+        assert c1.grab_all(ShapePrefixConstraint, 2) == [c1]
+        assert c1.grab_all(ShapePrefixConstraint, 2, 3) == [c1]
+        assert c1.grab_all(ShapePrefixConstraint, 2, 2) == []
+        assert c1.grab_all(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7) == []
+        assert c1.grab_all(ShapePrefixConstraint, 'nihao') == []
+
+        c2 = to_constraint([
+            ShapePrefixConstraint(2, 3, 4),
+            ShapePrefixConstraint(2, 3, 5, 7),
+            ShapePrefixConstraint(2, 7, 5),
+        ])
+        assert c2.grab_first(ShapePrefixConstraint) == ShapePrefixConstraint(2, 3, 4)
+        assert c2.grab_first(ShapePrefixConstraint, 2, 3) == ShapePrefixConstraint(2, 3, 4)
+        assert c2.grab_first(ShapePrefixConstraint, 2, 3, 5) == ShapePrefixConstraint(2, 3, 5, 7)

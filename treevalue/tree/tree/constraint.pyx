@@ -27,7 +27,7 @@ cdef class Constraint:
     cpdef Constraint _transaction(self, str key):
         raise NotImplementedError  # pragma: no cover
 
-    cpdef bool _grabable(self, tuple items, dict params):
+    cpdef bool _grabable(self, tuple items, dict params) except *:
         cdef int i
         cdef str key
         cdef object value
@@ -35,7 +35,7 @@ cdef class Constraint:
             try:
                 if self[i] != value:
                     return False
-            except (KeyError, IndexError):
+            except (KeyError, IndexError, TypeError):
                 return False
 
         for key, value in params.items():
@@ -121,8 +121,12 @@ cdef class Constraint:
         return self._contains_check(c) and c._contains_check(self)
 
     def _yield_grabable(self, __type, *args, **kwargs):
-        if __type == type(self) and self._grabable(args, kwargs):
-            yield self
+        if isinstance(__type, type) and issubclass(__type, Constraint):
+            if __type == type(self) and self._grabable(args, kwargs):
+                yield self
+        else:
+            if __type(self, *args, **kwargs):
+                yield self
 
     def grab_first(self, __type, *args, **kwargs):
         iter_ = self._yield_grabable(__type, *args, **kwargs)
