@@ -13,13 +13,14 @@ cdef class Constraint:
     cpdef object _features(self)
     cpdef bool _contains(self, Constraint other)
     cpdef Constraint _transaction(self, str key)
-    cpdef bool _grabable(self, tuple items, dict params) except*
 
     cdef bool _feature_match(self, Constraint other)
     cdef bool _contains_check(self, Constraint other)
     cdef tuple _native_validate(self, object instance, type type_, list path)
     cpdef tuple check(self, object instance)
     cpdef bool equiv(self, object other)
+
+cdef bool _c_can_grab(Constraint cons, object type_, tuple items, dict params) except*
 
 @cython.final
 cdef class EmptyConstraint(Constraint):

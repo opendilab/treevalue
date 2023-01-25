@@ -27,23 +27,6 @@ cdef class Constraint:
     cpdef Constraint _transaction(self, str key):
         raise NotImplementedError  # pragma: no cover
 
-    cpdef bool _grabable(self, tuple items, dict params) except *:
-        cdef int i
-        cdef str key
-        cdef object value
-        for i, value in enumerate(items):
-            try:
-                if self[i] != value:
-                    return False
-            except (KeyError, IndexError, TypeError):
-                return False
-
-        for key, value in params.items():
-            if not hasattr(self, key) or getattr(self, key) != value:
-                return False
-
-        return True
-
     @cython.final
     cdef inline bool _feature_match(self, Constraint other):
         return type(self) == type(other) and self._features() == other._features()
@@ -122,7 +105,7 @@ cdef class Constraint:
 
     def _yield_grabable(self, __type, *args, **kwargs):
         if isinstance(__type, type) and issubclass(__type, Constraint):
-            if __type == type(self) and self._grabable(args, kwargs):
+            if _c_can_grab(self, __type, args, kwargs):
                 yield self
         else:
             if __type(self, *args, **kwargs):
@@ -160,6 +143,26 @@ cdef class Constraint:
 
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
+
+cdef inline bool _c_can_grab(Constraint cons, object type_, tuple items, dict params) except*:
+    if type(cons) != type_:
+        return False
+
+    cdef int i
+    cdef str key
+    cdef object value
+    for i, value in enumerate(items):
+        try:
+            if cons[i] != value:
+                return False
+        except (KeyError, IndexError, TypeError):
+            return False
+
+    for key, value in params.items():
+        if not hasattr(cons, key) or getattr(cons, key) != value:
+            return False
+
+    return True
 
 @cython.final
 cdef class EmptyConstraint(Constraint):
