@@ -510,6 +510,21 @@ class TestTreeTreeConstraint:
         assert c1.grab_all(GreaterThanConstraint, value=2) == []
         assert c1.grab_all(CompositeConstraint) == []
 
+        c2 = to_constraint([
+            GreaterThanConstraint(3),
+            int,
+            float
+        ])
+        assert c2.grab_first(TypeConstraint) == float
+        assert c2.grab_first(TypeConstraint, type_=float) == float
+        assert c2.grab_first(TypeConstraint, type_=int) == int
+        assert not c2.grab_first(TypeConstraint, type_=list)
+
+        assert c2.grab_all(TypeConstraint) == [float, int]
+        assert c2.grab_all(TypeConstraint, type_=float) == [float]
+        assert c2.grab_all(TypeConstraint, type_=int) == [int]
+        assert c2.grab_all(TypeConstraint, type_=list) == []
+
     def test_tree(self):
         assert to_constraint({'a': None, 'b': []}) == to_constraint(None)
 
