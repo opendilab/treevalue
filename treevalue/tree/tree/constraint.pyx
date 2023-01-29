@@ -103,6 +103,28 @@ cdef class Constraint:
         cdef Constraint c = to_constraint(other)
         return self._contains_check(c) and c._contains_check(self)
 
+    def _yield_accessible(self, __type, *args, **kwargs):
+        if isinstance(__type, type) and issubclass(__type, Constraint):
+            if _c_default_accessible(self, __type, args, kwargs):
+                yield self
+        else:
+            if __type(self, *args, **kwargs):
+                yield self
+
+    def access_first(self, __type, *args, **kwargs):
+        iter_ = self._yield_accessible(__type, *args, **kwargs)
+        try:
+            return next(iter_)
+        except StopIteration:
+            return _EMPTY_CONSTRAINT
+
+    def access_all(self, __type, *args, **kwargs):
+        cdef list retval = []
+        cdef Constraint cons
+        for cons in self._yield_accessible(__type, *args, **kwargs):
+            retval.append(cons)
+        return retval
+
     def __ge__(self, other):
         cdef Constraint c = to_constraint(other)
         return self._contains_check(c)
@@ -122,6 +144,26 @@ cdef class Constraint:
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
 
+cdef inline bool _c_default_accessible(Constraint cons, object type_, tuple items, dict params) except*:
+    if type(cons) != type_:
+        return False
+
+    cdef int i
+    cdef str key
+    cdef object value
+    for i, value in enumerate(items):
+        try:
+            if cons[i] != value:
+                return False
+        except (KeyError, IndexError, TypeError):
+            return False
+
+    for key, value in params.items():
+        if not hasattr(cons, key) or getattr(cons, key) != value:
+            return False
+
+    return True
+
 @cython.final
 cdef class EmptyConstraint(Constraint):
     cpdef inline void _validate_node(self, object instance) except*:
@@ -138,6 +180,9 @@ cdef class EmptyConstraint(Constraint):
 
     cpdef inline Constraint _transaction(self, str key):
         return self
+
+    def _yield_accessible(self, __type, *args, **kwargs):
+        yield from []
 
     def __bool__(self):
         return False
@@ -335,6 +380,9 @@ cdef class TreeConstraint(Constraint):
         else:
             return _EMPTY_CONSTRAINT
 
+    def _yield_accessible(self, __type, *args, **kwargs):
+        yield from []
+
     def __reduce__(self):
         return TreeConstraint, (self._constraints, False)
 
@@ -432,8 +480,16 @@ cdef class CompositeConstraint(Constraint):
     cpdef Constraint _transaction(self, str key):
         return CompositeConstraint([c._transaction(key) for c in self._constraints])
 
+    def _yield_accessible(self, __type, *args, **kwargs):
+        cdef Constraint cons
+        for cons in self._constraints:
+            yield from cons._yield_accessible(__type, *args, **kwargs)
+
     def __reduce__(self):
         return CompositeConstraint, (list(self._constraints), False)
+
+    def __iter__(self):
+        return iter(self._constraints)
 
 cdef inline void _rec_composite_iter(Constraint constraint, list lst):
     cdef Constraint cons
