@@ -103,25 +103,25 @@ cdef class Constraint:
         cdef Constraint c = to_constraint(other)
         return self._contains_check(c) and c._contains_check(self)
 
-    def _yield_grabable(self, __type, *args, **kwargs):
+    def _yield_accessible(self, __type, *args, **kwargs):
         if isinstance(__type, type) and issubclass(__type, Constraint):
-            if _c_can_grab(self, __type, args, kwargs):
+            if _c_default_accessible(self, __type, args, kwargs):
                 yield self
         else:
             if __type(self, *args, **kwargs):
                 yield self
 
-    def grab_first(self, __type, *args, **kwargs):
-        iter_ = self._yield_grabable(__type, *args, **kwargs)
+    def access_first(self, __type, *args, **kwargs):
+        iter_ = self._yield_accessible(__type, *args, **kwargs)
         try:
             return next(iter_)
         except StopIteration:
             return _EMPTY_CONSTRAINT
 
-    def grab_all(self, __type, *args, **kwargs):
+    def access_all(self, __type, *args, **kwargs):
         cdef list retval = []
         cdef Constraint cons
-        for cons in self._yield_grabable(__type, *args, **kwargs):
+        for cons in self._yield_accessible(__type, *args, **kwargs):
             retval.append(cons)
         return retval
 
@@ -144,7 +144,7 @@ cdef class Constraint:
     def __repr__(self):
         return f'<{type(self).__name__} {self._features()!r}>'
 
-cdef inline bool _c_can_grab(Constraint cons, object type_, tuple items, dict params) except*:
+cdef inline bool _c_default_accessible(Constraint cons, object type_, tuple items, dict params) except*:
     if type(cons) != type_:
         return False
 
@@ -181,7 +181,7 @@ cdef class EmptyConstraint(Constraint):
     cpdef inline Constraint _transaction(self, str key):
         return self
 
-    def _yield_grabable(self, __type, *args, **kwargs):
+    def _yield_accessible(self, __type, *args, **kwargs):
         yield from []
 
     def __bool__(self):
@@ -380,7 +380,7 @@ cdef class TreeConstraint(Constraint):
         else:
             return _EMPTY_CONSTRAINT
 
-    def _yield_grabable(self, __type, *args, **kwargs):
+    def _yield_accessible(self, __type, *args, **kwargs):
         yield from []
 
     def __reduce__(self):
@@ -480,10 +480,10 @@ cdef class CompositeConstraint(Constraint):
     cpdef Constraint _transaction(self, str key):
         return CompositeConstraint([c._transaction(key) for c in self._constraints])
 
-    def _yield_grabable(self, __type, *args, **kwargs):
+    def _yield_accessible(self, __type, *args, **kwargs):
         cdef Constraint cons
         for cons in self._constraints:
-            yield from cons._yield_grabable(__type, *args, **kwargs)
+            yield from cons._yield_accessible(__type, *args, **kwargs)
 
     def __reduce__(self):
         return CompositeConstraint, (list(self._constraints), False)

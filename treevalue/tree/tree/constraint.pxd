@@ -20,7 +20,7 @@ cdef class Constraint:
     cpdef tuple check(self, object instance)
     cpdef bool equiv(self, object other)
 
-cdef bool _c_can_grab(Constraint cons, object type_, tuple items, dict params) except*
+cdef bool _c_default_accessible(Constraint cons, object type_, tuple items, dict params) except*
 
 @cython.final
 cdef class EmptyConstraint(Constraint):

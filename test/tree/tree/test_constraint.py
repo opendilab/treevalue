@@ -113,8 +113,8 @@ class TestTreeTreeConstraint:
         newc = pickle.loads(binary)
         assert isinstance(newc, EmptyConstraint)
 
-        assert not c1.grab_first(EmptyConstraint)
-        assert c1.grab_all(EmptyConstraint) == []
+        assert not c1.access_first(EmptyConstraint)
+        assert c1.access_all(EmptyConstraint) == []
 
     @unittest.skipUnless(vpip('torch') >= '1.1.0', 'Torch>=1.1.0 only')
     def test_type_with_meta(self):
@@ -130,21 +130,21 @@ class TestTreeTreeConstraint:
         assert not (c1 > torch.Tensor)
         assert not (c1 < torch.Tensor)
 
-        assert c1.grab_first(TypeConstraint) is c1
-        assert c1.grab_first(TypeConstraint, type_=torch.Tensor) is c1
-        assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
-        assert not c1.grab_first(GreaterThanConstraint)
-        assert c1.grab_first(lambda x: isinstance(x, TypeConstraint)) is c1
-        assert c1.grab_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) is c1
-        assert not c1.grab_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray)
+        assert c1.access_first(TypeConstraint) is c1
+        assert c1.access_first(TypeConstraint, type_=torch.Tensor) is c1
+        assert not c1.access_first(TypeConstraint, type_=np.ndarray)
+        assert not c1.access_first(GreaterThanConstraint)
+        assert c1.access_first(lambda x: isinstance(x, TypeConstraint)) is c1
+        assert c1.access_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) is c1
+        assert not c1.access_first(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray)
 
-        assert c1.grab_all(TypeConstraint) == [c1]
-        assert c1.grab_all(TypeConstraint, type_=torch.Tensor) == [c1]
-        assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
-        assert c1.grab_all(GreaterThanConstraint) == []
-        assert c1.grab_all(lambda x: isinstance(x, TypeConstraint)) == [c1]
-        assert c1.grab_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) == [c1]
-        assert c1.grab_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray) == []
+        assert c1.access_all(TypeConstraint) == [c1]
+        assert c1.access_all(TypeConstraint, type_=torch.Tensor) == [c1]
+        assert c1.access_all(TypeConstraint, type_=np.ndarray) == []
+        assert c1.access_all(GreaterThanConstraint) == []
+        assert c1.access_all(lambda x: isinstance(x, TypeConstraint)) == [c1]
+        assert c1.access_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, torch.Tensor) == [c1]
+        assert c1.access_all(lambda x, y: isinstance(x, TypeConstraint) and x.type_ == y, np.ndarray) == []
 
     def test_type_init_error(self):
         with pytest.raises(AssertionError):
@@ -214,17 +214,17 @@ class TestTreeTreeConstraint:
         assert newc.type_ == int
         assert newc == int
 
-        assert c1.grab_first(TypeConstraint) is c1
-        assert c1.grab_first(TypeConstraint, type_=int) is c1
-        assert not c1.grab_first(TypeConstraint, type_=np.ndarray)
-        assert not c1.grab_first(GreaterThanConstraint)
-        assert not c1.grab_first(TypeConstraint, np.ndarray)
+        assert c1.access_first(TypeConstraint) is c1
+        assert c1.access_first(TypeConstraint, type_=int) is c1
+        assert not c1.access_first(TypeConstraint, type_=np.ndarray)
+        assert not c1.access_first(GreaterThanConstraint)
+        assert not c1.access_first(TypeConstraint, np.ndarray)
 
-        assert c1.grab_all(TypeConstraint) == [c1]
-        assert c1.grab_all(TypeConstraint, type_=int) == [c1]
-        assert c1.grab_all(TypeConstraint, type_=np.ndarray) == []
-        assert c1.grab_all(GreaterThanConstraint) == []
-        assert c1.grab_all(TypeConstraint, np.ndarray) == []
+        assert c1.access_all(TypeConstraint) == [c1]
+        assert c1.access_all(TypeConstraint, type_=int) == [c1]
+        assert c1.access_all(TypeConstraint, type_=np.ndarray) == []
+        assert c1.access_all(GreaterThanConstraint) == []
+        assert c1.access_all(TypeConstraint, np.ndarray) == []
 
     def test_leaf(self):
         c1 = to_constraint(cleaf())
@@ -269,13 +269,13 @@ class TestTreeTreeConstraint:
         newc = pickle.loads(binary)
         assert isinstance(newc, LeafConstraint)
 
-        assert c1.grab_first(LeafConstraint) is c1
-        assert not c1.grab_first(LeafConstraint, type_=int)
-        assert not c1.grab_first(GreaterThanConstraint)
+        assert c1.access_first(LeafConstraint) is c1
+        assert not c1.access_first(LeafConstraint, type_=int)
+        assert not c1.access_first(GreaterThanConstraint)
 
-        assert c1.grab_all(LeafConstraint) == [c1]
-        assert c1.grab_all(LeafConstraint, type_=int) == []
-        assert c1.grab_all(GreaterThanConstraint) == []
+        assert c1.access_all(LeafConstraint) == [c1]
+        assert c1.access_all(LeafConstraint, type_=int) == []
+        assert c1.access_all(GreaterThanConstraint) == []
 
     def test_custom_value(self):
         c1 = GreaterThanConstraint(3)
@@ -355,17 +355,17 @@ class TestTreeTreeConstraint:
         with pytest.raises(ValueError):
             c1.validate(t1)
 
-        assert c1.grab_first(GreaterThanConstraint) is c1
-        assert c1.grab_first(GreaterThanConstraint, value=3) is c1
-        assert not c1.grab_first(GreaterThanConstraint, value=2)
-        assert not c1.grab_first(GreaterThanConstraint, type_=int)
-        assert not c1.grab_first(TypeConstraint)
+        assert c1.access_first(GreaterThanConstraint) is c1
+        assert c1.access_first(GreaterThanConstraint, value=3) is c1
+        assert not c1.access_first(GreaterThanConstraint, value=2)
+        assert not c1.access_first(GreaterThanConstraint, type_=int)
+        assert not c1.access_first(TypeConstraint)
 
-        assert c1.grab_all(GreaterThanConstraint) == [c1]
-        assert c1.grab_all(GreaterThanConstraint, value=3) == [c1]
-        assert c1.grab_all(GreaterThanConstraint, value=2) == []
-        assert c1.grab_all(GreaterThanConstraint, type_=int) == []
-        assert c1.grab_all(TypeConstraint) == []
+        assert c1.access_all(GreaterThanConstraint) == [c1]
+        assert c1.access_all(GreaterThanConstraint, value=3) == [c1]
+        assert c1.access_all(GreaterThanConstraint, value=2) == []
+        assert c1.access_all(GreaterThanConstraint, type_=int) == []
+        assert c1.access_all(TypeConstraint) == []
 
     def test_composite(self):
         c1 = to_constraint([
@@ -494,36 +494,36 @@ class TestTreeTreeConstraint:
         assert isinstance(newc, CompositeConstraint)
         assert newc == [GreaterThanConstraint(3), int]
 
-        assert c1.grab_first(TypeConstraint) == int
-        assert c1.grab_first(TypeConstraint, type_=int) == int
-        assert not c1.grab_first(TypeConstraint, type_=float)
-        assert c1.grab_first(GreaterThanConstraint) == GreaterThanConstraint(3)
-        assert c1.grab_first(GreaterThanConstraint, value=3) == GreaterThanConstraint(3)
-        assert not c1.grab_first(GreaterThanConstraint, value=10)
-        assert not c1.grab_first(CompositeConstraint)
+        assert c1.access_first(TypeConstraint) == int
+        assert c1.access_first(TypeConstraint, type_=int) == int
+        assert not c1.access_first(TypeConstraint, type_=float)
+        assert c1.access_first(GreaterThanConstraint) == GreaterThanConstraint(3)
+        assert c1.access_first(GreaterThanConstraint, value=3) == GreaterThanConstraint(3)
+        assert not c1.access_first(GreaterThanConstraint, value=10)
+        assert not c1.access_first(CompositeConstraint)
 
-        assert c1.grab_all(TypeConstraint) == [to_constraint(int)]
-        assert c1.grab_all(TypeConstraint, type_=int) == [to_constraint(int)]
-        assert c1.grab_all(TypeConstraint, type_=float) == []
-        assert c1.grab_all(GreaterThanConstraint) == [GreaterThanConstraint(3)]
-        assert c1.grab_all(GreaterThanConstraint, value=3) == [GreaterThanConstraint(3)]
-        assert c1.grab_all(GreaterThanConstraint, value=2) == []
-        assert c1.grab_all(CompositeConstraint) == []
+        assert c1.access_all(TypeConstraint) == [to_constraint(int)]
+        assert c1.access_all(TypeConstraint, type_=int) == [to_constraint(int)]
+        assert c1.access_all(TypeConstraint, type_=float) == []
+        assert c1.access_all(GreaterThanConstraint) == [GreaterThanConstraint(3)]
+        assert c1.access_all(GreaterThanConstraint, value=3) == [GreaterThanConstraint(3)]
+        assert c1.access_all(GreaterThanConstraint, value=2) == []
+        assert c1.access_all(CompositeConstraint) == []
 
         c2 = to_constraint([
             GreaterThanConstraint(3),
             int,
             float
         ])
-        assert c2.grab_first(TypeConstraint) == float
-        assert c2.grab_first(TypeConstraint, type_=float) == float
-        assert c2.grab_first(TypeConstraint, type_=int) == int
-        assert not c2.grab_first(TypeConstraint, type_=list)
+        assert c2.access_first(TypeConstraint) == float
+        assert c2.access_first(TypeConstraint, type_=float) == float
+        assert c2.access_first(TypeConstraint, type_=int) == int
+        assert not c2.access_first(TypeConstraint, type_=list)
 
-        assert c2.grab_all(TypeConstraint) == [float, int]
-        assert c2.grab_all(TypeConstraint, type_=float) == [float]
-        assert c2.grab_all(TypeConstraint, type_=int) == [int]
-        assert c2.grab_all(TypeConstraint, type_=list) == []
+        assert c2.access_all(TypeConstraint) == [float, int]
+        assert c2.access_all(TypeConstraint, type_=float) == [float]
+        assert c2.access_all(TypeConstraint, type_=int) == [int]
+        assert c2.access_all(TypeConstraint, type_=list) == []
 
     def test_tree(self):
         assert to_constraint({'a': None, 'b': []}) == to_constraint(None)
@@ -650,13 +650,13 @@ class TestTreeTreeConstraint:
             'c': None,
         }
 
-        assert not c1.grab_first(TypeConstraint)
-        assert not c1.grab_first(GreaterThanConstraint)
-        assert not c1.grab_first(TreeConstraint)
+        assert not c1.access_first(TypeConstraint)
+        assert not c1.access_first(GreaterThanConstraint)
+        assert not c1.access_first(TreeConstraint)
 
-        assert c1.grab_all(TypeConstraint) == []
-        assert c1.grab_all(GreaterThanConstraint) == []
-        assert c1.grab_all(TreeConstraint) == []
+        assert c1.access_all(TypeConstraint) == []
+        assert c1.access_all(GreaterThanConstraint) == []
+        assert c1.access_all(TreeConstraint) == []
 
     def test_composite_tree(self):
         c1 = to_constraint([
@@ -1086,25 +1086,25 @@ class TestTreeTreeConstraint:
 
     def test_shape_prefix(self):
         c1 = ShapePrefixConstraint(2, 3, 4)
-        assert c1.grab_first(ShapePrefixConstraint, ) is c1
-        assert c1.grab_first(ShapePrefixConstraint, 2) is c1
-        assert c1.grab_first(ShapePrefixConstraint, 2, 3) is c1
-        assert not c1.grab_first(ShapePrefixConstraint, 2, 2)
-        assert not c1.grab_first(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7)
-        assert not c1.grab_first(ShapePrefixConstraint, 'nihao')
+        assert c1.access_first(ShapePrefixConstraint, ) is c1
+        assert c1.access_first(ShapePrefixConstraint, 2) is c1
+        assert c1.access_first(ShapePrefixConstraint, 2, 3) is c1
+        assert not c1.access_first(ShapePrefixConstraint, 2, 2)
+        assert not c1.access_first(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7)
+        assert not c1.access_first(ShapePrefixConstraint, 'nihao')
 
-        assert c1.grab_all(ShapePrefixConstraint, ) == [c1]
-        assert c1.grab_all(ShapePrefixConstraint, 2) == [c1]
-        assert c1.grab_all(ShapePrefixConstraint, 2, 3) == [c1]
-        assert c1.grab_all(ShapePrefixConstraint, 2, 2) == []
-        assert c1.grab_all(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7) == []
-        assert c1.grab_all(ShapePrefixConstraint, 'nihao') == []
+        assert c1.access_all(ShapePrefixConstraint, ) == [c1]
+        assert c1.access_all(ShapePrefixConstraint, 2) == [c1]
+        assert c1.access_all(ShapePrefixConstraint, 2, 3) == [c1]
+        assert c1.access_all(ShapePrefixConstraint, 2, 2) == []
+        assert c1.access_all(ShapePrefixConstraint, 2, 3, 4, 5, 6, 7) == []
+        assert c1.access_all(ShapePrefixConstraint, 'nihao') == []
 
         c2 = to_constraint([
             ShapePrefixConstraint(2, 3, 4),
             ShapePrefixConstraint(2, 3, 5, 7),
             ShapePrefixConstraint(2, 7, 5),
         ])
-        assert c2.grab_first(ShapePrefixConstraint) == ShapePrefixConstraint(2, 3, 4)
-        assert c2.grab_first(ShapePrefixConstraint, 2, 3) == ShapePrefixConstraint(2, 3, 4)
-        assert c2.grab_first(ShapePrefixConstraint, 2, 3, 5) == ShapePrefixConstraint(2, 3, 5, 7)
+        assert c2.access_first(ShapePrefixConstraint) == ShapePrefixConstraint(2, 3, 4)
+        assert c2.access_first(ShapePrefixConstraint, 2, 3) == ShapePrefixConstraint(2, 3, 4)
+        assert c2.access_first(ShapePrefixConstraint, 2, 3, 5) == ShapePrefixConstraint(2, 3, 5, 7)
