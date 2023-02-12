@@ -928,9 +928,9 @@ cdef class TreeValue:
     @cython.binding(True)
     def with_constraints(self, object constraint, bool clear=False):
         if clear:
-            return self._type(self._st, to_constraint(constraint))
+            return self._type(self._st, constraint=to_constraint(constraint))
         else:
-            return self._type(self._st, to_constraint([constraint, self.constraint]))
+            return self._type(self._st, constraint=to_constraint([constraint, self.constraint]))
 
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
