@@ -1,4 +1,3 @@
-import html
 from functools import lru_cache
 from typing import Type, Callable, Union, Optional, Tuple
 
@@ -142,20 +141,6 @@ def _custom_repr(x):
         return str(x)
 
 
-_LEFT_ALIGN_LINESEP = r'\l'
-
-
-def _custom_html_escape(x):
-    s = html.escape(x) \
-        .replace(' ', '&ensp;') \
-        .replace('\r\n', _LEFT_ALIGN_LINESEP) \
-        .replace('\n', _LEFT_ALIGN_LINESEP) \
-        .replace('\r', _LEFT_ALIGN_LINESEP)
-    if len(x.splitlines()) > 1 and not s.endswith(_LEFT_ALIGN_LINESEP):
-        s += _LEFT_ALIGN_LINESEP
-    return s
-
-
 def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
              dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
              repr_gen: Optional[Callable] = None,
@@ -206,7 +191,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
         node_id_gen=_node_tag,
         graph_title=title,
         graph_cfg=cfg or {},
-        repr_gen=repr_gen or (lambda x: _custom_html_escape(_custom_repr(x))),
+        repr_gen=repr_gen or (lambda x: _custom_repr(x)),
         iter_gen=lambda n: iter(n.items()) if isinstance(n, TreeValue) else None,
         node_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, is_root, root: {
             'fillcolor': _shape_color(root[2]),

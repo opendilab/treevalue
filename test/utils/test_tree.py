@@ -14,14 +14,12 @@ class TestUtilsTree:
 
         g2 = build_graph(t, graph_title="Demo 2 of build_graph.")
         assert "Demo 2 of build_graph." in g2.source
-        assert "<root_0>" in g2.source
-        assert "<root_0>.x" in g2.source
+        assert "root_0" in g2.source
         assert len(g2.source) <= 580
 
         g3 = build_graph((t,), graph_title="Demo 3 of build_graph.")
         assert "Demo 3 of build_graph." in g3.source
-        assert "<root_0>" in g3.source
-        assert "<root_0>.x" in g3.source
+        assert "root_0" in g3.source
         assert len(g3.source) <= 580
 
         g4 = build_graph((), graph_title="Demo 4 of build_graph.")

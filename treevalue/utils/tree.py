@@ -1,3 +1,4 @@
+import html
 import re
 from functools import wraps
 from queue import Queue
@@ -67,6 +68,20 @@ def _root_process(root, index):
         return root, '<root_%d>' % (index,), index
 
 
+_LEFT_ALIGN_LINESEP = r'\l'
+
+
+def _custom_html_escape(x):
+    s = html.escape(x) \
+        .replace(' ', '&ensp;') \
+        .replace('\r\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\r', _LEFT_ALIGN_LINESEP)
+    if len(x.splitlines()) > 1 and not s.endswith(_LEFT_ALIGN_LINESEP):
+        s += _LEFT_ALIGN_LINESEP
+    return s
+
+
 def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 graph_title: Optional[str] = None, graph_name: Optional[str] = None,
                 graph_cfg: Optional[Mapping[str, Any]] = None,
@@ -123,7 +138,7 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
         root_node_id = node_id_gen(root, None, [], [], True)
         if root_node_id not in _queued_node_ids:
             graph.node(
-                name=root_node_id, label=root_title,
+                name=root_node_id, label=_custom_html_escape(root_title),
                 **node_cfg_gen(root, None, [], [], True, True, root_info)
             )
             _queue.put((root_node_id, root, (root, root_title, root_index), []))
@@ -143,14 +158,14 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 _current_label = repr_gen(_current_node, _current_path)
 
             if _current_id not in _queued_node_ids:
-                graph.node(_current_id, label=_current_label,
+                graph.node(_current_id, label=_custom_html_escape(_current_label),
                            **node_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
                                           _is_node, False, _root_info))
                 if iter_gen(_current_node, _current_path):
                     _queue.put((_current_id, _current_node, _root_info, _current_path))
                 _queued_node_ids.add(_current_id)
             if (_parent_id, _current_id, key) not in _queued_edges:
-                graph.edge(_parent_id, _current_id, label=key,
+                graph.edge(_parent_id, _current_id, label=_custom_html_escape(key),
                            **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
                                           _is_node, _root_info))
                 _queued_edges.add((_parent_id, _current_id, key))
