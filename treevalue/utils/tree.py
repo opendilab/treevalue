@@ -6,8 +6,6 @@ from typing import Optional, Mapping, Any, Callable
 from graphviz import Digraph
 from hbutils.reflection import dynamic_call, post_process
 
-from .random import random_hex_with_timestamp
-
 
 def _title_flatten(title):
     title = re.sub(r'[^a-zA-Z0-9_]+', '_', str(title))
@@ -104,7 +102,7 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
     roots = [item for item in roots if item is not None]
 
     node_id_gen = dynamic_call(suffixed_node_id(node_id_gen or _default_node_id))
-    graph_title = graph_title or ('untitled_' + random_hex_with_timestamp())
+    graph_title = graph_title or ''
     graph_name = graph_name or _title_flatten(graph_title)
     graph_cfg = _no_none_value(graph_cfg or {})
 

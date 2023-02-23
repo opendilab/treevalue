@@ -1,7 +1,8 @@
+import html
 from functools import lru_cache
 from typing import Type, Callable, Union, Optional, Tuple
 
-from graphviz import Digraph, nohtml
+from graphviz import Digraph
 from hbutils.reflection import post_process, dynamic_call, freduce
 
 from .tree import TreeValue
@@ -134,6 +135,27 @@ _GENERIC_N = 36
 _GENERIC_S = _GENERIC_N // 3
 
 
+def _custom_repr(x):
+    if isinstance(x, (str,)):
+        return repr(x)
+    else:
+        return str(x)
+
+
+_LEFT_ALIGN_LINESEP = r'\l'
+
+
+def _custom_html_escape(x):
+    s = html.escape(x) \
+        .replace(' ', '&ensp;') \
+        .replace('\r\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\r', _LEFT_ALIGN_LINESEP)
+    if len(x.splitlines()) > 1 and not s.endswith(_LEFT_ALIGN_LINESEP):
+        s += _LEFT_ALIGN_LINESEP
+    return s
+
+
 def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
              dup_value: Union[bool, Callable, type, Tuple[Type, ...]] = False,
              repr_gen: Optional[Callable] = None,
@@ -182,9 +204,9 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
     return build_graph(
         *trees,
         node_id_gen=_node_tag,
-        graph_title=title or "<untitled>",
+        graph_title=title,
         graph_cfg=cfg or {},
-        repr_gen=repr_gen or (lambda x: nohtml(repr(x))),
+        repr_gen=repr_gen or (lambda x: _custom_html_escape(_custom_repr(x))),
         iter_gen=lambda n: iter(n.items()) if isinstance(n, TreeValue) else None,
         node_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, is_root, root: {
             'fillcolor': _shape_color(root[2]),
@@ -193,7 +215,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
             'style': 'filled',
             'shape': 'diamond' if is_root else ('ellipse' if is_node else 'box'),
             'penwidth': 3 if is_root else 1.5,
-            'fontname': "Times-Roman bold" if is_node else "Times-Roman",
+            'fontname': "monospace" if is_node else "monospace",
         }, (node_cfg_gen or (lambda: {}))),
         edge_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, root: {
             'arrowhead': 'vee' if is_node else 'dot',
