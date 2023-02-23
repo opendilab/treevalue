@@ -183,8 +183,7 @@
     
     
   <h1>Source code for treevalue.tree.tree.graph</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">html</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
@@ -327,20 +326,6 @@
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<span class="n">_LEFT_ALIGN_LINESEP</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\l&#39;</span>
-
-
-<span class="k">def</span> <span class="nf">_custom_html_escape</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> \
-        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;ensp;&#39;</span><span class="p">)</span> \
-        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_LEFT_ALIGN_LINESEP</span><span class="p">)</span> \
-        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_LEFT_ALIGN_LINESEP</span><span class="p">)</span> \
-        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_LEFT_ALIGN_LINESEP</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_LEFT_ALIGN_LINESEP</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">+=</span> <span class="n">_LEFT_ALIGN_LINESEP</span>
-    <span class="k">return</span> <span class="n">s</span>
-
-
 <div class="viewcode-block" id="graphics"><a class="viewcode-back" href="../../../../api_doc/tree/tree.html#treevalue.tree.tree.graphics">[docs]</a><span class="k">def</span> <span class="nf">graphics</span><span class="p">(</span><span class="o">*</span><span class="n">trees</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">dup_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
              <span class="n">repr_gen</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -391,7 +376,7 @@
         <span class="n">node_id_gen</span><span class="o">=</span><span class="n">_node_tag</span><span class="p">,</span>
         <span class="n">graph_title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="n">graph_cfg</span><span class="o">=</span><span class="n">cfg</span> <span class="ow">or</span> <span class="p">{},</span>
-        <span class="n">repr_gen</span><span class="o">=</span><span class="n">repr_gen</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_custom_html_escape</span><span class="p">(</span><span class="n">_custom_repr</span><span class="p">(</span><span class="n">x</span><span class="p">))),</span>
+        <span class="n">repr_gen</span><span class="o">=</span><span class="n">repr_gen</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_custom_repr</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
         <span class="n">iter_gen</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">iter</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">TreeValue</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">node_cfg_gen</span><span class="o">=</span><span class="n">_dict_call_merge</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">is_node</span><span class="p">,</span> <span class="n">is_root</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;fillcolor&#39;</span><span class="p">:</span> <span class="n">_shape_color</span><span class="p">(</span><span class="n">root</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
