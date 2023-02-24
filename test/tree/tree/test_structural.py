@@ -1,5 +1,8 @@
+from collections import namedtuple
+
 import pytest
 
+from treevalue import FastTreeValue
 from treevalue.tree import TreeValue, mapping, union, raw, subside, rise, delayed
 
 
@@ -115,6 +118,24 @@ class TestTreeTreeStructural:
 
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
+        nt = namedtuple('nt', ['a', 'b', 'c'])
+        a = nt(
+            MyTreeValue({'x': 1, 'y': 2, 'z': {'v': 3}}),
+            MyTreeValue({'x': 4, 'y': 5, 'z': {'v': 6}}),
+            MyTreeValue({'x': 7, 'y': 8, 'z': {'v': 9}}),
+        )
+        t5 = subside(a)
+        assert t5 == MyTreeValue({
+            'x': nt(1, 4, 7),
+            'y': nt(2, 5, 8),
+            'z': {'v': nt(3, 6, 9), },
+        })
+
+        t6 = subside(a, return_type=FastTreeValue)
+        assert t6.a == FastTreeValue({'x': 1, 'y': 2, 'z': {'v': 3}})
+        assert t6.b == FastTreeValue({'x': 4, 'y': 5, 'z': {'v': 6}})
+        assert t6.c == FastTreeValue({'x': 7, 'y': 8, 'z': {'v': 9}})
 
     def test_subside_delayed(self):
         class MyTreeValue(TreeValue):
@@ -273,3 +294,15 @@ class TestTreeTreeStructural:
                 MyTreeValue({'v': {'x': 3, 'y': 8}}),
             ]
         }
+
+        nt = namedtuple('nt', ['a', 'b', 'c'])
+        t11 = MyTreeValue({
+            'x': nt(1, 4, 7),
+            'y': nt(2, 5, 8),
+            'z': {'v': nt(3, 6, 9), },
+        })
+        assert rise(t11) == nt(
+            MyTreeValue({'x': 1, 'y': 2, 'z': {'v': 3}}),
+            MyTreeValue({'x': 4, 'y': 5, 'z': {'v': 6}}),
+            MyTreeValue({'x': 7, 'y': 8, 'z': {'v': 9}}),
+        )
