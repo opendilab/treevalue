@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hbutils.design.singleton &mdash; treevalue 1.4.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> treevalue
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quick_start/index.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/main_idea/index.html">Main Idea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/basic_usage/index.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/advanced_usage/index.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/cli_usage/index.html">CLI Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/plugins/index.html">Plugins</a></li>
+</ul>
+<p><span class="caption-text">Best Practice</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../best_practice/numpy/index.html">Apply into Numpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../best_practice/sklearn/index.html">Apply into Scikit-Learn</a></li>
+</ul>
+<p><span class="caption-text">Comparison</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../comparison/generic.html">What and Why to Compare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../comparison/environment.result.html">Run Environment Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../comparison/dmtree.result.html">Comparison Between TreeValue and DM-Tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../comparison/tianshou_batch.result.html">Comparison Between TreeValue and Tianshou Batch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../comparison/jax_libtree.result.html">Comparison Between TreeValue and Jax LibTree</a></li>
+</ul>
+<p><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/config/index.html">treevalue.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/tree/index.html">treevalue.tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_doc/utils/index.html">treevalue.utils</a></li>
+</ul>
+<p><span class="caption-text">Contributor Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute/architecture/index.html">Architecture</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">treevalue</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>hbutils.design.singleton</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+    
+    
+  <h1>Source code for hbutils.design.singleton</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Overview:</span>
+<span class="sd">    Implement of singleton design pattern.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;SingletonMeta&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ValueBasedSingletonMeta&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SingletonMark&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">SingletonMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Meta class for singleton mode.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; class MyService(metaclass=SingletonMeta):</span>
+<span class="sd">        &gt;&gt;&gt;     def get_value(self):</span>
+<span class="sd">        &gt;&gt;&gt;         return 233</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; s = MyService()</span>
+<span class="sd">        &gt;&gt;&gt; s.get_value()    # 233</span>
+<span class="sd">        &gt;&gt;&gt; s1 = MyService()</span>
+<span class="sd">        &gt;&gt;&gt; s1 is s          # True</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        In native singleton pattern, the constructor is not needed because \</span>
+<span class="sd">        only one instance will be created in the whole lifetime. So when \</span>
+<span class="sd">        :class:`SingletonMeta` is used as metaclass, please keep the constructor \</span>
+<span class="sd">        be non-argument, or just ignore the ``__init__`` function.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SingletonMeta</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">ValueBasedSingletonMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Meta class for value based singleton mode.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; class MyData(metaclass=ValueBasedSingletonMeta):</span>
+<span class="sd">        &gt;&gt;&gt;     def __init__(self, value):</span>
+<span class="sd">        &gt;&gt;&gt;         self.__value = value</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;     @property</span>
+<span class="sd">        &gt;&gt;&gt;     def value(self):</span>
+<span class="sd">        &gt;&gt;&gt;         return self.__value</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; d1 = MyData(1)</span>
+<span class="sd">        &gt;&gt;&gt; d1.value       # 1</span>
+<span class="sd">        &gt;&gt;&gt; d2 = MyData(1)</span>
+<span class="sd">        &gt;&gt;&gt; d3 = MyData(2)</span>
+<span class="sd">        &gt;&gt;&gt; d2 is d1       # True</span>
+<span class="sd">        &gt;&gt;&gt; d2 is d3       # False</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        This is an external case of singleton pattern. It can only contain one argument \</span>
+<span class="sd">        (must be positional-supported), which differs from the native singleton case.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ValueBasedSingletonMeta</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">SingletonMark</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ValueBasedSingletonMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview:</span>
+<span class="sd">        Singleton mark for some situation.</span>
+<span class="sd">        Can be used when some default value is needed, especially when `None` has meaning which is not default.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; NO_VALUE = SingletonMark(&quot;no_value&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; NO_VALUE is SingletonMark(&quot;no_value&quot;)  # True</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        :class:`SingletonMark` is a value-based singleton class, can be used to create an unique \</span>
+<span class="sd">        value, especially in the cases which ``None`` is not suitable for the default value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mark</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Constructor of :class:`SingletonMark`, can create a singleton mark object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mark</span> <span class="o">=</span> <span class="n">mark</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            Get mark string of this mark object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - mark (:obj:`str`): Mark string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mark</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            :class:`SingletonMark` objects are hash supported. can be directly used \</span>
+<span class="sd">            in :class:`dict` and :class:`set`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mark</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            :class:`SingletonMark` objects can be directly compared with ``==``.</span>
+
+<span class="sd">        Examples::</span>
+<span class="sd">            &gt;&gt;&gt; mark1 = SingletonMark(&#39;mark1&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; mark1x = SingletonMark(&#39;mark1&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; mark2 = SingletonMark(&#39;mark2&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; mark1 == mark1</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; mark1 == mark1x</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; mark1 == mark2</span>
+<span class="sd">            False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">other</span><span class="o">.</span><span class="n">__mark</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mark</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview:</span>
+<span class="sd">            When you try to print a :class:`SingletonMark` object, its mark content will be \</span>
+<span class="sd">            displayed.</span>
+
+<span class="sd">        Examples::</span>
+<span class="sd">            &gt;&gt;&gt; mark1 = SingletonMark(&#39;mark1&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print(mark1)</span>
+<span class="sd">            &lt;SingletonMark mark1&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{cls}</span><span class="s2"> </span><span class="si">{mark}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">mark</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__mark</span><span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, HansBug, DI-engine&#39;s Contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: fix/namedtuple
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Tags</dt>
+                        <dd><a href="../../../../../v0.0.1/index.html">v0.0.1</a></dd>
+                        <dd><a href="../../../../../v0.1.0/index.html">v0.1.0</a></dd>
+                        <dd><a href="../../../../../v1.0.0/index.html">v1.0.0</a></dd>
+                        <dd><a href="../../../../../v1.1.0/index.html">v1.1.0</a></dd>
+                        <dd><a href="../../../../../v1.2.0/index.html">v1.2.0</a></dd>
+                        <dd><a href="../../../../../v1.2.1/index.html">v1.2.1</a></dd>
+                        <dd><a href="../../../../../v1.2.2/index.html">v1.2.2</a></dd>
+                        <dd><a href="../../../../../v1.3.0/index.html">v1.3.0</a></dd>
+                        <dd><a href="../../../../../v1.3.1/index.html">v1.3.1</a></dd>
+                        <dd><a href="../../../../../v1.4.0/index.html">v1.4.0</a></dd>
+                        <dd><a href="../../../../../v1.4.1/index.html">v1.4.1</a></dd>
+                        <dd><a href="../../../../../v1.4.2/index.html">v1.4.2</a></dd>
+                        <dd><a href="../../../../../v1.4.3/index.html">v1.4.3</a></dd>
+                        <dd><a href="../../../../../v1.4.4/index.html">v1.4.4</a></dd>
+                        <dd><a href="../../../../../v1.4.5/index.html">v1.4.5</a></dd>
+                </dl>
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="../../../../../main/index.html">main</a></dd>
+                        <dd><a href="../../../../../dev/repr/index.html">dev/repr</a></dd>
+                        <dd><a href="../../../../../doc/dmtree/index.html">doc/dmtree</a></dd>
+                        <dd><a href="../../../../../doc/readme/index.html">doc/readme</a></dd>
+                        <dd><a href="singleton.html">fix/namedtuple</a></dd>
+                        <dd><a href="../../../../../refactor/color/index.html">refactor/color</a></dd>
+                        <dd><a href="../../../../../run/paper/index.html">run/paper</a></dd>
+                </dl>
+        </div>
+    </div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
