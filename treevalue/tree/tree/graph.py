@@ -200,7 +200,7 @@ def graphics(*trees, title: Optional[str] = None, cfg: Optional[dict] = None,
             'style': 'filled',
             'shape': 'diamond' if is_root else ('ellipse' if is_node else 'box'),
             'penwidth': 3 if is_root else 1.5,
-            'fontname': "monospace" if is_node else "monospace",
+            'fontname': "monospace bold" if is_node else "monospace",
         }, (node_cfg_gen or (lambda: {}))),
         edge_cfg_gen=_dict_call_merge(lambda n, p, np, pp, is_node, root: {
             'arrowhead': 'vee' if is_node else 'dot',
