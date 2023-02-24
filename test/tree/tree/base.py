@@ -745,8 +745,9 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             _repr_png_ = t1._repr_png_()
             assert isinstance(_repr_png_, bytes)
             if OS.windows:
-                print(len(_repr_png_))
-            assert 16050 <= len(_repr_png_) <= 20500
+                assert 12000 <= len(_repr_png_) <= 16050
+            else:
+                assert 16050 <= len(_repr_png_) <= 20500
 
         def test_repr_jpeg(self):
             t1 = get_demo_constraint_tree()
