@@ -3,6 +3,7 @@ import re
 from typing import Type
 
 import pytest
+from hbutils.testing import OS
 
 from test.tree.tree.test_constraint import GreaterThanConstraint
 from treevalue import raw, TreeValue, delayed, ValidationError
@@ -743,6 +744,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
 
             _repr_png_ = t1._repr_png_()
             assert isinstance(_repr_png_, bytes)
+            if OS.windows:
+                print(len(_repr_png_))
             assert 16050 <= len(_repr_png_) <= 20500
 
         def test_repr_jpeg(self):
