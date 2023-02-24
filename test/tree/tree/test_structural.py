@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import pytest
 
 from treevalue.tree import TreeValue, mapping, union, raw, subside, rise, delayed
@@ -115,6 +117,18 @@ class TestTreeTreeStructural:
 
         assert subside({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}) == \
                {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}, 'e': [3, 4, 5]}
+
+        nt = namedtuple('nt', ['a', 'b', 'c'])
+        a = nt(
+            MyTreeValue({'x': 1, 'y': 2, 'z': {'v': 3}}),
+            MyTreeValue({'x': 4, 'y': 5, 'z': {'v': 6}}),
+            MyTreeValue({'x': 7, 'y': 8, 'z': {'v': 9}}),
+        )
+        assert subside(a) == MyTreeValue({
+            'x': nt(1, 4, 7),
+            'y': nt(2, 5, 8),
+            'z': {'v': nt(3, 6, 9), },
+        })
 
     def test_subside_delayed(self):
         class MyTreeValue(TreeValue):
@@ -273,3 +287,15 @@ class TestTreeTreeStructural:
                 MyTreeValue({'v': {'x': 3, 'y': 8}}),
             ]
         }
+
+        nt = namedtuple('nt', ['a', 'b', 'c'])
+        t11 = MyTreeValue({
+            'x': nt(1, 4, 7),
+            'y': nt(2, 5, 8),
+            'z': {'v': nt(3, 6, 9), },
+        })
+        assert rise(t11) == nt(
+            MyTreeValue({'x': 1, 'y': 2, 'z': {'v': 3}}),
+            MyTreeValue({'x': 4, 'y': 5, 'z': {'v': 6}}),
+            MyTreeValue({'x': 7, 'y': 8, 'z': {'v': 9}}),
+        )
