@@ -1,5 +1,6 @@
 import html
 import re
+import shutil
 from functools import wraps
 from queue import Queue
 from typing import Optional, Mapping, Any, Callable
@@ -82,6 +83,21 @@ def _custom_html_escape(x):
     return s
 
 
+_DOT_NOT_INSTALL_TEXT = """
+Command 'dot' not found in this environment.
+Please install graphviz first, with:
+  - Ubuntu:  apt install -y graphviz
+  - Windows: choco install graphviz
+  - MacOS:   brew install graphviz
+More detailed information can be found in documentation of graphviz python package: https://graphviz.readthedocs.io/en/stable/#installation
+""".lstrip()
+
+
+def _check_dot_installed():
+    if not shutil.which('dot'):
+        raise EnvironmentError(_DOT_NOT_INSTALL_TEXT)
+
+
 def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 graph_title: Optional[str] = None, graph_name: Optional[str] = None,
                 graph_cfg: Optional[Mapping[str, Any]] = None,
@@ -113,6 +129,8 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
     Returns:
         - dot (:obj:`Digraph`): Graphviz directed graph object.
     """
+    _check_dot_installed()
+
     roots = [_root_process(root, index) for index, root in enumerate(roots)]
     roots = [item for item in roots if item is not None]
 
