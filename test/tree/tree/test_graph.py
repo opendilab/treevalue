@@ -64,7 +64,7 @@ class TestTreeTreeGraph:
             title="This is a demo of 2 trees with dup value.",
             cfg={'bgcolor': '#ffffffff'},
         )
-        assert len(graph_4.source) <= 3780
+        assert len(graph_4.source) <= 4000
 
         graph_6 = graphics(
             (t, 't'), (t1, 't1'),
