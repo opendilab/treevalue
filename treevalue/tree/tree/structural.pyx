@@ -16,6 +16,15 @@ from ..func.modes cimport _c_load_mode
 
 MISSING_NOT_ALLOW = SingletonMark("missing_not_allow")
 
+cdef inline bool _c_is_namedtuple(object type_):
+    return issubclass(type_, tuple) and hasattr(type_, '_fields') and hasattr(type_, '_asdict')
+
+cdef inline object _c_create_sequence_with_type(object type_, object iters):
+    if _c_is_namedtuple(type_):
+        return type_(*iters)
+    else:
+        return type_(iters)
+
 cdef object _c_subside_process(tuple value, object it):
     cdef type type_
     cdef list items
@@ -29,7 +38,7 @@ cdef object _c_subside_process(tuple value, object it):
         _l_res = []
         for v in items:
             _l_res.append(_c_subside_process(v, it))
-        return type_(_l_res)
+        return _c_create_sequence_with_type(type_, _l_res)
     elif issubclass(type_, dict):
         _d_res = {}
         for k, v in items:
@@ -270,7 +279,7 @@ cdef object _c_rise_struct_builder(tuple p, object it):
         for v in item:
             _l_res.append(_c_rise_struct_builder(v, it))
 
-        return type_(_l_res)
+        return _c_create_sequence_with_type(type_, _l_res)
     else:
         return next(it)
 
@@ -298,7 +307,10 @@ cdef tuple _c_rise_struct_process(list objs, object template):
                 raise ValueError(f"At least {repr(_l_temp - 2)} value expected due to template "
                                  f"{repr(template)}, but length is {repr(_l_obj_0)}.")
 
-            _a_template = type(template)(chain(template[:-2], (template[-2],) * (_l_obj_0 - _l_temp + 2)))
+            _a_template = _c_create_sequence_with_type(
+                type(template),
+                chain(template[:-2], (template[-2],) * (_l_obj_0 - _l_temp + 2))
+            )
         else:
             _a_template = template
     elif template is None:
@@ -330,7 +342,7 @@ cdef tuple _c_rise_struct_process(list objs, object template):
                 if failed:
                     _a_template = object
                 else:
-                    _a_template = _t_type(None for _ in range(length))
+                    _a_template = _c_create_sequence_with_type(_t_type, (None for _ in range(length)))
 
             else:
                 _a_template = object
