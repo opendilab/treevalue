@@ -98,7 +98,7 @@ class TestTreeTreeWrapper:
         with pytest.raises(ValueError):
             _ = custom_native(t1, t2)
 
-        result = custom(t1, t2)
+        result = custom(t1, y=t2)
         assert isinstance(result, MyTreeValue)
         assert np.isclose(result.a, a1 + a3).all()
         assert isinstance(result.b, dict) and not isinstance(result.b, TreeValue)
