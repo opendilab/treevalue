@@ -220,3 +220,12 @@ loads
 
 .. autofunction:: loads
 
+
+.. _apidoc_tree_tree_penetrate:
+
+penetrate
+-------------------
+
+.. autofunction:: penetrate
+
+
