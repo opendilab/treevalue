@@ -294,7 +294,11 @@ Such as</p>
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span>from treevalue import FastTreeValue, raw
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span>from treevalue import FastTreeValue, raw
 from treevalue.tree.common import create_storage
 
 __all__ = [&#39;r&#39;, &#39;st&#39;, &#39;t&#39;]
@@ -304,10 +308,12 @@ st = create_storage({
     &#39;b&#39;: &#39;this is a string&#39;,
     &#39;c&#39;: [],
     &#39;d&#39;: {
-        &#39;x&#39;: raw({
-            &#39;a&#39;: 1,
-            &#39;b&#39;: (None, ...)
-        }),
+        &#39;x&#39;: {
+            &#39;__treevalue/raw/wrapper&#39;: {
+                &#39;a&#39;: 1,
+                &#39;b&#39;: (None, ...)
+            }
+        },
         &#39;y&#39;: {3, 4, 5}
     }
 })
@@ -316,10 +322,12 @@ t = FastTreeValue({
     &#39;b&#39;: &#39;this is a string&#39;,
     &#39;c&#39;: [],
     &#39;d&#39;: {
-        &#39;x&#39;: raw({
-            &#39;a&#39;: 1,
-            &#39;b&#39;: (None, ...)
-        }),
+        &#39;x&#39;: {
+            &#39;__treevalue/raw/wrapper&#39;: {
+                &#39;a&#39;: 1,
+                &#39;b&#39;: (None, ...)
+            }
+        },
         &#39;y&#39;: {3, 4, 5}
     }
 })
