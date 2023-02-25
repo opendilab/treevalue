@@ -53,6 +53,9 @@ cdef inline bool _c_is_safe_wrapped(object wrapped):
     else:
         return False
 
+cdef inline bool _c_is_wrapped(object wrapped):
+    return _c_is_unsafe_wrapped(wrapped) or _c_is_safe_wrapped(wrapped)
+
 @cython.binding(True)
 cpdef inline object raw(object obj, object safe=None):
     """

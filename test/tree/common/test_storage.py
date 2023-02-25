@@ -1,8 +1,10 @@
 import pickle
+from functools import partial
 
 import pytest
 
-from treevalue.tree.common import create_storage, raw, TreeStorage, delayed_partial
+from treevalue.tree.common import create_storage, TreeStorage, delayed_partial
+from treevalue.tree.common import raw as _native_raw
 
 try:
     _ = reversed({}.keys())
@@ -11,14 +13,22 @@ except TypeError:
 else:
     _reversible = True
 
+iter_raws = pytest.mark.parametrize(['raw'], [
+    (partial(_native_raw, safe=None),),
+    (partial(_native_raw, safe=True),),
+    (partial(_native_raw, safe=False),),
+])
+
 
 # noinspection PyArgumentList,DuplicatedCode,PyTypeChecker
 @pytest.mark.unittest
 class TestTreeStorage:
-    def test_init(self):
+    @iter_raws
+    def test_init(self, raw):
         _ = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
 
-    def test_get(self):
+    @iter_raws
+    def test_get(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.get('a') == 1
         assert t.get('b') == 2
@@ -76,7 +86,8 @@ class TestTreeStorage:
         assert t2.get('d').get('y') == {'x': 3, 'y': 4}
         assert (cnt1, cnt2, cnt3) == (2, 2, 1)
 
-    def test_get_or_default(self):
+    @iter_raws
+    def test_get_or_default(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.get_or_default('a', 233) == 1
         assert t.get_or_default('b', 233) == 2
@@ -104,7 +115,8 @@ class TestTreeStorage:
         assert t1.get_or_default('fff', delayed_partial(lambda: 2345)) == 2345
         assert not t1.contains('fff')
 
-    def test_pop(self):
+    @iter_raws
+    def test_pop(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.pop('a') == 1
         with pytest.raises(KeyError):
@@ -171,7 +183,8 @@ class TestTreeStorage:
             t2.get('d').pop('y')
         assert (cnt1, cnt2, cnt3) == (2, 2, 1)
 
-    def test_pop_or_default(self):
+    @iter_raws
+    def test_pop_or_default(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.pop_or_default('a', 233) == 1
         with pytest.raises(KeyError):
@@ -235,7 +248,8 @@ class TestTreeStorage:
             ('a', 1), ('b', 2), ('c', 1)
         ]
 
-    def test_set(self):
+    @iter_raws
+    def test_set(self, raw):
         t = create_storage({})
         t.set('a', 1)
         t.set('b', 2)
@@ -264,7 +278,8 @@ class TestTreeStorage:
         t.set('fff', raw({'x': 1, 'y': 2}))
         assert t.get('fff') == {'x': 1, 'y': 2}
 
-    def test_setdefault(self):
+    @iter_raws
+    def test_setdefault(self, raw):
         t = create_storage({})
         assert t.setdefault('a', 1) == 1
         assert t == create_storage({'a': 1})
@@ -284,7 +299,8 @@ class TestTreeStorage:
         assert t.setdefault('g', delayed_partial(lambda x: x * 100, d1)) == 2
         assert t == create_storage({'a': 1, 'b': 2, 'c': {'a': 100, 'b': 200}, 'g': 2})
 
-    def test_del_(self):
+    @iter_raws
+    def test_del_(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         t.del_('c')
         t.del_('b')
@@ -299,7 +315,8 @@ class TestTreeStorage:
         with pytest.raises(KeyError):
             t.del_('fff')
 
-    def test_clear(self):
+    @iter_raws
+    def test_clear(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         t.clear()
         assert t == create_storage({})
@@ -312,7 +329,8 @@ class TestTreeStorage:
         assert t1 == create_storage({})
         assert t1.size() == 0
 
-    def test_contains(self):
+    @iter_raws
+    def test_contains(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.contains('a')
         assert t.contains('b')
@@ -321,7 +339,8 @@ class TestTreeStorage:
         assert not t.contains('f')
         assert not t.contains('kdfsj')
 
-    def test_size(self):
+    @iter_raws
+    def test_size(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert t.size() == 4
         assert t.get('d').size() == 2
@@ -334,7 +353,8 @@ class TestTreeStorage:
         t.del_('d')
         assert t.size() == 2
 
-    def test_empty(self):
+    @iter_raws
+    def test_empty(self, raw):
         t = create_storage({'a': 1, 'b': 2, 'c': raw({'x': 3, 'y': 4}), 'd': {'x': 3, 'y': 4}})
         assert not t.empty()
         assert not t.get('d').empty()
@@ -352,7 +372,8 @@ class TestTreeStorage:
         t.del_('d')
         assert t.empty()
 
-    def test_dump(self):
+    @iter_raws
+    def test_dump(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -360,7 +381,8 @@ class TestTreeStorage:
         _dumped = t.dump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
-        assert _dumped['c'].value() is h1
+        assert _dumped['c'] == {'__treevalue/raw/wrapper': h1}
+        assert _dumped['c']['__treevalue/raw/wrapper'] is h1
         assert _dumped['d']['x'] == 3
         assert _dumped['d']['y'] == 4
 
@@ -373,11 +395,13 @@ class TestTreeStorage:
         _dumped = t2.dump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
-        assert _dumped['c'].value() is h1
+        assert _dumped['c'] == {'__treevalue/raw/wrapper': h1}
+        assert _dumped['c']['__treevalue/raw/wrapper'] is h1
         assert _dumped['d']['x'] == 3
         assert _dumped['d']['y'] == 4
 
-    def test_deepdump(self):
+    @iter_raws
+    def test_deepdump(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -385,12 +409,15 @@ class TestTreeStorage:
         _dumped = t.deepdump()
         assert _dumped['a'] == 1
         assert _dumped['b'] == 2
-        assert _dumped['c'].value() == h1
+        assert _dumped['c'] == {'__treevalue/raw/wrapper': h1}
+        assert _dumped['c']['__treevalue/raw/wrapper'] == h1
+        assert _dumped['c']['__treevalue/raw/wrapper'] is not h1
         assert _dumped['c'] is not h1
         assert _dumped['d']['x'] == 3
         assert _dumped['d']['y'] == 4
 
-    def test_deepdumpx(self):
+    @iter_raws
+    def test_deepdumpx(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -398,11 +425,13 @@ class TestTreeStorage:
         _dumped = t.deepdumpx(lambda x: -x if isinstance(x, int) else {'holy': 'shit'})
         assert _dumped['a'] == -1
         assert _dumped['b'] == -2
-        assert _dumped['c'].value() == {'holy': 'shit'}
+        assert _dumped['c'] == {'__treevalue/raw/wrapper': {'holy': 'shit'}}
+        assert _dumped['c']['__treevalue/raw/wrapper'] == {'holy': 'shit'}
         assert _dumped['d']['x'] == -3
         assert _dumped['d']['y'] == -4
 
-    def test_copy(self):
+    @iter_raws
+    def test_copy(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -414,7 +443,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == 3
         assert t1.get('d').get('y') == 4
 
-    def test_deepcopy(self):
+    @iter_raws
+    def test_deepcopy(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -427,7 +457,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == 3
         assert t1.get('d').get('y') == 4
 
-    def test_deepcopyx(self):
+    @iter_raws
+    def test_deepcopyx(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -439,7 +470,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == -3
         assert t1.get('d').get('y') == -4
 
-    def test_pickle(self):
+    @iter_raws
+    def test_pickle(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -452,7 +484,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == 3
         assert t1.get('d').get('y') == 4
 
-    def test_detach(self):
+    @iter_raws
+    def test_detach(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2})
@@ -465,7 +498,8 @@ class TestTreeStorage:
         assert dt['d'].get('x') == 3
         assert dt['d'].get('y') == 4
 
-    def test_copy_from(self):
+    @iter_raws
+    def test_copy_from(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
@@ -500,7 +534,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == 3
         assert t1.get('d').get('y') == 7
 
-    def test_deepcopy_from(self):
+    @iter_raws
+    def test_deepcopy_from(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
@@ -534,7 +569,8 @@ class TestTreeStorage:
         assert t1.get('d').get('x') == 3
         assert t1.get('d').get('y') == 7
 
-    def test_repr(self):
+    @iter_raws
+    def test_repr(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
@@ -543,7 +579,8 @@ class TestTreeStorage:
         assert repr(('x', 'y')) in repr(t.get('d'))
         assert repr(('x', 'y')) in repr(t.get('f'))
 
-    def test_eq(self):
+    @iter_raws
+    def test_eq(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
@@ -569,7 +606,8 @@ class TestTreeStorage:
         })
         assert t3 == t4
 
-    def test_keys(self):
+    @iter_raws
+    def test_keys(self, raw):
         h1 = {'x': 3, 'y': 4}
         h2 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'c': raw(h1), 'd': h2, 'f': h2})
@@ -612,7 +650,8 @@ class TestTreeStorage:
             with pytest.raises(TypeError):
                 _ = list(t1.iter_rev_values())
 
-    def test_items(self):
+    @iter_raws
+    def test_items(self, raw):
         h1 = {'x': 3, 'y': 4}
         t = create_storage({'a': 1, 'b': 2, 'd': raw(h1)})
 

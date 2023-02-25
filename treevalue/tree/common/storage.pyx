@@ -6,7 +6,7 @@ cimport cython
 
 from libcpp cimport bool
 
-from .base cimport raw, unraw
+from .base cimport raw, unraw, _c_is_wrapped
 from .delay cimport undelay
 
 cdef inline object _keep_object(object obj):
@@ -168,7 +168,7 @@ cdef class TreeStorage:
             else:
                 obj = copy_func(v) if not allow_delayed else v
                 if need_raw:
-                    obj = raw(obj)
+                    obj = raw(obj, safe=True)
                 result[k] = obj
 
         return result
@@ -332,7 +332,7 @@ cpdef inline object create_storage(dict value):
     cdef str k
     cdef object v
     for k, v in value.items():
-        if isinstance(v, dict):
+        if isinstance(v, dict) and not _c_is_wrapped(v):
             _map[k] = create_storage(v)
         else:
             _map[k] = unraw(v)
