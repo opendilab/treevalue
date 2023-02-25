@@ -1,10 +1,11 @@
 from collections import namedtuple
 from functools import wraps
 from itertools import chain
+from unittest import skipUnless
 
-import jax
 import numpy as np
 import pytest
+from hbutils.testing import vpip
 
 from treevalue import penetrate, PENETRATE_SESSIONID_ARGNAME, FastTreeValue, raw, TreeValue
 
@@ -25,16 +26,6 @@ def _my_decorator(func):
         return func(*args, **kwargs)
 
     return _new_func
-
-
-@penetrate(jax.jit, static_argnames=PENETRATE_SESSIONID_ARGNAME)
-def mul(x, y):
-    return (x + 1) * y
-
-
-@penetrate(jax.jit)
-def mul_native(x, y):
-    return (x + 1) * y
 
 
 @penetrate(_my_decorator)
@@ -61,7 +52,17 @@ def custom_native(x, y):
 
 @pytest.mark.unittest
 class TestTreeTreeWrapper:
+    @skipUnless(vpip('jax'), 'jax required but not installed')
     def test_penetrate_with_jit(self):
+        import jax
+        @penetrate(jax.jit, static_argnames=PENETRATE_SESSIONID_ARGNAME)
+        def mul(x, y):
+            return (x + 1) * y
+
+        @penetrate(jax.jit)
+        def mul_native(x, y):
+            return (x + 1) * y
+
         t1 = FastTreeValue({
             'a': np.random.randint(0, 10, (2, 3)),
             'b': {
