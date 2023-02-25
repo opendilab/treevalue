@@ -1,0 +1,1155 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "9d39d946",
+   "metadata": {},
+   "source": [
+    "# Comparison Between TreeValue and Tianshou Batch"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3c6db2d4",
+   "metadata": {},
+   "source": [
+    "In this section, we will take a look at the feature and performance of the [Tianshou Batch](https://github.com/thu-ml/tianshou) library, which is developed by Tsinghua Machine Learning Group."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "069361b0",
+   "metadata": {},
+   "source": [
+    "Before starting the comparison, let us define some thing."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "06fc8d26",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:42.768032Z",
+     "iopub.status.busy": "2023-02-25T05:57:42.767809Z",
+     "iopub.status.idle": "2023-02-25T05:57:43.676495Z",
+     "shell.execute_reply": "2023-02-25T05:57:43.675835Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html\n",
+      "  from .autonotebook import tqdm as notebook_tqdm\n"
+     ]
+    }
+   ],
+   "source": [
+    "import torch \n",
+    "\n",
+    "_TREE_DATA_1 = {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}\n",
+    "_TREE_DATA_2 = {\n",
+    "    'a': torch.randn(2, 3), \n",
+    "    'x': {\n",
+    "        'c': torch.randn(3, 4)\n",
+    "    },\n",
+    "}\n",
+    "_TREE_DATA_3 = {\n",
+    "    'obs': torch.randn(4, 84, 84),\n",
+    "    'action': torch.randint(0, 6, size=(1,)),\n",
+    "    'reward': torch.rand(1),\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "83461b25",
+   "metadata": {},
+   "source": [
+    "## Read and Write Operation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "067b3f73",
+   "metadata": {},
+   "source": [
+    "Reading and writing are the two most common operations in the tree data structure based on the data model (TreeValue and Tianshou Batch both belong to this type), so this section will compare the reading and writing performance of these two libraries."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5d09a5b7",
+   "metadata": {},
+   "source": [
+    "### TreeValue's Get and Set"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "9519c4bb",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:43.679928Z",
+     "iopub.status.busy": "2023-02-25T05:57:43.679310Z",
+     "iopub.status.idle": "2023-02-25T05:57:43.712268Z",
+     "shell.execute_reply": "2023-02-25T05:57:43.711661Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from treevalue import FastTreeValue\n",
+    "\n",
+    "t = FastTreeValue(_TREE_DATA_2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "11c37677",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:43.715107Z",
+     "iopub.status.busy": "2023-02-25T05:57:43.714582Z",
+     "iopub.status.idle": "2023-02-25T05:57:43.722910Z",
+     "shell.execute_reply": "2023-02-25T05:57:43.722265Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6978ed87f0>\n",
+       "├── 'a' --> tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981]])\n",
+       "└── 'x' --> <FastTreeValue 0x7f6978ed8af0>\n",
+       "    └── 'c' --> tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300]])"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "t"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "fd70b0b9",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:43.725538Z",
+     "iopub.status.busy": "2023-02-25T05:57:43.725206Z",
+     "iopub.status.idle": "2023-02-25T05:57:43.729941Z",
+     "shell.execute_reply": "2023-02-25T05:57:43.729305Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "        [ 0.2399,  0.8804,  0.3981]])"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "t.a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "c18197bd",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:43.732455Z",
+     "iopub.status.busy": "2023-02-25T05:57:43.732122Z",
+     "iopub.status.idle": "2023-02-25T05:57:48.812839Z",
+     "shell.execute_reply": "2023-02-25T05:57:48.812105Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "62.9 ns ± 0.0921 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit t.a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "bd52f867",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:48.815825Z",
+     "iopub.status.busy": "2023-02-25T05:57:48.815302Z",
+     "iopub.status.idle": "2023-02-25T05:57:48.821882Z",
+     "shell.execute_reply": "2023-02-25T05:57:48.821309Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f6978ed87f0>\n",
+       "├── 'a' --> tensor([[-1.3518,  1.9287, -0.5993],\n",
+       "│                   [ 0.4193, -0.1420, -1.2490]])\n",
+       "└── 'x' --> <FastTreeValue 0x7f6978ed8af0>\n",
+       "    └── 'c' --> tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300]])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "new_value = torch.randn(2, 3)\n",
+    "t.a = new_value\n",
+    "\n",
+    "t"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "bbe04d1c",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:48.824348Z",
+     "iopub.status.busy": "2023-02-25T05:57:48.823998Z",
+     "iopub.status.idle": "2023-02-25T05:57:54.192554Z",
+     "shell.execute_reply": "2023-02-25T05:57:54.191782Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "66.4 ns ± 0.0313 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit t.a = new_value"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "48c49731",
+   "metadata": {},
+   "source": [
+    "### Tianshou Batch's Get and Set"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "f1bb14c1",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:54.195449Z",
+     "iopub.status.busy": "2023-02-25T05:57:54.195222Z",
+     "iopub.status.idle": "2023-02-25T05:57:54.522140Z",
+     "shell.execute_reply": "2023-02-25T05:57:54.521470Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from tianshou.data import Batch\n",
+    "\n",
+    "b = Batch(**_TREE_DATA_2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "cb0777c3",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:54.525686Z",
+     "iopub.status.busy": "2023-02-25T05:57:54.525097Z",
+     "iopub.status.idle": "2023-02-25T05:57:54.531188Z",
+     "shell.execute_reply": "2023-02-25T05:57:54.530599Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Batch(\n",
+       "    a: tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981]]),\n",
+       "    x: Batch(\n",
+       "           c: tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300]]),\n",
+       "       ),\n",
+       ")"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "b"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "43ef8ea3",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:54.534000Z",
+     "iopub.status.busy": "2023-02-25T05:57:54.533579Z",
+     "iopub.status.idle": "2023-02-25T05:57:54.539218Z",
+     "shell.execute_reply": "2023-02-25T05:57:54.538628Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "        [ 0.2399,  0.8804,  0.3981]])"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "b.a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "b785ab72",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:54.541567Z",
+     "iopub.status.busy": "2023-02-25T05:57:54.541231Z",
+     "iopub.status.idle": "2023-02-25T05:57:59.189308Z",
+     "shell.execute_reply": "2023-02-25T05:57:59.188514Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "57.5 ns ± 0.0167 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit b.a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "ad54dc69",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:59.192007Z",
+     "iopub.status.busy": "2023-02-25T05:57:59.191773Z",
+     "iopub.status.idle": "2023-02-25T05:57:59.197330Z",
+     "shell.execute_reply": "2023-02-25T05:57:59.196710Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Batch(\n",
+       "    a: tensor([[ 0.8416, -1.5444, -1.7189],\n",
+       "               [ 0.1248,  1.0471, -0.8605]]),\n",
+       "    x: Batch(\n",
+       "           c: tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300]]),\n",
+       "       ),\n",
+       ")"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "new_value = torch.randn(2, 3)\n",
+    "b.a = new_value\n",
+    "\n",
+    "b"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "29b1d0bf",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:57:59.199771Z",
+     "iopub.status.busy": "2023-02-25T05:57:59.199549Z",
+     "iopub.status.idle": "2023-02-25T05:58:03.118439Z",
+     "shell.execute_reply": "2023-02-25T05:58:03.117732Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "483 ns ± 0.103 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit b.a = new_value"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b61ad1d0",
+   "metadata": {},
+   "source": [
+    "## Initialization"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d70f0d54",
+   "metadata": {},
+   "source": [
+    "### TreeValue's Initialization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "d32a679b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:03.121868Z",
+     "iopub.status.busy": "2023-02-25T05:58:03.121287Z",
+     "iopub.status.idle": "2023-02-25T05:58:10.157088Z",
+     "shell.execute_reply": "2023-02-25T05:58:10.156375Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "868 ns ± 13.8 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit FastTreeValue(_TREE_DATA_1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "24f3707b",
+   "metadata": {},
+   "source": [
+    "### Tianshou Batch's Initialization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "ac3958df",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:10.160328Z",
+     "iopub.status.busy": "2023-02-25T05:58:10.159786Z",
+     "iopub.status.idle": "2023-02-25T05:58:19.423180Z",
+     "shell.execute_reply": "2023-02-25T05:58:19.422460Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "11.4 µs ± 20 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit Batch(**_TREE_DATA_1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1ab82e2d",
+   "metadata": {},
+   "source": [
+    "## Deep Copy Operation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "210a9442",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:19.426450Z",
+     "iopub.status.busy": "2023-02-25T05:58:19.425952Z",
+     "iopub.status.idle": "2023-02-25T05:58:19.429958Z",
+     "shell.execute_reply": "2023-02-25T05:58:19.429357Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import copy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5a736274",
+   "metadata": {},
+   "source": [
+    "### Deep Copy of TreeValue"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "f9bcadd6",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:19.432502Z",
+     "iopub.status.busy": "2023-02-25T05:58:19.432039Z",
+     "iopub.status.idle": "2023-02-25T05:58:30.552825Z",
+     "shell.execute_reply": "2023-02-25T05:58:30.552053Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "137 µs ± 286 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "t3 = FastTreeValue(_TREE_DATA_3)\n",
+    "%timeit copy.deepcopy(t3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bf8be7ea",
+   "metadata": {},
+   "source": [
+    "### Deep Copy of Tianshou Batch"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "91998e6f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:30.557035Z",
+     "iopub.status.busy": "2023-02-25T05:58:30.555738Z",
+     "iopub.status.idle": "2023-02-25T05:58:41.952155Z",
+     "shell.execute_reply": "2023-02-25T05:58:41.951560Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "140 µs ± 607 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "b3 = Batch(**_TREE_DATA_3)\n",
+    "%timeit copy.deepcopy(b3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "223162fb",
+   "metadata": {},
+   "source": [
+    "## Stack, Concat and Split Operation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "85fa4a73",
+   "metadata": {},
+   "source": [
+    "### Performance of TreeValue"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "a0c2b697",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:41.956152Z",
+     "iopub.status.busy": "2023-02-25T05:58:41.955191Z",
+     "iopub.status.idle": "2023-02-25T05:58:41.959511Z",
+     "shell.execute_reply": "2023-02-25T05:58:41.958963Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "trees = [FastTreeValue(_TREE_DATA_2) for _ in range(8)]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "017ea5a5",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:41.963061Z",
+     "iopub.status.busy": "2023-02-25T05:58:41.962136Z",
+     "iopub.status.idle": "2023-02-25T05:58:41.971052Z",
+     "shell.execute_reply": "2023-02-25T05:58:41.970523Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f68cdb9efd0>\n",
+       "├── 'a' --> tensor([[[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]],\n",
+       "│           \n",
+       "│                   [[-0.3214,  0.1891,  1.1817],\n",
+       "│                    [ 0.2399,  0.8804,  0.3981]]])\n",
+       "└── 'x' --> <FastTreeValue 0x7f68cdb9efa0>\n",
+       "    └── 'c' --> tensor([[[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "                \n",
+       "                        [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                         [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                         [ 0.0825, -0.4264,  0.3601, -0.2300]]])"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "t_stack = FastTreeValue.func(subside=True)(torch.stack)\n",
+    "\n",
+    "t_stack(trees)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "f8b3f415",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:41.974586Z",
+     "iopub.status.busy": "2023-02-25T05:58:41.973657Z",
+     "iopub.status.idle": "2023-02-25T05:58:44.538202Z",
+     "shell.execute_reply": "2023-02-25T05:58:44.537536Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "31.6 µs ± 52.4 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit t_stack(trees)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "94b56771",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:44.541340Z",
+     "iopub.status.busy": "2023-02-25T05:58:44.540756Z",
+     "iopub.status.idle": "2023-02-25T05:58:44.548653Z",
+     "shell.execute_reply": "2023-02-25T05:58:44.548069Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<FastTreeValue 0x7f68cdb82520>\n",
+       "├── 'a' --> tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981],\n",
+       "│                   [-0.3214,  0.1891,  1.1817],\n",
+       "│                   [ 0.2399,  0.8804,  0.3981]])\n",
+       "└── 'x' --> <FastTreeValue 0x7f68cdb82250>\n",
+       "    └── 'c' --> tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                        [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                        [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                        [ 0.0825, -0.4264,  0.3601, -0.2300]])"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "t_cat = FastTreeValue.func(subside=True)(torch.cat)\n",
+    "\n",
+    "t_cat(trees)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "5e9c06a6",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:44.551263Z",
+     "iopub.status.busy": "2023-02-25T05:58:44.550745Z",
+     "iopub.status.idle": "2023-02-25T05:58:46.956067Z",
+     "shell.execute_reply": "2023-02-25T05:58:46.955414Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "29.6 µs ± 60 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit t_cat(trees)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "a3ab5c8f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:46.958781Z",
+     "iopub.status.busy": "2023-02-25T05:58:46.958419Z",
+     "iopub.status.idle": "2023-02-25T05:58:51.743516Z",
+     "shell.execute_reply": "2023-02-25T05:58:51.742846Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "58.9 µs ± 70.7 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "t_split = FastTreeValue.func(rise=True)(torch.split)\n",
+    "tree = FastTreeValue({\n",
+    "    'obs': torch.randn(8, 4, 84, 84),\n",
+    "    'action': torch.randint(0, 6, size=(8, 1,)),\n",
+    "    'reward': torch.rand(8, 1),\n",
+    "})\n",
+    "\n",
+    "%timeit t_split(tree, 1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "31c3ec0b",
+   "metadata": {},
+   "source": [
+    "### Performance of Tianshou Batch"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "9ead828a",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:51.746508Z",
+     "iopub.status.busy": "2023-02-25T05:58:51.745896Z",
+     "iopub.status.idle": "2023-02-25T05:58:51.753856Z",
+     "shell.execute_reply": "2023-02-25T05:58:51.753279Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Batch(\n",
+       "    x: Batch(\n",
+       "           c: tensor([[[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]],\n",
+       "              \n",
+       "                      [[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                       [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                       [ 0.0825, -0.4264,  0.3601, -0.2300]]]),\n",
+       "       ),\n",
+       "    a: tensor([[[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]],\n",
+       "       \n",
+       "               [[-0.3214,  0.1891,  1.1817],\n",
+       "                [ 0.2399,  0.8804,  0.3981]]]),\n",
+       ")"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "batches = [Batch(**_TREE_DATA_2) for _ in range(8)]\n",
+    "\n",
+    "Batch.stack(batches)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "ec9037a3",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:51.756266Z",
+     "iopub.status.busy": "2023-02-25T05:58:51.755927Z",
+     "iopub.status.idle": "2023-02-25T05:58:58.140133Z",
+     "shell.execute_reply": "2023-02-25T05:58:58.139423Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "78.6 µs ± 254 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit Batch.stack(batches)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "cb8ab77e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:58.142942Z",
+     "iopub.status.busy": "2023-02-25T05:58:58.142605Z",
+     "iopub.status.idle": "2023-02-25T05:58:58.149973Z",
+     "shell.execute_reply": "2023-02-25T05:58:58.149403Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Batch(\n",
+       "    x: Batch(\n",
+       "           c: tensor([[-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300],\n",
+       "                      [-0.5162,  0.7968, -0.4552, -0.3729],\n",
+       "                      [-0.2142, -0.7820,  1.3746, -1.1049],\n",
+       "                      [ 0.0825, -0.4264,  0.3601, -0.2300]]),\n",
+       "       ),\n",
+       "    a: tensor([[-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981],\n",
+       "               [-0.3214,  0.1891,  1.1817],\n",
+       "               [ 0.2399,  0.8804,  0.3981]]),\n",
+       ")"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Batch.cat(batches)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "18dfb045",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:58:58.152236Z",
+     "iopub.status.busy": "2023-02-25T05:58:58.152026Z",
+     "iopub.status.idle": "2023-02-25T05:59:09.715848Z",
+     "shell.execute_reply": "2023-02-25T05:59:09.715180Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "142 µs ± 304 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "%timeit Batch.cat(batches)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "c6688e51",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-02-25T05:59:09.718512Z",
+     "iopub.status.busy": "2023-02-25T05:59:09.718157Z",
+     "iopub.status.idle": "2023-02-25T05:59:12.268674Z",
+     "shell.execute_reply": "2023-02-25T05:59:12.268107Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "313 µs ± 1.58 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)\n"
+     ]
+    }
+   ],
+   "source": [
+    "batch = Batch({\n",
+    "    'obs': torch.randn(8, 4, 84, 84),\n",
+    "    'action': torch.randint(0, 6, size=(8, 1,)),\n",
+    "    'reward': torch.rand(8, 1)}\n",
+    ")\n",
+    "\n",
+    "%timeit list(Batch.split(batch, 1, shuffle=False, merge_last=True))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2539fbd9",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.16"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
