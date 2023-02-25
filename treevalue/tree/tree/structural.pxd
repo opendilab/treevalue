@@ -5,6 +5,9 @@
 
 from libcpp cimport bool
 
+cdef bool _c_is_namedtuple(object type_)
+cdef object _c_create_sequence_with_type(object type_, object iters)
+
 cdef class _SubsideCall:
     cdef object run
 

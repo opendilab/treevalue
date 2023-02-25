@@ -6,3 +6,4 @@ from .io import loads, load, dumps, dump
 from .service import jsonify, clone, typetrans, walk
 from .structural import subside, union, rise
 from .tree import TreeValue, delayed, ValidationError
+from .wrapper import penetrate, PENETRATE_SESSIONID_ARGNAME
