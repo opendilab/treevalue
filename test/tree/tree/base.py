@@ -1,12 +1,14 @@
 import pickle
 import re
+from functools import partial
 from typing import Type
 
 import pytest
 
 from test.tree.tree.test_constraint import GreaterThanConstraint
-from treevalue import raw, TreeValue, delayed, ValidationError
+from treevalue import TreeValue, delayed, ValidationError
 from treevalue.tree.common import create_storage
+from treevalue.tree.common import raw as _native_raw
 from treevalue.tree.tree.constraint import cleaf
 
 try:
@@ -15,6 +17,12 @@ except TypeError:
     _reversible = False
 else:
     _reversible = True
+
+iter_raws = pytest.mark.parametrize(['raw'], [
+    (partial(_native_raw, safe=None),),
+    (partial(_native_raw, safe=True),),
+    (partial(_native_raw, safe=False),),
+])
 
 
 class _Container:
@@ -66,7 +74,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
     # noinspection PyMethodMayBeStatic
     @pytest.mark.unittest
     class _TestClass:
-        def test_tree_value_init(self):
+        @iter_raws
+        def test_tree_value_init(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
             assert tv1.a == 1
             assert tv1.b == 2
@@ -131,7 +140,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             with pytest.raises(KeyError):
                 _ = tv3[0]
 
-        def test_tree_value_operate(self):
+        @iter_raws
+        def test_tree_value_operate(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
             tv2 = treevalue_class(tv1)
             tv3 = treevalue_class({'a': tv1, 'b': tv2, 'c': tv1})
@@ -173,7 +183,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert tv1.fff == {'x': 1, 'y': 2}
 
         # noinspection PyTypeChecker
-        def test_setdefault(self):
+        @iter_raws
+        def test_setdefault(self, raw):
             t = treevalue_class({})
             assert t.setdefault('a', 1) == 1
             assert t == treevalue_class({'a': 1})
@@ -196,7 +207,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert t.setdefault('g', delayed(lambda x: x + 100, d)) == 2
             assert t == treevalue_class({'a': 1, 'f': raw({'a': 1, 'b': 2}), 'c': {'a': 1, 'b': 2}, 'g': 2})
 
-        def test_tree_value_operate_with_item(self):
+        @iter_raws
+        def test_tree_value_operate_with_item(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}})
             tv2 = treevalue_class(tv1)
             tv3 = treevalue_class({'a': tv1, 'b': tv2, 'c': tv1})
@@ -345,7 +357,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert pickle.loads(bt2) == tv2
 
         # noinspection PyTypeChecker
-        def test_get(self):
+        @iter_raws
+        def test_get(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
 
             assert tv1.get('a') == 1
@@ -366,7 +379,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert tv2.get('c') == treevalue_class({'x': 2, 'y': 3})
 
         # noinspection PyTypeChecker
-        def test_pop(self):
+        @iter_raws
+        def test_pop(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
 
             assert tv1.pop('a') == 1
@@ -402,7 +416,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert tv3.pop('b', 345) == 345
             assert tv3.pop('c', 345) == 345
 
-        def test_popitem(self):
+        @iter_raws
+        def test_popitem(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
             assert sorted([tv1.popitem() for _ in range(len(tv1))]) == [
                 ('a', 1), ('b', 2),
@@ -421,13 +436,15 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             with pytest.raises(KeyError):
                 tv2.popitem()
 
-        def test_clear(self):
+        @iter_raws
+        def test_clear(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
             assert tv1.clear() is None
             assert not tv1
 
         # noinspection DuplicatedCode
-        def test_update(self):
+        @iter_raws
+        def test_update(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
             tv1.update({'a': 3, 'c': treevalue_class({'x': 3, 'y': 4}), 'd': {'x': 200, 'y': 300}})
             assert tv1 == treevalue_class({
@@ -475,7 +492,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
                 'd': raw({'x': 200, 'y': 300}),
             })
 
-        def test_keys(self):
+        @iter_raws
+        def test_keys(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
             assert len(tv1.keys()) == 4
             assert set(tv1.keys()) == {'a', 'b', 'c', 'd'}
@@ -509,7 +527,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
                 with pytest.raises(TypeError):
                     reversed(tv1.values())
 
-        def test_items(self):
+        @iter_raws
+        def test_items(self, raw):
             tv1 = treevalue_class({'a': 1, 'b': 2, 'c': {'x': 2, 'y': 3}, 'd': raw({'x': 2, 'y': 3})})
             assert len(tv1.items()) == 4
             assert sorted(tv1.items()) == [

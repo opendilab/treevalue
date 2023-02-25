@@ -9,6 +9,7 @@ import cython
 from hbutils.design import SingletonMark
 
 from .constraint cimport Constraint, to_constraint, transact, _EMPTY_CONSTRAINT
+from ..common.base cimport _c_is_wrapped
 from ..common.delay cimport undelay, _c_delayed_partial, DelayedProxy
 from ..common.storage cimport TreeStorage, create_storage, _c_undelay_data
 from ...utils import format_tree
@@ -37,7 +38,7 @@ cdef inline TreeStorage _dict_unpack(dict d):
     cdef dict result = {}
 
     for k, v in d.items():
-        if isinstance(v, dict):
+        if isinstance(v, dict) and not _c_is_wrapped(v):
             result[k] = _dict_unpack(v)
         elif isinstance(v, TreeValue):
             result[k] = v._detach()
