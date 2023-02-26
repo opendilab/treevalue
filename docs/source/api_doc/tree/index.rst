@@ -8,3 +8,4 @@ treevalue.tree
     tree
     func
     general
+    integration

@@ -8,7 +8,7 @@ import cython
 from .tree cimport TreeValue
 from ..common.storage cimport TreeStorage, _c_undelay_data
 
-cdef void _c_flatten(TreeStorage st, tuple path, list res) except *:
+cdef inline void _c_flatten(TreeStorage st, tuple path, list res) except *:
     cdef dict data = st.detach()
     cdef tuple curpath
 
@@ -44,7 +44,7 @@ cpdef list flatten(TreeValue tree):
     _c_flatten(tree._detach(), (), result)
     return result
 
-cdef void _c_flatten_values(TreeStorage st, list res) except *:
+cdef inline void _c_flatten_values(TreeStorage st, list res) except *:
     cdef dict data = st.detach()
 
     cdef str k
@@ -72,7 +72,7 @@ cpdef list flatten_values(TreeValue tree):
     _c_flatten_values(tree._detach(), result)
     return result
 
-cdef void _c_flatten_keys(TreeStorage st, tuple path, list res) except *:
+cdef inline void _c_flatten_keys(TreeStorage st, tuple path, list res) except *:
     cdef dict data = st.detach()
     cdef tuple curpath
 
@@ -102,7 +102,7 @@ cpdef list flatten_keys(TreeValue tree):
     _c_flatten_keys(tree._detach(), (), result)
     return result
 
-cdef TreeStorage _c_unflatten(object pairs):
+cdef inline TreeStorage _c_unflatten(object pairs):
     cdef dict raw_data = {}
     cdef TreeStorage result = TreeStorage(raw_data)
     cdef list stack = []
