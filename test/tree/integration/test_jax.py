@@ -12,8 +12,8 @@ except (ModuleNotFoundError, ImportError):
 
 
 @pytest.mark.unittest
-@skipUnless(jax, 'Jax required.')
 class TestTreeTreeIntegration:
+    @skipUnless(jax, 'Jax required.')
     def test_jax_double(self):
         @jax.jit
         def double(x):
