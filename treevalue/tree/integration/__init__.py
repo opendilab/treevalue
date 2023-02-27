@@ -1,5 +1,6 @@
 from typing import Type
 
+from .general import generic_flatten, generic_unflatten, register_integrate_container, generic_mapping
 from .jax import register_for_jax
 from .torch import register_for_torch
 from ..tree import TreeValue
