@@ -3,26 +3,14 @@
 
 import cython
 
-from ..tree.flatten cimport _c_flatten, _c_unflatten
+from .base cimport _c_flatten_for_integration, _c_unflatten_for_integration
 from ..tree.tree cimport TreeValue
 
 cdef inline tuple _c_flatten_for_jax(object tv):
-    cdef list result = []
-    _c_flatten(tv._detach(), (), result)
-
-    cdef list paths = []
-    cdef list values = []
-    for path, value in result:
-        paths.append(path)
-        values.append(value)
-
-    return values, (type(tv), paths)
+    return _c_flatten_for_integration(tv)
 
 cdef inline object _c_unflatten_for_jax(tuple aux, tuple values):
-    cdef object type_
-    cdef list paths
-    type_, paths = aux
-    return type_(_c_unflatten(zip(paths, values)))
+    return _c_unflatten_for_integration(values, aux)
 
 @cython.binding(True)
 cpdef void register_for_jax(object cls) except*:
