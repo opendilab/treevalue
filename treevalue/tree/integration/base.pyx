@@ -14,7 +14,6 @@ cdef inline tuple _c_flatten_for_integration(object tv):
         values.append(value)
 
     return values, (type(tv), paths)
-    pass
 
 cdef inline object _c_unflatten_for_integration(object values, tuple spec):
     cdef object type_
