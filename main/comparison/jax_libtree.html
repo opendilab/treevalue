@@ -490,12 +490,28 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_jax_libtree_5_0.svg" src="../_images/comparison_jax_libtree_5_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f968c538df0&gt;
+├── &#39;a&#39; --&gt; 1
+├── &#39;b&#39; --&gt; 4
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f968c538ca0&gt;
+    ├── &#39;c&#39; --&gt; 9
+    └── &#39;d&#39; --&gt; 16
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -510,7 +526,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.92 µs ± 3.39 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.82 µs ± 23.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -526,7 +542,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_jax_libtree_7_0.svg" src="../_images/comparison_jax_libtree_7_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f968c4d3310&gt;
+├── &#39;a&#39; --&gt; (1, (&#39;a&#39;,))
+├── &#39;b&#39; --&gt; (4, (&#39;b&#39;,))
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f968c4d3370&gt;
+    ├── &#39;c&#39; --&gt; (9, (&#39;x&#39;, &#39;c&#39;))
+    └── &#39;d&#39; --&gt; (16, (&#39;x&#39;, &#39;d&#39;))
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -541,7 +564,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.13 µs ± 5.47 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.96 µs ± 34.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -579,7 +602,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-5.53 µs ± 7.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+7.12 µs ± 77.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -621,7 +644,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-714 ns ± 1.33 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+958 ns ± 7.82 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -656,7 +679,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-632 ns ± 0.892 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+900 ns ± 9.85 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -691,7 +714,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-489 ns ± 2.51 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+631 ns ± 11.6 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -709,7 +732,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_jax_libtree_20_0.svg" src="../_images/comparison_jax_libtree_20_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;TreeValue 0x7f968c54cfd0&gt;
+├── &#39;a&#39; --&gt; 1
+├── &#39;b&#39; --&gt; 2
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f968c54c130&gt;
+    ├── &#39;c&#39; --&gt; 3
+    └── &#39;d&#39; --&gt; 4
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -724,7 +754,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-840 ns ± 3.14 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.09 µs ± 5.02 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -764,7 +794,7 @@ Treedef: PyTreeDef({&#39;a&#39;: *, &#39;b&#39;: *, &#39;x&#39;: {&#39;c&#39;: *
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.96 µs ± 25.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.48 µs ± 41.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -799,7 +829,7 @@ Treedef: PyTreeDef({&#39;a&#39;: *, &#39;b&#39;: *, &#39;x&#39;: {&#39;c&#39;: *
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-879 ns ± 1.96 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.17 µs ± 12.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -838,7 +868,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-589 ns ± 0.163 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+783 ns ± 11.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -882,7 +912,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.16 µs ± 19.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.83 µs ± 59.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -927,7 +957,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.09 µs ± 2.86 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.48 µs ± 16.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -964,7 +994,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.19 µs ± 7.21 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.63 µs ± 34.7 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1002,7 +1032,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.78 µs ± 12.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.59 µs ± 59.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1035,7 +1065,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.91 µs ± 7.43 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.7 µs ± 92.1 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1067,7 +1097,13 @@ True
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_jax_libtree_48_0.svg" src="../_images/comparison_jax_libtree_48_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f95dd36cee0&gt;
+├── &#39;a&#39; --&gt; {&#39;a&#39;: 1, &#39;b&#39;: 10, &#39;c&#39;: {&#39;x&#39;: 100, &#39;y&#39;: 400}}
+└── &#39;b&#39; --&gt; &lt;FastTreeValue 0x7f95dd36cb50&gt;
+    ├── &#39;x&#39; --&gt; {&#39;a&#39;: 2, &#39;b&#39;: 20, &#39;c&#39;: {&#39;x&#39;: 200, &#39;y&#39;: 500}}
+    └── &#39;y&#39; --&gt; {&#39;a&#39;: 3, &#39;b&#39;: 30, &#39;c&#39;: {&#39;x&#39;: 300, &#39;y&#39;: 600}}
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
@@ -1082,7 +1118,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-14.3 µs ± 35.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+19.1 µs ± 568 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1109,24 +1145,24 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7faff5325730&gt;
-  ├── &#39;a&#39; --&gt; 2
-  ├── &#39;b&#39; --&gt; 20
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff53257c0&gt;
-      ├── &#39;x&#39; --&gt; 200
-      └── &#39;y&#39; --&gt; 500,
-  &#39;y&#39;: &lt;FastTreeValue 0x7faff53256d0&gt;
-  ├── &#39;a&#39; --&gt; 3
-  ├── &#39;b&#39; --&gt; 30
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff5325880&gt;
-      ├── &#39;x&#39; --&gt; 300
-      └── &#39;y&#39; --&gt; 600},
- &#39;a&#39;: &lt;FastTreeValue 0x7faff5325670&gt;
+{&#39;a&#39;: &lt;FastTreeValue 0x7f95dd36c6d0&gt;
  ├── &#39;a&#39; --&gt; 1
  ├── &#39;b&#39; --&gt; 10
- └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff5325790&gt;
+ └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36c1c0&gt;
      ├── &#39;x&#39; --&gt; 100
-     └── &#39;y&#39; --&gt; 400}
+     └── &#39;y&#39; --&gt; 400,
+ &#39;b&#39;: {&#39;y&#39;: &lt;FastTreeValue 0x7f95dd36cf40&gt;
+  ├── &#39;a&#39; --&gt; 3
+  ├── &#39;b&#39; --&gt; 30
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36ceb0&gt;
+      ├── &#39;x&#39; --&gt; 300
+      └── &#39;y&#39; --&gt; 600,
+  &#39;x&#39;: &lt;FastTreeValue 0x7f95dd36c640&gt;
+  ├── &#39;a&#39; --&gt; 2
+  ├── &#39;b&#39; --&gt; 20
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36c1f0&gt;
+      ├── &#39;x&#39; --&gt; 200
+      └── &#39;y&#39; --&gt; 500}}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1142,7 +1178,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-15.3 µs ± 16.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+19.4 µs ± 119 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1160,22 +1196,22 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;a&#39;: &lt;FastTreeValue 0x7faff5325580&gt;
+{&#39;a&#39;: &lt;FastTreeValue 0x7f95dd36c940&gt;
  ├── &#39;a&#39; --&gt; 1
  ├── &#39;b&#39; --&gt; 10
- └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff5325640&gt;
+ └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36c220&gt;
      ├── &#39;x&#39; --&gt; 100
      └── &#39;y&#39; --&gt; 400,
- &#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7faff5325310&gt;
+ &#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7f95dd36c340&gt;
   ├── &#39;a&#39; --&gt; 2
   ├── &#39;b&#39; --&gt; 20
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff5325340&gt;
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36c040&gt;
       ├── &#39;x&#39; --&gt; 200
       └── &#39;y&#39; --&gt; 500,
-  &#39;y&#39;: &lt;FastTreeValue 0x7faff53255e0&gt;
+  &#39;y&#39;: &lt;FastTreeValue 0x7f95dd36c280&gt;
   ├── &#39;a&#39; --&gt; 3
   ├── &#39;b&#39; --&gt; 30
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7faff5325520&gt;
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f95dd36cb20&gt;
       ├── &#39;x&#39; --&gt; 300
       └── &#39;y&#39; --&gt; 600}}
 </pre></div></div>
@@ -1193,7 +1229,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-12.4 µs ± 15.1 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+15.5 µs ± 182 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1246,7 +1282,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-13.6 µs ± 11.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+19.6 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1316,6 +1352,7 @@ True
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../dev/torch/index.html">dev/torch</a></dd>
                         <dd><a href="../../dev/repr/index.html">dev/repr</a></dd>
                         <dd><a href="../../dev/wrap/index.html">dev/wrap</a></dd>
                         <dd><a href="../../doc/readme/index.html">doc/readme</a></dd>
