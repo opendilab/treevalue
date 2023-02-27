@@ -1,17 +1,9 @@
 from collections import namedtuple
-from dataclasses import dataclass
 
 import pytest
 from easydict import EasyDict
 
-from treevalue import generic_flatten, generic_unflatten, FastTreeValue, register_integrate_container
-
-
-@dataclass
-class DC:
-    x: int
-    y: str
-
+from treevalue import generic_flatten, generic_unflatten, FastTreeValue, register_integrate_container, generic_mapping
 
 nt = namedtuple('nt', ['a', 'b'])
 
@@ -28,7 +20,7 @@ class TestTreeIntegrationGeneral:
             'b': [2, 3, 'f'],
             'c': (2, 5, 'ds', EasyDict({
                 'x': None,
-                'z': DC(34, '1.2'),
+                'z': [34, '1.2'],
             })),
             'd': nt('f', 100),
             'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})
@@ -40,7 +32,7 @@ class TestTreeIntegrationGeneral:
         assert rv == demo_data
         assert isinstance(rv['c'][-1], EasyDict)
         assert isinstance(rv['d'], nt)
-        assert isinstance(rv['c'][-1]['z'], DC)
+        assert isinstance(rv['c'][-1]['z'], list)
         assert isinstance(rv['e'], MyTreeValue)
 
     def test_register_my_class(self):
@@ -79,3 +71,25 @@ class TestTreeIntegrationGeneral:
         assert isinstance(rv['d'], nt)
         assert isinstance(rv['c'][-1]['z'], MyDC)
         assert isinstance(rv['e'], MyTreeValue)
+
+    def test_generic_mapping(self):
+        demo_data = {
+            'a': 1,
+            'b': [2, 3, 'f'],
+            'c': (2, 5, 'ds', EasyDict({
+                'x': None,
+                'z': (34, '1.2'),
+            })),
+            'd': nt('f', 100),
+            'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})
+        }
+        assert generic_mapping(demo_data, str) == {
+            'a': '1',
+            'b': ['2', '3', 'f'],
+            'c': ('2', '5', 'ds', EasyDict({
+                'x': 'None',
+                'z': ('34', '1.2'),
+            })),
+            'd': nt('f', '100'),
+            'e': MyTreeValue({'x': '1', 'y': 'dsfljk'})
+        }

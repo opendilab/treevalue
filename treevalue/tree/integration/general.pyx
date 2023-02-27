@@ -2,7 +2,6 @@
 # cython:language_level=3
 
 from collections import namedtuple
-from dataclasses import dataclass, is_dataclass
 
 import cython
 from libcpp cimport bool
@@ -45,23 +44,6 @@ cdef inline tuple _namedtuple_flatten(object l):
 
 cdef inline object _namedtuple_unflatten(list values, object spec):
     return spec(*values)
-
-cdef inline tuple _dataclass_flatten(object l):
-    cdef object type_ = type(l)
-    cdef list keys = []
-    cdef list values = []
-    for key in type_.__dataclass_fields__.keys():
-        keys.append(key)
-        values.append(getattr(l, key))
-
-    return values, (type_, keys)
-
-cdef inline object _dataclass_unflatten(list values, tuple spec):
-    cdef object type_
-    cdef list keys
-    type_, keys = spec
-
-    return type_(**{key: value for key, value in zip(keys, values)})
 
 cdef inline tuple _treevalue_flatten(object l):
     return _c_flatten_for_integration(l)
@@ -132,57 +114,7 @@ cpdef inline void register_integrate_container(object type_, object flatten_func
     """
     _REGISTERED_CONTAINERS[type_] = (flatten_func, unflatten_func)
 
-@cython.binding(True)
-cpdef inline object generic_flatten(object v):
-    """
-    Overview:
-        Flatten generic data, including native objects, ``TreeValue``, namedtuples and dataclasses.
-    
-    :param v: Value to be flatted.
-    :return: Flatted value.
-    
-    Examples::
-        >>> from collections import namedtuple
-        >>> from dataclasses import dataclass
-        >>> from easydict import EasyDict
-        >>> from treevalue import FastTreeValue, generic_flatten, generic_unflatten
-        >>> 
-        >>> class MyTreeValue(FastTreeValue):
-        ...     pass
-        >>> 
-        >>> @dataclass
-        ... class DC:
-        ...     x: int
-        ...     y: float
-        ... 
-        ...     def __repr__(self):
-        ...         return f'DC({self.x}, {self.y})'
-        >>> 
-        >>> nt = namedtuple('nt', ['a', 'b'])
-        >>> 
-        >>> origin = {
-        ...     'a': 1,
-        ...     'b': [2, 3, 'f', ],
-        ...     'c': (2, 5, 'ds', EasyDict({  # dict's child class
-        ...         'x': None,
-        ...         'z': DC(34, '1.2'),  # dataclass
-        ...     })),
-        ...     'd': nt('f', 100),  # namedtuple
-        ...     'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})  # treevalue
-        ... }
-        >>> v, spec = generic_flatten(origin)
-        >>> v
-        [1, [2, 3, 'f'], [2, 5, 'ds', [None, [34, '1.2']]], ['f', 100], [1, 'dsfljk']]
-        >>> 
-        >>> rv = generic_unflatten(v, spec)
-        >>> rv  # all the data, including types, are recovered
-        {'a': 1, 'b': [2, 3, 'f'], 'c': (2, 5, 'ds', {'x': None, 'z': DC(34, 1.2)}), 'd': nt(a='f', b=100), 'e': <MyTreeValue 0x7fba23ef9c50>
-        ├── 'x' --> 1
-        └── 'y' --> 'dsfljk'
-        }
-        >>> type(rv['c'][-1])
-        <class 'easydict.EasyDict'>
-    """
+cdef inline tuple _c_get_flatted_values_and_spec(object v):
     cdef list values
     cdef object spec, type_
     cdef object flatten_func
@@ -195,9 +127,6 @@ cpdef inline object generic_flatten(object v):
     elif isinstance(v, (list, tuple)):
         values, spec = _list_and_tuple_flatten(v)
         type_ = list
-    elif is_dataclass(v):
-        values, spec = _dataclass_flatten(v)
-        type_ = dataclass
     elif isinstance(v, TreeValue):
         values, spec = _treevalue_flatten(v)
         type_ = TreeValue
@@ -206,7 +135,72 @@ cpdef inline object generic_flatten(object v):
         values, spec = flatten_func(v)
         type_ = type(v)
     else:
-        return v, (None, None, None)
+        return v, None, None
+
+    return values, type_, spec
+
+cdef inline object _c_get_object_from_flatted(object values, object type_, object spec):
+    cdef object unflatten_func
+    if type_ is dict:
+        return _dict_unflatten(values, spec)
+    elif type_ is namedtuple:
+        return _namedtuple_unflatten(values, spec)
+    elif type_ is list:
+        return _list_and_tuple_unflatten(values, spec)
+    elif type_ is TreeValue:
+        return _treevalue_unflatten(values, spec)
+    elif type_ in _REGISTERED_CONTAINERS:
+        _, unflatten_func = _REGISTERED_CONTAINERS[type_]
+        return unflatten_func(values, spec)
+    else:
+        raise TypeError(f'Unknown type for unflatten - {values!r}, {spec!r}.')  # pragma: no cover
+
+@cython.binding(True)
+cpdef inline object generic_flatten(object v):
+    """
+    Overview:
+        Flatten generic data, including native objects, ``TreeValue``, namedtuples.
+    
+    :param v: Value to be flatted.
+    :return: Flatted value.
+    
+    Examples::
+
+        >>> from collections import namedtuple
+        >>> from easydict import EasyDict
+        >>> from treevalue import FastTreeValue, generic_flatten, generic_unflatten
+        >>> 
+        >>> class MyTreeValue(FastTreeValue):
+        ...     pass
+        >>> 
+        >>> nt = namedtuple('nt', ['a', 'b'])
+        >>> 
+        >>> origin = {
+        ...     'a': 1,
+        ...     'b': (2, 3, 'f',),
+        ...     'c': (2, 5, 'ds', EasyDict({  # dict's child class
+        ...         'x': None,
+        ...         'z': [34, '1.2'],  # dataclass
+        ...     })),
+        ...     'd': nt('f', 100),  # namedtuple
+        ...     'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})  # treevalue
+        ... }
+        >>> v, spec = generic_flatten(origin)
+        >>> v
+        [1, [2, 3, 'f'], [2, 5, 'ds', [None, [34, '1.2']]], ['f', 100], [1, 'dsfljk']]
+        >>> 
+        >>> rv = generic_unflatten(v, spec)
+        >>> rv
+        {'a': 1, 'b': (2, 3, 'f'), 'c': (2, 5, 'ds', {'x': None, 'z': [34, '1.2']}), 'd': nt(a='f', b=100), 'e': <MyTreeValue 0x7fb6026d7b10>
+        ├── 'x' --> 1
+        └── 'y' --> 'dsfljk'
+        }
+        >>> type(rv['c'][-1])
+        <class 'easydict.EasyDict'>
+    """
+    values, type_, spec = _c_get_flatted_values_and_spec(v)
+    if type_ is None:
+        return values, (None, None, None)
 
     cdef list child_values = []
     cdef list child_specs = []
@@ -241,19 +235,17 @@ cpdef inline object generic_unflatten(object v, tuple gspec):
     for _i_value, _i_spec in zip(v, child_specs):
         values.append(generic_unflatten(_i_value, _i_spec))
 
-    cdef object unflatten_func
-    if type_ is dict:
-        return _dict_unflatten(values, spec)
-    elif type_ is namedtuple:
-        return _namedtuple_unflatten(values, spec)
-    elif type_ is list:
-        return _list_and_tuple_unflatten(values, spec)
-    elif type_ is dataclass:
-        return _dataclass_unflatten(values, spec)
-    elif type_ is TreeValue:
-        return _treevalue_unflatten(values, spec)
-    elif type_ in _REGISTERED_CONTAINERS:
-        _, unflatten_func = _REGISTERED_CONTAINERS[type_]
-        return unflatten_func(values, spec)
-    else:
-        raise TypeError(f'Unknown type for unflatten - {values!r}, {gspec!r}.')  # pragma: no cover
+    return _c_get_object_from_flatted(values, type_, spec)
+
+@cython.binding(True)
+cpdef inline object generic_mapping(object v, object func):
+    values, type_, spec = _c_get_flatted_values_and_spec(v)
+    if type_ is None:
+        return func(values)
+
+    cdef list retvals = []
+    cdef object value
+    for value in values:
+        retvals.append(generic_mapping(value, func))
+
+    return _c_get_object_from_flatted(retvals, type_, spec)
