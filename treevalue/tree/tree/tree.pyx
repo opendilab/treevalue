@@ -913,6 +913,46 @@ cdef class TreeValue:
         """
         return treevalue_items(self, self._st)
 
+    cdef tuple _unpack(self, tuple keys, object default=_GET_NO_DEFAULT):
+        cdef object key
+        cdef list result = []
+        for key in keys:
+            if self._st.contains(key) or default is not _GET_NO_DEFAULT:
+                result.append(self.get(key, default))
+            else:
+                raise KeyError(f'Key not found - {key!r}.')
+
+        return tuple(result)
+
+    @cython.binding(True)
+    def unpack(self, *keys, default=_GET_NO_DEFAULT):
+        """
+        Unpack values from current treevalue object.
+
+        :param keys: Keys to unpack.
+        :param default: Default value when key not found. Raise `KeyError` when not given.
+
+        Examples::
+
+            >>> from treevalue import FastTreeValue
+            >>> t1 = FastTreeValue({
+            ...     'a': 21, 'b': {'x': 'f-49', 'y': 7.7},
+            ... })
+            >>>
+            >>> t1.unpack('a', 'b')
+            (21, <FastTreeValue 0x7ffb77fc2850>
+            ├── 'x' --> 'f-49'
+            └── 'y' --> 7.7
+            )
+            >>> t1.b.unpack('x', 'y')
+            ('f-49', 7.7)
+            >>> t1.b.unpack('x', 'y', 'z')
+            KeyError: "Key not found - 'z'."
+            >>> t1.b.unpack('x', 'y', 'z', default=None)
+            ('f-49', 7.7, None)
+        """
+        return self._unpack(keys, default)
+
     @cython.binding(True)
     cpdef void validate(self) except*:
         cdef bool retval
