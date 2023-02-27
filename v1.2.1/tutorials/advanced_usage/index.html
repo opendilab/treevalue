@@ -355,10 +355,10 @@
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f000e287f70&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7fa093e40f70&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f000e287be0&gt;
+└── x --&gt; &lt;TreeValue 0x7fa093e40be0&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52
     └── e --&gt; 59
@@ -374,15 +374,15 @@
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo.demox.py&quot;, line 15, in &lt;module&gt;
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo.demox.py&quot;, line 15, in &lt;module&gt;
     print(&#39;plus(t4, t2):&#39;, plus(t4, t2))
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 84, in treevalue.tree.func.cfunc._c_func_treelize_run
   File &quot;treevalue/tree/func/modes.pyx&quot;, line 132, in treevalue.tree.func.modes._c_keyset
   File &quot;treevalue/tree/func/modes.pyx&quot;, line 54, in treevalue.tree.func.modes._c_strict_keyset
-KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is {&#39;x&#39;, &#39;b&#39;} but 1 in {&#39;x&#39;, &#39;b&#39;, &#39;a&#39;}.&quot;
+KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is {&#39;x&#39;, &#39;b&#39;} but 1 in {&#39;a&#39;, &#39;b&#39;, &#39;x&#39;}.&quot;
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note" id="tutorials-advancedusage-how-works">
@@ -482,32 +482,22 @@ KeyError: &quot;Argument keys not match in strict mode, key set of argument 0 is
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span>Current a and b: &lt;class &#39;int&#39;&gt; 30 &lt;class &#39;int&#39;&gt; 3
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span>Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;numpy.ndarray&#39;&gt; [ 2  5  8 11]
+Current a and b: &lt;class &#39;int&#39;&gt; 30 &lt;class &#39;int&#39;&gt; 3
 Current a and b: &lt;class &#39;int&#39;&gt; 54 &lt;class &#39;numpy.ndarray&#39;&gt; [[2 3]
  [5 6]]
 Current a and b: &lt;class &#39;int&#39;&gt; 48 &lt;class &#39;float&#39;&gt; 4.8
 Current a and b: &lt;class &#39;int&#39;&gt; 11 &lt;class &#39;numpy.ndarray&#39;&gt; [1 3 5 7]
-Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;numpy.ndarray&#39;&gt; [ 2  5  8 11]
-plus(t1, t2): &lt;TreeValue 0x7f19ad620130&gt;
+plus(t1, t2): &lt;TreeValue 0x7f3a9a4e2580&gt;
 ├── a --&gt; array([12, 14, 16, 18])
 ├── b --&gt; array([24, 27, 30, 33])
-└── x --&gt; &lt;TreeValue 0x7f19ad65e460&gt;
+└── x --&gt; &lt;TreeValue 0x7f3a9a32dca0&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52.8
     └── e --&gt; array([[56, 57],
                      [59, 60]])
 
 
-Current a and b: &lt;class &#39;int&#39;&gt; 30 &lt;class &#39;int&#39;&gt; 3
-Current a and b: &lt;class &#39;int&#39;&gt; 54 &lt;class &#39;numpy.ndarray&#39;&gt; [[2 3]
- [5 6]]
-Current a and b: &lt;class &#39;int&#39;&gt; 48 &lt;class &#39;float&#39;&gt; 4.8
-Current a and b: &lt;class &#39;int&#39;&gt; 11 &lt;class &#39;numpy.ndarray&#39;&gt; [1 3 5 7]
 Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;list&#39;&gt; [2, 5, 8, 11]
 </pre></div></td></tr></table></div>
 </div>
@@ -522,14 +512,14 @@ Current a and b: &lt;class &#39;int&#39;&gt; 22 &lt;class &#39;list&#39;&gt; [2,
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 35, in &lt;module&gt;
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 35, in &lt;module&gt;
     print(&#39;plus(t1, t3):&#39;, plus(t1, t3))
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 75, in treevalue.tree.func.cfunc._c_func_treelize_run
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 9, in plus
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/strict_demo_show.demox.py&quot;, line 9, in plus
     return a + b
 TypeError: unsupported operand type(s) for +: &#39;int&#39; and &#39;list&#39;
 </pre></div></td></tr></table></div>
@@ -582,9 +572,9 @@ TypeError: unsupported operand type(s) for +: &#39;int&#39; and &#39;list&#39;
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f84516bfbe0&gt;
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7fadb2591be0&gt;
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f84516bff70&gt;
+└── x --&gt; &lt;TreeValue 0x7fadb2591f70&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52
     └── e --&gt; 59
@@ -611,9 +601,9 @@ KeyError: &#39;f&#39;
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/left_demo.demox.py&quot;, line 15, in &lt;module&gt;
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/left_demo.demox.py&quot;, line 15, in &lt;module&gt;
     print(&#39;plus(t4, t2):&#39;, plus(t4, t2))
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
@@ -678,17 +668,17 @@ KeyError: &quot;Missing is off, key &#39;f&#39; not found in {&#39;c&#39;: 30, &
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f4eaf443f70&gt;
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f4cc086bf70&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f4eaf443be0&gt;
+└── x --&gt; &lt;TreeValue 0x7f4cc086bbe0&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52
     └── e --&gt; 59
 
-plus(t4, t2): &lt;TreeValue 0x7f4eaf443f70&gt;
+plus(t4, t2): &lt;TreeValue 0x7f4cc086bf70&gt;
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f4eaf443be0&gt;
+└── x --&gt; &lt;TreeValue 0x7f4cc086bbe0&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52
     └── e --&gt; 59
@@ -744,10 +734,10 @@ due to this missing and value of <code class="docutils literal notranslate"><spa
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f45ec2b6b20&gt;
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7fb1fcb3cb20&gt;
 ├── a --&gt; 11
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7f45ec2b6ee0&gt;
+└── x --&gt; &lt;TreeValue 0x7fb1fcb3cee0&gt;
     ├── c --&gt; 33
     ├── d --&gt; 52
     ├── e --&gt; 59
@@ -851,18 +841,18 @@ due to this missing and value of <code class="docutils literal notranslate"><spa
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7ff0cdf54e20&gt;
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2): &lt;TreeValue 0x7f4e29f89e20&gt;
 ├── a --&gt; 12
 ├── b --&gt; 24
-└── x --&gt; &lt;TreeValue 0x7ff0cdf54ee0&gt;
+└── x --&gt; &lt;TreeValue 0x7f4e29f89ee0&gt;
     ├── c --&gt; 39
     ├── d --&gt; 57
     └── e --&gt; 63
 
-plus(t2, 5): &lt;TreeValue 0x7ff0cdf54e20&gt;
+plus(t2, 5): &lt;TreeValue 0x7f4e29f89e20&gt;
 ├── a --&gt; 16
 ├── b --&gt; 27
-└── x --&gt; &lt;TreeValue 0x7ff0cdf54ee0&gt;
+└── x --&gt; &lt;TreeValue 0x7f4e29f89ee0&gt;
     ├── c --&gt; 35
     ├── d --&gt; 53
     └── e --&gt; 59
@@ -877,9 +867,9 @@ plus(t2, 5): &lt;TreeValue 0x7ff0cdf54e20&gt;
 <span class="normal">7</span>
 <span class="normal">8</span>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span>Traceback (most recent call last):
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/inherit_demo.demox.py&quot;, line 22, in &lt;module&gt;
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/docs/source/tutorials/advanced_usage/inherit_demo.demox.py&quot;, line 22, in &lt;module&gt;
     print(&#39;plusx(t1, t2):&#39;, plusx(t1, t2))
-  File &quot;/tmp/tmpwbfzdy_3/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
+  File &quot;/tmp/tmpc9fch7sa/4fbd95995e129b482e0fe5ea376b6f08c7e893f0/treevalue/tree/func/func.py&quot;, line 56, in _new_func
     return _treelized(*args, **kwargs)
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 176, in treevalue.tree.func.cfunc._w_func_treelize_run
   File &quot;treevalue/tree/func/cfunc.pyx&quot;, line 151, in treevalue.tree.func.cfunc._c_func_treelize_run
@@ -974,10 +964,10 @@ TypeError: Inherit is off, tree value expected but &#39;int&#39; found in args 0
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>plus(t1, t2):
-&lt;TreeValue 0x7f85248f3df0&gt;
+&lt;TreeValue 0x7fd7c4cf0df0&gt;
 ├── a --&gt; [23]
 ├── b --&gt; [2, 3, 29, 31]
-└── x --&gt; &lt;TreeValue 0x7f85248f3b50&gt;
+└── x --&gt; &lt;TreeValue 0x7fd7c4cf0b50&gt;
     ├── c --&gt; [5, 37]
     ├── d --&gt; [7, 11, 13, 41, 43]
     └── e --&gt; [17, 19]
@@ -1040,10 +1030,10 @@ Result of filter: [3, 7]
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>mapping(t, lambda x: x ** x + 2):
-&lt;FastTreeValue 0x7ff992cbee50&gt;
+&lt;FastTreeValue 0x7fb3b1a3ae50&gt;
 ├── a --&gt; 3
 ├── b --&gt; 6
-└── x --&gt; &lt;FastTreeValue 0x7ff992cbec40&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fb3b1a3ac40&gt;
     ├── c --&gt; 29
     └── d --&gt; 258
 </pre></div></td></tr></table></div>
@@ -1088,17 +1078,17 @@ Result of filter: [3, 7]
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span>filter_(t, lambda x: x % 2 == 1):
-&lt;FastTreeValue 0x7f9005a7ce50&gt;
+&lt;FastTreeValue 0x7f933bce2e50&gt;
 ├── a --&gt; 1
-└── x --&gt; &lt;FastTreeValue 0x7f9005a7cb80&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f933bce2b80&gt;
     └── c --&gt; 3
 
 filter_(t, lambda x: x % 2 == 1, remove_empty=False):
-&lt;FastTreeValue 0x7f9005a7cf70&gt;
+&lt;FastTreeValue 0x7f933bce2f70&gt;
 ├── a --&gt; 1
-├── x --&gt; &lt;FastTreeValue 0x7f9005a7ce50&gt;
+├── x --&gt; &lt;FastTreeValue 0x7f933bce2e50&gt;
 │   └── c --&gt; 3
-└── y --&gt; &lt;FastTreeValue 0x7f9005a7cb80&gt;
+└── y --&gt; &lt;FastTreeValue 0x7f933bce2b80&gt;
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note">
@@ -1138,17 +1128,17 @@ filter_(t, lambda x: x % 2 == 1, remove_empty=False):
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span>mask(t, mapping(t, lambda x: x % 2 == 1)):
-&lt;FastTreeValue 0x7f36d0e0efa0&gt;
+&lt;FastTreeValue 0x7f4e20f5efa0&gt;
 ├── a --&gt; 1
-└── x --&gt; &lt;FastTreeValue 0x7f36d0e0ef70&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f4e20f5ef70&gt;
     └── c --&gt; 3
 
 mask(t, mapping(t, lambda x: x % 2 == 1), remove_empty=False):
-&lt;FastTreeValue 0x7f36d0e0edf0&gt;
+&lt;FastTreeValue 0x7f4e20f5edf0&gt;
 ├── a --&gt; 1
-├── x --&gt; &lt;FastTreeValue 0x7f36d0e0eb80&gt;
+├── x --&gt; &lt;FastTreeValue 0x7f4e20f5eb80&gt;
 │   └── c --&gt; 3
-└── y --&gt; &lt;FastTreeValue 0x7f36d0e0ebe0&gt;
+└── y --&gt; &lt;FastTreeValue 0x7f4e20f5ebe0&gt;
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information about <code class="docutils literal notranslate"><span class="pre">mask</span></code> function, take a look at <a class="reference internal" href="#tutorials-advancedusage-functional-mask"><span class="std std-ref">Mask</span></a>.</p>
@@ -1196,19 +1186,19 @@ mask(t, mapping(t, lambda x: x % 2 == 1), remove_empty=False):
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span>mask(t, m):
-&lt;FastTreeValue 0x7f53dd8fef70&gt;
+&lt;FastTreeValue 0x7f7e383adf70&gt;
 ├── a --&gt; 1
-└── x --&gt; &lt;FastTreeValue 0x7f53dd8feeb0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f7e383adeb0&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 mask(t, m, remove_empty=False):
-&lt;FastTreeValue 0x7f53dd8febe0&gt;
+&lt;FastTreeValue 0x7f7e383adbe0&gt;
 ├── a --&gt; 1
-├── x --&gt; &lt;FastTreeValue 0x7f53dd8fef70&gt;
+├── x --&gt; &lt;FastTreeValue 0x7f7e383adf70&gt;
 │   ├── c --&gt; 3
 │   └── d --&gt; 4
-└── y --&gt; &lt;FastTreeValue 0x7f53dd8feeb0&gt;
+└── y --&gt; &lt;FastTreeValue 0x7f7e383adeb0&gt;
 </pre></div></td></tr></table></div>
 </div>
 <p>For further definition or source code implement of function <code class="docutils literal notranslate"><span class="pre">mask</span></code>, take a look at <a class="reference internal" href="../../api_doc/tree/tree.html#apidoc-tree-tree-mask"><span class="std std-ref">mask</span></a>.</p>
@@ -1284,13 +1274,13 @@ Multiply of t: 1152
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Weight tree: &lt;FastTreeValue 0x7f8c3bdb0e50&gt;
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span>Weight tree: &lt;FastTreeValue 0x7ff26fd23e50&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-├── x --&gt; &lt;FastTreeValue 0x7f8c3bdb0b80&gt;
+├── x --&gt; &lt;FastTreeValue 0x7ff26fd23b80&gt;
 │   ├── c --&gt; 6
 │   └── d --&gt; 8
-└── y --&gt; &lt;FastTreeValue 0x7f8c3bdb0b20&gt;
+└── y --&gt; &lt;FastTreeValue 0x7ff26fd23b20&gt;
     ├── e --&gt; 12
     └── f --&gt; 16
 
@@ -1341,10 +1331,10 @@ Huffman weight sum of t: 45
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>Size tree: &lt;FastTreeValue 0x7f24bdb10c40&gt;
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>Size tree: &lt;FastTreeValue 0x7f5b7eb56c40&gt;
 ├── a --&gt; 72
 ├── b --&gt; 32
-└── x --&gt; &lt;FastTreeValue 0x7f24b7638b20&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f5b78678b20&gt;
     ├── c --&gt; 32
     └── d --&gt; 48
 
@@ -1420,28 +1410,28 @@ Total bytes of arrays in t: 184
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span>union(t1, t2):
-&lt;FastTreeValue 0x7f815fc3b130&gt;
+&lt;FastTreeValue 0x7ff6246f2130&gt;
 ├── a --&gt; (1, 11)
 ├── b --&gt; (2, 22)
-└── x --&gt; &lt;FastTreeValue 0x7f815fc3b0d0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7ff6246f20d0&gt;
     ├── c --&gt; (3, 30)
     ├── d --&gt; (4, 48)
     └── e --&gt; (5, 54)
 
 union(t1, t2, t3):
-&lt;FastTreeValue 0x7f815fc3b0d0&gt;
+&lt;FastTreeValue 0x7ff6246f20d0&gt;
 ├── a --&gt; (1, 11, -13)
 ├── b --&gt; (2, 22, -7)
-└── x --&gt; &lt;FastTreeValue 0x7f815fc3b1c0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7ff6246f21c0&gt;
     ├── c --&gt; (3, 30, -5)
     ├── d --&gt; (4, 48, -3)
     └── e --&gt; (5, 54, -2)
 
 union(t1, t2, t3, t4):
-&lt;FastTreeValue 0x7f815fc3b0d0&gt;
+&lt;FastTreeValue 0x7ff6246f20d0&gt;
 ├── a --&gt; (1, 11, -13, -13)
 ├── b --&gt; (2, 22, -7, -7)
-└── x --&gt; &lt;FastTreeValue 0x7f815fc29f70&gt;
+└── x --&gt; &lt;FastTreeValue 0x7ff6246e0f70&gt;
     ├── c --&gt; (3, 30, -5, 8)
     ├── d --&gt; (4, 48, -3, 8)
     └── e --&gt; (5, 54, -2, 8)
@@ -1489,10 +1479,10 @@ union(t1, t2, t3, t4):
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>subside(st):
-&lt;TreeValue 0x7f35a90bf0d0&gt;
+&lt;TreeValue 0x7f5e4537d0d0&gt;
 ├── a --&gt; {&#39;first&#39;: (1, -14), &#39;second&#39;: [6, {&#39;x&#39;: 0, &#39;y&#39;: 3}]}
 ├── b --&gt; {&#39;first&#39;: (2, 9), &#39;second&#39;: [0, {&#39;x&#39;: -17, &#39;y&#39;: 9}]}
-└── x --&gt; &lt;TreeValue 0x7f35a90bff70&gt;
+└── x --&gt; &lt;TreeValue 0x7f5e4537df70&gt;
     ├── c --&gt; {&#39;first&#39;: (3, 3), &#39;second&#39;: [-5, {&#39;x&#39;: -8, &#39;y&#39;: 11}]}
     └── d --&gt; {&#39;first&#39;: (4, 8), &#39;second&#39;: [17, {&#39;x&#39;: 15, &#39;y&#39;: -17}]}
 </pre></div></td></tr></table></div>
@@ -1639,74 +1629,74 @@ union(t1, t2, t3, t4):
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
-<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: (&lt;TreeValue 0x7f9ca6a84df0&gt;
-├── a --&gt; 1
-├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7f9ca6a84f70&gt;
-    ├── c --&gt; 3
-    └── d --&gt; 4
-, &lt;TreeValue 0x7f9ca6a961c0&gt;
-├── a --&gt; -14
-├── b --&gt; 9
-└── x --&gt; &lt;TreeValue 0x7f9ca6a96820&gt;
-    ├── c --&gt; 3
-    └── d --&gt; 8
-), &#39;second&#39;: (&lt;TreeValue 0x7f9ca632d430&gt;
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;second&#39;: (&lt;TreeValue 0x7fc73366adf0&gt;
 ├── a --&gt; 6
 ├── b --&gt; 0
-└── x --&gt; &lt;TreeValue 0x7f9ca6a96130&gt;
+└── x --&gt; &lt;TreeValue 0x7fc73366af70&gt;
     ├── c --&gt; -5
     └── d --&gt; 17
-, {&#39;x&#39;: &lt;TreeValue 0x7f9ca632dac0&gt;
-├── a --&gt; 0
-├── b --&gt; -17
-└── x --&gt; &lt;TreeValue 0x7f9ca632d4f0&gt;
-    ├── c --&gt; -8
-    └── d --&gt; 15
-, &#39;y&#39;: &lt;TreeValue 0x7f9ca632d5e0&gt;
+, {&#39;y&#39;: &lt;TreeValue 0x7fc73367c1c0&gt;
 ├── a --&gt; 3
 ├── b --&gt; 9
-└── x --&gt; &lt;TreeValue 0x7f9ca632db80&gt;
+└── x --&gt; &lt;TreeValue 0x7fc73367c820&gt;
     ├── c --&gt; 11
     └── d --&gt; -17
-})}
-st2[&#39;first&#39;][0]:
-&lt;TreeValue 0x7f9ca6a84df0&gt;
+, &#39;x&#39;: &lt;TreeValue 0x7fc732f13ac0&gt;
+├── a --&gt; 0
+├── b --&gt; -17
+└── x --&gt; &lt;TreeValue 0x7fc73367c130&gt;
+    ├── c --&gt; -8
+    └── d --&gt; 15
+}), &#39;first&#39;: (&lt;TreeValue 0x7fc732f134f0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7f9ca6a84f70&gt;
+└── x --&gt; &lt;TreeValue 0x7fc732f13430&gt;
+    ├── c --&gt; 3
+    └── d --&gt; 4
+, &lt;TreeValue 0x7fc732f13c40&gt;
+├── a --&gt; -14
+├── b --&gt; 9
+└── x --&gt; &lt;TreeValue 0x7fc732f13b80&gt;
+    ├── c --&gt; 3
+    └── d --&gt; 8
+)}
+st2[&#39;first&#39;][0]:
+&lt;TreeValue 0x7fc732f134f0&gt;
+├── a --&gt; 1
+├── b --&gt; 2
+└── x --&gt; &lt;TreeValue 0x7fc732f13430&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 st2[&#39;first&#39;][1]:
-&lt;TreeValue 0x7f9ca6a961c0&gt;
+&lt;TreeValue 0x7fc732f13c40&gt;
 ├── a --&gt; -14
 ├── b --&gt; 9
-└── x --&gt; &lt;TreeValue 0x7f9ca6a96820&gt;
+└── x --&gt; &lt;TreeValue 0x7fc732f13b80&gt;
     ├── c --&gt; 3
     └── d --&gt; 8
 
 st2[&#39;second&#39;][0]:
-&lt;TreeValue 0x7f9ca632d430&gt;
+&lt;TreeValue 0x7fc73366adf0&gt;
 ├── a --&gt; 6
 ├── b --&gt; 0
-└── x --&gt; &lt;TreeValue 0x7f9ca6a96130&gt;
+└── x --&gt; &lt;TreeValue 0x7fc73366af70&gt;
     ├── c --&gt; -5
     └── d --&gt; 17
 
 st2[&#39;second&#39;][1][&#39;x&#39;]:
-&lt;TreeValue 0x7f9ca632dac0&gt;
+&lt;TreeValue 0x7fc732f13ac0&gt;
 ├── a --&gt; 0
 ├── b --&gt; -17
-└── x --&gt; &lt;TreeValue 0x7f9ca632d4f0&gt;
+└── x --&gt; &lt;TreeValue 0x7fc73367c130&gt;
     ├── c --&gt; -8
     └── d --&gt; 15
 
 st2[&#39;second&#39;][1][&#39;y&#39;]:
-&lt;TreeValue 0x7f9ca632d5e0&gt;
+&lt;TreeValue 0x7fc73367c1c0&gt;
 ├── a --&gt; 3
 ├── b --&gt; 9
-└── x --&gt; &lt;TreeValue 0x7f9ca632db80&gt;
+└── x --&gt; &lt;TreeValue 0x7fc73367c820&gt;
     ├── c --&gt; 11
     └── d --&gt; -17
 </pre></div></td></tr></table></div>
@@ -1843,60 +1833,60 @@ st2[&#39;second&#39;][1][&#39;y&#39;]:
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
-<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: [&lt;TreeValue 0x7fbce7ebd1f0&gt;
+<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span>st2: {&#39;first&#39;: [&lt;TreeValue 0x7fa8f8ac61f0&gt;
 ├── a --&gt; (1, -14)
 ├── b --&gt; (2, 9)
-└── x --&gt; &lt;TreeValue 0x7fbce8626190&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f922f190&gt;
     ├── c --&gt; (3, 3)
     └── d --&gt; (4, 8)
-, &lt;TreeValue 0x7fbce7ebdee0&gt;
+, &lt;TreeValue 0x7fa8f8ac6ee0&gt;
 ├── a --&gt; (3, -31)
 ├── b --&gt; (9, 82)
-└── x --&gt; &lt;TreeValue 0x7fbce7ebd790&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6790&gt;
     ├── c --&gt; (15, 47)
     └── d --&gt; (41, 32)
-], &#39;second&#39;: (&lt;TreeValue 0x7fbce7ebd6d0&gt;
+], &#39;second&#39;: (&lt;TreeValue 0x7fa8f8ac66d0&gt;
 ├── a --&gt; 6
 ├── b --&gt; 0
-└── x --&gt; &lt;TreeValue 0x7fbce7ebd610&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6610&gt;
     ├── c --&gt; -5
     └── d --&gt; 17
-, &lt;TreeValue 0x7fbce7ebdd60&gt;
+, &lt;TreeValue 0x7fa8f8ac6d60&gt;
 ├── a --&gt; {&#39;x&#39;: 0, &#39;y&#39;: 3}
 ├── b --&gt; {&#39;x&#39;: -17, &#39;y&#39;: 9}
-└── x --&gt; &lt;TreeValue 0x7fbce7ebdfd0&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6fd0&gt;
     ├── c --&gt; {&#39;x&#39;: -8, &#39;y&#39;: 11}
     └── d --&gt; {&#39;x&#39;: 15, &#39;y&#39;: -17}
 )}
 st2[&#39;first&#39;][0]:
-&lt;TreeValue 0x7fbce7ebd1f0&gt;
+&lt;TreeValue 0x7fa8f8ac61f0&gt;
 ├── a --&gt; (1, -14)
 ├── b --&gt; (2, 9)
-└── x --&gt; &lt;TreeValue 0x7fbce8626190&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f922f190&gt;
     ├── c --&gt; (3, 3)
     └── d --&gt; (4, 8)
 
 st2[&#39;first&#39;][1]:
-&lt;TreeValue 0x7fbce7ebdee0&gt;
+&lt;TreeValue 0x7fa8f8ac6ee0&gt;
 ├── a --&gt; (3, -31)
 ├── b --&gt; (9, 82)
-└── x --&gt; &lt;TreeValue 0x7fbce7ebd790&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6790&gt;
     ├── c --&gt; (15, 47)
     └── d --&gt; (41, 32)
 
 st2[&#39;second&#39;][0]:
-&lt;TreeValue 0x7fbce7ebd6d0&gt;
+&lt;TreeValue 0x7fa8f8ac66d0&gt;
 ├── a --&gt; 6
 ├── b --&gt; 0
-└── x --&gt; &lt;TreeValue 0x7fbce7ebd610&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6610&gt;
     ├── c --&gt; -5
     └── d --&gt; 17
 
 st2[&#39;second&#39;][1]:
-&lt;TreeValue 0x7fbce7ebdd60&gt;
+&lt;TreeValue 0x7fa8f8ac6d60&gt;
 ├── a --&gt; {&#39;x&#39;: 0, &#39;y&#39;: 3}
 ├── b --&gt; {&#39;x&#39;: -17, &#39;y&#39;: 9}
-└── x --&gt; &lt;TreeValue 0x7fbce7ebdfd0&gt;
+└── x --&gt; &lt;TreeValue 0x7fa8f8ac6fd0&gt;
     ├── c --&gt; {&#39;x&#39;: -8, &#39;y&#39;: 11}
     └── d --&gt; {&#39;x&#39;: 15, &#39;y&#39;: -17}
 </pre></div></td></tr></table></div>
@@ -1961,10 +1951,10 @@ st2[&#39;second&#39;][1]:
 <span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span>Tree t:
-&lt;TreeValue 0x7f120bf27c40&gt;
+&lt;TreeValue 0x7fc11b522c40&gt;
 ├── a --&gt; 1
 ├── b --&gt; [2, 3]
-└── x --&gt; &lt;TreeValue 0x7f120c980fd0&gt;
+└── x --&gt; &lt;TreeValue 0x7fc11bf7bfd0&gt;
     ├── c --&gt; {&#39;x&#39;: 1, &#39;y&#39;: 2}
     └── d --&gt; &#39;this is a string&#39;
 
@@ -2075,39 +2065,39 @@ Json data of t:
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span>Tree t:
-&lt;TreeValue 0x7fdce40aadc0&gt;
+&lt;TreeValue 0x7f237c458dc0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7fdce4acf130&gt;
+└── x --&gt; &lt;TreeValue 0x7f237ce7d130&gt;
     ├── c --&gt; 3
     ├── d --&gt; 4
     └── y --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of t.x.y: 7fdce4ada140
+Id of t.x.y: 7f237ce88140
 
 
 clone(t):
-&lt;TreeValue 0x7fdce40aaca0&gt;
+&lt;TreeValue 0x7f237c458ca0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7fdce40aab50&gt;
+└── x --&gt; &lt;TreeValue 0x7f237c458b50&gt;
     ├── c --&gt; 3
     ├── d --&gt; 4
     └── y --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of clone(t).x.y: 7fdce4ada140
+Id of clone(t).x.y: 7f237ce88140
 
 
 clone(t, copy_value=True):
-&lt;TreeValue 0x7fdce40aab50&gt;
+&lt;TreeValue 0x7f237c458b50&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7fdce40aaca0&gt;
+└── x --&gt; &lt;TreeValue 0x7f237c458ca0&gt;
     ├── c --&gt; 3
     ├── d --&gt; 4
     └── y --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
-Id of clone(t, copy_value=True).x.y: 7fdce393bc00
+Id of clone(t, copy_value=True).x.y: 7f237bcee380
 </pre></div></td></tr></table></div>
 </div>
 <div class="admonition note">
@@ -2204,35 +2194,35 @@ Id of clone(t, copy_value=True).x.y: 7fdce393bc00
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span>t1:
-&lt;FastTreeValue 0x7f6cba652ca0&gt;
+&lt;FastTreeValue 0x7fad40727ca0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;FastTreeValue 0x7f6cbb05fe50&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fad41134e50&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 t1 ** 2:
-&lt;FastTreeValue 0x7f6cba652b80&gt;
+&lt;FastTreeValue 0x7fad40727b80&gt;
 ├── a --&gt; 1
 ├── b --&gt; 4
-└── x --&gt; &lt;FastTreeValue 0x7f6cba652c40&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fad40727c40&gt;
     ├── c --&gt; 9
     └── d --&gt; 16
 
 
 t2:
-&lt;MyTreeValue 0x7f6cba652ca0&gt;
+&lt;MyTreeValue 0x7fad40727ca0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;MyTreeValue 0x7f6cbb05fe50&gt;
+└── x --&gt; &lt;MyTreeValue 0x7fad41134e50&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 t2.pw():
-&lt;MyTreeValue 0x7f6cba652b50&gt;
+&lt;MyTreeValue 0x7fad40727b50&gt;
 ├── a --&gt; 6
 ├── b --&gt; 12
-└── x --&gt; &lt;MyTreeValue 0x7f6cba652c40&gt;
+└── x --&gt; &lt;MyTreeValue 0x7fad40727c40&gt;
     ├── c --&gt; 20
     └── d --&gt; 30
 </pre></div></td></tr></table></div>
@@ -2388,11 +2378,11 @@ t2.pw():
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span>unflatten(flatted):
-&lt;TreeValue 0x7fc0a6cb6fd0&gt;
+&lt;TreeValue 0x7f3eac527fd0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
 ├── c --&gt; {&#39;x&#39;: 3, &#39;y&#39;: 4}
-└── d --&gt; &lt;TreeValue 0x7fc0a6c82130&gt;
+└── d --&gt; &lt;TreeValue 0x7f3eac4f3130&gt;
     ├── x --&gt; 3
     └── y --&gt; 4
 </pre></div></td></tr></table></div>
@@ -2427,18 +2417,18 @@ t2.pw():
 </div>
 <p>The output is</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;TreeValue 0x7f33bb1e0ee0&gt;
+&lt;TreeValue 0x7f943daa8ee0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7f33bb1c8e50&gt;
+└── x --&gt; &lt;TreeValue 0x7f943da90e50&gt;
     ├── c --&gt; 3
     └── d --&gt; [3, 4]
 
 tx:
-&lt;TreeValue 0x7f33ba7bbdc0&gt;
+&lt;TreeValue 0x7f943d083dc0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;TreeValue 0x7f33ba7bbc40&gt;
+└── x --&gt; &lt;TreeValue 0x7f943d083c40&gt;
     ├── c --&gt; 3
     └── d --&gt; [3, 4]
 </pre></div>
@@ -2469,18 +2459,18 @@ tx:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;TreeValue 0x7f31a55f6ee0&gt;
+&lt;TreeValue 0x7f78a9badee0&gt;
 ├── a --&gt; &#39;ab&#39;
 ├── b --&gt; &#39;Cd&#39;
-└── x --&gt; &lt;TreeValue 0x7f31a55dee50&gt;
+└── x --&gt; &lt;TreeValue 0x7f78a9b95e50&gt;
     ├── c --&gt; &#39;eF&#39;
     └── d --&gt; &#39;GH&#39;
 
 dt:
-&lt;TreeValue 0x7f31a4b289d0&gt;
+&lt;TreeValue 0x7f78a90df9d0&gt;
 ├── a --&gt; &#39;ab&#39;
 ├── b --&gt; &#39;Cd&#39;
-└── x --&gt; &lt;TreeValue 0x7f31a4b28880&gt;
+└── x --&gt; &lt;TreeValue 0x7f78a90df880&gt;
     ├── c --&gt; &#39;eF&#39;
     └── d --&gt; &#39;GH&#39;
 </pre></div>
@@ -2507,18 +2497,18 @@ dt:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t:
-&lt;FastTreeValue 0x7f1b250bdee0&gt;
+&lt;FastTreeValue 0x7f37b37b4ee0&gt;
 ├── a --&gt; &#39;ab&#39;
 ├── b --&gt; &#39;Cd&#39;
-└── x --&gt; &lt;FastTreeValue 0x7f1b250a5e50&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f37b379ce50&gt;
     ├── c --&gt; &#39;eF&#39;
     └── d --&gt; &#39;GH&#39;
 
 dt:
-&lt;FastTreeValue 0x7f1b246aa0d0&gt;
+&lt;FastTreeValue 0x7f37b2da10d0&gt;
 ├── a --&gt; &#39;ab&#39;
 ├── b --&gt; &#39;Cd&#39;
-└── x --&gt; &lt;FastTreeValue 0x7f1b246aa130&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f37b2da1130&gt;
     ├── c --&gt; &#39;eF&#39;
     └── d --&gt; &#39;GH&#39;
 </pre></div>
@@ -2555,36 +2545,36 @@ dt:
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>st:
-&lt;FastTreeValue 0x7f4522494ee0&gt;
-├── a --&gt; &lt;built-in method upper of str object at 0x7f4522c27ab0&gt;
-├── b --&gt; &lt;built-in method upper of str object at 0x7f4522e084f0&gt;
-└── x --&gt; &lt;FastTreeValue 0x7f45224b1b20&gt;
-    ├── c --&gt; &lt;built-in method upper of str object at 0x7f4522e082f0&gt;
-    └── d --&gt; &lt;built-in method upper of str object at 0x7f4522484670&gt;
+&lt;FastTreeValue 0x7fbc165ddee0&gt;
+├── a --&gt; &lt;built-in method upper of str object at 0x7fbc16d71930&gt;
+├── b --&gt; &lt;built-in method upper of str object at 0x7fbc165cd330&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fbc165fab20&gt;
+    ├── c --&gt; &lt;built-in method upper of str object at 0x7fbc165cd9b0&gt;
+    └── d --&gt; &lt;built-in method upper of str object at 0x7fbc165cd4f0&gt;
 
 st():
-&lt;FastTreeValue 0x7f45224ae640&gt;
+&lt;FastTreeValue 0x7fbc165f7640&gt;
 ├── a --&gt; &#39;AB&#39;
 ├── b --&gt; &#39;CD&#39;
-└── x --&gt; &lt;FastTreeValue 0x7f4522494eb0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fbc165ddeb0&gt;
     ├── c --&gt; &#39;EF&#39;
     └── d --&gt; &#39;GH&#39;
 
 
 Length of binary: 213
 dst:
-&lt;FastTreeValue 0x7f45224aea30&gt;
-├── a --&gt; &lt;built-in method upper of str object at 0x7f4521d423f0&gt;
-├── b --&gt; &lt;built-in method upper of str object at 0x7f4521d421f0&gt;
-└── x --&gt; &lt;FastTreeValue 0x7f45224ae6a0&gt;
-    ├── c --&gt; &lt;built-in method upper of str object at 0x7f4521d427b0&gt;
-    └── d --&gt; &lt;built-in method upper of str object at 0x7f4521c695f0&gt;
+&lt;FastTreeValue 0x7fbc165f7a30&gt;
+├── a --&gt; &lt;built-in method upper of str object at 0x7fbc15dbfcf0&gt;
+├── b --&gt; &lt;built-in method upper of str object at 0x7fbc15e8b1f0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fbc165f76a0&gt;
+    ├── c --&gt; &lt;built-in method upper of str object at 0x7fbc15db25f0&gt;
+    └── d --&gt; &lt;built-in method upper of str object at 0x7fbc15e8b5f0&gt;
 
 dst():
-&lt;FastTreeValue 0x7f45224ae730&gt;
+&lt;FastTreeValue 0x7fbc165f7730&gt;
 ├── a --&gt; &#39;AB&#39;
 ├── b --&gt; &#39;CD&#39;
-└── x --&gt; &lt;FastTreeValue 0x7f45224aeac0&gt;
+└── x --&gt; &lt;FastTreeValue 0x7fbc165f7ac0&gt;
     ├── c --&gt; &#39;EF&#39;
     └── d --&gt; &#39;GH&#39;
 </pre></div>
@@ -2705,27 +2695,27 @@ dst():
 <span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;FastTreeValue 0x7ff15ce9bb80&gt;
+&lt;FastTreeValue 0x7f47916edb80&gt;
 ├── a --&gt; 6
 ├── b --&gt; 8
-└── x --&gt; &lt;FastTreeValue 0x7ff15ce9bb50&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f47916edb50&gt;
     ├── c --&gt; 10
     └── d --&gt; 12
 
 t2 ** t1:
-&lt;FastTreeValue 0x7ff15ce9bb80&gt;
+&lt;FastTreeValue 0x7f47916edb80&gt;
 ├── a --&gt; 5
 ├── b --&gt; 36
-└── x --&gt; &lt;FastTreeValue 0x7ff15ce9bb50&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f47916edb50&gt;
     ├── c --&gt; 343
     └── d --&gt; 4096
 
 
 t1.map(lambda x: (x + 1) * (x + 2)):
-&lt;FastTreeValue 0x7ff15ce9bb50&gt;
+&lt;FastTreeValue 0x7f47916edb50&gt;
 ├── a --&gt; 6
 ├── b --&gt; 12
-└── x --&gt; &lt;FastTreeValue 0x7ff15ce9bb80&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f47916edb80&gt;
     ├── c --&gt; 20
     └── d --&gt; 30
 
@@ -2733,17 +2723,17 @@ t1.reduce(lambda **kwargs: sum(kwargs.values())): 10
 
 
 t1.map(lambda x: (x + 1) * (x + 2)).filter(lambda x: x % 4 == 0):
-&lt;FastTreeValue 0x7ff15ce9bf70&gt;
+&lt;FastTreeValue 0x7f47916edf70&gt;
 ├── b --&gt; 12
-└── x --&gt; &lt;FastTreeValue 0x7ff15ce9bb20&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f47916edb20&gt;
     └── c --&gt; 20
 
 
 Union result:
-&lt;FastTreeValue 0x7ff15ce9bf70&gt;
+&lt;FastTreeValue 0x7f47916edf70&gt;
 ├── a --&gt; &#39;first: 6, second: 81, which sum is 87&#39;
 ├── b --&gt; &#39;first: 12, second: 1024, which sum is 1036&#39;
-└── x --&gt; &lt;FastTreeValue 0x7ff15ce9bb20&gt;
+└── x --&gt; &lt;FastTreeValue 0x7f47916edb20&gt;
     ├── c --&gt; &#39;first: 20, second: 15625, which sum is 15645&#39;
     └── d --&gt; &#39;first: 30, second: 279936, which sum is 279966&#39;
 </pre></div></td></tr></table></div>
@@ -2841,31 +2831,31 @@ Union result:
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span>Append arguments: 2 9
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span>Append arguments: 1 -14
 Append arguments: 3 3
 Append arguments: 4 8
-Append arguments: 1 -14
-Append arguments: 11 0
+Append arguments: 2 9
+Append arguments: -13 6
 Append arguments: 6 -5
 Append arguments: 12 17
-Append arguments: -13 6
+Append arguments: 11 0
 t1.append(t2).append(t3):
-&lt;MyTreeValue 0x7fad11339be0&gt;
+&lt;MyTreeValue 0x7fc7121c8be0&gt;
 ├── a --&gt; -7
 ├── b --&gt; 11
-└── x --&gt; &lt;MyTreeValue 0x7fad11339f10&gt;
+└── x --&gt; &lt;MyTreeValue 0x7fc7121c8f10&gt;
     ├── c --&gt; 1
     └── d --&gt; 29
 
-Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 2 9 0
+Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 1 -14 6
 Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 3 3 -5
 Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 4 8 17
-Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 1 -14 6
+Sum arguments: &lt;class &#39;__main__.MyTreeValue&#39;&gt; 2 9 0
 MyTreeValue.sum(t1, t2, t3):
-&lt;MyTreeValue 0x7fad11339f10&gt;
+&lt;MyTreeValue 0x7fc7121c8f10&gt;
 ├── a --&gt; -7
 ├── b --&gt; 11
-└── x --&gt; &lt;MyTreeValue 0x7fad11358040&gt;
+└── x --&gt; &lt;MyTreeValue 0x7fc7121e7040&gt;
     ├── c --&gt; 1
     └── d --&gt; 29
 </pre></div></td></tr></table></div>
@@ -2900,18 +2890,18 @@ MyTreeValue.sum(t1, t2, t3):
 </div>
 <p>The result should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t1:
-&lt;MyTreeValue 0x7f886b1adca0&gt;
+&lt;MyTreeValue 0x7f3a6a28aca0&gt;
 ├── a --&gt; 1
 ├── b --&gt; 2
-└── x --&gt; &lt;MyTreeValue 0x7f886bbbae50&gt;
+└── x --&gt; &lt;MyTreeValue 0x7f3a6ac97e50&gt;
     ├── c --&gt; 3
     └── d --&gt; 4
 
 t1.append(t2).append(t3):
-&lt;MyTreeValue 0x7f886b1adca0&gt;
+&lt;MyTreeValue 0x7f3a6a28aca0&gt;
 ├── a --&gt; -7
 ├── b --&gt; 11
-└── x --&gt; &lt;MyTreeValue 0x7f886bbbae50&gt;
+└── x --&gt; &lt;MyTreeValue 0x7f3a6ac97e50&gt;
     ├── c --&gt; 1
     └── d --&gt; 29
 </pre></div>
@@ -2989,10 +2979,10 @@ t1.append(t2).append(t3):
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;MyTreeValue 0x7fccb2df2310&gt;
+&lt;MyTreeValue 0x7f9cad85f310&gt;
 ├── a --&gt; 12
 ├── b --&gt; 26
-└── x --&gt; &lt;MyTreeValue 0x7fccb2e10d00&gt;
+└── x --&gt; &lt;MyTreeValue 0x7f9cad87dd00&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
 </pre></div></td></tr></table></div>
@@ -3083,18 +3073,18 @@ t1.append(t2).append(t3):
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span>at1 + at2:
-&lt;AddZeroTreeValue 0x7f8d6afbfca0&gt;
+&lt;AddZeroTreeValue 0x7f7479a53ca0&gt;
 ├── a --&gt; 12
 ├── b --&gt; 2
-└── x --&gt; &lt;AddZeroTreeValue 0x7f8d6afbfc10&gt;
+└── x --&gt; &lt;AddZeroTreeValue 0x7f7479a53c10&gt;
     ├── c --&gt; 33
     └── d --&gt; 47
 
 mt1 * mt2:
-&lt;MulOneTreeValue 0x7f8d6afbfca0&gt;
+&lt;MulOneTreeValue 0x7f7479a53ca0&gt;
 ├── a --&gt; 11
 ├── b --&gt; 2
-└── x --&gt; &lt;MulOneTreeValue 0x7f8d6afbfc10&gt;
+└── x --&gt; &lt;MulOneTreeValue 0x7f7479a53c10&gt;
     ├── c --&gt; 90
     └── d --&gt; 47
 </pre></div></td></tr></table></div>
@@ -3221,10 +3211,10 @@ mt1 * mt2:
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span>t1 + t2:
-&lt;DemoTreeValue 0x7fb3b4596c40&gt;
+&lt;DemoTreeValue 0x7f3f700edc40&gt;
 ├── a --&gt; 12
 ├── b --&gt; 26
-└── x --&gt; &lt;DemoTreeValue 0x7fb3b4596c70&gt;
+└── x --&gt; &lt;DemoTreeValue 0x7f3f700edc70&gt;
     ├── c --&gt; 33
     └── d --&gt; 51
 
@@ -3233,10 +3223,10 @@ unsupported operand type(s) for -: &#39;DemoTreeValue&#39; and &#39;DemoTreeValu
 t1 / t2:
 True div is not supported
 +t1:
-&lt;DemoTreeValue 0x7fb3b4596d30&gt;
+&lt;DemoTreeValue 0x7f3f700edd30&gt;
 ├── a --&gt; 2
 ├── b --&gt; 4
-└── x --&gt; &lt;DemoTreeValue 0x7fb3b4596c40&gt;
+└── x --&gt; &lt;DemoTreeValue 0x7f3f700edc40&gt;
     ├── c --&gt; 6
     └── d --&gt; 8
 </pre></div></td></tr></table></div>
@@ -3329,27 +3319,27 @@ True div is not supported
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>// This is a demo of 2 trees.
 digraph this_is_a_demo_of_2_trees {
 	graph [bgcolor=&quot;#ffffff00&quot; label=&quot;This is a demo of 2 trees.&quot;]
-	node_7f2118a8ac40 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	node_7f2118a8ae50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
-	value__node_7f2118a8ac40__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f2118a8ac40 -&gt; value__node_7f2118a8ac40__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f2118a8ac40__b [label=&quot;array([[5, 6],
+	node_7faf2ad48c40 [label=t color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	node_7faf2ad48e50 [label=t2 color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=3 shape=diamond style=filled]
+	value__node_7faf2ad48c40__a [label=1 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7faf2ad48c40 -&gt; value__node_7faf2ad48c40__a [label=a arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7faf2ad48c40__b [label=&quot;array([[5, 6],
        [7, 8]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f2118a8ac40 -&gt; value__node_7f2118a8ac40__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f21194e5fd0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f2118a8ac40 -&gt; node_7f21194e5fd0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f2118a8ae50 -&gt; node_7f21194e5fd0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f2118a8ab80 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
-	node_7f2118a8ae50 -&gt; node_7f2118a8ab80 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f21194e5fd0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f21194e5fd0 -&gt; value__node_7f21194e5fd0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f21194e5fd0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f21194e5fd0 -&gt; value__node_7f21194e5fd0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	value__node_7f21194e5fd0__e [label=&quot;array([[1, 2],
+	node_7faf2ad48c40 -&gt; value__node_7faf2ad48c40__b [label=b arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2b7a3fd0 [label=&quot;t.x&quot; color=&quot;#3eb24899&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7faf2ad48c40 -&gt; node_7faf2b7a3fd0 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2ad48e50 -&gt; node_7faf2b7a3fd0 [label=ppp arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2ad48b80 [label=&quot;t2.x&quot; color=&quot;#5b3eb299&quot; fillcolor=&quot;#9673ff99&quot; fontcolor=&quot;#0d0033ff&quot; fontname=&quot;Times-Roman bold&quot; penwidth=1.5 shape=ellipse style=filled]
+	node_7faf2ad48e50 -&gt; node_7faf2ad48b80 [label=x arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7faf2b7a3fd0__c [label=3 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7faf2b7a3fd0 -&gt; value__node_7faf2b7a3fd0__c [label=c arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7faf2b7a3fd0__d [label=4 color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
+	node_7faf2b7a3fd0 -&gt; value__node_7faf2b7a3fd0__d [label=d arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	value__node_7faf2b7a3fd0__e [label=&quot;array([[1, 2],
        [3, 4]])&quot; color=&quot;#3eb24800&quot; fillcolor=&quot;#73ff7e99&quot; fontcolor=&quot;#003304ff&quot; fontname=&quot;Times-Roman&quot; penwidth=1.5 shape=box style=filled]
-	node_7f21194e5fd0 -&gt; value__node_7f21194e5fd0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f2118a8ab80 -&gt; node_7f2118a8ac40 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
-	node_7f2118a8ab80 -&gt; node_7f21194e5fd0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2b7a3fd0 -&gt; value__node_7faf2b7a3fd0__e [label=e arrowhead=dot arrowsize=0.5 color=&quot;#1f9929cc&quot; fontcolor=&quot;#00730aff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2ad48b80 -&gt; node_7faf2ad48c40 [label=t arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
+	node_7faf2ad48b80 -&gt; node_7faf2b7a3fd0 [label=y arrowhead=vee arrowsize=1.0 color=&quot;#3d1f99cc&quot; fontcolor=&quot;#1d0073ff&quot; fontname=&quot;Times-Roman bold&quot;]
 }
 </pre></div></td></tr></table></div>
 </div>
@@ -3433,7 +3423,6 @@ digraph this_is_a_demo_of_2_trees {
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../dev/torch/tutorials/advanced_usage/index.html">dev/torch</a></dd>
                         <dd><a href="../../../dev/int/tutorials/advanced_usage/index.html">dev/int</a></dd>
                         <dd><a href="../../../dev/repr/tutorials/advanced_usage/index.html">dev/repr</a></dd>
                         <dd><a href="../../../dev/wrap/tutorials/advanced_usage/index.html">dev/wrap</a></dd>
