@@ -127,6 +127,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#register-integrate-container">register_integrate_container</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generic-flatten">generic_flatten</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generic-unflatten">generic_unflatten</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generic-mapping">generic_mapping</a></li>
 </ul>
 </li>
 </ul>
@@ -327,8 +328,8 @@
 </ul>
 </dd>
 </dl>
-<p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">register_integrate_container</span><span class="p">,</span> <span class="n">generic_flatten</span><span class="p">,</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">generic_unflatten</span>
+<dl>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">register_integrate_container</span><span class="p">,</span> <span class="n">generic_flatten</span><span class="p">,</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">generic_unflatten</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyDC</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -343,8 +344,9 @@
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">_mydc_unflatten</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">spec</span><span class="p">):</span>  <span class="c1"># spec will be MyDC</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">spec</span><span class="p">(</span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">register_integrate_container</span><span class="p">(</span><span class="n">MyDC</span><span class="p">,</span> <span class="n">_mydc_flatten</span><span class="p">,</span> <span class="n">_mydc_unflatten</span><span class="p">)</span>  <span class="c1"># register MyDC</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">,</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">generic_flatten</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">MyDC</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">MyDC</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">FastTreeValue</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;f&#39;</span><span class="p">}))})</span>
@@ -366,6 +368,8 @@
 <span class="go">└── &#39;y&#39; --&gt; &#39;f&#39;</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -375,7 +379,7 @@
 <dt id="treevalue.tree.integration.generic_flatten">
 <code class="sig-prename descclassname">treevalue.tree.integration.</code><code class="sig-name descname">generic_flatten</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.integration.generic_flatten" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Overview:</dt><dd><p>Flatten generic data, including native objects, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, namedtuples and dataclasses.</p>
+<dt>Overview:</dt><dd><p>Flatten generic data, including native objects, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, namedtuples and custom classes         (see <a class="reference internal" href="#treevalue.tree.integration.register_integrate_container" title="treevalue.tree.integration.register_integrate_container"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_integrate_container()</span></code></a>).</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -388,29 +392,20 @@
 </dl>
 <dl>
 <dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">easydict</span> <span class="kn">import</span> <span class="n">EasyDict</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">generic_flatten</span><span class="p">,</span> <span class="n">generic_unflatten</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyTreeValue</span><span class="p">(</span><span class="n">FastTreeValue</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dataclass</span>
-<span class="gp">... </span><span class="k">class</span> <span class="nc">DC</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
-<span class="gp">... </span>    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
-<span class="gp">... </span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;DC(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1">)&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nt</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;nt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">origin</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,),</span>
 <span class="gp">... </span>    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="n">EasyDict</span><span class="p">({</span>  <span class="c1"># dict&#39;s child class</span>
 <span class="gp">... </span>        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">DC</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="s1">&#39;1.2&#39;</span><span class="p">),</span>  <span class="c1"># dataclass</span>
+<span class="gp">... </span>        <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">34</span><span class="p">,</span> <span class="s1">&#39;1.2&#39;</span><span class="p">],</span>  <span class="c1"># dataclass</span>
 <span class="gp">... </span>    <span class="p">})),</span>
 <span class="gp">... </span>    <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="n">nt</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>  <span class="c1"># namedtuple</span>
 <span class="gp">... </span>    <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="n">MyTreeValue</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;dsfljk&#39;</span><span class="p">})</span>  <span class="c1"># treevalue</span>
@@ -420,8 +415,8 @@
 <span class="go">[1, [2, 3, &#39;f&#39;], [2, 5, &#39;ds&#39;, [None, [34, &#39;1.2&#39;]]], [&#39;f&#39;, 100], [1, &#39;dsfljk&#39;]]</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span> <span class="o">=</span> <span class="n">generic_unflatten</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span>  <span class="c1"># all the data, including types, are recovered</span>
-<span class="go">{&#39;a&#39;: 1, &#39;b&#39;: [2, 3, &#39;f&#39;], &#39;c&#39;: (2, 5, &#39;ds&#39;, {&#39;x&#39;: None, &#39;z&#39;: DC(34, 1.2)}), &#39;d&#39;: nt(a=&#39;f&#39;, b=100), &#39;e&#39;: &lt;MyTreeValue 0x7fba23ef9c50&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rv</span>
+<span class="go">{&#39;a&#39;: 1, &#39;b&#39;: (2, 3, &#39;f&#39;), &#39;c&#39;: (2, 5, &#39;ds&#39;, {&#39;x&#39;: None, &#39;z&#39;: [34, &#39;1.2&#39;]}), &#39;d&#39;: nt(a=&#39;f&#39;, b=100), &#39;e&#39;: &lt;MyTreeValue 0x7fb6026d7b10&gt;</span>
 <span class="go">├── &#39;x&#39; --&gt; 1</span>
 <span class="go">└── &#39;y&#39; --&gt; &#39;dsfljk&#39;</span>
 <span class="go">}</span>
@@ -453,6 +448,55 @@
 </dl>
 <dl class="simple">
 <dt>Examples::</dt><dd><p>See <a class="reference internal" href="#treevalue.tree.integration.generic_flatten" title="treevalue.tree.integration.generic_flatten"><code class="xref py py-func docutils literal notranslate"><span class="pre">generic_flatten()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="generic-mapping">
+<span id="apidoc-tree-integration-generic-mapping"></span><h2>generic_mapping<a class="headerlink" href="#generic-mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="treevalue.tree.integration.generic_mapping">
+<code class="sig-prename descclassname">treevalue.tree.integration.</code><code class="sig-name descname">generic_mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#treevalue.tree.integration.generic_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Overview:</dt><dd><p>Generic map all the values, including native objects, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code>, namedtuples and custom classes         (see <a class="reference internal" href="#treevalue.tree.integration.register_integrate_container" title="treevalue.tree.integration.register_integrate_container"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_integrate_container()</span></code></a>)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> – Original value, nested structure is supported.</p></li>
+<li><p><strong>func</strong> – Function to operate.</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Examples::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">easydict</span> <span class="kn">import</span> <span class="n">EasyDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">treevalue</span> <span class="kn">import</span> <span class="n">FastTreeValue</span><span class="p">,</span> <span class="n">generic_mapping</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyTreeValue</span><span class="p">(</span><span class="n">FastTreeValue</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nt</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;nt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">origin</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,),</span>
+<span class="gp">... </span>    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="n">EasyDict</span><span class="p">({</span>  <span class="c1"># dict&#39;s child class</span>
+<span class="gp">... </span>        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">34</span><span class="p">,</span> <span class="s1">&#39;1.2&#39;</span><span class="p">],</span>  <span class="c1"># dataclass</span>
+<span class="gp">... </span>    <span class="p">})),</span>
+<span class="gp">... </span>    <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="n">nt</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>  <span class="c1"># namedtuple</span>
+<span class="gp">... </span>    <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="n">MyTreeValue</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;dsfljk&#39;</span><span class="p">})</span>  <span class="c1"># treevalue</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">generic_mapping</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: &#39;1&#39;, &#39;b&#39;: (&#39;2&#39;, &#39;3&#39;, &#39;f&#39;), &#39;c&#39;: (&#39;2&#39;, &#39;5&#39;, &#39;ds&#39;, {&#39;x&#39;: &#39;None&#39;, &#39;z&#39;: [&#39;34&#39;, &#39;1.2&#39;]}), &#39;d&#39;: nt(a=&#39;f&#39;, b=&#39;100&#39;), &#39;e&#39;: &lt;MyTreeValue 0x7f72e4d4ac90&gt;</span>
+<span class="go">├── &#39;x&#39; --&gt; &#39;1&#39;</span>
+<span class="go">└── &#39;y&#39; --&gt; &#39;dsfljk&#39;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>
