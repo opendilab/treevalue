@@ -16,6 +16,6 @@ def register_treevalue_class(cls: Type[TreeValue], r_jax: bool = True, r_torch: 
     :param r_torch: Register for torch, default is `True`.
     """
     if r_jax:
-        register_for_torch(cls)
-    if r_torch:
         register_for_jax(cls)
+    if r_torch:
+        register_for_torch(cls)
