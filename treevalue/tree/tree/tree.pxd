@@ -45,6 +45,8 @@ cdef class TreeValue:
     cpdef public treevalue_values values(self)
     cpdef public treevalue_items items(self)
 
+    cdef tuple _unpack(self, tuple keys, object default=*)
+
     cpdef void validate(self) except*
 
 cdef str _prefix_fix(object text, object prefix)
