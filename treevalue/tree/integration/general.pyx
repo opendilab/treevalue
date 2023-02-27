@@ -74,7 +74,6 @@ cpdef inline void register_integrate_container(object type_, object flatten_func
     :param unflatten_func: Function for unflattening.
     
     Examples::
-
         >>> from treevalue import register_integrate_container, generic_flatten, FastTreeValue, generic_unflatten
         >>> 
         >>> class MyDC:
@@ -159,13 +158,13 @@ cdef inline object _c_get_object_from_flatted(object values, object type_, objec
 cpdef inline object generic_flatten(object v):
     """
     Overview:
-        Flatten generic data, including native objects, ``TreeValue``, namedtuples.
+        Flatten generic data, including native objects, ``TreeValue``, namedtuples and custom classes \
+        (see :func:`register_integrate_container`).
     
     :param v: Value to be flatted.
     :return: Flatted value.
     
     Examples::
-
         >>> from collections import namedtuple
         >>> from easydict import EasyDict
         >>> from treevalue import FastTreeValue, generic_flatten, generic_unflatten
@@ -239,6 +238,40 @@ cpdef inline object generic_unflatten(object v, tuple gspec):
 
 @cython.binding(True)
 cpdef inline object generic_mapping(object v, object func):
+    """
+    Overview:
+        Generic map all the values, including native objects, ``TreeValue``, namedtuples and custom classes \
+        (see :func:`register_integrate_container`)
+    
+    :param v: Original value, nested structure is supported.
+    :param func: Function to operate. 
+    
+    Examples::
+        >>> from collections import namedtuple
+        >>> from easydict import EasyDict
+        >>> from treevalue import FastTreeValue, generic_mapping
+        >>> 
+        >>> class MyTreeValue(FastTreeValue):
+        ...     pass
+        >>> 
+        >>> nt = namedtuple('nt', ['a', 'b'])
+        >>> 
+        >>> origin = {
+        ...     'a': 1,
+        ...     'b': (2, 3, 'f',),
+        ...     'c': (2, 5, 'ds', EasyDict({  # dict's child class
+        ...         'x': None,
+        ...         'z': [34, '1.2'],  # dataclass
+        ...     })),
+        ...     'd': nt('f', 100),  # namedtuple
+        ...     'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})  # treevalue
+        ... }
+        >>> generic_mapping(origin, str)
+        {'a': '1', 'b': ('2', '3', 'f'), 'c': ('2', '5', 'ds', {'x': 'None', 'z': ['34', '1.2']}), 'd': nt(a='f', b='100'), 'e': <MyTreeValue 0x7f72e4d4ac90>
+        ├── 'x' --> '1'
+        └── 'y' --> 'dsfljk'
+        }
+    """
     values, type_, spec = _c_get_flatted_values_and_spec(v)
     if type_ is None:
         return func(values)

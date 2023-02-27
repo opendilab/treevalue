@@ -52,3 +52,11 @@ generic_unflatten
 .. autofunction:: generic_unflatten
 
 
+.. _apidoc_tree_integration_generic_mapping:
+
+generic_mapping
+--------------------------------
+
+.. autofunction:: generic_mapping
+
+
