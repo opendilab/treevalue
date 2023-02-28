@@ -179,7 +179,7 @@ cpdef inline object generic_flatten(object v):
         ...     'b': (2, 3, 'f',),
         ...     'c': (2, 5, 'ds', EasyDict({  # dict's child class
         ...         'x': None,
-        ...         'z': [34, '1.2'],  # dataclass
+        ...         'z': [34, '1.2'],
         ...     })),
         ...     'd': nt('f', 100),  # namedtuple
         ...     'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})  # treevalue
@@ -261,7 +261,7 @@ cpdef inline object generic_mapping(object v, object func):
         ...     'b': (2, 3, 'f',),
         ...     'c': (2, 5, 'ds', EasyDict({  # dict's child class
         ...         'x': None,
-        ...         'z': [34, '1.2'],  # dataclass
+        ...         'z': [34, '1.2'],
         ...     })),
         ...     'd': nt('f', 100),  # namedtuple
         ...     'e': MyTreeValue({'x': 1, 'y': 'dsfljk'})  # treevalue
