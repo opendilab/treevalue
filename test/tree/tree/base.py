@@ -688,6 +688,26 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
 
             assert a_found and b_found, f'Key {"a"!r} or {"b"!r} not found in {t1!r}.'
 
+        def test_unpack(self):
+            t1 = get_demo_constraint_tree()
+            a, b = t1.unpack('a', 'b')
+            assert a == 21
+            assert isinstance(b, treevalue_class)
+            assert b.x == 'f-49'
+            assert b.y == pytest.approx(7.7)
+
+            x, y = b.unpack('x', 'y')
+            assert x == 'f-49'
+            assert y == pytest.approx(7.7)
+
+            with pytest.raises(KeyError):
+                _ = b.unpack('x', 'y', 'z')
+
+            x, y, z = b.unpack('x', 'y', 'z', default=None)
+            assert x == 'f-49'
+            assert y == pytest.approx(7.7)
+            assert z is None
+
         def test_with_constraints(self):
             t1 = get_demo_constraint_tree()
             t2 = t1.with_constraints(GreaterThanConstraint(10))
