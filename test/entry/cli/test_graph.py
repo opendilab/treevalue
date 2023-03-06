@@ -9,12 +9,22 @@ import pytest
 from click.testing import CliRunner
 from hbutils.testing import cmdv, OS
 
-from treevalue import FastTreeValue, dump
+from treevalue import FastTreeValue, dump, graphics
 from treevalue.entry.cli import treevalue_cli
 
 t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
 t2 = FastTreeValue({'a': 1, 'b': {2, 4}, 'x': {'c': [1, 3], 'd': 4}})
 t3 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': t2.b, 'd': t2.x.c}})
+
+if cmdv('dot'):
+    g = graphics(
+        (t1, 't1'), (t2, 't2'), (t3, 't3'),
+        title='This is title for g.',
+        cfg=dict(bgcolor='#ffffff00'),
+        dup_value=(list,),
+    )
+else:
+    g = None
 
 
 @pytest.mark.unittest
