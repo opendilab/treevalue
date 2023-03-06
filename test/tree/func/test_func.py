@@ -3,6 +3,7 @@ from operator import __mul__
 
 import pytest
 
+from treevalue import FastTreeValue
 from treevalue.tree import func_treelize, TreeValue, method_treelize, classmethod_treelize, delayed
 
 
@@ -401,3 +402,29 @@ class TestTreeFuncFunc:
             'v': {'a': 12, 'b': 25, 'x': {'c': 38, 'd': 51}},
         })
         assert cnt_1 == 4
+
+    def test_return_treevalue(self):
+        def func(x):
+            return FastTreeValue({
+                'x': x, 'y': x ** 2,
+            })
+
+        f = FastTreeValue({
+            'x': func,
+            'y': {
+                'z': func,
+            }
+        })
+        v = FastTreeValue({'x': 2, 'y': {'z': 34}})
+        assert f(v) == FastTreeValue({
+            'x': {
+                'x': v.x,
+                'y': v.x ** 2,
+            },
+            'y': {
+                'z': {
+                    'x': v.y.z,
+                    'y': v.y.z ** 2,
+                }
+            }
+        })
