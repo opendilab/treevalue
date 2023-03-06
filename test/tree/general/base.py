@@ -646,7 +646,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
                 title="This is a demo of 2 trees with dup value.",
                 cfg={'bgcolor': '#ffffffff'},
             )
-            assert len(graph_1.source) <= 5000
+            assert len(graph_1.source) <= 5000  # a value for svg in windows
 
             graph_2 = treevalue_class.graphics(
                 (t, 't'), (t1, 't1'),
