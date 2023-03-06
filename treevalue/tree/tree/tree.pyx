@@ -2,6 +2,7 @@
 # cython:language_level=3
 
 import os
+import shutil
 from collections.abc import Sized, Container, Reversible, Mapping
 from operator import itemgetter
 
@@ -69,6 +70,12 @@ cdef class ValidationError(Exception):
     def __str__(self):
         return f"Validation failed on {self._cons!r} at position {self._path!r}{os.linesep}" \
                f"{type(self._error).__name__}: {self._error}"
+
+cdef inline bool _check_dot_installed():
+    if shutil.which('dot'):
+        return True
+    else:
+        return False
 
 cdef class TreeValue:
     r"""
@@ -979,15 +986,24 @@ cdef class TreeValue:
 
     @cython.binding(True)
     def _repr_svg_(self):
-        return self._get_tree_graph().pipe(format='svg', encoding='utf-8')
+        if _check_dot_installed():
+            return self._get_tree_graph().pipe(format='svg', encoding='utf-8')
+        else:
+            return None
 
     @cython.binding(True)
     def _repr_png_(self):
-        return self._get_tree_graph().pipe(format='png')
+        if _check_dot_installed():
+            return self._get_tree_graph().pipe(format='png')
+        else:
+            return None
 
     @cython.binding(True)
     def _repr_jpeg_(self):
-        return self._get_tree_graph().pipe(format='jpeg')
+        if _check_dot_installed():
+            return self._get_tree_graph().pipe(format='jpeg')
+        else:
+            return None
 
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
