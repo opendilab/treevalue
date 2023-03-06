@@ -3,7 +3,7 @@ name: Release Test
 on: workflow_dispatch
 
 jobs:
-  source_release:
+  source_build:
     name: Try package the source
     runs-on: ${{ matrix.os }}
     strategy:
@@ -40,8 +40,13 @@ jobs:
         with:
           name: build-artifacts-source-pack
           path: ./dist/*
+      - name: Upload packed files to artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts-all
+          path: ./dist/*
 
-  wheel_release:
+  wheel_build:
     name: Try build the wheels
     runs-on: ${{ matrix.os }}
     strategy:
@@ -107,8 +112,38 @@ jobs:
         shell: bash
         run: |
           ls -al ./wheelhouse
+          mv wheelhouse dist
       - name: Upload packed files to artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts-${{ runner.os }}-cp${{ matrix.python }}-${{ matrix.architecture }}
-          path: ./wheelhouse/*
+          path: ./dist/*
+      - name: Upload packed files to artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts-all
+          path: ./dist/*
+
+  # the publishing can only be processed on linux system
+  fake_publish:
+    name: Fake Publish
+    runs-on: ubuntu-20.04
+    needs:
+      - wheel_build
+      - source_build
+    strategy:
+      fail-fast: false
+      matrix:
+        python:
+          - '3.8'
+
+    steps:
+      - name: Download packed files to artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts-all
+          path: ./dist
+      - name: Show the buildings
+        shell: bash
+        run: |
+          ls -al ./dist
