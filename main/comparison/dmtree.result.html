@@ -523,7 +523,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_8_1.svg" src="../_images/comparison_dmtree.result_8_1.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f27e1073df0&gt;
+├── &#39;a&#39; --&gt; 1
+├── &#39;b&#39; --&gt; 2
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f27e1073af0&gt;
+    ├── &#39;x&#39; --&gt; 3
+    └── &#39;y&#39; --&gt; 4
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -538,7 +545,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_9_0.svg" src="../_images/comparison_dmtree.result_9_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f27e1073070&gt;
+├── &#39;a&#39; --&gt; 2
+├── &#39;b&#39; --&gt; 4
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f27e10738b0&gt;
+    ├── &#39;x&#39; --&gt; 6
+    └── &#39;y&#39; --&gt; 8
+</pre></div></div>
 </div>
 <p>Here is the performance test.</p>
 <div class="nbinput docutils container">
@@ -554,7 +568,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.37 µs ± 8.06 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.49 µs ± 22.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>In order to support the cased that the mapped value is related to both path and value of each node, we can use the ‘path mapping mode’ by simply use the second parameter of the mapping function.</p>
@@ -571,7 +585,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_13_0.svg" src="../_images/comparison_dmtree.result_13_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f272de34850&gt;
+├── &#39;a&#39; --&gt; (&#39;path&#39;, (&#39;a&#39;,), &#39;value&#39;, 1)
+├── &#39;b&#39; --&gt; (&#39;path&#39;, (&#39;b&#39;,), &#39;value&#39;, 2)
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f27e1073970&gt;
+    ├── &#39;x&#39; --&gt; (&#39;path&#39;, (&#39;c&#39;, &#39;x&#39;), &#39;value&#39;, 3)
+    └── &#39;y&#39; --&gt; (&#39;path&#39;, (&#39;c&#39;, &#39;y&#39;), &#39;value&#39;, 4)
+</pre></div></div>
 </div>
 <p>And here is the performance</p>
 <div class="nbinput docutils container">
@@ -587,7 +608,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.44 µs ± 2.88 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.55 µs ± 37.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -633,7 +654,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16 µs ± 33.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+16 µs ± 48.6 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To supported the second situation in the last section, <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.map_structure_with_path">map_structure_with_path</a> can be used.</p>
@@ -679,7 +700,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-34.1 µs ± 57.6 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+33.9 µs ± 52.6 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -706,7 +727,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_31_0.svg" src="../_images/comparison_dmtree.result_31_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;FastTreeValue 0x7f272ddef970&gt;
+├── &#39;a&#39; --&gt; 1
+├── &#39;b&#39; --&gt; 2
+└── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f272ddefa00&gt;
+    ├── &#39;x&#39; --&gt; 3
+    └── &#39;y&#39; --&gt; 4
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
@@ -740,7 +768,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-726 ns ± 0.815 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+717 ns ± 0.541 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The tree can be re-created from <code class="docutils literal notranslate"><span class="pre">flatted</span></code> with function <code class="docutils literal notranslate"><span class="pre">unflatten</span></code>.</p>
@@ -757,7 +785,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_36_0.svg" src="../_images/comparison_dmtree.result_36_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;TreeValue 0x7f272de34550&gt;
+├── &#39;a&#39; --&gt; 1
+├── &#39;b&#39; --&gt; 2
+└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f272de346a0&gt;
+    ├── &#39;x&#39; --&gt; 3
+    └── &#39;y&#39; --&gt; 4
+</pre></div></div>
 </div>
 <p>And here is the performance.</p>
 <div class="nbinput docutils container">
@@ -773,7 +808,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-827 ns ± 2.83 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+863 ns ± 13.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -813,7 +848,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-928 ns ± 2.77 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+951 ns ± 6.75 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The structure of the tree is dropped, only the data is extracted from the tree. This means the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> function in DM-Tree is irreversible, we can not recover the original tree with the result above.</p>
@@ -851,7 +886,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16.5 µs ± 47.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+16.5 µs ± 33 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To re-create the original tree, we need a tree structure with any objects filled inside. Use the <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.unflatten_as">unflatten_as</a> to archive this goal.</p>
@@ -888,7 +923,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-13.2 µs ± 20.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+13.2 µs ± 38 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -922,7 +957,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree.result_58_0.svg" src="../_images/comparison_dmtree.result_58_0.svg" /></div>
+<div class="highlight"><pre>
+&lt;TreeValue 0x7f272de34df0&gt;
+├── &#39;a&#39; --&gt; 3
+├── &#39;b&#39; --&gt; 5
+└── &#39;c&#39; --&gt; &lt;TreeValue 0x7f272de34610&gt;
+    ├── &#39;x&#39; --&gt; 7
+    └── &#39;y&#39; --&gt; 9
+</pre></div></div>
 </div>
 <p>Here is the performance.</p>
 <div class="nbinput docutils container">
@@ -938,7 +980,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.61 µs ± 6.35 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.58 µs ± 24.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>In DM-Tree, <code class="docutils literal notranslate"><span class="pre">unflatten_as</span></code> can be directly used.</p>
@@ -975,7 +1017,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-12.9 µs ± 27 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+13 µs ± 19.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1052,9 +1094,10 @@ div.rendered_html tbody tr:hover {
                 </dl>
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="dmtree.result.html">main</a></dd>
+                        <dd><a href="../../dev/repr/index.html">dev/repr</a></dd>
                         <dd><a href="../../dev/wrap/index.html">dev/wrap</a></dd>
                         <dd><a href="../../doc/readme/index.html">doc/readme</a></dd>
+                        <dd><a href="dmtree.result.html">main</a></dd>
                         <dd><a href="../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../run/paper/index.html">run/paper</a></dd>
                 </dl>
