@@ -12,6 +12,7 @@ skip = ["pp*"] # Do not build for PyPy
 [tool.cibuildwheel.windows]
 archs = ["x86", 'AMD64']
 before-test = [# Unittest for windows
+    "choco install graphviz",
     "pip install -r \"{project}\\requirements-test.txt\"",
 ]
 test-command = [
@@ -25,6 +26,7 @@ test-command = [
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"] # Build for x86_64 and arm64
 before-test = [# Unittest for macos
+    "brew install graphviz",
     "pip install -r {project}/requirements-test.txt",
 ]
 test-command = [
@@ -40,6 +42,7 @@ test-command = [
 archs = ["x86_64", "aarch64"] # Build for x86_64 and arm64
 skip = ["pp* *musllinux*"] # dependencies do not build for musl
 before-test = [# Unittest for linux
+    "apt-get install -y graphviz",
     "pip install -r {project}/requirements-test.txt",
 ]
 test-command = [
