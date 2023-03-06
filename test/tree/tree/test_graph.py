@@ -1,5 +1,8 @@
+import unittest
+
 import numpy as np
 import pytest
+from hbutils.testing import cmdv
 
 from treevalue import FastTreeValue, graphics
 
@@ -10,6 +13,7 @@ class MyFastTreeValue(FastTreeValue):
 
 @pytest.mark.unittest
 class TestTreeTreeGraph:
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_graphics(self):
         t = MyFastTreeValue({
             'a': [4, 3, 2, 1],

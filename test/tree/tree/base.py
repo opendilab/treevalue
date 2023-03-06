@@ -1,9 +1,10 @@
 import pickle
 import re
+import unittest
 from typing import Type
 
 import pytest
-from hbutils.testing import OS
+from hbutils.testing import OS, cmdv
 
 from test.tree.tree.test_constraint import GreaterThanConstraint
 from treevalue import raw, TreeValue, delayed, ValidationError
@@ -750,6 +751,7 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert newt1 == t1
             assert newt1.constraint == t1.constraint
 
+        @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_repr_svg(self):
             t1 = get_demo_constraint_tree()
             assert hasattr(t1, '_repr_svg_')
@@ -758,6 +760,7 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             assert isinstance(_repr_svg_, str)
             assert 4500 <= len(_repr_svg_) <= 4900
 
+        @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_repr_png(self):
             t1 = get_demo_constraint_tree()
             assert hasattr(t1, '_repr_png_')
@@ -769,6 +772,7 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             else:
                 assert 16050 <= len(_repr_png_) <= 20500
 
+        @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_repr_jpeg(self):
             t1 = get_demo_constraint_tree()
             assert hasattr(t1, '_repr_jpeg_')

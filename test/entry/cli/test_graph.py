@@ -9,19 +9,12 @@ import pytest
 from click.testing import CliRunner
 from hbutils.testing import cmdv, OS
 
-from treevalue import FastTreeValue, dump, graphics
+from treevalue import FastTreeValue, dump
 from treevalue.entry.cli import treevalue_cli
 
 t1 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}})
 t2 = FastTreeValue({'a': 1, 'b': {2, 4}, 'x': {'c': [1, 3], 'd': 4}})
 t3 = FastTreeValue({'a': 1, 'b': 2, 'x': {'c': t2.b, 'd': t2.x.c}})
-
-g = graphics(
-    (t1, 't1'), (t2, 't2'), (t3, 't3'),
-    title='This is title for g.',
-    cfg=dict(bgcolor='#ffffff00'),
-    dup_value=(list,),
-)
 
 
 @pytest.mark.unittest
@@ -43,6 +36,7 @@ class TestEntryCliGraph:
             assert os.path.exists('test_graph.gv')
             assert os.path.getsize('test_graph.gv') <= 2500
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_simple_code_graph_to_stdout(self):
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -198,6 +192,7 @@ class TestEntryCliGraph:
             assert 'first title' not in content
             assert 'This is title for g.' in content
 
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_cfg(self):
         runner = CliRunner()
         with runner.isolated_filesystem():

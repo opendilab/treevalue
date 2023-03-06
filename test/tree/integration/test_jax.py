@@ -23,7 +23,7 @@ class TestTreeTreeIntegration:
             'a': np.random.randint(0, 10, (2, 3)),
             'b': {
                 'x': np.asarray(233.0),
-                'y': np.random.randn(2, 3)
+                'y': np.random.randn(2, 3) + 1,
             }
         })
         r1 = double(t1)
@@ -40,7 +40,7 @@ class TestTreeTreeIntegration:
             'a': np.random.randint(0, 10, (2, 3)),
             'b': {
                 'x': np.asarray(233.0),
-                'y': np.random.randn(2, 3)
+                'y': np.random.randn(2, 3) + 1,
             }
         })
         r2 = double(t2)

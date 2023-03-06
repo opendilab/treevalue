@@ -1,7 +1,9 @@
+import unittest
 from shutil import which
 from unittest.mock import patch
 
 import pytest
+from hbutils.testing import cmdv
 
 from treevalue.utils import build_graph
 
@@ -20,6 +22,7 @@ def no_dot():
 
 @pytest.mark.unittest
 class TestUtilsTree:
+    @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
     def test_build_graph(self):
         t = {'a': 1, 'b': 2, 'x': {'c': 3, 'd': 4}}
         g = build_graph((t, 't'), graph_title="Demo of build_graph.")

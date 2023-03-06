@@ -1,9 +1,11 @@
+import unittest
 from functools import reduce
 from operator import __mul__
 from typing import Type
 
 import numpy as np
 import pytest
+from hbutils.testing import cmdv
 
 from treevalue.tree import func_treelize, TreeValue, raw, mapping, delayed, FastTreeValue
 from ..tree.base import get_treevalue_test
@@ -606,6 +608,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
             assert t2.x.c is not t.x.c
             assert t2.x.d is not t.x.d
 
+        @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_graph(self):
             t = treevalue_class({
                 'a': [4, 3, 2, 1],
@@ -619,6 +622,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
             graph = t.graph('t')
             assert len(graph.source) <= 2290
 
+        @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_graphics(self):
             t = treevalue_class({
                 'a': [4, 3, 2, 1],
