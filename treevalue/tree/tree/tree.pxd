@@ -49,6 +49,8 @@ cdef class TreeValue:
 
     cpdef void validate(self) except*
 
+    cdef object _get_tree_graph(self)
+
 cdef str _prefix_fix(object text, object prefix)
 cdef str _title_repr(TreeStorage st, object type_)
 cdef object _build_tree(TreeStorage st, object type_, str prefix, dict id_pool, tuple path)

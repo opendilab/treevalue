@@ -646,7 +646,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
                 title="This is a demo of 2 trees with dup value.",
                 cfg={'bgcolor': '#ffffffff'},
             )
-            assert len(graph_1.source) <= 4960
+            assert len(graph_1.source) <= 5000  # a value for svg in windows
 
             graph_2 = treevalue_class.graphics(
                 (t, 't'), (t1, 't1'),
@@ -655,7 +655,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
                 title="This is a demo of 2 trees with dup value.",
                 cfg={'bgcolor': '#ffffffff'},
             )
-            assert len(graph_2.source) <= 5480
+            assert len(graph_2.source) <= 5600
 
             graph_3 = treevalue_class.graphics(
                 (t, 't'), (t1, 't1'),
@@ -673,7 +673,7 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
                 title="This is a demo of 2 trees with dup value.",
                 cfg={'bgcolor': '#ffffffff'},
             )
-            assert len(graph_4.source) <= 3780
+            assert len(graph_4.source) <= 4000
 
             graph_6 = treevalue_class.graphics(
                 (t, 't'), (t1, 't1'),

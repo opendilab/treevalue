@@ -66,17 +66,17 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y tree cloc wget curl make
+          sudo apt-get install -y tree cloc wget curl make graphviz
       - name: Set up system dependences on Windows
         if: ${{ env.OS_NAME == 'Windows' }}
         shell: bash
         run: |
-          choco install tree cloc wget curl make zip
+          choco install tree cloc wget curl make zip graphviz
       - name: Set up system dependences on MacOS
         if: ${{ env.OS_NAME == 'MacOS' }}
         shell: bash
         run: |
-          brew install tree cloc wget curl make zip
+          brew install tree cloc wget curl make zip graphviz
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:

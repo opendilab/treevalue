@@ -1,12 +1,12 @@
+import html
 import re
+import shutil
 from functools import wraps
 from queue import Queue
 from typing import Optional, Mapping, Any, Callable
 
 from graphviz import Digraph
 from hbutils.reflection import dynamic_call, post_process
-
-from .random import random_hex_with_timestamp
 
 
 def _title_flatten(title):
@@ -69,6 +69,35 @@ def _root_process(root, index):
         return root, '<root_%d>' % (index,), index
 
 
+_LEFT_ALIGN_LINESEP = r'\l'
+
+
+def _custom_html_escape(x):
+    s = html.escape(x) \
+        .replace(' ', '&ensp;') \
+        .replace('\r\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\n', _LEFT_ALIGN_LINESEP) \
+        .replace('\r', _LEFT_ALIGN_LINESEP)
+    if len(x.splitlines()) > 1 and not s.endswith(_LEFT_ALIGN_LINESEP):
+        s += _LEFT_ALIGN_LINESEP
+    return s
+
+
+_DOT_NOT_INSTALL_TEXT = """
+Command 'dot' not found in this environment.
+Please install graphviz first, with:
+  - Ubuntu:  apt install -y graphviz
+  - Windows: choco install graphviz
+  - MacOS:   brew install graphviz
+More detailed information can be found in documentation of graphviz python package: https://graphviz.readthedocs.io/en/stable/#installation
+""".lstrip()
+
+
+def _check_dot_installed():
+    if not shutil.which('dot'):
+        raise EnvironmentError(_DOT_NOT_INSTALL_TEXT)
+
+
 def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 graph_title: Optional[str] = None, graph_name: Optional[str] = None,
                 graph_cfg: Optional[Mapping[str, Any]] = None,
@@ -100,11 +129,13 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
     Returns:
         - dot (:obj:`Digraph`): Graphviz directed graph object.
     """
+    _check_dot_installed()
+
     roots = [_root_process(root, index) for index, root in enumerate(roots)]
     roots = [item for item in roots if item is not None]
 
     node_id_gen = dynamic_call(suffixed_node_id(node_id_gen or _default_node_id))
-    graph_title = graph_title or ('untitled_' + random_hex_with_timestamp())
+    graph_title = graph_title or ''
     graph_name = graph_name or _title_flatten(graph_title)
     graph_cfg = _no_none_value(graph_cfg or {})
 
@@ -125,7 +156,7 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
         root_node_id = node_id_gen(root, None, [], [], True)
         if root_node_id not in _queued_node_ids:
             graph.node(
-                name=root_node_id, label=root_title,
+                name=root_node_id, label=_custom_html_escape(root_title),
                 **node_cfg_gen(root, None, [], [], True, True, root_info)
             )
             _queue.put((root_node_id, root, (root, root_title, root_index), []))
@@ -145,14 +176,14 @@ def build_graph(*roots, node_id_gen: Optional[Callable] = None,
                 _current_label = repr_gen(_current_node, _current_path)
 
             if _current_id not in _queued_node_ids:
-                graph.node(_current_id, label=_current_label,
+                graph.node(_current_id, label=_custom_html_escape(_current_label),
                            **node_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
                                           _is_node, False, _root_info))
                 if iter_gen(_current_node, _current_path):
                     _queue.put((_current_id, _current_node, _root_info, _current_path))
                 _queued_node_ids.add(_current_id)
             if (_parent_id, _current_id, key) not in _queued_edges:
-                graph.edge(_parent_id, _current_id, label=key,
+                graph.edge(_parent_id, _current_id, label=_custom_html_escape(key),
                            **edge_cfg_gen(_current_node, _parent_node, _current_path, _parent_path,
                                           _is_node, _root_info))
                 _queued_edges.add((_parent_id, _current_id, key))

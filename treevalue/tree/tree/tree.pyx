@@ -972,6 +972,23 @@ cdef class TreeValue:
         else:
             return self._type(self._st, constraint=to_constraint([constraint, self.constraint]))
 
+    @cython.final
+    cdef inline object _get_tree_graph(self):
+        from .graph import graphics
+        return graphics((self, '<root>'))
+
+    @cython.binding(True)
+    def _repr_svg_(self):
+        return self._get_tree_graph().pipe(format='svg', encoding='utf-8')
+
+    @cython.binding(True)
+    def _repr_png_(self):
+        return self._get_tree_graph().pipe(format='png')
+
+    @cython.binding(True)
+    def _repr_jpeg_(self):
+        return self._get_tree_graph().pipe(format='jpeg')
+
 cdef str _prefix_fix(object text, object prefix):
     cdef list lines = []
     cdef int i

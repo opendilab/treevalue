@@ -3,6 +3,7 @@ import re
 from typing import Type
 
 import pytest
+from hbutils.testing import OS
 
 from test.tree.tree.test_constraint import GreaterThanConstraint
 from treevalue import raw, TreeValue, delayed, ValidationError
@@ -748,5 +749,32 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
 
             assert newt1 == t1
             assert newt1.constraint == t1.constraint
+
+        def test_repr_svg(self):
+            t1 = get_demo_constraint_tree()
+            assert hasattr(t1, '_repr_svg_')
+
+            _repr_svg_ = t1._repr_svg_()
+            assert isinstance(_repr_svg_, str)
+            assert 4500 <= len(_repr_svg_) <= 4900
+
+        def test_repr_png(self):
+            t1 = get_demo_constraint_tree()
+            assert hasattr(t1, '_repr_png_')
+
+            _repr_png_ = t1._repr_png_()
+            assert isinstance(_repr_png_, bytes)
+            if OS.windows:
+                assert 12000 <= len(_repr_png_) <= 16050
+            else:
+                assert 16050 <= len(_repr_png_) <= 20500
+
+        def test_repr_jpeg(self):
+            t1 = get_demo_constraint_tree()
+            assert hasattr(t1, '_repr_jpeg_')
+
+            _repr_jpeg_ = t1._repr_jpeg_()
+            assert isinstance(_repr_jpeg_, bytes)
+            assert 10500 <= len(_repr_jpeg_) <= 14500
 
     return _TestClass
