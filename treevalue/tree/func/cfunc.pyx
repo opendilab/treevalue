@@ -57,6 +57,7 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mo
 
     cdef list _a_args
     cdef dict _a_kwargs
+    cdef object _a_ret
     if not has_tree:
         _a_args = []
         for v in args:
@@ -72,7 +73,11 @@ cdef object _c_func_treelize_run(object func, list args, dict kwargs, _e_tree_mo
             else:
                 _a_kwargs[k] = missing_func()
 
-        return func(*_a_args, **_a_kwargs)
+        _a_ret = func(*_a_args, **_a_kwargs)
+        if isinstance(_a_ret, TreeValue):
+            return _a_ret._detach()
+        else:
+            return _a_ret
 
     cdef dict _d_res = {}
     cdef str ak
