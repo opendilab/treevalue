@@ -6,6 +6,7 @@ from treevalue import FastTreeValue, register_for_torch
 
 try:
     import torch
+    from torch.utils._pytree import _register_pytree_node
 except (ImportError, ModuleNotFoundError):
     torch = None
 

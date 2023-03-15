@@ -7,6 +7,7 @@ from treevalue import FastTreeValue, register_for_jax
 
 try:
     import jax
+    from jax.tree_util import register_pytree_node
 except (ModuleNotFoundError, ImportError):
     jax = None
 
