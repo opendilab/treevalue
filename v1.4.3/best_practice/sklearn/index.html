@@ -185,31 +185,7 @@
             
     
     
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="apply-into-scikit-learn">
+  <section id="apply-into-scikit-learn">
 <h1>Apply into Scikit-Learn<a class="headerlink" href="#apply-into-scikit-learn" title="Permalink to this headline">¶</a></h1>
 <p>Actually, <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be used in practice with not only <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">torch</span></code> library, such as <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.
 In the following part, a demo of PCA to tree-structured arrays will be shown.</p>
@@ -293,30 +269,30 @@ The specific code is as follows</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span>Original int data:
-&lt;FastTreeValue 0x7ff6f69cf100&gt;
-├── &#39;a&#39; --&gt; array([[-1,  3,  8],
-│                  [ 9,  2, 14],
-│                  [ 2, 14,  6],
-│                  [ 8, 14,  7]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7ff6f692ee80&gt;
-    └── &#39;c&#39; --&gt; array([[-14,   3, -13,   2],
-                       [ -8, -15,   2,  -7],
-                       [-11, -15,  -2,   2],
-                       [  0, -12,   3, -15],
-                       [ -8, -11, -13,  -5]])
+&lt;FastTreeValue 0x7f357b7bb100&gt;
+├── &#39;a&#39; --&gt; array([[ 0,  6, 12],
+│                  [14, -4, -4],
+│                  [ 6, 10,  1],
+│                  [ 6, -2, -3]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f357b71aeb0&gt;
+    └── &#39;c&#39; --&gt; array([[-15,  -2,   1,  -5],
+                       [ -2,   1, -10,   0],
+                       [ -4,  -3,  -2,  -8],
+                       [ -6, -13,  -2,  -8],
+                       [ -6,   0,  -2,  -9]])
 
 Fit transformed data:
-&lt;FastTreeValue 0x7ff6f5f21eb0&gt;
-├── &#39;a&#39; --&gt; array([[ 4.01213904,  6.48810308, -0.42691782],
-│                  [ 8.20217937, -4.41348607,  0.34697889],
-│                  [-6.53605489,  1.87829975,  0.79181852],
-│                  [-5.67826352, -3.95291676, -0.71187959]])
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7ff6f5f21df0&gt;
-    └── &#39;c&#39; --&gt; array([[ 17.05046161,  -3.5935377 ,  -3.62252993,   0.07431326],
-                       [ -7.72932562,   3.14091998,  -1.52372276,   1.5589792 ],
-                       [  0.22645066,   9.0458386 ,  -0.46437047,  -1.03241667],
-                       [-13.7922827 ,  -6.65165968,  -1.45690837,  -0.75218301],
-                       [  4.24469604,  -1.9415612 ,   7.06753152,   0.15130722]])
+&lt;FastTreeValue 0x7f357b731190&gt;
+├── &#39;a&#39; --&gt; array([[ 1.22628500e+01, -3.69515944e+00, -8.47529286e-01],
+│                  [-1.10200643e+01, -1.01895473e+00, -2.50397952e+00],
+│                  [ 3.91719275e+00,  6.43471028e+00,  1.02259080e-02],
+│                  [-5.15997845e+00, -1.72059611e+00,  3.34128290e+00]])
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f35747de2b0&gt;
+    └── &#39;c&#39; --&gt; array([[-5.10177012,  7.49973175, -2.69003535,  0.09836179],
+                       [10.85481852, -0.82875962, -2.64645161, -0.0486441 ],
+                       [ 0.16456323, -1.3623988 ,  3.08337612,  0.72772258],
+                       [-6.41398603, -7.25247023, -1.93579093, -0.18754263],
+                       [ 0.4963744 ,  1.9438969 ,  4.18890177, -0.58989765]])
 </pre></div></td></tr></table></div>
 </div>
 <p>For further information, see the links below:</p>
@@ -392,9 +368,10 @@ Fit transformed data:
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../main/best_practice/sklearn/index.html">main</a></dd>
                         <dd><a href="../../../dev/wrap/best_practice/sklearn/index.html">dev/wrap</a></dd>
                         <dd><a href="../../../doc/readme/best_practice/sklearn/index.html">doc/readme</a></dd>
-                        <dd><a href="../../../main/best_practice/sklearn/index.html">main</a></dd>
+                        <dd><a href="../../../fix/integration/best_practice/sklearn/index.html">fix/integration</a></dd>
                         <dd><a href="../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/best_practice/sklearn/index.html">run/paper</a></dd>
                 </dl>

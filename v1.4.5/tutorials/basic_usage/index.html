@@ -38,6 +38,14 @@
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Advanced Usage" href="../advanced_usage/index.html" />
@@ -194,31 +202,7 @@
             
     
     
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="basic-usage">
+  <section id="basic-usage">
 <h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
 <p>In this part, basic usages of <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> will be introduced one by one with sample code and graph to explain them.</p>
 <section id="create-a-tree">
@@ -260,10 +244,10 @@
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>&lt;FastTreeValue 0x7f83708a7100&gt;
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span>&lt;FastTreeValue 0x7f854ff70100&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2.3
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f8370806e80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f854fecfeb0&gt;
     ├── &#39;c&#39; --&gt; &#39;str&#39;
     ├── &#39;d&#39; --&gt; [1, 2, None]
     └── &#39;e&#39; --&gt; b&#39;bytes&#39;
@@ -382,58 +366,58 @@
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span>Original tree:
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551e95e80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d392eb0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 Value of t.a:  1
 Value of t.x.c: 3
 Value of t.x:
-&lt;FastTreeValue 0x7fd551e95e80&gt;
+&lt;FastTreeValue 0x7f655d392eb0&gt;
 ├── &#39;c&#39; --&gt; 3
 └── &#39;d&#39; --&gt; 4
 
 Value after t.a = 233:
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551e95e80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d392eb0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 Value after t.x.d = -1:
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551e95e80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d392eb0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; -1
 
 Value after t.x = FastTreeValue({&#39;e&#39;: 5, &#39;f&#39;: 6}):
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551eadf10&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d3aaf40&gt;
     ├── &#39;e&#39; --&gt; 5
     └── &#39;f&#39; --&gt; 6
 
 Value after t.x.g = {&#39;e&#39;: 5, &#39;f&#39;: 6}:
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551eadf10&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d3aaf40&gt;
     ├── &#39;e&#39; --&gt; 5
     ├── &#39;f&#39; --&gt; 6
     └── &#39;g&#39; --&gt; {&#39;e&#39;: 5, &#39;f&#39;: 6}
 
 Value after del t.x.g:
-&lt;FastTreeValue 0x7fd551f35100&gt;
+&lt;FastTreeValue 0x7f655d432100&gt;
 ├── &#39;a&#39; --&gt; 233
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd551eadf10&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f655d3aaf40&gt;
     ├── &#39;e&#39; --&gt; 5
     └── &#39;f&#39; --&gt; 6
 </pre></div></td></tr></table></div>
@@ -498,23 +482,23 @@ And the full life circle of the tree <code class="docutils literal notranslate">
 <span class="normal">18</span>
 <span class="normal">19</span>
 <span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span>Result of t[0]:
-&lt;FastTreeValue 0x7f9d8a2fcf10&gt;
+&lt;FastTreeValue 0x7f33b6e25f40&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 4
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f9d8a2fc160&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f33b6e25190&gt;
     ├── &#39;c&#39; --&gt; 11
     └── &#39;d&#39; --&gt; -2
 
 Result of t[::-1]:
-&lt;FastTreeValue 0x7f9d8a2fc160&gt;
+&lt;FastTreeValue 0x7f33b6e25190&gt;
 ├── &#39;a&#39; --&gt; [3, 2, 1]
 ├── &#39;b&#39; --&gt; [16, 9, 4]
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f9d8a2fcf10&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f33b6e25f40&gt;
     ├── &#39;c&#39; --&gt; [17, 13, 11]
     └── &#39;d&#39; --&gt; [-8, -4, -2]
 
 Result of t.x[1:]:
-&lt;FastTreeValue 0x7f9d8a2fcf10&gt;
+&lt;FastTreeValue 0x7f33b6e25f40&gt;
 ├── &#39;c&#39; --&gt; [13, 17]
 └── &#39;d&#39; --&gt; [-4, -8]
 </pre></div></td></tr></table></div>
@@ -580,33 +564,33 @@ Result of t.x[1:]:
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span>Result of t1 + t2:
-&lt;FastTreeValue 0x7fa52116fc70&gt;
+&lt;FastTreeValue 0x7fd406b6fca0&gt;
 ├── &#39;a&#39; --&gt; 4
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa52116fdf0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd406b6fe20&gt;
     ├── &#39;c&#39; --&gt; 17
     └── &#39;d&#39; --&gt; -1
 
 Result of t1 - t2:
-&lt;FastTreeValue 0x7fa52116fc70&gt;
+&lt;FastTreeValue 0x7fd406b6fca0&gt;
 ├── &#39;a&#39; --&gt; -2
 ├── &#39;b&#39; --&gt; -5
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa52116fdf0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd406b6fe20&gt;
     ├── &#39;c&#39; --&gt; -11
     └── &#39;d&#39; --&gt; 9
 
 Result of t1 ^ t2:
-&lt;FastTreeValue 0x7fa52116fc70&gt;
+&lt;FastTreeValue 0x7fd406b6fca0&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 5
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa52116fdf0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd406b6fe20&gt;
     ├── &#39;c&#39; --&gt; 13
     └── &#39;d&#39; --&gt; -1
 
-Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7fa52116fc70&gt;
+Result of t1 + t2 * (-4 + t1 ** t2) &lt;FastTreeValue 0x7fd406b6fca0&gt;
 ├── &#39;a&#39; --&gt; -8.0
 ├── &#39;b&#39; --&gt; -25.9453125
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fa52116fdf0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fd406b6fe20&gt;
     ├── &#39;c&#39; --&gt; -52.999997072947785
     └── &#39;d&#39; --&gt; -5096
 </pre></div></td></tr></table></div>
@@ -640,44 +624,44 @@ The structures of the trees involved in <code class="docutils literal notranslat
 </div>
 <p>The output should be</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>t1:
-&lt;FastTreeValue 0x7f6d5951d100&gt;
+&lt;FastTreeValue 0x7f0ef6fad100&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f6d5947de80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0ef6f0deb0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 
 t2:
-&lt;FastTreeValue 0x7f6d59495f10&gt;
+&lt;FastTreeValue 0x7f0ef6f25f40&gt;
 ├── &#39;a&#39; --&gt; 3
 ├── &#39;b&#39; --&gt; 7
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f6d59495160&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0ef6f25190&gt;
     ├── &#39;c&#39; --&gt; 14
     └── &#39;d&#39; --&gt; -5
 
 t1 + t2:
-&lt;FastTreeValue 0x7f6d58a70b50&gt;
+&lt;FastTreeValue 0x7f0ef6500b80&gt;
 ├── &#39;a&#39; --&gt; 4
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f6d58a70cd0&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0ef6500d00&gt;
     ├── &#39;c&#39; --&gt; 17
     └── &#39;d&#39; --&gt; -1
 
 
 After t1 += t2
 t1:
-&lt;FastTreeValue 0x7f6d5951d100&gt;
+&lt;FastTreeValue 0x7f0ef6fad100&gt;
 ├── &#39;a&#39; --&gt; 4
 ├── &#39;b&#39; --&gt; 9
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f6d5947de80&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0ef6f0deb0&gt;
     ├── &#39;c&#39; --&gt; 17
     └── &#39;d&#39; --&gt; -1
 
 t2:
-&lt;FastTreeValue 0x7f6d59495f10&gt;
+&lt;FastTreeValue 0x7f0ef6f25f40&gt;
 ├── &#39;a&#39; --&gt; 3
 ├── &#39;b&#39; --&gt; 7
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f6d59495160&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0ef6f25190&gt;
     ├── &#39;c&#39; --&gt; 14
     └── &#39;d&#39; --&gt; -5
 </pre></div>
@@ -744,10 +728,10 @@ t2:
 <span class="normal">7</span>
 <span class="normal">8</span>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span>Result of gcd(t1, t2):
-&lt;TreeValue 0x7f76110eec70&gt;
+&lt;TreeValue 0x7f8c8071dca0&gt;
 ├── &#39;a&#39; --&gt; 2
 ├── &#39;b&#39; --&gt; 6
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f76110eee80&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7f8c8071deb0&gt;
     ├── &#39;c&#39; --&gt; 2
     └── &#39;d&#39; --&gt; 9
 
@@ -868,9 +852,10 @@ gcd(900, 768): 12
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../main/tutorials/basic_usage/index.html">main</a></dd>
                         <dd><a href="../../../dev/wrap/tutorials/basic_usage/index.html">dev/wrap</a></dd>
                         <dd><a href="../../../doc/readme/tutorials/basic_usage/index.html">doc/readme</a></dd>
-                        <dd><a href="../../../main/tutorials/basic_usage/index.html">main</a></dd>
+                        <dd><a href="../../../fix/integration/tutorials/basic_usage/index.html">fix/integration</a></dd>
                         <dd><a href="../../../refactor/color/tutorials/basic_usage/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/tutorials/basic_usage/index.html">run/paper</a></dd>
                 </dl>

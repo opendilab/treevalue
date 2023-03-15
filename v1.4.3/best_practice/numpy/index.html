@@ -185,31 +185,7 @@
             
     
     
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="apply-into-numpy">
+  <section id="apply-into-numpy">
 <h1>Apply into Numpy<a class="headerlink" href="#apply-into-numpy" title="Permalink to this headline">¶</a></h1>
 <p>In following parts, we will show some demos about how to use <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> in practice.</p>
 <p>For example, now we have a group of structed data in python-dict type, we want to do different operations on differnent key-value pairs inplace,
@@ -437,47 +413,47 @@ numpy functions and pack data with <code class="docutils literal notranslate"><s
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span>mean0 &amp; mean1: 1.4276728630065918 1.4276727
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span>mean0 &amp; mean1: 1.3843898475170135 1.3843899
 
 
-even_index_a0: [[[6.83986604e-01 8.10903251e-01 3.30616653e-01 7.54302561e-01
-   1.47398680e-01 7.19179735e-02 8.09030294e-01 1.65959537e-01]
-  [9.18447077e-01 7.89540783e-02 5.55747032e-01 2.51495212e-01
-   6.33642018e-01 5.61560690e-01 8.15904260e-01 5.97471476e-01]]
+even_index_a0: [[[0.8623819  0.13427259 0.98726076 0.04887347 0.17408761 0.94338363
+   0.9986836  0.00339386]
+  [0.4456143  0.3180184  0.43731746 0.7412976  0.65493697 0.16739695
+   0.47647467 0.72455853]]
 
- [[4.47105467e-01 3.18802238e-01 1.34784296e-01 2.75193125e-01
-   4.88303274e-01 4.46934901e-05 4.60315883e-01 5.78184247e-01]
-  [4.51413393e-01 5.54516077e-01 9.94875133e-01 9.28366542e-01
-   2.33942196e-01 6.91406071e-01 2.86278516e-01 8.12179983e-01]]
+ [[0.27213234 0.21580186 0.6685271  0.03683221 0.30879742 0.5991135
+   0.7598502  0.02861539]
+  [0.4717888  0.01709737 0.5216444  0.9118668  0.75140536 0.2841005
+   0.33581525 0.78418475]]
 
- [[9.86345947e-01 2.74331570e-01 3.93726259e-01 3.22170168e-01
-   4.12357569e-01 8.99773896e-01 7.70703793e-01 2.52685342e-02]
-  [8.69382799e-01 6.49709821e-01 3.59895855e-01 1.19052291e-01
-   6.79722488e-01 6.05212629e-01 2.86317229e-01 5.54188848e-01]]
+ [[0.9914198  0.69079775 0.20539092 0.04176054 0.21682344 0.48657835
+   0.35968018 0.9197409 ]
+  [0.28932288 0.4489416  0.29014015 0.8781759  0.6372259  0.64704734
+   0.46893975 0.90685445]]
 
- [[9.49871004e-01 3.21350247e-02 4.93995339e-01 1.09215006e-01
-   2.23890975e-01 8.80066216e-01 7.78712392e-01 6.20822787e-01]
-  [2.47072399e-01 7.23411679e-01 7.07442224e-01 3.47525448e-01
-   5.18246889e-01 1.10464334e-01 3.64707619e-01 7.94438422e-01]]]
-even_index_a1: [[[6.83986604e-01 8.10903251e-01 3.30616653e-01 7.54302561e-01
-   1.47398680e-01 7.19179735e-02 8.09030294e-01 1.65959537e-01]
-  [9.18447077e-01 7.89540783e-02 5.55747032e-01 2.51495212e-01
-   6.33642018e-01 5.61560690e-01 8.15904260e-01 5.97471476e-01]]
+ [[0.90916604 0.47426128 0.37354517 0.9785489  0.50225526 0.73824966
+   0.11964852 0.18431395]
+  [0.70504224 0.24130107 0.36855805 0.8781796  0.1285313  0.11421522
+   0.97658336 0.3244487 ]]]
+even_index_a1: [[[0.8623819  0.13427259 0.98726076 0.04887347 0.17408761 0.94338363
+   0.9986836  0.00339386]
+  [0.4456143  0.3180184  0.43731746 0.7412976  0.65493697 0.16739695
+   0.47647467 0.72455853]]
 
- [[4.47105467e-01 3.18802238e-01 1.34784296e-01 2.75193125e-01
-   4.88303274e-01 4.46934901e-05 4.60315883e-01 5.78184247e-01]
-  [4.51413393e-01 5.54516077e-01 9.94875133e-01 9.28366542e-01
-   2.33942196e-01 6.91406071e-01 2.86278516e-01 8.12179983e-01]]
+ [[0.27213234 0.21580186 0.6685271  0.03683221 0.30879742 0.5991135
+   0.7598502  0.02861539]
+  [0.4717888  0.01709737 0.5216444  0.9118668  0.75140536 0.2841005
+   0.33581525 0.78418475]]
 
- [[9.86345947e-01 2.74331570e-01 3.93726259e-01 3.22170168e-01
-   4.12357569e-01 8.99773896e-01 7.70703793e-01 2.52685342e-02]
-  [8.69382799e-01 6.49709821e-01 3.59895855e-01 1.19052291e-01
-   6.79722488e-01 6.05212629e-01 2.86317229e-01 5.54188848e-01]]
+ [[0.9914198  0.69079775 0.20539092 0.04176054 0.21682344 0.48657835
+   0.35968018 0.9197409 ]
+  [0.28932288 0.4489416  0.29014015 0.8781759  0.6372259  0.64704734
+   0.46893975 0.90685445]]
 
- [[9.49871004e-01 3.21350247e-02 4.93995339e-01 1.09215006e-01
-   2.23890975e-01 8.80066216e-01 7.78712392e-01 6.20822787e-01]
-  [2.47072399e-01 7.23411679e-01 7.07442224e-01 3.47525448e-01
-   5.18246889e-01 1.10464334e-01 3.64707619e-01 7.94438422e-01]]]
+ [[0.90916604 0.47426128 0.37354517 0.9785489  0.50225526 0.73824966
+   0.11964852 0.18431395]
+  [0.70504224 0.24130107 0.36855805 0.8781796  0.1285313  0.11421522
+   0.97658336 0.3244487 ]]]
 </pre></div></td></tr></table></div>
 </div>
 <p>In this case, we can see that the <code class="docutils literal notranslate"><span class="pre">TreeValue</span></code> can be properly applied into the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library.
@@ -552,9 +528,10 @@ The tree-structured matrix calculation can be easily built with <code class="doc
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../main/best_practice/numpy/index.html">main</a></dd>
                         <dd><a href="../../../dev/wrap/best_practice/numpy/index.html">dev/wrap</a></dd>
                         <dd><a href="../../../doc/readme/best_practice/numpy/index.html">doc/readme</a></dd>
-                        <dd><a href="../../../main/best_practice/numpy/index.html">main</a></dd>
+                        <dd><a href="../../../fix/integration/best_practice/numpy/index.html">fix/integration</a></dd>
                         <dd><a href="../../../refactor/color/best_practice/numpy/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/best_practice/numpy/index.html">run/paper</a></dd>
                 </dl>

@@ -38,6 +38,12 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="treevalue.config" href="../api_doc/config/index.html" />
@@ -112,22 +118,22 @@
 <li class="toctree-l1"><a class="reference internal" href="tianshou_batch.result.html">Comparison Between TreeValue and Tianshou Batch</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Comparison Between TreeValue and Jax LibTree</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Mapping-Operation">Mapping Operation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#TreeValue’s-Mapping">TreeValue’s Mapping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pytree’s-tree_map">pytree’s tree_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#TreeValue's-Mapping">TreeValue’s Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pytree's-tree_map">pytree’s tree_map</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Flatten-and-Unflatten-Operation">Flatten and Unflatten Operation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#TreeValue’s-Performance">TreeValue’s Performance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pytree’s-Performance">pytree’s Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#TreeValue's-Performance">TreeValue’s Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pytree's-Performance">pytree’s Performance</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#All-Operation">All Operation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#treevalues-performance-1">TreeValue’s Performance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pytree.tree_all’s-performance">pytree.tree_all’s performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#treevalue-s-performance-1">TreeValue’s Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pytree.tree_all's-performance">pytree.tree_all’s performance</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Reduce-Operation">Reduce Operation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#TreeValue’s-Reduce">TreeValue’s Reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#TreeValue's-Reduce">TreeValue’s Reduce</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pytree.tree_reduce">pytree.tree_reduce</a></li>
 </ul>
 </li>
@@ -214,286 +220,7 @@
             
     
     
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars and line breaks on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-    white-space: pre;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-.jp-RenderedHTMLCommon table,
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-.jp-RenderedHTMLCommon thead,
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-.jp-RenderedHTMLCommon tr,
-.jp-RenderedHTMLCommon th,
-.jp-RenderedHTMLCommon td,
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-.jp-RenderedHTMLCommon th,
-div.rendered_html th {
-  font-weight: bold;
-}
-.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-.jp-RenderedHTMLCommon tbody tr:hover,
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="Comparison-Between-TreeValue-and-Jax-LibTree">
+  <section id="Comparison-Between-TreeValue-and-Jax-LibTree">
 <h1>Comparison Between TreeValue and Jax LibTree<a class="headerlink" href="#Comparison-Between-TreeValue-and-Jax-LibTree" title="Permalink to this headline">¶</a></h1>
 <p>In this section, we will take a look at the feature and performance of the <a class="reference external" href="https://jax.readthedocs.io/en/latest/pytrees.html">jax-libtree</a> library, which is developed by Google.</p>
 <div class="nbinput nblast docutils container">
@@ -506,8 +233,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Mapping-Operation">
 <h2>Mapping Operation<a class="headerlink" href="#Mapping-Operation" title="Permalink to this headline">¶</a></h2>
-<section id="TreeValue’s-Mapping">
-<h3>TreeValue’s Mapping<a class="headerlink" href="#TreeValue’s-Mapping" title="Permalink to this headline">¶</a></h3>
+<section id="TreeValue's-Mapping">
+<h3>TreeValue’s Mapping<a class="headerlink" href="#TreeValue's-Mapping" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -534,10 +261,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f0014be7ac0&gt;
+&lt;FastTreeValue 0x7fe018604e50&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 4
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0014be7d30&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe018604dc0&gt;
     ├── &#39;c&#39; --&gt; 9
     └── &#39;d&#39; --&gt; 16
 </pre></div></div>
@@ -555,7 +282,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.82 µs ± 125 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.01 µs ± 13.6 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -572,10 +299,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7f0014be7850&gt;
+&lt;FastTreeValue 0x7fe0186040d0&gt;
 ├── &#39;a&#39; --&gt; (1, (&#39;a&#39;,))
 ├── &#39;b&#39; --&gt; (4, (&#39;b&#39;,))
-└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7f0014be7880&gt;
+└── &#39;x&#39; --&gt; &lt;FastTreeValue 0x7fe018604af0&gt;
     ├── &#39;c&#39; --&gt; (9, (&#39;x&#39;, &#39;c&#39;))
     └── &#39;d&#39; --&gt; (16, (&#39;x&#39;, &#39;d&#39;))
 </pre></div></div>
@@ -593,12 +320,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.91 µs ± 66.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3.17 µs ± 14 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
-<section id="pytree’s-tree_map">
-<h3>pytree’s tree_map<a class="headerlink" href="#pytree’s-tree_map" title="Permalink to this headline">¶</a></h3>
+<section id="pytree's-tree_map">
+<h3>pytree’s tree_map<a class="headerlink" href="#pytree's-tree_map" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -631,15 +358,15 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-6.81 µs ± 201 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+5.79 µs ± 11.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
 </section>
 <section id="Flatten-and-Unflatten-Operation">
 <h2>Flatten and Unflatten Operation<a class="headerlink" href="#Flatten-and-Unflatten-Operation" title="Permalink to this headline">¶</a></h2>
-<section id="TreeValue’s-Performance">
-<h3>TreeValue’s Performance<a class="headerlink" href="#TreeValue’s-Performance" title="Permalink to this headline">¶</a></h3>
+<section id="TreeValue's-Performance">
+<h3>TreeValue’s Performance<a class="headerlink" href="#TreeValue's-Performance" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -673,7 +400,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-958 ns ± 20.9 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+710 ns ± 2.07 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -708,7 +435,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-884 ns ± 11 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+644 ns ± 2.16 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -743,7 +470,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-680 ns ± 14.8 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+509 ns ± 2.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -762,10 +489,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;TreeValue 0x7eff66f27550&gt;
+&lt;TreeValue 0x7fe01b6764f0&gt;
 ├── &#39;a&#39; --&gt; 1
 ├── &#39;b&#39; --&gt; 2
-└── &#39;x&#39; --&gt; &lt;TreeValue 0x7eff672637f0&gt;
+└── &#39;x&#39; --&gt; &lt;TreeValue 0x7fe01b6762b0&gt;
     ├── &#39;c&#39; --&gt; 3
     └── &#39;d&#39; --&gt; 4
 </pre></div></div>
@@ -783,12 +510,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.06 µs ± 38.8 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+844 ns ± 1.06 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
-<section id="pytree’s-Performance">
-<h3>pytree’s Performance<a class="headerlink" href="#pytree’s-Performance" title="Permalink to this headline">¶</a></h3>
+<section id="pytree's-Performance">
+<h3>pytree’s Performance<a class="headerlink" href="#pytree's-Performance" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -823,7 +550,7 @@ Treedef: PyTreeDef({&#39;a&#39;: *, &#39;b&#39;: *, &#39;x&#39;: {&#39;c&#39;: *
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.33 µs ± 55.4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.03 µs ± 9.11 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -858,15 +585,15 @@ Treedef: PyTreeDef({&#39;a&#39;: *, &#39;b&#39;: *, &#39;x&#39;: {&#39;c&#39;: *
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.11 µs ± 15.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+899 ns ± 0.348 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
 </section>
 <section id="All-Operation">
 <h2>All Operation<a class="headerlink" href="#All-Operation" title="Permalink to this headline">¶</a></h2>
-<section id="treevalues-performance-1">
-<h3>TreeValue’s Performance<a class="headerlink" href="#treevalues-performance-1" title="Permalink to this headline">¶</a></h3>
+<section id="treevalue-s-performance-1">
+<h3>TreeValue’s Performance<a class="headerlink" href="#treevalue-s-performance-1" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
@@ -897,12 +624,12 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-840 ns ± 12 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+599 ns ± 3.21 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
-<section id="pytree.tree_all’s-performance">
-<h3>pytree.tree_all’s performance<a class="headerlink" href="#pytree.tree_all’s-performance" title="Permalink to this headline">¶</a></h3>
+<section id="pytree.tree_all's-performance">
+<h3>pytree.tree_all’s performance<a class="headerlink" href="#pytree.tree_all's-performance" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
@@ -941,15 +668,15 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.76 µs ± 60.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.27 µs ± 10.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
 </section>
 <section id="Reduce-Operation">
 <h2>Reduce Operation<a class="headerlink" href="#Reduce-Operation" title="Permalink to this headline">¶</a></h2>
-<section id="TreeValue’s-Reduce">
-<h3>TreeValue’s Reduce<a class="headerlink" href="#TreeValue’s-Reduce" title="Permalink to this headline">¶</a></h3>
+<section id="TreeValue's-Reduce">
+<h3>TreeValue’s Reduce<a class="headerlink" href="#TreeValue's-Reduce" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
@@ -986,7 +713,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.51 µs ± 63.2 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.1 µs ± 3.61 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1023,7 +750,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.66 µs ± 34.5 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+1.2 µs ± 3.9 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1061,7 +788,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.6 µs ± 136 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+2.88 µs ± 4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1094,7 +821,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.8 µs ± 57.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+3 µs ± 5.51 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1127,9 +854,9 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;FastTreeValue 0x7eff66a32c40&gt;
+&lt;FastTreeValue 0x7fe018604820&gt;
 ├── &#39;a&#39; --&gt; {&#39;a&#39;: 1, &#39;b&#39;: 10, &#39;c&#39;: {&#39;x&#39;: 100, &#39;y&#39;: 400}}
-└── &#39;b&#39; --&gt; &lt;FastTreeValue 0x7eff66a32580&gt;
+└── &#39;b&#39; --&gt; &lt;FastTreeValue 0x7fdf69a51eb0&gt;
     ├── &#39;x&#39; --&gt; {&#39;a&#39;: 2, &#39;b&#39;: 20, &#39;c&#39;: {&#39;x&#39;: 200, &#39;y&#39;: 500}}
     └── &#39;y&#39; --&gt; {&#39;a&#39;: 3, &#39;b&#39;: 30, &#39;c&#39;: {&#39;x&#39;: 300, &#39;y&#39;: 600}}
 </pre></div></div>
@@ -1147,7 +874,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-19.4 µs ± 358 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+13.9 µs ± 41 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1174,24 +901,24 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7f0014be7340&gt;
-  ├── &#39;a&#39; --&gt; 2
-  ├── &#39;b&#39; --&gt; 20
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f0014be7a90&gt;
-      ├── &#39;x&#39; --&gt; 200
-      └── &#39;y&#39; --&gt; 500,
-  &#39;y&#39;: &lt;FastTreeValue 0x7f0014be7280&gt;
-  ├── &#39;a&#39; --&gt; 3
-  ├── &#39;b&#39; --&gt; 30
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f0014be74c0&gt;
-      ├── &#39;x&#39; --&gt; 300
-      └── &#39;y&#39; --&gt; 600},
- &#39;a&#39;: &lt;FastTreeValue 0x7f0014be7400&gt;
+{&#39;a&#39;: &lt;FastTreeValue 0x7fe018604700&gt;
  ├── &#39;a&#39; --&gt; 1
  ├── &#39;b&#39; --&gt; 10
- └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7f0014be7430&gt;
+ └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fe018604b50&gt;
      ├── &#39;x&#39; --&gt; 100
-     └── &#39;y&#39; --&gt; 400}
+     └── &#39;y&#39; --&gt; 400,
+ &#39;b&#39;: {&#39;y&#39;: &lt;FastTreeValue 0x7fe018604ac0&gt;
+  ├── &#39;a&#39; --&gt; 3
+  ├── &#39;b&#39; --&gt; 30
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fe018604430&gt;
+      ├── &#39;x&#39; --&gt; 300
+      └── &#39;y&#39; --&gt; 600,
+  &#39;x&#39;: &lt;FastTreeValue 0x7fe0186048b0&gt;
+  ├── &#39;a&#39; --&gt; 2
+  ├── &#39;b&#39; --&gt; 20
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fe018604a60&gt;
+      ├── &#39;x&#39; --&gt; 200
+      └── &#39;y&#39; --&gt; 500}}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1207,7 +934,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-20.5 µs ± 485 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+15.2 µs ± 18.4 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1225,22 +952,22 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;a&#39;: &lt;FastTreeValue 0x7eff66a32e80&gt;
+{&#39;a&#39;: &lt;FastTreeValue 0x7fdf69a512b0&gt;
  ├── &#39;a&#39; --&gt; 1
  ├── &#39;b&#39; --&gt; 10
- └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7eff66a325e0&gt;
+ └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fdf69a51ac0&gt;
      ├── &#39;x&#39; --&gt; 100
      └── &#39;y&#39; --&gt; 400,
- &#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7eff66a325b0&gt;
+ &#39;b&#39;: {&#39;x&#39;: &lt;FastTreeValue 0x7fdf69a51cd0&gt;
   ├── &#39;a&#39; --&gt; 2
   ├── &#39;b&#39; --&gt; 20
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7eff66a32dc0&gt;
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fdf69a517c0&gt;
       ├── &#39;x&#39; --&gt; 200
       └── &#39;y&#39; --&gt; 500,
-  &#39;y&#39;: &lt;FastTreeValue 0x7eff66a323d0&gt;
+  &#39;y&#39;: &lt;FastTreeValue 0x7fdf69a51a90&gt;
   ├── &#39;a&#39; --&gt; 3
   ├── &#39;b&#39; --&gt; 30
-  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7eff66a32490&gt;
+  └── &#39;c&#39; --&gt; &lt;FastTreeValue 0x7fdf69a51730&gt;
       ├── &#39;x&#39; --&gt; 300
       └── &#39;y&#39; --&gt; 600}}
 </pre></div></div>
@@ -1258,7 +985,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16.1 µs ± 245 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+12 µs ± 22.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -1311,7 +1038,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-19 µs ± 504 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+14.1 µs ± 63.1 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1392,9 +1119,10 @@ True
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../main/index.html">main</a></dd>
                         <dd><a href="../../dev/wrap/index.html">dev/wrap</a></dd>
                         <dd><a href="../../doc/readme/index.html">doc/readme</a></dd>
-                        <dd><a href="../../main/index.html">main</a></dd>
+                        <dd><a href="../../fix/integration/index.html">fix/integration</a></dd>
                         <dd><a href="../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../run/paper/index.html">run/paper</a></dd>
                 </dl>
