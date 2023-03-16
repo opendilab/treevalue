@@ -196,7 +196,7 @@
 <h1>Comparison Between TreeValue and Tianshou Batch<a class="headerlink" href="#Comparison-Between-TreeValue-and-Tianshou-Batch" title="Permalink to this headline">¶</a></h1>
 <p>In this section, we will take a look at the feature and performance of the <a class="reference external" href="https://github.com/thu-ml/tianshou">Tianshou Batch</a> library, which is developed by Tsinghua Machine Learning Group.</p>
 <p>Before starting the comparison, let us define some thing.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -216,15 +216,6 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
-</pre></div></div>
 </div>
 <section id="Read-and-Write-Operation">
 <h2>Read and Write Operation<a class="headerlink" href="#Read-and-Write-Operation" title="Permalink to this headline">¶</a></h2>
@@ -270,8 +261,8 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-tensor([[-1.3790,  0.0370, -1.2744],
-        [-0.9708,  1.5440,  0.7180]])
+tensor([[ 0.5200, -1.5712, -1.0055],
+        [-0.5463,  1.8004, -1.0224]])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -287,7 +278,7 @@ tensor([[-1.3790,  0.0370, -1.2744],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-63.1 ns ± 0.102 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
+63.6 ns ± 0.0642 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -321,7 +312,7 @@ tensor([[-1.3790,  0.0370, -1.2744],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-69.6 ns ± 0.047 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
+66 ns ± 0.0588 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -352,12 +343,12 @@ tensor([[-1.3790,  0.0370, -1.2744],
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Batch(
-    a: tensor([[-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180]]),
+    a: tensor([[ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224]]),
     x: Batch(
-           c: tensor([[-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078]]),
+           c: tensor([[ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060]]),
        ),
 )
 </pre></div></div>
@@ -376,8 +367,8 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-tensor([[-1.3790,  0.0370, -1.2744],
-        [-0.9708,  1.5440,  0.7180]])
+tensor([[ 0.5200, -1.5712, -1.0055],
+        [-0.5463,  1.8004, -1.0224]])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -393,7 +384,7 @@ tensor([[-1.3790,  0.0370, -1.2744],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-63.5 ns ± 0.0109 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
+59 ns ± 0.0371 ns per loop (mean ± std. dev. of 7 runs, 10,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -414,12 +405,12 @@ tensor([[-1.3790,  0.0370, -1.2744],
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Batch(
-    a: tensor([[-0.7512,  1.0904,  0.3561],
-               [ 0.2030,  0.4181,  0.1829]]),
+    a: tensor([[ 1.2176,  1.5577,  0.2521],
+               [ 0.0958,  0.1486, -0.4861]]),
     x: Batch(
-           c: tensor([[-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078]]),
+           c: tensor([[ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060]]),
        ),
 )
 </pre></div></div>
@@ -437,7 +428,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-496 ns ± 0.223 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+492 ns ± 0.574 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -459,7 +450,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-853 ns ± 2.68 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+821 ns ± 3.29 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -478,7 +469,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-11 µs ± 15.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+10.8 µs ± 39.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -509,7 +500,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-144 µs ± 370 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+145 µs ± 1.09 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -529,7 +520,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-144 µs ± 541 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+142 µs ± 596 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -576,7 +567,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-32.7 µs ± 85.9 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+33.5 µs ± 56.1 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -609,7 +600,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-30.1 µs ± 43.6 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+31.6 µs ± 72.9 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -632,7 +623,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-57.1 µs ± 53.8 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+68.6 µs ± 62.7 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -655,62 +646,62 @@ Batch(
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Batch(
-    a: tensor([[[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]],
-
-               [[-1.3790,  0.0370, -1.2744],
-                [-0.9708,  1.5440,  0.7180]]]),
     x: Batch(
-           c: tensor([[[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+           c: tensor([[[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]],
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]],
 
-                      [[-0.2312,  1.3045,  0.7208,  0.5716],
-                       [ 0.3464, -1.0941,  1.1140,  1.1513],
-                       [-0.2206, -0.9592,  0.2014,  1.0078]]]),
+                      [[ 1.1462,  0.7193,  1.0190, -0.1391],
+                       [ 1.2438, -2.2515,  2.1587,  0.9985],
+                       [ 0.1510, -0.1423,  1.2029, -1.0060]]]),
        ),
+    a: tensor([[[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]],
+
+               [[ 0.5200, -1.5712, -1.0055],
+                [-0.5463,  1.8004, -1.0224]]]),
 )
 </pre></div></div>
 </div>
@@ -727,7 +718,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-78.7 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+78.7 µs ± 68.7 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -745,48 +736,48 @@ Batch(
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Batch(
-    a: tensor([[-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180],
-               [-1.3790,  0.0370, -1.2744],
-               [-0.9708,  1.5440,  0.7180]]),
     x: Batch(
-           c: tensor([[-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078],
-                      [-0.2312,  1.3045,  0.7208,  0.5716],
-                      [ 0.3464, -1.0941,  1.1140,  1.1513],
-                      [-0.2206, -0.9592,  0.2014,  1.0078]]),
+           c: tensor([[ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060],
+                      [ 1.1462,  0.7193,  1.0190, -0.1391],
+                      [ 1.2438, -2.2515,  2.1587,  0.9985],
+                      [ 0.1510, -0.1423,  1.2029, -1.0060]]),
        ),
+    a: tensor([[ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224],
+               [ 0.5200, -1.5712, -1.0055],
+               [-0.5463,  1.8004, -1.0224]]),
 )
 </pre></div></div>
 </div>
@@ -803,7 +794,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-143 µs ± 405 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+147 µs ± 453 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -825,7 +816,7 @@ Batch(
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-322 µs ± 3.1 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+335 µs ± 5.18 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -900,7 +891,6 @@ Batch(
                         <dd><a href="../../../main/index.html">main</a></dd>
                         <dd><a href="tianshou_batch.html">dev/wrap</a></dd>
                         <dd><a href="../../../doc/readme/index.html">doc/readme</a></dd>
-                        <dd><a href="../../../fix/integration/index.html">fix/integration</a></dd>
                         <dd><a href="../../../refactor/color/index.html">refactor/color</a></dd>
                         <dd><a href="../../../run/paper/index.html">run/paper</a></dd>
                 </dl>
