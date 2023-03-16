@@ -7,6 +7,7 @@ from treevalue import FastTreeValue, register_for_jax
 
 try:
     import jax
+    from jax.tree_util import register_pytree_node
 except (ModuleNotFoundError, ImportError):
     jax = None
 
@@ -20,10 +21,10 @@ class TestTreeTreeIntegration:
             return x * 2 + 1.5
 
         t1 = FastTreeValue({
-            'a': np.random.randint(0, 10, (2, 3)),
+            'a': np.random.randint(0, 10, (2, 3)) + 1,
             'b': {
                 'x': np.asarray(233.0),
-                'y': np.random.randn(2, 3) + 1,
+                'y': np.random.randn(2, 3) + 100,
             }
         })
         r1 = double(t1)
@@ -37,10 +38,10 @@ class TestTreeTreeIntegration:
         register_for_jax(MyTreeValue)
 
         t2 = MyTreeValue({
-            'a': np.random.randint(0, 10, (2, 3)),
+            'a': np.random.randint(0, 10, (2, 3)) + 1,
             'b': {
                 'x': np.asarray(233.0),
-                'y': np.random.randn(2, 3) + 1,
+                'y': np.random.randn(2, 3) + 100,
             }
         })
         r2 = double(t2)
