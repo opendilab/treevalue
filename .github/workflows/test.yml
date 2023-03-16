@@ -100,9 +100,9 @@ jobs:
       - name: Install Torch
         shell: bash
         if: ${{ matrix.torch-version != 'latest' }}
+        continue-on-error: true
         run: |
-          echo "torch==${{ matrix.torch-version }}; python_version < '3.11'" > requirements-torch.txt
-          pip install -r requirements-torch.txt
+          pip install torch==${{ matrix.torch-version }}
       - name: Install Extra Test Requirements
         shell: bash
         run: |
