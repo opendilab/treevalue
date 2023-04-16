@@ -1,6 +1,7 @@
 from unittest import skipUnless
 
 import pytest
+from hbutils.testing import vpip
 
 from treevalue import FastTreeValue, register_for_torch
 
@@ -60,3 +61,15 @@ class TestTreeIntegrationTorch:
 
         with pytest.warns(UserWarning):
             register_for_torch(MyTreeValueX)
+
+    @skipUnless(vpip('torch') >= '2.0.0', 'Torch 2 required')
+    def test_torch_compile(self):
+        @torch.compile
+        def foo(x, y, t):
+            z = (x + y * 2000) / (t - 100)
+            return z
+
+        a = torch.randn(3, 4)
+        b = torch.randn(3, 4)
+        c = torch.randn(3, 4)
+        assert torch.isclose(foo(a, b, c), (a + b * 2000) / (c - 100)).all()
