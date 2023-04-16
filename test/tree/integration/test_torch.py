@@ -62,7 +62,7 @@ class TestTreeIntegrationTorch:
         with pytest.warns(UserWarning):
             register_for_torch(MyTreeValueX)
 
-    @skipUnless(vpip('torch') >= '2.0.0' and not OS.windows, 'Torch 2 on non-windows platform required')
+    @skipUnless(vpip('torch') >= '2.0.0' and OS.linux, 'Torch 2 on linux platform required')
     def test_torch_compile(self):
         @torch.compile
         def foo(x, y, t):
