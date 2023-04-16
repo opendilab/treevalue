@@ -1,7 +1,7 @@
 from unittest import skipUnless
 
 import pytest
-from hbutils.testing import vpip
+from hbutils.testing import vpip, OS
 
 from treevalue import FastTreeValue, register_for_torch
 
@@ -62,7 +62,7 @@ class TestTreeIntegrationTorch:
         with pytest.warns(UserWarning):
             register_for_torch(MyTreeValueX)
 
-    @skipUnless(vpip('torch') >= '2.0.0', 'Torch 2 required')
+    @skipUnless(vpip('torch') >= '2.0.0' and not OS.windows, 'Torch 2 on non-windows platform required')
     def test_torch_compile(self):
         @torch.compile
         def foo(x, y, t):
