@@ -211,13 +211,13 @@
 <li><p>Simple usage</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">unique</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@int_enum_loads</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@unique</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyEnum</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">B</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>  <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c1"># MyEnum.B</span>
@@ -231,13 +231,13 @@
 <li><p>Preprocessors</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">unique</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@int_enum_loads</span><span class="p">(</span><span class="n">name_preprocess</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="n">value_preprocess</span><span class="o">=</span><span class="nb">abs</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@unique</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyEnum</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">B</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>  <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c1"># MyEnum.B</span>
@@ -251,13 +251,13 @@
 <li><p>External processor</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">unique</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@int_enum_loads</span><span class="p">(</span><span class="n">external_process</span><span class="o">=</span><span class="k">lambda</span> <span class="n">data</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@unique</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyEnum</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">B</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>  <span class="c1"># MyEnum.A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyEnum</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c1"># MyEnum.B</span>
@@ -341,6 +341,7 @@
                 </dl>
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/torch/index.html">dev/torch</a></dd>
                         <dd><a href="../../../dev/torch2/index.html">dev/torch2</a></dd>
                         <dd><a href="../../../dev/wrap/index.html">dev/wrap</a></dd>
                         <dd><a href="../../../doc/readme/index.html">doc/readme</a></dd>
