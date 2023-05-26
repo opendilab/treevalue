@@ -31,6 +31,9 @@ jobs:
           - '1.13.1'
           - '2.0.1'
           - 'latest'
+        exclude:
+          - python-version: '3.7'
+            torch-version: '2.0.1'
 
     steps:
       - name: Get system version for Linux
@@ -99,16 +102,15 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-build.txt
           pip install -r requirements-test.txt
-      - name: Install Torch
-        shell: bash
-        if: ${{ matrix.torch-version != 'latest' }}
-        continue-on-error: true
-        run: |
-          pip install torch==${{ matrix.torch-version }}
       - name: Install Extra Test Requirements
         shell: bash
         run: |
           pip install -r requirements-test-extra.txt
+      - name: Install Torch
+        shell: bash
+        if: ${{ matrix.torch-version != 'latest' }}
+        run: |
+          pip install torch==${{ matrix.torch-version }}
       - name: Test the basic environment
         shell: bash
         run: |
