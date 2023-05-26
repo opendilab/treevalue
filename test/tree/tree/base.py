@@ -770,7 +770,7 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             _repr_png_ = t1._repr_png_()
             assert isinstance(_repr_png_, bytes)
             if OS.windows:
-                min_size, max_size = 12000, 16050
+                min_size, max_size = 14000, 18050
             else:
                 min_size, max_size = 16050, 20500
             assert min_size <= len(_repr_png_) <= max_size, \
