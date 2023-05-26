@@ -758,7 +758,9 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
 
             _repr_svg_ = t1._repr_svg_()
             assert isinstance(_repr_svg_, str)
-            assert 4500 <= len(_repr_svg_) <= 4900
+            min_size, max_size = 4500, 4900
+            assert min_size <= len(_repr_svg_) <= max_size, \
+                f'Size within [{min_size!r}, {max_size!r}] required, but {len(_repr_svg_)!r} found.'
 
         @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_repr_png(self):
@@ -768,9 +770,11 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             _repr_png_ = t1._repr_png_()
             assert isinstance(_repr_png_, bytes)
             if OS.windows:
-                assert 12000 <= len(_repr_png_) <= 16050
+                min_size, max_size = 12000, 16050
             else:
-                assert 16050 <= len(_repr_png_) <= 20500
+                min_size, max_size = 16050, 20500
+            assert min_size <= len(_repr_png_) <= max_size, \
+                f'Size within [{min_size!r}, {max_size!r}] required, but {len(_repr_png_)!r} found.'
 
         @unittest.skipUnless(cmdv('dot'), 'Dot installed only')
         def test_repr_jpeg(self):
@@ -779,6 +783,8 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
 
             _repr_jpeg_ = t1._repr_jpeg_()
             assert isinstance(_repr_jpeg_, bytes)
-            assert 10500 <= len(_repr_jpeg_) <= 14500
+            min_size, max_size = 10500, 14500
+            assert min_size <= len(_repr_jpeg_) <= max_size, \
+                f'Size within [{min_size!r}, {max_size!r}] required, but {len(_repr_jpeg_)!r} found.'
 
     return _TestClass
