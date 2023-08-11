@@ -73,3 +73,24 @@ class TestTreeIntegrationTorch:
         b = torch.randn(3, 4)
         c = torch.randn(3, 4)
         assert torch.isclose(foo(a, b, c), (a + b * 2000) / (c - 100)).all()
+
+    @skipUnless(vpip('torch') >= '2.0.0' and OS.linux and vpython < '3.11', 'Torch 2 on linux platform required')
+    def test_torch_compile_buggy(self):
+        @torch.compile
+        def foox(x, y):
+            z = x + y
+            return z
+
+        x = FastTreeValue({
+            'a': torch.randn(3, 4) + 200,
+            'b': torch.randn(5) - 300,
+        })
+        y = FastTreeValue({
+            'a': torch.rand(4) + 500,
+            'b': torch.randn(4, 5) + 1000,
+        })
+
+        _t_isclose = FastTreeValue.func()(torch.isclose)
+
+        assert _t_isclose(foox(x, y), x + y).all() == \
+               FastTreeValue({'a': torch.tensor(True), 'b': torch.tensor(True)})
