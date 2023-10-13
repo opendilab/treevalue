@@ -1,6 +1,8 @@
 import warnings
 from functools import wraps
 
+from ..tree import register_dict_type
+
 try:
     import jax
     from jax.tree_util import register_pytree_node
@@ -20,3 +22,10 @@ else:
 
     register_for_jax(TreeValue)
     register_for_jax(FastTreeValue)
+
+try:
+    from torch.nn import ModuleDict
+except (ModuleNotFoundError, ImportError):
+    pass
+else:
+    register_dict_type(ModuleDict, ModuleDict.items)

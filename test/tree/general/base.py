@@ -1,3 +1,4 @@
+import collections.abc
 import unittest
 from functools import reduce
 from operator import __mul__
@@ -7,8 +8,23 @@ import numpy as np
 import pytest
 from hbutils.testing import cmdv
 
+from treevalue import register_dict_type
 from treevalue.tree import func_treelize, TreeValue, raw, mapping, delayed, FastTreeValue
 from ..tree.base import get_treevalue_test
+
+
+class CustomMapping(collections.abc.Mapping):
+    def __init__(self, **kwargs):
+        self._kwargs = kwargs
+
+    def __getitem__(self, __key):
+        return self._kwargs[__key]
+
+    def __len__(self):
+        return len(self._kwargs)
+
+    def __iter__(self):
+        yield from self._kwargs
 
 
 def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
@@ -812,5 +828,33 @@ def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):
             assert x == 'f-49'
             assert y == pytest.approx(7.7)
             assert z is None
+
+        def test_init_with_custom_mapping_type(self):
+            origin_t = CustomMapping(a=1, b=2, c={'x': 15, 'y': CustomMapping(z=100)})
+            t = treevalue_class(origin_t)
+            assert t == treevalue_class({'a': 1, 'b': 2, 'c': {'x': 15, 'y': {'z': 100}}})
+
+        def test_init_with_custom_type(self):
+            class _CustomMapping:
+                def __init__(self, **kwargs):
+                    self._kwargs = kwargs
+
+                def __getitem__(self, __key):
+                    return self._kwargs[__key]
+
+                def __len__(self):
+                    return len(self._kwargs)
+
+                def __iter__(self):
+                    yield from self._kwargs
+
+                def iter_items(self):
+                    yield from self._kwargs.items()
+
+            register_dict_type(_CustomMapping, _CustomMapping.iter_items)
+
+            origin_t = _CustomMapping(a=1, b=2, c={'x': 15, 'y': _CustomMapping(z=100)})
+            t = treevalue_class(origin_t)
+            assert t == treevalue_class({'a': 1, 'b': 2, 'c': {'x': 15, 'y': {'z': 100}}})
 
     return _TestClass

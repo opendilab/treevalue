@@ -14,6 +14,7 @@ cdef class _SimplifiedConstraintProxy:
     cdef readonly Constraint cons
 
 cdef Constraint _c_get_constraint(object cons)
+cpdef register_dict_type(object type_, object f_items)
 
 cdef class ValidationError(Exception):
     cdef readonly TreeValue _object
