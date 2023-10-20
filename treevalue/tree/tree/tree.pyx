@@ -35,7 +35,19 @@ _KNOWN_DICT_TYPES = {
     Mapping: Mapping.items,
 }
 
+@cython.binding(True)
 cpdef inline register_dict_type(object type_, object f_items):
+    """
+    Overview:
+        Register dict-like type for TreeValue.
+
+    :param type_: Type to register.
+    :param f_items: Function to get items, the format should be like ``dict.items``.
+
+    .. note::
+        If torch detected, the ``torch.nn.ModuleDict`` is registered by default.
+
+    """
     if isinstance(object, type):
         _KNOWN_DICT_TYPES[type_] = f_items
     else:

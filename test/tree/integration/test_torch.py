@@ -161,3 +161,20 @@ class TestTreeIntegrationTorch:
             'c': torch.Size([14]),
             'd': torch.Size([2, 5, 3]),
         })
+
+    @skipUnless(vpip('torch') and OS.linux and vpython < '3.11', 'torch required')
+    def test_moduledict(self):
+        with torch.no_grad():
+            md = torch.nn.ModuleDict({
+                'a': torch.nn.Linear(3, 5),
+                'b': torch.nn.Linear(3, 6),
+            })
+            t = FastTreeValue(md)
+
+            input_ = torch.randn(2, 3)
+            output_ = t(input_)
+
+            assert output_.shape == FastTreeValue({
+                'a': (2, 5),
+                'b': (2, 6),
+            })
