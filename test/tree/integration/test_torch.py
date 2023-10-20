@@ -162,7 +162,7 @@ class TestTreeIntegrationTorch:
             'd': torch.Size([2, 5, 3]),
         })
 
-    @skipUnless(vpip('torch') and OS.linux and vpython < '3.11', 'torch required')
+    @skipUnless(torch is not None and vpip('torch') and OS.linux and vpython < '3.11', 'torch required')
     def test_moduledict(self):
         with torch.no_grad():
             md = torch.nn.ModuleDict({
