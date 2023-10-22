@@ -11,20 +11,8 @@ from hbutils.testing import cmdv
 from treevalue import register_dict_type
 from treevalue.tree import func_treelize, TreeValue, raw, mapping, delayed, FastTreeValue
 from ..tree.base import get_treevalue_test
+from ...testings import CustomMapping
 
-
-class CustomMapping(collections.abc.Mapping):
-    def __init__(self, **kwargs):
-        self._kwargs = kwargs
-
-    def __getitem__(self, __key):
-        return self._kwargs[__key]
-
-    def __len__(self):
-        return len(self._kwargs)
-
-    def __iter__(self):
-        yield from self._kwargs
 
 
 def get_fasttreevalue_test(treevalue_class: Type[FastTreeValue]):

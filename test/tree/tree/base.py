@@ -1,4 +1,3 @@
-import collections.abc
 import pickle
 import re
 import unittest
@@ -11,6 +10,7 @@ from test.tree.tree.test_constraint import GreaterThanConstraint
 from treevalue import raw, TreeValue, delayed, ValidationError, register_dict_type
 from treevalue.tree.common import create_storage
 from treevalue.tree.tree.constraint import cleaf
+from ...testings import CustomMapping
 
 try:
     _ = reversed({}.keys())
@@ -42,20 +42,6 @@ class _Container:
 
     def __hash__(self):
         return hash((self.__value,))
-
-
-class CustomMapping(collections.abc.Mapping):
-    def __init__(self, **kwargs):
-        self._kwargs = kwargs
-
-    def __getitem__(self, __key):
-        return self._kwargs[__key]
-
-    def __len__(self):
-        return len(self._kwargs)
-
-    def __iter__(self):
-        yield from self._kwargs
 
 
 def get_treevalue_test(treevalue_class: Type[TreeValue]):
