@@ -7,9 +7,10 @@ import pytest
 from hbutils.testing import OS, cmdv
 
 from test.tree.tree.test_constraint import GreaterThanConstraint
-from treevalue import raw, TreeValue, delayed, ValidationError
+from treevalue import raw, TreeValue, delayed, ValidationError, register_dict_type
 from treevalue.tree.common import create_storage
 from treevalue.tree.tree.constraint import cleaf
+from ...testings import CustomMapping
 
 try:
     _ = reversed({}.keys())
@@ -786,5 +787,33 @@ def get_treevalue_test(treevalue_class: Type[TreeValue]):
             min_size, max_size = 10500, 14500
             assert min_size <= len(_repr_jpeg_) <= max_size, \
                 f'Size within [{min_size!r}, {max_size!r}] required, but {len(_repr_jpeg_)!r} found.'
+
+        def test_init_with_custom_mapping_type(self):
+            origin_t = CustomMapping(a=1, b=2, c={'x': 15, 'y': CustomMapping(z=100)})
+            t = treevalue_class(origin_t)
+            assert t == treevalue_class({'a': 1, 'b': 2, 'c': {'x': 15, 'y': {'z': 100}}})
+
+        def test_init_with_custom_type(self):
+            class _CustomMapping:
+                def __init__(self, **kwargs):
+                    self._kwargs = kwargs
+
+                def __getitem__(self, __key):
+                    return self._kwargs[__key]
+
+                def __len__(self):
+                    return len(self._kwargs)
+
+                def __iter__(self):
+                    yield from self._kwargs
+
+                def iter_items(self):
+                    yield from self._kwargs.items()
+
+            register_dict_type(_CustomMapping, _CustomMapping.iter_items)
+
+            origin_t = _CustomMapping(a=1, b=2, c={'x': 15, 'y': _CustomMapping(z=100)})
+            t = treevalue_class(origin_t)
+            assert t == treevalue_class({'a': 1, 'b': 2, 'c': {'x': 15, 'y': {'z': 100}}})
 
     return _TestClass

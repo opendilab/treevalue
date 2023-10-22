@@ -220,3 +220,11 @@ loads
 
 .. autofunction:: loads
 
+
+register_dict_type
+----------------------------
+
+.. autofunction:: register_dict_type
+
+
+

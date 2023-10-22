@@ -31,23 +31,58 @@ cdef inline object _item_unwrap(object v):
         return v
 
 _GET_NO_DEFAULT = SingletonMark('get_no_default')
+_KNOWN_DICT_TYPES = {
+    Mapping: Mapping.items,
+}
 
-cdef inline TreeStorage _dict_unpack(dict d):
+@cython.binding(True)
+cpdef inline register_dict_type(object type_, object f_items):
+    """
+    Overview:
+        Register dict-like type for TreeValue.
+
+    :param type_: Type to register.
+    :param f_items: Function to get items, the format should be like ``dict.items``.
+
+    .. note::
+        If torch detected, the ``torch.nn.ModuleDict`` is registered by default.
+
+    """
+    if isinstance(object, type):
+        _KNOWN_DICT_TYPES[type_] = f_items
+    else:
+        raise TypeError(f'Not a type - {type_!r}.')
+
+_DEFAULT_STORAGE = create_storage({})
+
+cdef inline TreeStorage _generic_dict_unpack(object d):
     cdef str k
     cdef object v
     cdef dict result = {}
 
-    for k, v in d.items():
+    cdef object d_items = None
+    if isinstance(d, dict):
+        d_items = d.items()
+    else:
+        for d_type, df_items in _KNOWN_DICT_TYPES.items():
+            if isinstance(d, d_type):
+                d_items = df_items(d)
+                break
+        if d_items is None:
+            raise TypeError(f'Unknown dict type - {d!r}.')
+
+    for k, v in d_items:
         if isinstance(v, dict):
-            result[k] = _dict_unpack(v)
-        elif isinstance(v, TreeValue):
+            result[k] = _generic_dict_unpack(v)
+        if isinstance(v, TreeValue):
             result[k] = v._detach()
         else:
-            result[k] = v
+            try:
+                result[k] = _generic_dict_unpack(v)
+            except TypeError:
+                result[k] = v
 
     return create_storage(result)
-
-_DEFAULT_STORAGE = create_storage({})
 
 cdef class _SimplifiedConstraintProxy:
     def __cinit__(self, Constraint cons):
@@ -131,13 +166,14 @@ cdef class TreeValue:
                 self._child_constraints = data._child_constraints
             else:
                 self.constraint = _c_get_constraint(constraint)
-        elif isinstance(data, dict):
-            self._st = _dict_unpack(data)
-            self.constraint = _c_get_constraint(constraint)
         else:
-            raise TypeError(
-                "Unknown initialization type for tree value - {type}.".format(
-                    type=repr(type(data).__name__)))
+            try:
+                self._st = _generic_dict_unpack(data)
+                self.constraint = _c_get_constraint(constraint)
+            except TypeError:
+                raise TypeError(
+                    "Unknown initialization type for tree value - {type}.".format(
+                        type=repr(type(data).__name__)))
 
     def __getnewargs_ex__(self):  # for __cinit__, when pickle.loads
         return ({},), {}
