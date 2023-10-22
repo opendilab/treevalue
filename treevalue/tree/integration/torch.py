@@ -1,6 +1,8 @@
 import warnings
 from functools import wraps
 
+from ..tree import register_dict_type
+
 try:
     import torch
     from torch.utils._pytree import _register_pytree_node
@@ -20,3 +22,10 @@ else:
 
     register_for_torch(TreeValue)
     register_for_torch(FastTreeValue)
+
+try:
+    from torch.nn import ModuleDict
+except (ModuleNotFoundError, ImportError):
+    pass
+else:
+    register_dict_type(ModuleDict, ModuleDict.items)
