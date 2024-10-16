@@ -20,7 +20,7 @@ jobs:
         os:
           - 'ubuntu-20.04'
           - 'windows-2019'  # need to be fixed, see: https://github.com/opendilab/treevalue/issues/41
-          - 'macos-13'
+          - 'macos-12'
         python-version:
           - '3.8'
           - '3.9'
@@ -47,7 +47,7 @@ jobs:
           - python-version: '3.12'
             torch-version: '2.0.1'
           - torch-version: '2.4.0'
-            os: 'macos-13'
+            os: 'macos-12'
 
     steps:
       - name: Get system version for Linux
@@ -142,7 +142,7 @@ jobs:
         run: |
           make clean build unittest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
