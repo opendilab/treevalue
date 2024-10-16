@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -215,12 +215,23 @@
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/runner/work/treevalue/treevalue/treevalue/tree/integration/torch.py:23: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  register_for_torch(TreeValue)
+/home/runner/work/treevalue/treevalue/treevalue/tree/integration/torch.py:24: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  register_for_torch(FastTreeValue)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/comparison_dmtree_8_0.svg" src="../_images/comparison_dmtree_8_0.svg" /></div>
+<img alt="../_images/comparison_dmtree_8_1.svg" src="../_images/comparison_dmtree_8_1.svg" /></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -251,7 +262,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.61 µs ± 25.2 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+1.69 µs ± 5.39 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>In order to support the cased that the mapped value is related to both path and value of each node, we can use the ‘path mapping mode’ by simply use the second parameter of the mapping function.</p>
@@ -284,7 +295,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.72 µs ± 21.9 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+1.71 µs ± 8.37 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -330,7 +341,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-19.6 µs ± 639 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+12.7 µs ± 42.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To supported the second situation in the last section, <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.map_structure_with_path">map_structure_with_path</a> can be used.</p>
@@ -376,7 +387,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-41.8 µs ± 81.9 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+27.7 µs ± 203 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -437,7 +448,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-880 ns ± 5.07 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+510 ns ± 5.67 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The tree can be re-created from <code class="docutils literal notranslate"><span class="pre">flatted</span></code> with function <code class="docutils literal notranslate"><span class="pre">unflatten</span></code>.</p>
@@ -470,7 +481,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-992 ns ± 5.79 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+592 ns ± 2.91 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -510,7 +521,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.24 µs ± 5.2 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+754 ns ± 3.93 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>The structure of the tree is dropped, only the data is extracted from the tree. This means the <code class="docutils literal notranslate"><span class="pre">flatten</span></code> function in DM-Tree is irreversible, we can not recover the original tree with the result above.</p>
@@ -548,7 +559,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-18.5 µs ± 312 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+13 µs ± 52.1 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p>To re-create the original tree, we need a tree structure with any objects filled inside. Use the <a class="reference external" href="https://tree.readthedocs.io/en/latest/api.html#tree.unflatten_as">unflatten_as</a> to archive this goal.</p>
@@ -585,7 +596,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-15.2 µs ± 221 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+10.1 µs ± 51.7 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -635,7 +646,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.11 µs ± 74.5 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+1.89 µs ± 7.57 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <p>In DM-Tree, <code class="docutils literal notranslate"><span class="pre">unflatten_as</span></code> can be directly used.</p>
@@ -672,7 +683,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-15 µs ± 135 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+10 µs ± 44.3 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 </section>
@@ -696,7 +707,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2023, HansBug, DI-engine&#39;s Contributors
+        &copy; Copyright 2024, HansBug, DI-engine&#39;s Contributors
 
     </p>
   </div>
@@ -745,6 +756,7 @@
                 <dl>
                     <dt>Branches</dt>
                         <dd><a href="../../main/index.html">main</a></dd>
+                        <dd><a href="../../dependabot/github_actions/dot-github/workflows/actions/download-artifact-4.1.7/index.html">dependabot/github_actions/dot-github/workflows/actions/download-artifact-4.1.7</a></dd>
                         <dd><a href="../../dev/torch2/index.html">dev/torch2</a></dd>
                         <dd><a href="../../dev/wrap/index.html">dev/wrap</a></dd>
                         <dd><a href="../../doc/readme/index.html">doc/readme</a></dd>
