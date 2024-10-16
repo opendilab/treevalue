@@ -1,9 +1,8 @@
 import os
 import re
 from codecs import open
-from distutils.core import setup
 
-from setuptools import find_packages
+from setuptools import find_packages, setup
 from Cython.Build import cythonize  # this line should be after 'from setuptools import find_packages'
 
 _package_name = "treevalue"
@@ -60,7 +59,7 @@ setup(
     url='https://github.com/HansBug/treevalue',
 
     # environment
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     ext_modules=cythonize(
         find_pyx(),
         language_level=3,
@@ -77,11 +76,11 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
     entry_points={
         'console_scripts': [
