@@ -20,7 +20,7 @@ jobs:
         os:
           - 'ubuntu-20.04'
           - 'windows-2019'  # need to be fixed, see: https://github.com/opendilab/treevalue/issues/41
-          - 'macos-12'
+          - 'macos-13'
         python-version:
           - '3.8'
           - '3.9'
@@ -36,10 +36,14 @@ jobs:
         exclude:
           - python-version: '3.10'
             torch-version: '1.7.1'
+          - python-version: '3.10'
+            torch-version: '2.4.0'
           - python-version: '3.11'
             torch-version: '1.7.1'
           - python-version: '3.11'
             torch-version: '1.13.1'
+          - python-version: '3.11'
+            torch-version: '2.4.0'
           - python-version: '3.12'
             torch-version: '1.7.1'
           - python-version: '3.12'
@@ -141,6 +145,7 @@ jobs:
           make clean build unittest
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
