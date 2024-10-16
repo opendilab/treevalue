@@ -38,7 +38,7 @@ jobs:
           make zip
           ls -al dist
       - name: Upload packed files to artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifacts-all
           path: ./dist/*
@@ -60,6 +60,7 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
+          - '3.12'
         architecture:
           - x86_64
           - arm64
@@ -111,7 +112,7 @@ jobs:
           ls -al ./wheelhouse
           mv wheelhouse dist
       - name: Upload packed files to artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifacts-all
           path: ./dist/*
